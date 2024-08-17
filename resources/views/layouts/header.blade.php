@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>RIVI</title>
+        <link rel="icon" type="image/x-icon" href="img/rivi-favicon.png" />
+
+        <!-- css -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,-25" />
+        <link href="{{ asset('./assets/css/bootstrap.css') }}" rel="stylesheet" />
+        <link href="{{ asset('./assets/css/theme.css') }}" rel="stylesheet" />
+        <link href="{{ asset('./assets/css/select2.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('./assets/css/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('./assets/css/style.css') }}" rel="stylesheet" />
+
+        <!-- js chart-->
+        <script src="{{ asset('./assets/js/canvasjs.min.js') }}"></script>
+        <!-- jquery -->
+        <script src="{{ asset('./assets/js/jquery-3.7.1.min.js') }}"></script>
+        <script src="{{ asset('./assets/js/jquery.basictable.js') }}"></script>
+        <script src="{{ asset('./assets/js/select2.min.js') }}"></script>
+    </head>
+    <body class="nav-fixed">
