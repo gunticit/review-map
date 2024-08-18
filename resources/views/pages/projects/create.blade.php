@@ -27,6 +27,11 @@
                             <label for="inputlist-table">Tên dự án <span class="required">*</span>
                             </label>
                             <input class="form-control" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="" required>
+                            @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                             <small class="d-none">Tên dự án cho phép dưới 50 ký tự bao gồm các khoảng trắng.</small>
                         </div>
                         <!-- Form Group (UrlMap)-->
@@ -36,6 +41,11 @@
                             <div class="row">
                                 <div class="col-md-9 col-12">
                                     <input class="form-control" id="inputUrlMap" name="url_map" type="url" placeholder="URL bắt buộc phải là URL, bắt buộc bằng địa chỉ https://maps.app.goo.gl/..." value="" required>
+                                    @error('url_map')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                     <small class="d-none">Sai URL. Vui lòng kiểm tra lại.</small>
                                 </div>
                                 <div class="col-md-3 col-12">
@@ -58,11 +68,17 @@
                                     <label for="inputReview">Chọn gói review <span class="required">*</span>
                                     </label>
                                     <select class="form-control form-select" name="package" id="inputReview" required>
-                                        <option value="">RIVI10 - 45.000 VND/đánh giá - 10 lượt đánh giá</option>
-                                        <option value="">RIVI50 - 35.000 VND/đánh giá - 50 lượt đánh giá</option>
-                                        <option value="">RIVI100 - 30.000 VND/đánh giá - 100 lượt đánh giá</option>
-                                        <option value="">RIVI200 - 25.000 VND/đánh giá - 200 lượt đánh giá</option>
+                                        <option value="">--- Chọn gói ---</option>
+                                        <option value="1">RIVI10 - 45.000 VND/đánh giá - 10 lượt đánh giá</option>
+                                        <option value="2">RIVI50 - 35.000 VND/đánh giá - 50 lượt đánh giá</option>
+                                        <option value="3">RIVI100 - 30.000 VND/đánh giá - 100 lượt đánh giá</option>
+                                        <option value="4">RIVI200 - 25.000 VND/đánh giá - 200 lượt đánh giá</option>
                                     </select>
+                                    @error('package')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -77,9 +93,9 @@
                                     </button>
                                     <div class="input-group">
                                         <span class="input-group-text" id="inputRaiChamCheck">
-                                            <input type="checkbox" class="form-check-input" id="inputRaiChamCheck">
+                                            <input type="checkbox" name="is_slow" class="form-check-input" id="inputRaiChamCheck">
                                         </span>
-                                        <input type="number" max="100" class="form-control" id="inputRaiCham">
+                                        <input type="number" max="100" name="point_slow" class="form-control" id="inputRaiCham">
                                     </div>
                                     <small>Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>
                                 </div>
@@ -89,18 +105,23 @@
                         <div class="mb-4">
                             <label for="Tagslist-table">Từ khóa <span class="required">*</span>
                             </label>
-                            <input class="form-control" id="Tagslist-table" type="text" placeholder="Enter để ngắt từ khóa" value="" required>
+                            <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa" value="" required>
+                            @error('keyword')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <!-- Form Group (Img)-->
                         <div class="inputImg"><!-- class: active -->
-                            <label class="d-block" for="inputImg">Hình ảnh <span class="required">*</span>
+                            <label class="d-block" for="inputImg">Hình ảnh
                             </label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inputImg" id="inputImg1" value="inputImg1">
+                                <input class="form-check-input" type="radio" name="has_image" id="inputImg1" value="1">
                                 <label class="form-check-label" for="inputImg1"> Có </label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inputImg" id="inputImg2" value="inputImg2" checked>
+                                <input class="form-check-input" type="radio" name="has_image" id="inputImg2" value="0" checked>
                                 <label class="form-check-label" for="inputImg2"> Không </label>
                             </div>
                             <div class="d-none">

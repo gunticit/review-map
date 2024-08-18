@@ -38,7 +38,8 @@ class AuthService {
     public function registerUser($request){
         $data = $this->filterData($request);
         $user = $this->userRepository->create($data);
-        return $user ?? [];
+        $user = UserResource::make($user);
+        return $user;
     }
 
     /**

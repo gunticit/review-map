@@ -100,3 +100,42 @@ use Illuminate\Support\Facades\Storage;
             return date('Y/m/d');
         }
     }
+
+    if(!function_exists('checkStatus')){
+        function checkStatus($status){
+            $className = '';
+            $labelStatus = '';
+            switch($status) {
+                case 0:
+                    $className = 'btn-danger';
+                    $labelStatus = 'Huỷ';
+                    break;
+                case 1:
+                    $className = 'btn-primary';
+                    $labelStatus = 'Đang thực hiện';
+                    break;
+                case 2:
+                    $className = 'btn-success';
+                    $labelStatus = 'Hoàn thành';
+                    break;
+                case 3:
+                    $className = 'btn-warning';
+                    $labelStatus = 'Hoàn lại';
+                    break;
+                case 4:
+                    $className = 'btn-danger';
+                    $labelStatus = 'Tạm ngưng';
+                    break;
+                case 5:
+                    $className = 'btn-warning';
+                    $labelStatus = 'Chưa thanh toán';
+                    break;
+                default:
+                    break;
+            }
+            return [
+                'className' => $className,
+                'labelStatus' => $labelStatus
+            ];
+        }
+    }

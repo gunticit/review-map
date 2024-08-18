@@ -17,11 +17,11 @@ return new class extends Migration
             $table->string('url_map');
             $table->string('description')->nullable();
             $table->string('package');
-            $table->string('is_slow')->nullable();
-            $table->string('point_slow')->nullable();
+            $table->string('is_slow')->nullable(); // Rải chậm
+            $table->string('point_slow')->nullable(); // Điểm chậm
             $table->string('keyword')->nullable();
             $table->boolean('has_image')->default(false)->nullable();
-            $table->integer('status'); // 0: Huỷ, 1: Đang thực hiện, 2: Hoàn thành, 3: Hoàn lại, 4: Tạm ngưng
+            $table->integer('status'); // 0: Huỷ, 1: Đang thực hiện, 2: Hoàn thành, 3: Hoàn lại, 4: Tạm ngưng, 5: Chưa thanh toán
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

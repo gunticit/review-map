@@ -27,27 +27,45 @@ class ProjectService {
      */
 
     public function list($request){
-        $project = $this->projectRepository->list($request);
-        return $project;
+        $projects = $this->projectRepository->list($request);
+        $projects = ProjectResource::collection($projects)->resource;
+        $working = 0;
+        $stopped = 0;
+        foreach($projects as $project){
+            if($project->status == 1){
+                $working++;
+            }
+            if($project->status == 4){
+                $stopped++;
+            }
+        }
+        $data = array(
+            'projects' => $projects,
+            'total' => count($projects),
+            'working' => $working,
+            'stopped' => $stopped
+        );
+        return $data;
     }
 
     public function create($request){
-        $data = $this->filterData($request);
-        $project = $this->projectRepository->create($data);
-        return $project;
+        $project = $this->filterData($request);
+        $data = $this->projectRepository->create($project);
+        return $data;
     }
 
     private function filterData($request): array{
         $data = $request->all();
         return array(
-            'name' => $data['name'],
-            'url_map' => $data['url_map'],
-            'description' => $data['description'],
-            'package' => $data['package'],
-            'is_slow' => $data['is_slow'],
-            'keyword' => $data['keyword'],
-            'has_image' => $data['has_image'],
-            'description' => $data['description'],
+            'name' => $data['name'] ?? null,
+            'url_map' => $data['url_map'] ?? null,
+            'description' => $data['description'] ?? null,
+            'package' => $data['package'] ?? null,
+            'is_slow' => $data['is_slow'] ?? null,
+            'keyword' => $data['keyword'] ?? null,
+            'has_image' => $data['has_image'] ?? null,
+            'description' => $data['description'] ?? null,
+            'status' => $data['status'] ?? 1,
         );
     }
 }
