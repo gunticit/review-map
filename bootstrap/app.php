@@ -31,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(AdminMiddleware::class);
         $middleware->alias([
             'locale' => \App\Http\Middleware\Locale::class,
-            // 'auth' => \App\Http\Middleware\Authenticate::class,
+            'auth' => \App\Http\Middleware\Authenticate::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -21,4 +21,6 @@ class Permission extends Model
         return $this->belongsToMany(User::class, 'model_has_permissions', 'permission_id', 'model_id')
                     ->wherePivot('model_type', User::class);
     }
+
+    public $timestamps = true;
 }

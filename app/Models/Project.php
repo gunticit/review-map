@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HasRoles extends Model
+class Project extends Model
 {
     use HasFactory;
-    
-    protected $table='model_has_roles';
-    
+
+    protected $table = 'projects';
+    protected $guarded = [];
     public $timestamps = true;
 }

@@ -2,7 +2,7 @@
 @section('content')
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
-    <form action="">
+    <form action="{{ route('project.store') }}" method="POST">
         <div class="container">
             <div class="row">
                 <!-- cot 1 -->
@@ -14,7 +14,7 @@
                         <div class="mb-4"><!-- class: invalid -->
                             <label for="inputlist-table">Tên dự án <span class="required">*</span>
                             </label>
-                            <input class="form-control" id="inputlist-table" type="text" placeholder="RIVI" value="" required>
+                            <input class="form-control" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="" required>
                             <small class="d-none">Tên dự án cho phép dưới 50 ký tự bao gồm các khoảng trắng.</small>
                         </div>
                         <!-- Form Group (UrlMap)-->
@@ -23,7 +23,7 @@
                             </label>
                             <div class="row">
                                 <div class="col-md-9 col-12">
-                                    <input class="form-control" id="inputUrlMap" type="url" placeholder="URL bắt buộc phải là URL, bắt buộc bằng địa chỉ https://maps.app.goo.gl/..." value="" required>
+                                    <input class="form-control" id="inputUrlMap" name="url_map" type="url" placeholder="URL bắt buộc phải là URL, bắt buộc bằng địa chỉ https://maps.app.goo.gl/..." value="" required>
                                     <small class="d-none">Sai URL. Vui lòng kiểm tra lại.</small>
                                 </div>
                                 <div class="col-md-3 col-12">
@@ -35,7 +35,7 @@
                         <div class="mb-4">
                             <label for="inputDescription">Mô tả dự án
                             </label>
-                            <textarea class="form-control" id="inputDescription" placeholder="Nhập mô tả"></textarea>
+                            <textarea class="form-control" name="description" id="inputDescription" placeholder="Nhập mô tả"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-12">
@@ -43,7 +43,7 @@
                                 <div class="mb-4">
                                     <label for="inputReview">Chọn gói review <span class="required">*</span>
                                     </label>
-                                    <select class="form-control form-select" name="" id="inputReview" required>
+                                    <select class="form-control form-select" name="package" id="inputReview" required>
                                         <option value="">RIVI10 - 45.000 VND/đánh giá - 10 lượt đánh giá</option>
                                         <option value="">RIVI50 - 35.000 VND/đánh giá - 50 lượt đánh giá</option>
                                         <option value="">RIVI100 - 30.000 VND/đánh giá - 100 lượt đánh giá</option>
@@ -54,7 +54,8 @@
                             <div class="col-md-6 col-12">
                                 <!-- Form Group (RaiCham)-->
                                 <div class="mb-4 RaiCham">
-                                    <label for="inputRaiCham">Rải chậm
+                                    <label for="inputRaiCham">
+                                        Rải chậm
                                     </label>
                                     <button type="button" class="btn" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Rải chậm là hình thức đánh giá review mỗi ngày.
                                 Ví dụ: Nếu bạn nhập số lượng rải chậm là 2 tương đương dự án của bạn sẽ nhận 2 lượt đánh giá mỗi ngày">
@@ -140,8 +141,8 @@
     </div>
 </div>
 <!-- Jquery table input Tags -->
-<script src="js/inputTags.jquery.min.js"></script>
-<script src="js/fileUpload.js"></script>
+<script src="{{ asset('./assets/js/inputTags.jquery.min.js') }}"></script>
+<script src="{{ asset('./assets/js/fileUpload.js') }}"></script>
 <script>
     // Jquery 
     jQuery(document).ready(function($) {
