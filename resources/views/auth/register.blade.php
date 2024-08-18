@@ -13,6 +13,16 @@
                                     <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="login">
                                 </a>
                             </div>
+                            @if (Session::has('success'))
+                                <div class="alert alert-success">
+                                    {{ Session::get('success') }}
+                                </div>
+                            @endif
+                            @if (Session::has('error'))
+                                <div class="alert alert-danger">
+                                    {{ Session::get('error') }}
+                                </div>
+                            @endif
                             <div class="login-form text-center">
                                 <h1>{{ __('auth.register') }}</h1>
                                 <form method="POST" action="{{ route('auth.registerUser') }}">
@@ -26,7 +36,12 @@
                                         @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="{{ __('auth.telephone') }}" required />
+                                        <input type="tel" class="form-control" id="phone" name="telephone" placeholder="{{ __('auth.telephone') }}" required />
+                                        @error('telephone')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
                                     <div class="input-group mb-3">
                                         <input id="InputEmail" placeholder="{{ __('auth.email') }}" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
@@ -53,6 +68,8 @@
                                             <label class="form-check-label" for="exampleCheck1">{!! __('auth.terms_and_policy', ['url' => route('terms')]) !!} </label>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="role_id" value="2">
+                                    <input type="hidden" name="permission_id" value="1">
                                     <button type="submit" class="btn btn-primary">{{ __('auth.register') }}</button>
                                 </form>
                                 <div class="login-other">

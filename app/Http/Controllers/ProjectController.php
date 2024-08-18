@@ -18,17 +18,15 @@ class ProjectController extends Controller
     }
 
     public function create(Request $request){
-        return view('pages.projects.create');
+        $data = array(
+            'latitude' => '10.8299',
+            'longitude' => '106.68029'
+        );
+        return view('pages.projects.create',$data);
     }
 
-    public function store(ProjectRequest $request){
-        try{
-            dd($request);
-            $data = $request->all();
-            $check = $this->projectService->create($data);
-            dd($check);
-        }catch(\Exception $e){
-            dd($e);
-        }
+    public function store(Request $request){
+        $data = $this->projectService->create($request);
+        dd($data);
     }
 }

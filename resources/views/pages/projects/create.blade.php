@@ -1,8 +1,20 @@
 @extends('layouts.app')
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/basictable/1.5.0/basictable.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/basictable/1.5.0/basictable.min.js"></script>
+<style>
+    .inputUrlMap.active .col-md-3{
+        cursor: pointer;
+    }
+    #map{
+        width: 100%;
+        height: 500px;
+    }
+</style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
     <form action="{{ route('project.store') }}" method="POST">
+        @csrf
         <div class="container">
             <div class="row">
                 <!-- cot 1 -->
@@ -27,8 +39,10 @@
                                     <small class="d-none">Sai URL. Vui lòng kiểm tra lại.</small>
                                 </div>
                                 <div class="col-md-3 col-12">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CheckUrl" disabled> Kiểm tra URL </button>
+                                    <button type="button" class="btn btn-primary btn-check-map" onclick="handleCheckMap()" data-bs-toggle="modal" data-bs-target="#CheckUrl" disabled> Kiểm tra URL </button>
                                 </div>
+                                <input type="hidden" name="lat" id="lat">
+                                <input type="hidden" name="lng" id="lng">
                             </div>
                         </div>
                         <!-- Form Group (Description)-->
@@ -65,7 +79,7 @@
                                         <span class="input-group-text" id="inputRaiChamCheck">
                                             <input type="checkbox" class="form-check-input" id="inputRaiChamCheck">
                                         </span>
-                                        <input type="number" class="form-control" id="inputRaiCham">
+                                        <input type="number" max="100" class="form-control" id="inputRaiCham">
                                     </div>
                                     <small>Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>
                                 </div>
@@ -131,11 +145,13 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d661.6551900125415!2d106.66539727809767!3d10.786532101280468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ed21149a467%3A0xe046dc904427832b!2zTOG6qXUgQsOyIE7hu5NpIMSQ4bqldCBCw6AgU8OhdQ!5e0!3m2!1svi!2s!4v1721189394229!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
+                <div class="map-info">
+                    <div id="map"></div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary">Xác nhận</button>
+                <button type="button" class="btn btn-primary" id="confirm-url-map">Xác nhận</button>
             </div>
         </div>
     </div>
@@ -157,9 +173,72 @@
         // file Upload
         $("#fileUpload").fileUpload();
         //imgs
-        $('.inputImg input[name="inputImg"]').change(function() {
-            $(".inputImg").toggleClass("active");
+        $('.inputUrlMap input[name="url_map"]').change(function() {
+            $(".inputUrlMap").toggleClass("active");
+            let urlMap = $(this).val();
+            let coordinates = getLatLongFromUrl(urlMap);
+            console.log(coordinates);
+            $('#lat').val(coordinates.latitude);
+            $('#lng').val(coordinates.longitude);
+            $('.btn-check-map').prop('disabled', false);
+        });
+        $('#confirm-url-map').on('click', function(){
+            $('#CheckUrl').modal('hide');
         });
     });
+    function getLatLongFromUrl(url) {
+        const urlObj = new URL(url);
+        const pathParts = decodeURIComponent(urlObj.pathname).split('/');
+        const dataURL = pathParts.filter(item => item.startsWith('@'));
+        const data = dataURL[0] ? dataURL[0].split(',') : [];
+        
+        return {
+            latitude: data[0] ? data[0].replace('@', '') :'',
+            longitude: data[1] ? data[1] : ''
+        };
+    }
 </script> 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&callback=initMap" async defer></script>
+    <script>
+        let map;
+        let marker;
+
+        function initMap() {
+            const initialLat = parseFloat('<?= $latitude; ?>');
+            const initialLng = parseFloat('<?= $longitude; ?>');
+
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 13,
+                gestureHandling: "greedy",
+                center: { lat: initialLat, lng: initialLng },
+            });
+
+            marker = new google.maps.Marker({
+                map,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                position: { lat: initialLat, lng: initialLng },
+            });
+
+            marker.addListener("dragend", handleMarkerDragEnd);
+        }
+
+        function handleCheckMap() {
+            let latitude = parseFloat($('#lat').val());
+            let longitude = parseFloat($('#lng').val());
+
+            if (!isNaN(latitude) && !isNaN(longitude) && map) {
+                map.setCenter({ lat: latitude, lng: longitude });
+                marker.setPosition({ lat: latitude, lng: longitude });
+            } else {
+                console.error('Tọa độ không hợp lệ hoặc bản đồ chưa được khởi tạo.');
+            }
+        }
+        function handleMarkerDragEnd(event) {
+            const newLat = event.latLng.lat();
+            const newLng = event.latLng.lng();
+            $('#lat').val(newLat);
+            $('#lng').val(newLng);
+        }
+    </script>
 @endsection

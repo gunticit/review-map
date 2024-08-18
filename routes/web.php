@@ -65,4 +65,5 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/create-project', [App\Http\Controllers\ProjectController::class, 'create'])->name('project.create');
     Route::post('/create-project', [App\Http\Controllers\ProjectController::class, 'store'])->name('project.store');
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
 });

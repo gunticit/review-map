@@ -12,7 +12,7 @@
                     </div> <?= __('common.overview') ?>
                 </a>
                 <!-- Sidenav Link (Alerts)-->
-                <a class="nav-link " href="10.0.thong-bao.php">
+                <a class="nav-link " href="{{ route('notification') }}">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">notifications_active</span>
                     </div> Thông báo

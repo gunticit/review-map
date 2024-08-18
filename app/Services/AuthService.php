@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -34,10 +35,10 @@ class AuthService {
         return $data;
     }
 
-    public function registerUser($request): array{
+    public function registerUser($request){
         $data = $this->filterData($request);
         $user = $this->userRepository->create($data);
-        return $user;
+        return $user ?? [];
     }
 
     /**

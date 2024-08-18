@@ -16,11 +16,6 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // if (!$request->user() || !$request->user()->isAdmin()) {
-        //     Auth::logout();
-        //     return redirect()->route('login');
-        // }else{
-            return $next($request);
-        // }
+        return $next($request);
     }
 }

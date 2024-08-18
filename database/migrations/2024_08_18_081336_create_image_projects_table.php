@@ -11,17 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('url_map');
-            $table->string('description')->nullable();
-            $table->string('package');
-            $table->string('is_slow')->nullable();
-            $table->string('point_slow')->nullable();
-            $table->string('keyword')->nullable();
-            $table->boolean('has_image')->default(false)->nullable();
-            $table->integer('status'); // 0: Huỷ, 1: Đang thực hiện, 2: Hoàn thành, 3: Hoàn lại, 4: Tạm ngưng
+        Schema::create('image_projects', function (Blueprint $table) {
+            $table->id();
+            $table->string('project_id');
+            $table->string('image_url');
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -37,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('image_projects');
     }
 };

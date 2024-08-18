@@ -41,8 +41,13 @@ class ProjectService {
         $data = $request->all();
         return array(
             'name' => $data['name'],
-            'email' => $data['email'],
-            'telephone' => $data['telephone'],
+            'url_map' => $data['url_map'],
+            'description' => $data['description'],
+            'package' => $data['package'],
+            'is_slow' => $data['is_slow'],
+            'keyword' => $data['keyword'],
+            'has_image' => $data['has_image'],
+            'description' => $data['description'],
         );
     }
 }

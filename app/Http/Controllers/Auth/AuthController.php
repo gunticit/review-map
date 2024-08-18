@@ -3,13 +3,16 @@
     namespace App\Http\Controllers\Auth;
     use Illuminate\Http\Request;
     use App\Exceptions\ProcessException;
-    use App\Http\Requests\AuthRequest;
     use App\Services\AuthService;
     use Illuminate\Support\Facades\Auth;
     use App\Http\Controllers\BaseController;
-    use App\Http\Requests\RegisterRequest;
-    use App\Helpers\Helper;
-    
+use App\Http\Requests\AuthRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Rules\Email;
+use App\Rules\PhoneNumber;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+
     class AuthController extends BaseController
     {
         protected $authService;
@@ -33,7 +36,7 @@
             return redirect()->route('login');
         }
 
-        public function authenticate(Request $request){
+        public function authenticate(AuthRequest $request){
             try{
                 $check_login = $this->authService->login($request);
                 if($check_login){
@@ -48,10 +51,13 @@
         public function registerUser(RegisterRequest $request){
             try{
                 $data = $this->authService->registerUser($request);
-                dd($data);
-                return redirect()->route('login');
+                if($data){
+                    Session::flash('success', 'Bạn đã tạo user thành công');
+                    return redirect()->route('login');
+                }
+                Session::flash('error', 'Tạo user không thành công');
+                return redirect()->back()->withInput();
             }catch(\Exception $e){
-                dd($e->getMessage());
                 throw new ProcessException($e);
             }
         }

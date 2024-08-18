@@ -16,7 +16,7 @@ use App\Http\Middleware\CheckTokenExpiration;
 use App\Http\Middleware\DenyInactiveAccount;
 # Middleware params request vào file log
 use App\Http\Middleware\LogRequestParams;
-use App\Http\Middleware\AdminMiddleware;
+// use App\Http\Middleware\AdminMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -28,7 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(CheckTokenExpiration::class);
         $middleware->append(DenyInactiveAccount::class);
         $middleware->append(LogRequestParams::class);
-        $middleware->append(AdminMiddleware::class);
+        // $middleware->append(AdminMiddleware::class);
         $middleware->alias([
             'locale' => \App\Http\Middleware\Locale::class,
             'auth' => \App\Http\Middleware\Authenticate::class,
