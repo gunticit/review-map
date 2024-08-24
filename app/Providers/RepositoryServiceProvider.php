@@ -11,6 +11,9 @@ use App\Repositories\User\UserRepositoryInterface;
 # Project
 use App\Repositories\Project\ProjectRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
+# Project Image
+use App\Repositories\ProjectImage\ProjectImageRepository;
+use App\Repositories\ProjectImage\ProjectImageRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(ProjectRepositoryInterface::class, ProjectRepository::class);
+        $this->app->bind(ProjectImageRepositoryInterface::class, ProjectImageRepository::class);
     }
 
     /**

@@ -13,7 +13,7 @@
                         <i class="material-symbols-outlined">image</i>
                         <p>Kéo thả hoặc <span class="text-primary">chọn hình ảnh</span> để tải lên</p>
                     </div>
-                    <input type="file" accept="image/png, image/gif, image/jpeg" id="${fileUploadId}" name=[] multiple hidden />
+                    <input type="file" accept="image/png, image/gif, image/jpeg" id="${fileUploadId}" name="images[]" multiple hidden />
                 </label>
             `;
 
@@ -76,7 +76,7 @@
                         $(this).closest("tr").remove();
 
                         if (tableBody.find("tr").length === 0) {
-                            tableBody.append('<tr><td colspan="6" class="no-file">No files selected!</td></tr>');
+                            tableBody.append('<tr style="width: 100% !important"><td colspan="6" class="no-file">Không có file nào được chọn!</td></tr>');
                         }
                     });
                 }

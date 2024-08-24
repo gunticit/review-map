@@ -98,6 +98,13 @@ class BaseRepository implements RepositoryInterface
  
         return $this->model->fresh();
     }
+
+    public function deleteByKey($key, $value)
+    {
+        $this->model->query()->where($key, $value)->delete();
+ 
+        return $this->model->fresh();
+    }
  
     // Create a new record in the database and get back the ID
     public function insertGetId(array $data)

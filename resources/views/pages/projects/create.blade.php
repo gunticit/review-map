@@ -53,6 +53,37 @@
         display: flex;
         gap: 12px
     }
+    #detail-video{
+        position: relative;
+    }
+    #detail-video .btn-play-video{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        background: transparent;
+        border: none;
+        display: none;
+        transition: all ease .4s;
+        opacity: 0;
+        animation: showBtnVideo 1s ease forwards;
+    }
+    #detail-video:hover .btn-play-video{
+        display: block;
+    }
+    #detail-video .btn-play-video span{
+        font-size: 50px;
+        color: #1b1b1b;
+    }
+    @keyframes showBtnVideo{
+        from{
+            opacity: 0;
+        }
+        to{
+            opacity: 1;
+        }
+    }
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
@@ -63,7 +94,7 @@
                 <!-- cot 1 -->
                 <div class="col-xl-8 col-md-12 col-12 mb-4 mb-xl-0">
                     <div class="col-inner">
-                        <h2 class="section-title mb-4">Tạo dự án <i class="fa-regular fa-star"></i></h2>
+                        <h2 class="section-title mb-4">Tạo dự án</h2>
                         <!-- Form Group (list-table)-->
                         
                         <div class="mb-4"><!-- class: invalid -->
@@ -140,13 +171,12 @@
                                 Ví dụ: Nếu bạn nhập số lượng rải chậm là 2 tương đương dự án của bạn sẽ nhận 2 lượt đánh giá mỗi ngày">
                                         <span class="material-symbols-outlined">info</span>
                                     </button>
-                                    <div class="input-group">
+                                    <div class="input-group" id="group-raicham">
                                         <span class="input-group-text" id="inputRaiChamCheck">
                                             <input type="checkbox" name="is_slow" class="form-check-input" id="inputRaiChamCheck">
                                         </span>
                                         <input type="number" max="100" name="point_slow" class="form-control" id="inputRaiCham">
                                     </div>
-                                    <small>Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>
                                 </div>
                             </div>
                         </div>
@@ -173,7 +203,7 @@
                                 <input class="form-check-input" type="radio" name="has_image" id="inputImg2" value="0" checked>
                                 <label class="form-check-label" for="inputImg2"> Không </label>
                             </div>
-                            <div class="d-none">
+                            <div class="d-none" id="group-upload-image">
                                 <p>
                                     <small>Các hình ảnh bắt buộc phải được chụp bằng thiết bị thật, chúng tôi sẽ phân phối mỗi đánh giá kèm với 1 ảnh. Đánh giá có ảnh sẽ được phân phối ngẫu nhiên xen kẽ với đánh giá chỉ có chữ.</small>
                                 </p>
@@ -191,11 +221,18 @@
                         <div id="info-map-reviews" style="display:none"></div>
                         <div id="video-intro">
                             <h2>Hướng dẫn lấy URL</h2>
-                            <video id="video1" width="420">
-                                <source src="{{ asset('assets/video/mov_bbb.mp4') }}" type="video/mp4">
-                                <source src="{{ asset('assets/video/mov_bbb.ogg') }}" type="video/ogg">
-                                Your browser does not support HTML video.
-                              </video>
+                            <div id="detail-video">
+                                <button onclick="playPause()" type="button" class="btn-play-video">
+                                    <span class="material-symbols-outlined">
+                                        play_circle
+                                    </span>
+                                </button>
+                                <video id="video1" width="420" style="max-width: 100%;">
+                                    <source src="{{ asset('assets/video/mov_bbb.mp4') }}" type="video/mp4">
+                                    <source src="{{ asset('assets/video/mov_bbb.ogg') }}" type="video/ogg">
+                                    Your browser does not support HTML video.
+                                </video>
+                            </div>
                         </div>
                         <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/MLpWrANjFbI?si=ZGXqWQK6lxYSxRAW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
                         <h3 class="col-title">Rải chậm</h3>
@@ -255,9 +292,7 @@
         $('.inputUrlMap input[name="url_map"]').change(async function() {
             $(".inputUrlMap").toggleClass("active");
             let urlMap = $(this).val();
-            if(!urlMap) {
-                $('.row-coordinate').removeClass('show');
-            }else{
+            if(urlMap) {
                 await getLongUrl(urlMap).then(function(res) {
                     if(res.data) {
                         let realUrl = res.data?.long_url ?? '';
@@ -268,7 +303,6 @@
                             document.getElementById('lat').value = coordinates.latitude ?? '';
                             $('.btn-check-map').prop('disabled', false);
                         }
-                        $('.row-coordinate').addClass('show');
                     }
                 })
             }
@@ -304,6 +338,7 @@
 </script> 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&libraries=places&callback=initMap" async defer></script>
     <script>
+        // Xử lý map
         var map;
         var marker;
 
@@ -377,22 +412,22 @@
             document.getElementById('lat').value = newLat;
             document.getElementById('lng').value = newLng;
         }
-    </script>
-    <script>
+
         $('#confirm-url-map').on('click', function(){
             latitude = parseFloat($('#lat').val());
             longitude = parseFloat($('#lng').val());
             var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
             var geocoder = new google.maps.Geocoder;
+            $('#info-map-reviews *').remove();
             geocoder.geocode({'location': latlng}, async function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
-                if (results[1]) {
-                   await getMapInfo(results[1].place_id);
+                    if (results[1]) {
+                    await getMapInfo(results[1].place_id);
+                    } else {
+                        window.alert('No results found');
+                    }
                 } else {
-                    window.alert('No results found');
-                }
-                } else {
-                window.alert('Geocoder failed due to: ' + status);
+                    window.alert('Geocoder failed due to: ' + status);
                 }
             });
         });
@@ -404,6 +439,7 @@
                 $('#info-map-reviews').show();
                 $('#info-map-reviews').append(`
                 <h2>${data?.displayName?.text}</h2>
+                <p>Đánh giá trung bình</p>
                 <div class="rating-row">
                     <span>${data?.rating}</span>
                     <div class="stars">
@@ -436,10 +472,10 @@
                     }
                 });
                 $('#info-map-reviews').append(`
-                    <p>Đánh giá trung bình</p>
+                    <hr />
                     <p>Bạn cần nâng cấp trung bình đánh giá lên số lượng</p>`);
                 $('#info-map-reviews').append(`
-                    <input class="form-control" id="changeRate" type="number" name="changeRate" min="0" max="5">
+                    <input class="form-control" id="changeRate" onchange="handleRateChange(event, ${data?.rating})" type="number" name="changeRate" min="0" max="5">
                 `);
             })
             .catch(function (error) {
@@ -448,5 +484,84 @@
         }
         function handleSearchMap(event){
         }
+
+        // Rating
+        function handleRateChange(event, rating){
+            $('#info-map-reviews .group-reviews-alert').remove();
+            let rate = event.target.value;
+            let message = '';
+            let errors = false;
+            if(rate > 0 && rate < 5){
+                errors = false;
+            }else{
+                errors = true;
+                if(rate < 0){
+                    $('#changeRate').val(0);
+                    message = 'Giá trị đánh giá từ 0 đến 5';
+                }
+                if(rate > 5){
+                    $('#changeRate').val(5);
+                    message = 'Giá trị đánh giá không quá 5';
+                }
+            }
+            if (errors) {
+                $('#info-map-reviews').append(`
+                    <div class="group-reviews-alert">
+                        <p class="text-danger">${message}</p>
+                    </div>
+                `);
+            } else {
+                $('#info-map-reviews').append(`
+                    <div class="group-reviews-alert">
+                        <p class="text-success">${message}</p>
+                    </div>
+                `);
+            }
+            setTimeout(() => {
+                $('#info-map-reviews .group-reviews-alert').remove();
+            }, 2500);
+        }
+
+        // Rải chậm
+        $('#inputRaiCham').on('change', function(){
+            $('#group-raicham small').remove();
+            if($(this).val() > 100){
+                $(this).val(100);
+                $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);
+                setTimeout(() => {
+                    $('#group-raicham small').remove();
+                }, 2500);
+            }
+            if($(this).val() < 0){
+                $(this).val(0);
+            }
+        });
+
+        // Upload image
+        $('input[name=has_image]').on('change', function(){
+            if($(this).is(':checked') && $(this).val() === '1'){
+                $('#group-upload-image').removeClass('d-none');
+            }else if($(this).val() === '0'){
+                $('#group-upload-image').addClass('d-none');
+            }  
+        });
+        var myVideo = document.getElementById("video1"); 
+
+        function playPause() { 
+            if (myVideo.paused){
+                $('#detail-video .btn-play-video *').remove();
+                $('#detail-video .btn-play-video').html(`<span class="material-symbols-outlined">
+                pause_circle
+                </span>`);
+                myVideo.play(); 
+            }else{
+                $('#detail-video .btn-play-video *').remove();
+                $('#detail-video .btn-play-video').html(`<span class="material-symbols-outlined">
+                play_circle
+                </span>`);
+                myVideo.pause();
+            }
+                
+        } 
     </script>
 @endsection

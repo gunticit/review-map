@@ -6,14 +6,17 @@ use App\Exceptions\ProcessException;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest;
 use App\Services\ProjectService;
+use App\Services\ProjectImageService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Validate;
 
 class ProjectController extends Controller
 {
-    protected $projectService;
-    public function __construct(ProjectService $projectService){
+    protected $projectService, $projectImageService;
+    public function __construct(ProjectService $projectService, ProjectImageService $projectImageService){
         $this->projectService = $projectService;
+        $this->projectImageService = $projectImageService;
     }
     public function index(Request $request){
         $data = $this->projectService->list($request);
@@ -35,14 +38,21 @@ class ProjectController extends Controller
 
     public function store(ProjectRequest $request){
         try{
+            DB::beginTransaction();
             $data = $this->projectService->create($request);
             if($data){
+                if(!empty($request->images)){
+                    $this->projectImageService->createDataImages($request, $data->id);
+                }
                 Session::flash('success', 'Khởi tạo dự án thành công');
+                DB::commit();
                 return redirect()->route('project.list');
             }
+            DB::rollBack();
             Session::flash('error', 'Tạo dự án không thành công');
             return redirect()->back()->withInput();
         }catch(\Exception $e){
+            DB::rollBack();
             throw new ProcessException($e);
         }
     }
