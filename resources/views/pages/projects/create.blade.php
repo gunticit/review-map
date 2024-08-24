@@ -2,6 +2,15 @@
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/basictable/1.5.0/basictable.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/basictable/1.5.0/basictable.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/fontawesome.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/5ad6bf3d69.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+<script>
+    var latitude = parseFloat('<?= $latitude; ?>');
+    var longitude = parseFloat('<?= $longitude; ?>');
+</script>
 <style>
     .inputUrlMap.active .col-md-3{
         cursor: pointer;
@@ -9,6 +18,40 @@
     #map{
         width: 100%;
         height: 500px;
+    }
+    .stars i {
+        color: #ccc;
+    }
+
+    .stars i.filled {
+        color: gold;
+    }
+
+    .stars i.half {
+        background: linear-gradient(90deg, gold 50%, #ccc 50%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .row-coordinate{
+        display: flex;
+    }
+    .relative{
+        position: relative
+    }
+    .row-coordinate{
+        position: absolute;
+        top: 0;
+        right: 0;
+        direction: rtl;
+        width: 220px;
+        z-index: -1;
+    }
+    .row-coordinate.show{
+        z-index: 1;
+    }
+    .rating-row{
+        display: flex;
+        gap: 12px
     }
 </style>
 <!-- tao-du-an -->
@@ -20,7 +63,7 @@
                 <!-- cot 1 -->
                 <div class="col-xl-8 col-md-12 col-12 mb-4 mb-xl-0">
                     <div class="col-inner">
-                        <h2 class="section-title mb-4">Tạo dự án</h2>
+                        <h2 class="section-title mb-4">Tạo dự án <i class="fa-regular fa-star"></i></h2>
                         <!-- Form Group (list-table)-->
                         
                         <div class="mb-4"><!-- class: invalid -->
@@ -39,7 +82,7 @@
                             <label for="inputUrlMap">URL Map <span class="required">*</span>
                             </label>
                             <div class="row">
-                                <div class="col-md-9 col-12">
+                                <div class="col-md-9 col-12 relative">
                                     <input class="form-control" id="inputUrlMap" name="url_map" type="url" placeholder="URL bắt buộc phải là URL, bắt buộc bằng địa chỉ https://maps.app.goo.gl/..." value="" required>
                                     @error('url_map')
                                         <span class="invalid-feedback" role="alert">
@@ -47,12 +90,18 @@
                                         </span>
                                     @enderror
                                     <small class="d-none">Sai URL. Vui lòng kiểm tra lại.</small>
+                                    <div class="row-coordinate">
+                                        <div>
+                                            <input class="form-control" placeholder="Latitude" name="lat" id="lat">
+                                        </div>
+                                        <div>
+                                            <input class="form-control" placeholder="Longitude" name="lng" id="lng">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-3 col-12">
                                     <button type="button" class="btn btn-primary btn-check-map" onclick="handleCheckMap()" data-bs-toggle="modal" data-bs-target="#CheckUrl" disabled> Kiểm tra URL </button>
                                 </div>
-                                <input type="hidden" name="lat" id="lat">
-                                <input type="hidden" name="lng" id="lng">
                             </div>
                         </div>
                         <!-- Form Group (Description)-->
@@ -139,7 +188,15 @@
                 <!-- cot 2 -->
                 <div class="col-xl-4 col-md-12 col-12 ">
                     <div class="col-inner col-guide">
-                        <h2 class="section-title">Hướng dẫn lấy URL</h2>
+                        <div id="info-map-reviews" style="display:none"></div>
+                        <div id="video-intro">
+                            <h2>Hướng dẫn lấy URL</h2>
+                            <video id="video1" width="420">
+                                <source src="{{ asset('assets/video/mov_bbb.mp4') }}" type="video/mp4">
+                                <source src="{{ asset('assets/video/mov_bbb.ogg') }}" type="video/ogg">
+                                Your browser does not support HTML video.
+                              </video>
+                        </div>
                         <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/MLpWrANjFbI?si=ZGXqWQK6lxYSxRAW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
                         <h3 class="col-title">Rải chậm</h3>
                         <p>Rải chậm giúp các đánh giá thật hơn. Chi phí rải chậm một ngày là 2.000 VND</p>
@@ -167,6 +224,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="map-info">
+                    <input onchange="handleSearchMap(event)" id="search-places" placeholder="Tìm kiếm vị trí" class="form-control" >
                     <div id="map"></div>
                 </div>
             </div>
@@ -194,59 +252,117 @@
         // file Upload
         $("#fileUpload").fileUpload();
         //imgs
-        $('.inputUrlMap input[name="url_map"]').change(function() {
+        $('.inputUrlMap input[name="url_map"]').change(async function() {
             $(".inputUrlMap").toggleClass("active");
             let urlMap = $(this).val();
-            let coordinates = getLatLongFromUrl(urlMap);
-            console.log(coordinates);
-            $('#lat').val(coordinates.latitude);
-            $('#lng').val(coordinates.longitude);
-            $('.btn-check-map').prop('disabled', false);
+            if(!urlMap) {
+                $('.row-coordinate').removeClass('show');
+            }else{
+                await getLongUrl(urlMap).then(function(res) {
+                    if(res.data) {
+                        let realUrl = res.data?.long_url ?? '';
+                        if (realUrl) {
+                            let coordinates = getLatLongFromUrl(realUrl);
+                            console.log(coordinates);
+                            document.getElementById('lng').value = coordinates.longitude ?? '';
+                            document.getElementById('lat').value = coordinates.latitude ?? '';
+                            $('.btn-check-map').prop('disabled', false);
+                        }
+                        $('.row-coordinate').addClass('show');
+                    }
+                })
+            }
         });
         $('#confirm-url-map').on('click', function(){
             $('#CheckUrl').modal('hide');
         });
     });
+    async function getLongUrl(shortUrl) {
+        try {
+            let url = "{{ route('get.long.url') }}?url=" + encodeURIComponent(shortUrl); 
+            const response = await axios(url);
+            return response
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
     function getLatLongFromUrl(url) {
-        const urlObj = new URL(url);
-        const pathParts = decodeURIComponent(urlObj.pathname).split('/');
-        const dataURL = pathParts.filter(item => item.startsWith('@'));
-        const data = dataURL[0] ? dataURL[0].split(',') : [];
-        
+        const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+        const match = url.match(regex);
+        if (match) {
+            latitude = match[1];
+            longitude = match[2];
+            console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        } else {
+            console.log('Không tìm thấy tọa độ trong URL.');
+        }
         return {
-            latitude: data[0] ? data[0].replace('@', '') :'',
-            longitude: data[1] ? data[1] : ''
+            latitude: latitude,
+            longitude: longitude
         };
     }
 </script> 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&libraries=places&callback=initMap" async defer></script>
     <script>
-        let map;
-        let marker;
+        var map;
+        var marker;
 
         function initMap() {
-            const initialLat = parseFloat('<?= $latitude; ?>');
-            const initialLng = parseFloat('<?= $longitude; ?>');
 
+            // Tạo bản đồ
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 13,
                 gestureHandling: "greedy",
-                center: { lat: initialLat, lng: initialLng },
+                center: { lat: latitude, lng: longitude },
             });
 
+            // Tạo marker
             marker = new google.maps.Marker({
                 map,
                 draggable: true,
                 animation: google.maps.Animation.DROP,
-                position: { lat: initialLat, lng: initialLng },
+                position: { lat: latitude, lng: longitude },
             });
 
+            // Tạo SearchBox cho ô tìm kiếm
+            const input = document.getElementById('search-places');
+            const searchBox = new google.maps.places.SearchBox(input);
+
+            // Điều chỉnh kết quả tìm kiếm theo viewport của bản đồ
+            map.addListener('bounds_changed', () => {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            searchBox.addListener('places_changed', () => {
+                const places = searchBox.getPlaces();
+
+                if (places.length === 0) {
+                    return;
+                }
+
+                // Lấy vị trí đầu tiên từ kết quả tìm kiếm
+                const place = places[0];
+
+                if (!place.geometry || !place.geometry.location) {
+                    console.error("Place không có thông tin về vị trí");
+                    return;
+                }
+
+                // Di chuyển marker tới vị trí được chọn và cập nhật bản đồ
+                marker.setPosition(place.geometry.location);
+                map.setCenter(place.geometry.location);
+
+                // Cập nhật giá trị latitude và longitude trong các ô input
+                document.getElementById('lat').value = place.geometry.location.lat();
+                document.getElementById('lng').value = place.geometry.location.lng();
+            });
             marker.addListener("dragend", handleMarkerDragEnd);
         }
 
         function handleCheckMap() {
-            let latitude = parseFloat($('#lat').val());
-            let longitude = parseFloat($('#lng').val());
+            latitude = parseFloat($('#lat').val());
+            longitude = parseFloat($('#lng').val());
+            console.log(latitude, longitude);
 
             if (!isNaN(latitude) && !isNaN(longitude) && map) {
                 map.setCenter({ lat: latitude, lng: longitude });
@@ -258,8 +374,79 @@
         function handleMarkerDragEnd(event) {
             const newLat = event.latLng.lat();
             const newLng = event.latLng.lng();
-            $('#lat').val(newLat);
-            $('#lng').val(newLng);
+            document.getElementById('lat').value = newLat;
+            document.getElementById('lng').value = newLng;
+        }
+    </script>
+    <script>
+        $('#confirm-url-map').on('click', function(){
+            latitude = parseFloat($('#lat').val());
+            longitude = parseFloat($('#lng').val());
+            var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+            var geocoder = new google.maps.Geocoder;
+            geocoder.geocode({'location': latlng}, async function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                if (results[1]) {
+                   await getMapInfo(results[1].place_id);
+                } else {
+                    window.alert('No results found');
+                }
+                } else {
+                window.alert('Geocoder failed due to: ' + status);
+                }
+            });
+        });
+        function getMapInfo(placeID){
+            axios.get(`https://places.googleapis.com/v1/places/${placeID}?fields=id,displayName,rating,reviews,userRatingCount&key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E`)
+            .then(function (response) {
+                let data = response.data ? response.data : {};
+                $('#video-intro').hide();
+                $('#info-map-reviews').show();
+                $('#info-map-reviews').append(`
+                <h2>${data?.displayName?.text}</h2>
+                <div class="rating-row">
+                    <span>${data?.rating}</span>
+                    <div class="stars">
+                        <i class="fa fa-star" data-value="1"></i>
+                        <i class="fa fa-star" data-value="2"></i>
+                        <i class="fa fa-star" data-value="3"></i>
+                        <i class="fa fa-star" data-value="4"></i>
+                        <i class="fa fa-star" data-value="5"></i>
+                    </div> 
+                    <span>(${data?.userRatingCount})</span>
+                </div>
+                `);
+                let rating = data?.rating ? data?.rating : 0;
+                const stars = document.querySelectorAll('.stars i');
+
+                stars.forEach(star => {
+                    const starValue = parseFloat(star.getAttribute('data-value'));
+                    if (rating >= starValue) {
+                        star.classList.remove('fa-star-half');
+                        star.classList.add('fa-solid');
+                        star.classList.remove('fa-regular');
+                    } else if (rating > starValue - 1 && rating < starValue) {
+                        star.classList.add('fa-star-half');
+                        star.classList.remove('fa-star');
+                        star.classList.remove('fa-solid');
+                        star.classList.remove('fa-regular');
+                    } else {
+                        star.classList.remove('fa-star-half');
+                        star.classList.add('fa-regular');
+                    }
+                });
+                $('#info-map-reviews').append(`
+                    <p>Đánh giá trung bình</p>
+                    <p>Bạn cần nâng cấp trung bình đánh giá lên số lượng</p>`);
+                $('#info-map-reviews').append(`
+                    <input class="form-control" id="changeRate" type="number" name="changeRate" min="0" max="5">
+                `);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+        function handleSearchMap(event){
         }
     </script>
 @endsection

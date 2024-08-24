@@ -67,3 +67,5 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
 });
+
+Route::get('/get-long-url', [App\Http\Controllers\DashboardController::class, 'getLongUrl'])->name('get.long.url');
