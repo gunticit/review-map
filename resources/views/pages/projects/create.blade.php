@@ -87,7 +87,7 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
-    <form action="{{ route('project.store') }}" method="POST">
+    <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="container">
             <div class="row">

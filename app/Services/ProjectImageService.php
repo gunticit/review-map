@@ -55,25 +55,19 @@ class ProjectImageService {
     }
 
     public function createDataImages($request, $project_id){
-        $projectImage = $this->filterData($request);
         $data = array();
-        if(!empty($projectImage['images'])){
+        if ($request->hasFile('images')) {
             $this->projectImageRepository->deleteByKey('project_id',$project_id);
-            foreach($projectImage['images'] as $image){
+            $folder = 'uploads' . '/' . date('Y-m') . '/' . date('d') . '/' . $project_id;
+            foreach ($request->file('images') as $image) {
+                $path = $image->store($folder, 'public');
                 $data[] = array(
-                    'image_url' => $image,
+                    'image_url' => $path,
                     'project_id' => $project_id
                 );
             }
             $this->projectImageRepository->insert($data);
         }
         return $data;
-    }
-
-    private function filterData($request): array{
-        $data = $request->all();
-        return array(
-            'images' => $data['images'] ?? null,
-        );
     }
 }

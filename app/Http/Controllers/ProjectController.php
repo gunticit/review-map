@@ -41,7 +41,7 @@ class ProjectController extends Controller
             DB::beginTransaction();
             $data = $this->projectService->create($request);
             if($data){
-                if(!empty($request->images)){
+                if ($request->has('has_image') && $request->has_image == 1) {
                     $this->projectImageService->createDataImages($request, $data->id);
                 }
                 Session::flash('success', 'Khởi tạo dự án thành công');

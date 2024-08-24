@@ -27,7 +27,7 @@ class AuthRequest extends FormRequest
         ];
     }
 
-    public static function messages(): array{
+    public static function messages(){
         return [
             'username.required' => 'Vui lòng nhập tài khoản',
             'password.required' => 'Vui lòng nhập mật khẩu',
