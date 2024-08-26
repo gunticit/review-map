@@ -88,6 +88,7 @@
         padding: 6px 8px;
         margin-right: 6px;
         margin-bottom: 6px;
+        font-size: 12px;
     }
     .tags-input-wrapper{
         background: transparent;
@@ -112,14 +113,13 @@
         display: inline-block;
         background-color: #FAFAFA;
         color: #000000;
-        border-radius: 40px;
-        padding: 0px 3px 0px 7px;
+        border-radius: 5px;
+        padding: 2px 3px 2px 10px;
         margin-right: 5px;
         margin-bottom: 5px;
-        box-shadow: 0 5px 15px -2px rgb(208 208 208 / 70%);
     }
     .tags-input-wrapper .tag a {
-        margin: 0 7px 3px;
+        margin: 0 7px;
         display: inline-block;
         cursor: pointer;
     }

@@ -19,7 +19,7 @@ class ProjectRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public static function rules(): array
+    public function rules(): array
     {
         return [
             'name' => 'required',
@@ -28,7 +28,7 @@ class ProjectRequest extends FormRequest
         ];
     }
 
-    public static function messages(): array{
+    public function messages(): array{
         return [
             'name.required' => 'Vui lòng nhập tên dự án',
             'url_map.required' => 'Vui lòng nhập đường dẫn bản đồ',
