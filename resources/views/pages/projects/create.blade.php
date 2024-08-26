@@ -7,6 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/5ad6bf3d69.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+{{-- <link href="{{ asset('assets/css/bootstrap-tagsinput.css') }}" rel="stylesheet"/> --}}
 <script>
     var latitude = parseFloat('<?= $latitude; ?>');
     var longitude = parseFloat('<?= $longitude; ?>');
@@ -75,6 +76,52 @@
     #detail-video .btn-play-video span{
         font-size: 50px;
         color: #1b1b1b;
+    }
+    .Tagslist-wrap{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .Tagslist-wrap span {
+        border-radius: 8px;
+        background-color: #FAFAFA;
+        color: #96A3BE;
+        padding: 6px 8px;
+        margin-right: 6px;
+        margin-bottom: 6px;
+    }
+    .tags-input-wrapper{
+        background: transparent;
+        background-color: #FAFAFA;
+        border-radius: 8px;
+        min-height: 54px;
+        box-shadow: unset;
+        line-height: 1.3;
+        border: 1px solid transparent;
+        width: 100%;
+        padding: 0.875rem 1.125rem;
+        font-size: 0.875rem;
+    }
+    .tags-input-wrapper input{
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 140px;
+        margin-left: 8px;
+    }
+    .tags-input-wrapper .tag{
+        display: inline-block;
+        background-color: #FAFAFA;
+        color: #000000;
+        border-radius: 40px;
+        padding: 0px 3px 0px 7px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        box-shadow: 0 5px 15px -2px rgb(208 208 208 / 70%);
+    }
+    .tags-input-wrapper .tag a {
+        margin: 0 7px 3px;
+        display: inline-block;
+        cursor: pointer;
     }
     @keyframes showBtnVideo{
         from{
@@ -184,6 +231,14 @@
                         <div class="mb-4">
                             <label for="Tagslist-table">Từ khóa <span class="required">*</span>
                             </label>
+                            <div class="Tagslist-wrap">
+                                <span>Đồ uống ngon</span>
+                                <span>Yên tĩnh</span>
+                                <span>Nhân viên thân thiện</span>
+                                <span>Náo nhiệt</span>
+                                <span>Không gian đẹp</span>
+                                <span>Ưu đãi hấp dẫn</span>
+                            </div>
                             <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa" value="" required>
                             @error('keyword')
                                 <span class="invalid-feedback" role="alert">
@@ -273,19 +328,19 @@
     </div>
 </div>
 <!-- Jquery table input Tags -->
-<script src="{{ asset('./assets/js/inputTags.jquery.min.js') }}"></script>
+<script src="{{ asset('./assets/js/bootstrap-tagsinput.js') }}"></script>
 <script src="{{ asset('./assets/js/fileUpload.js') }}"></script>
 <script>
     // Jquery 
     jQuery(document).ready(function($) {
         //Jquery table input Tags
-        $('#Tagslist-table').inputTags({
-            autocomplete: {
-                values: ['Không gian đẹp', 'Nhân viên nhiệt tình', 'Cà phê ngon', 'Náo nhiệt', 'Review', 'Google Map', 'Đồ uống ngon', 'Yên tĩnh'],
-                only: true
-            },
-            max: 6,
+        var tagInput1 = new TagsInput({
+            selector: 'Tagslist-table',
+            duplicate : false,
+            max : 10
         });
+        tagInput1.addData([]);
+
         // file Upload
         $("#fileUpload").fileUpload();
         //imgs

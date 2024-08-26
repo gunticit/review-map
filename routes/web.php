@@ -69,3 +69,4 @@ Route::group(['middleware' => 'auth'], function(){
 });
 
 Route::get('/get-long-url', [App\Http\Controllers\DashboardController::class, 'getLongUrl'])->name('get.long.url');
+Route::get('/list-tags', [App\Http\Controllers\TagController::class, 'index'])->name('list.tags');

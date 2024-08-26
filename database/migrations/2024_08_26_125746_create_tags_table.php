@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->nullable();
+            $table->string('subject_id')->nullable(); // Chủ đề hoặc lĩnh vực
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
