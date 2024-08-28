@@ -36,17 +36,29 @@ use Illuminate\Support\Facades\Validator;
             return redirect()->route('login');
         }
 
-        public function authenticate(AuthRequest $request){
-            try{
-                $check_login = $this->authService->login($request);
-                if($check_login){
-                    return redirect()->route('home');
-                }
-                return redirect()->route('login');
-            }catch(\Exception $e){
-                throw new ProcessException($e);
-            }
+    public function authenticate(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        $loginType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'telephone';
+
+        $credentials = [
+            $loginType => $request->username,
+            'password' => $request->password,
+            'active' => 1, // Giả định rằng bạn có cột `active` để kiểm tra tài khoản đã kích hoạt
+        ];
+
+        if (!Auth::attempt($credentials, $request->filled('remember'))) {
+            return redirect()->route('login')->withErrors([
+                'login' => __('Sai thông tin đăng nhập hoặc mật khẩu.'),
+            ])->withInput();
         }
+
+        return redirect()->route('home');
+    }
 
         public function registerUser(RegisterRequest $request){
             try{
