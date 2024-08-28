@@ -6,12 +6,13 @@
     use App\Services\AuthService;
     use Illuminate\Support\Facades\Auth;
     use App\Http\Controllers\BaseController;
-use App\Http\Requests\AuthRequest;
-use App\Http\Requests\RegisterRequest;
-use App\Rules\Email;
-use App\Rules\PhoneNumber;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
+    use App\Http\Requests\AuthRequest;
+    use App\Http\Requests\RegisterRequest;
+    use App\Rules\Email;
+    use App\Rules\PhoneNumber;
+    use Illuminate\Support\Facades\Log;
+    use Illuminate\Support\Facades\Session;
+    use Illuminate\Support\Facades\Validator;
 
     class AuthController extends BaseController
     {
@@ -39,12 +40,15 @@ use Illuminate\Support\Facades\Validator;
         public function authenticate(AuthRequest $request){
             try{
                 $check_login = $this->authService->login($request);
-                if($check_login){
+                if(!empty($check_login)){
                     return redirect()->route('home');
                 }
-                return redirect()->route('login');
-            }catch(\Exception $e){
-                throw new ProcessException($e);
+                Session::flash('error', __('auth.failed'));
+                return redirect()->back()->withInput();
+            } catch(\Exception $e) {
+                Log::error($e->getMessage());
+                Session::flash('error', __('auth.failed'));
+                return redirect()->back()->withInput();
             }
         }
 

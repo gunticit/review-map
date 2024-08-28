@@ -37,8 +37,8 @@ class ProjectController extends Controller
     }
 
     public function store(ProjectRequest $request){
-        try{
-            DB::beginTransaction();
+        // try{
+        //     DB::beginTransaction();
             $data = $this->projectService->create($request);
             if($data){
                 if ($request->has('has_image') && $request->has_image == 1) {
@@ -48,12 +48,12 @@ class ProjectController extends Controller
                 DB::commit();
                 return redirect()->route('project.list');
             }
-            DB::rollBack();
+            // DB::rollBack();
             Session::flash('error', 'Tạo dự án không thành công');
             return redirect()->back()->withInput();
-        }catch(\Exception $e){
-            DB::rollBack();
-            throw new ProcessException($e);
-        }
+        // }catch(\Exception $e){
+        //     DB::rollBack();
+        //     throw new ProcessException($e);
+        // }
     }
 }

@@ -3611,6 +3611,7 @@ table.bt .list-table-title a {
 .wallet-col .depositAmount .form-check label {
   white-space: nowrap;
   cursor: pointer;
+  font-size: 0.8rem;
 }
 .wallet-col .discount {
   border-bottom: 1px solid #E8EDFF;

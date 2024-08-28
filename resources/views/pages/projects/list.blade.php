@@ -82,12 +82,12 @@
                     <tbody>
                         @foreach($projects as $project)
                         <tr>
-                            <td>1</td>
+                            <td>{{ $project->id }}</td>
                             <td class="list-table-title">
                                 <a href="#">{{ $project->name }}</a>
                             </td>
                             <td class="list-table-link-map">
-                                <a class="btn" target="_blank" href="{{ $project->url_map }}" role="button">
+                                <a class="btn" target="_blank" href="#" role="button">
                                     <span class="material-symbols-outlined">link</span>
                                 </a>
                             </td>

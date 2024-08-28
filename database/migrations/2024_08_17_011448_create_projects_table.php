@@ -14,12 +14,16 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('url_map');
+            $table->string('url_map')->nullable();
             $table->string('description')->nullable();
-            $table->string('package');
+            $table->string('package')->nullable();
+            $table->double('rating_desire')->nullable(); // Rating mong muốn
             $table->string('is_slow')->nullable(); // Rải chậm
             $table->string('point_slow')->nullable(); // Điểm chậm
             $table->string('keyword')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('place_id')->nullable();
             $table->boolean('has_image')->default(false)->nullable();
             $table->integer('status'); // 0: Huỷ, 1: Đang thực hiện, 2: Hoàn thành, 3: Hoàn lại, 4: Tạm ngưng, 5: Chưa thanh toán
             $table->timestamps();

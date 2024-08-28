@@ -7,18 +7,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/5ad6bf3d69.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
-{{-- <link href="{{ asset('assets/css/bootstrap-tagsinput.css') }}" rel="stylesheet"/> --}}
+<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+<script src="{{ asset('./assets/js/map.js') }}"></script>
 <script>
-    var latitude = parseFloat('<?= $latitude; ?>');
-    var longitude = parseFloat('<?= $longitude; ?>');
+    let latitude = Number('<?= $latitude ?>');
+    let longitude = Number('<?= $longitude ?>');
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+            console.log(latitude, longitude);
+        });
+    }
 </script>
 <style>
-    .inputUrlMap.active .col-md-3{
-        cursor: pointer;
-    }
     #map{
         width: 100%;
-        height: 500px;
+        height: 530px;
     }
     .stars i {
         color: #ccc;
@@ -53,6 +58,9 @@
     .rating-row{
         display: flex;
         gap: 12px
+    }
+    .map-info{
+        position: relative
     }
     #detail-video{
         position: relative;
@@ -89,6 +97,27 @@
         margin-right: 6px;
         margin-bottom: 6px;
         font-size: 12px;
+        border:transparent 1px solid;
+    }
+    .Tagslist-wrap span.active, .Tagslist-wrap span:hover{
+        background-color: #eaeaea;
+        color: #3d3e3f;
+        border: 1px solid #ccc;
+    }
+    .list-star{
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .list-star p{
+        margin-bottom: 0 !important;
+    }
+    .list-star svg{
+        color: #cacaca;
+    }
+    .list-star svg.active{
+        color: #ffa400
     }
     .tags-input-wrapper{
         background: transparent;
@@ -123,6 +152,56 @@
         display: inline-block;
         cursor: pointer;
     }
+        /* Đảm bảo ô search có z-index cao hơn modal */
+    #search-places {
+        position: relative;
+        z-index: 1050; /* Số z-index cao hơn modal */
+        right: 0;
+        width: 80%;
+    }
+
+    /* Đảm bảo kết quả tìm kiếm không bị che mất */
+    #map {
+        position: relative;
+        z-index: 1050; /* Số z-index cao hơn modal */
+    }
+    .pac-container{
+        z-index: 9999;
+    }
+    #infowindow-content{
+        text-align: center;
+    }
+    #infowindow-content p{
+        margin-bottom: 5px;
+    }
+    #place-name{
+        margin: 10px 0;
+        text-align: center;
+    }
+    #info-map-reviews h3{
+        margin-bottom: 5px;
+    }
+    #info-map-reviews p{
+        margin-bottom: 5px;
+    }
+    .border-error{
+        border: 1px solid #f00 !important;
+    }
+    .btn-check-map{
+        background: #b0b0b0;
+        color: #3c3b3b;
+        border: transparent;
+        cursor: pointer;
+        transition: all ease .4s
+    }
+    .btn-check-map:hover{
+        background: #c1c1c1;
+        color: #3c3b3b;
+    }
+    .btn-check-map.border-error{
+        border: 1px solid #f00;
+        background: #f1f1f1;
+    }
     @keyframes showBtnVideo{
         from{
             opacity: 0;
@@ -134,7 +213,7 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
-    <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('project.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="container">
             <div class="row">
@@ -143,11 +222,19 @@
                     <div class="col-inner">
                         <h2 class="section-title mb-4">Tạo dự án</h2>
                         <!-- Form Group (list-table)-->
-                        
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="mb-4"><!-- class: invalid -->
                             <label for="inputlist-table">Tên dự án <span class="required">*</span>
                             </label>
-                            <input class="form-control" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="" required>
+                            <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="" required>
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -156,30 +243,16 @@
                             <small class="d-none">Tên dự án cho phép dưới 50 ký tự bao gồm các khoảng trắng.</small>
                         </div>
                         <!-- Form Group (UrlMap)-->
-                        <div class="mb-4 inputUrlMap "><!-- class: active -->
-                            <label for="inputUrlMap">URL Map <span class="required">*</span>
+                        <div class="mb-4"><!-- class: active -->
+                            <label>Chọn Map<span class="required">*</span>
                             </label>
                             <div class="row">
-                                <div class="col-md-9 col-12 relative">
-                                    <input class="form-control" id="inputUrlMap" name="url_map" type="url" placeholder="URL bắt buộc phải là URL, bắt buộc bằng địa chỉ https://maps.app.goo.gl/..." value="" required>
-                                    @error('url_map')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                    <small class="d-none">Sai URL. Vui lòng kiểm tra lại.</small>
-                                    <div class="row-coordinate">
-                                        <div>
-                                            <input class="form-control" placeholder="Latitude" name="lat" id="lat">
-                                        </div>
-                                        <div>
-                                            <input class="form-control" placeholder="Longitude" name="lng" id="lng">
-                                        </div>
-                                    </div>
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-primary btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">Nhấn để Map</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
                                 </div>
-                                <div class="col-md-3 col-12">
-                                    <button type="button" class="btn btn-primary btn-check-map" onclick="handleCheckMap()" data-bs-toggle="modal" data-bs-target="#CheckUrl" disabled> Kiểm tra URL </button>
-                                </div>
+                                <input id="lat" type="hidden" name="latitude" />
+                                <input id="long" type="hidden" name="latitude" />
+                                <input id="place-id" type="hidden" name="place_id" />
                             </div>
                         </div>
                         <!-- Form Group (Description)-->
@@ -194,7 +267,7 @@
                                 <div class="mb-4">
                                     <label for="inputReview">Chọn gói review <span class="required">*</span>
                                     </label>
-                                    <select class="form-control form-select" name="package" id="inputReview" required>
+                                    <select class="form-control form-select require" name="package" id="inputReview" required>
                                         <option value="">--- Chọn gói ---</option>
                                         <option value="1">RIVI10 - 45.000 VND/đánh giá - 10 lượt đánh giá</option>
                                         <option value="2">RIVI50 - 35.000 VND/đánh giá - 50 lượt đánh giá</option>
@@ -219,10 +292,10 @@
                                         <span class="material-symbols-outlined">info</span>
                                     </button>
                                     <div class="input-group" id="group-raicham">
-                                        <span class="input-group-text" id="inputRaiChamCheck">
+                                        <span class="input-group-text" for="inputRaiChamCheck">
                                             <input type="checkbox" name="is_slow" class="form-check-input" id="inputRaiChamCheck">
                                         </span>
-                                        <input type="number" max="100" name="point_slow" class="form-control" id="inputRaiCham">
+                                        <input type="number" min="2" name="point_slow" readonly class="form-control" id="inputRaiCham">
                                     </div>
                                 </div>
                             </div>
@@ -239,7 +312,7 @@
                                 <span>Không gian đẹp</span>
                                 <span>Ưu đãi hấp dẫn</span>
                             </div>
-                            <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa" value="" required>
+                            <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
                             @error('keyword')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -302,7 +375,7 @@
                             <li>Đồ uống tại quán cà phê ngon và đa dạng , không gian sang trong và sạch sẽ</li>
                             <li>Quán cà phê ngon, đồ uống chất lượng, không gian yên tĩnh và thư giãn</li>
                         </ul>
-                        <input class="btn btn-primary btn-full" type="submit" value="Đặt đơn" />
+                        <input class="btn btn-primary btn-full" type="button" id="btn-submit" value="Đặt đơn" />
                     </div>
                 </div>
             </div>
@@ -316,8 +389,14 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="map-info">
-                    <input onchange="handleSearchMap(event)" id="search-places" placeholder="Tìm kiếm vị trí" class="form-control" >
+                    <input id="search-places" placeholder="Nhập theo cú pháp: Cửa hàng + Địa chỉ" type="text" class="controls form-control" >
                     <div id="map"></div>
+                    <div id="infowindow-content">
+                        <h2 id="place-name" class="title"></h2>
+                        <p id="place-address"></p>
+                        <p id="place-telephone"></p>
+                        <p id="place-rate"></p>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -343,202 +422,54 @@
 
         // file Upload
         $("#fileUpload").fileUpload();
-        //imgs
-        $('.inputUrlMap input[name="url_map"]').change(async function() {
-            $(".inputUrlMap").toggleClass("active");
-            let urlMap = $(this).val();
-            if(urlMap) {
-                await getLongUrl(urlMap).then(function(res) {
-                    if(res.data) {
-                        let realUrl = res.data?.long_url ?? '';
-                        if (realUrl) {
-                            let coordinates = getLatLongFromUrl(realUrl);
-                            console.log(coordinates);
-                            document.getElementById('lng').value = coordinates.longitude ?? '';
-                            document.getElementById('lat').value = coordinates.latitude ?? '';
-                            $('.btn-check-map').prop('disabled', false);
-                        }
-                    }
-                })
-            }
-        });
         $('#confirm-url-map').on('click', function(){
             $('#CheckUrl').modal('hide');
+            $('#video-intro').hide();
+            $('#info-map-reviews').show();
+            
+            if($('#place-id').val() == ''){
+                $('.btn-check-map').addClass('border-error');
+            }else{
+                $('.btn-check-map').removeClass('border-error');
+            }
         });
     });
-    async function getLongUrl(shortUrl) {
-        try {
-            let url = "{{ route('get.long.url') }}?url=" + encodeURIComponent(shortUrl); 
-            const response = await axios(url);
-            return response
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-    function getLatLongFromUrl(url) {
-        const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
-        const match = url.match(regex);
-        if (match) {
-            latitude = match[1];
-            longitude = match[2];
-            console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-        } else {
-            console.log('Không tìm thấy tọa độ trong URL.');
-        }
-        return {
-            latitude: latitude,
-            longitude: longitude
-        };
-    }
 </script> 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&callback=initMap&fields=id,displayName,rating,reviews,userRatingCount&libraries=places&v=weekly" defer></script>
     <script>
-        // Xử lý map
-        var map;
-        var marker;
-
-        function initMap() {
-
-            // Tạo bản đồ
-            map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 13,
-                gestureHandling: "greedy",
-                center: { lat: latitude, lng: longitude },
-            });
-
-            // Tạo marker
-            marker = new google.maps.Marker({
-                map,
-                draggable: true,
-                animation: google.maps.Animation.DROP,
-                position: { lat: latitude, lng: longitude },
-            });
-
-            // Tạo SearchBox cho ô tìm kiếm
-            const input = document.getElementById('search-places');
-            const searchBox = new google.maps.places.SearchBox(input);
-
-            // Điều chỉnh kết quả tìm kiếm theo viewport của bản đồ
-            map.addListener('bounds_changed', () => {
-                searchBox.setBounds(map.getBounds());
-            });
-
-            searchBox.addListener('places_changed', () => {
-                const places = searchBox.getPlaces();
-
-                if (places.length === 0) {
-                    return;
+        function addTag(tagText) {
+            var exists = false;
+            $('.tags-input-wrapper .tag').each(function() {
+                if ($(this).text().trim() == tagText + '×') {
+                    $(this).remove();
+                    exists = true;
+                    return false;
                 }
-
-                // Lấy vị trí đầu tiên từ kết quả tìm kiếm
-                const place = places[0];
-
-                if (!place.geometry || !place.geometry.location) {
-                    console.error("Place không có thông tin về vị trí");
-                    return;
-                }
-
-                // Di chuyển marker tới vị trí được chọn và cập nhật bản đồ
-                marker.setPosition(place.geometry.location);
-                map.setCenter(place.geometry.location);
-
-                // Cập nhật giá trị latitude và longitude trong các ô input
-                document.getElementById('lat').value = place.geometry.location.lat();
-                document.getElementById('lng').value = place.geometry.location.lng();
             });
-            marker.addListener("dragend", handleMarkerDragEnd);
-        }
-
-        function handleCheckMap() {
-            latitude = parseFloat($('#lat').val());
-            longitude = parseFloat($('#lng').val());
-            console.log(latitude, longitude);
-
-            if (!isNaN(latitude) && !isNaN(longitude) && map) {
-                map.setCenter({ lat: latitude, lng: longitude });
-                marker.setPosition({ lat: latitude, lng: longitude });
-            } else {
-                console.error('Tọa độ không hợp lệ hoặc bản đồ chưa được khởi tạo.');
+            if (!exists) {
+                var newTag = $('<span class="tag">' + tagText + '<a>×</a></span>');
+                $('.tags-input-wrapper').prepend(newTag);
             }
         }
-        function handleMarkerDragEnd(event) {
-            const newLat = event.latLng.lat();
-            const newLng = event.latLng.lng();
-            document.getElementById('lat').value = newLat;
-            document.getElementById('lng').value = newLng;
-        }
+        $('.Tagslist-wrap > span').click(function(){
+            $(this).toggleClass('active');
+            let value = $(this).text();
+            addTag(value.trim());
+        })
+        $(document).on('click', '.tags-input-wrapper .tag a', function() {
+            var textCheck = $(this).parent().text().trim(); 
+            textCheck = textCheck.replace("×", ""); 
 
-        $('#confirm-url-map').on('click', function(){
-            latitude = parseFloat($('#lat').val());
-            longitude = parseFloat($('#lng').val());
-            var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
-            var geocoder = new google.maps.Geocoder;
-            $('#info-map-reviews *').remove();
-            geocoder.geocode({'location': latlng}, async function(results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    if (results[1]) {
-                    await getMapInfo(results[1].place_id);
-                    } else {
-                        window.alert('No results found');
-                    }
-                } else {
-                    window.alert('Geocoder failed due to: ' + status);
+            $('.Tagslist-wrap span').each(function() {
+                var tagText = $(this).text().trim(); 
+                if (tagText === textCheck) { 
+                    $(this).removeClass('active'); 
+                    return false; 
                 }
             });
-        });
-        function getMapInfo(placeID){
-            axios.get(`https://places.googleapis.com/v1/places/${placeID}?fields=id,displayName,rating,reviews,userRatingCount&key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E`)
-            .then(function (response) {
-                let data = response.data ? response.data : {};
-                $('#video-intro').hide();
-                $('#info-map-reviews').show();
-                $('#info-map-reviews').append(`
-                <h2>${data?.displayName?.text}</h2>
-                <p>Đánh giá trung bình</p>
-                <div class="rating-row">
-                    <span>${data?.rating}</span>
-                    <div class="stars">
-                        <i class="fa fa-star" data-value="1"></i>
-                        <i class="fa fa-star" data-value="2"></i>
-                        <i class="fa fa-star" data-value="3"></i>
-                        <i class="fa fa-star" data-value="4"></i>
-                        <i class="fa fa-star" data-value="5"></i>
-                    </div> 
-                    <span>(${data?.userRatingCount})</span>
-                </div>
-                `);
-                let rating = data?.rating ? data?.rating : 0;
-                const stars = document.querySelectorAll('.stars i');
 
-                stars.forEach(star => {
-                    const starValue = parseFloat(star.getAttribute('data-value'));
-                    if (rating >= starValue) {
-                        star.classList.remove('fa-star-half');
-                        star.classList.add('fa-solid');
-                        star.classList.remove('fa-regular');
-                    } else if (rating > starValue - 1 && rating < starValue) {
-                        star.classList.add('fa-star-half');
-                        star.classList.remove('fa-star');
-                        star.classList.remove('fa-solid');
-                        star.classList.remove('fa-regular');
-                    } else {
-                        star.classList.remove('fa-star-half');
-                        star.classList.add('fa-regular');
-                    }
-                });
-                $('#info-map-reviews').append(`
-                    <hr />
-                    <p>Bạn cần nâng cấp trung bình đánh giá lên số lượng</p>`);
-                $('#info-map-reviews').append(`
-                    <input class="form-control" id="changeRate" onchange="handleRateChange(event, ${data?.rating})" type="number" name="changeRate" min="0" max="5">
-                `);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        }
-        function handleSearchMap(event){
-        }
+            $(this).parent().remove(); // Xóa tag từ danh sách tags-input-wrapper
+        });
 
         // Rating
         function handleRateChange(event, rating){
@@ -574,22 +505,62 @@
             }
             setTimeout(() => {
                 $('#info-map-reviews .group-reviews-alert').remove();
-            }, 2500);
+            }, 3500);
         }
-
-        // Rải chậm
+        $('#inputReview').on('change', function(){
+            if($(this).val()){
+                $('#inputRaiCham').prop('readonly',false);
+                $('#inputRaiChamCheck').prop('checked', true);
+                $('#inputRaiCham').focus();
+            }else{
+                $('#inputRaiCham').prop('readonly',true);
+                $('#inputRaiChamCheck').prop('checked', false);
+            }
+        })
+        $('#inputRaiChamCheck').on('change', function(){
+            if($(this).is(':checked')){
+                $('#inputRaiCham').prop('readonly',false);
+                $('#inputRaiChamCheck').prop('checked', true);
+                $('#inputRaiCham').focus();
+            }else{
+                $('#inputRaiCham').prop('readonly',true);
+                $('#inputRaiChamCheck').prop('checked', false);
+            }
+        });
         $('#inputRaiCham').on('change', function(){
             $('#group-raicham small').remove();
-            if($(this).val() > 100){
-                $(this).val(100);
+            let review = $('#inputReview').val();
+            const data = $(this).val();
+            if(data <= 2){
+                $(this).val(2);
+            }
+            if(data > 2 && review == 1){
                 $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);
-                setTimeout(() => {
-                    $('#group-raicham small').remove();
-                }, 2500);
+                if(data > 10){
+                    $(this).val(10);
+                }
             }
-            if($(this).val() < 0){
-                $(this).val(0);
+            if(data > 5 && review == 2){
+                $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);
+                if(data > 50){
+                    $(this).val(50);
+                }
             }
+            if(data > 10 && review == 3){
+                $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);
+                if(data > 100){
+                    $(this).val(100);
+                }
+            }
+            if(data > 20 && review == 3){
+                $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);
+                if(data > 200){
+                    $(this).val(200);
+                }
+            }
+            setTimeout(() => {
+                $('#group-raicham small').remove();
+            }, 5000);
         });
 
         // Upload image
@@ -618,5 +589,72 @@
             }
                 
         } 
+        $(document).ready(function() {
+            function validateRequiredFields() {
+                $('.alert').remove();
+                $('.require').each(function() {
+                    if ($(this).val() === '') {
+                        $(this).addClass('border-error');
+                        var alertMessage = $('<div class="alert text-danger">Bắt buộc nhập dữ liệu</div>');
+                        $(this).after(alertMessage);
+                        $(this).addClass('error');
+                        return false;
+                    } else {
+                        $(this).removeClass('border-error');
+                        $(this).removeClass('error');
+                    }
+                });
+                if($('#place-id').val() == ''){
+                    $('.btn-check-map').addClass('border-error');
+                    return false;
+                }else{
+                    $('.btn-check-map').removeClass('border-error');
+                }
+                if($('.tags-input-wrapper .tag').length == 0){
+                    $('.tags-input-wrapper').addClass('border-error');
+                    return false;
+                }else{
+                    $('.tags-input-wrapper').removeClass('border-error');
+                }
+                if($('body #rating-desire').val() == 0 || $('body #rating-desire').val() == null || $('body #rating-desire').val() == ''){
+                    $('body #rating-desire').addClass('border-error');
+                    $('body #rating-desire-group').append('<p class="alert text-danger">Vui lòng nhập giá trị mong muốn</p>');
+                    return false;
+                }
+                return true;
+            }
+            $('.tags-input-wrapper').on('change', function(){
+                if($('.tags-input-wrapper .tag').length == 0){
+                    $('.tags-input-wrapper').addClass('border-error');
+                }else{
+                    $('.tags-input-wrapper').removeClass('border-error');
+                }
+                $(this).parent().find('.alert.text-danger').remove();
+            });
+            $('.Tagslist-wrap span').on('click', function(){
+                if($('.tags-input-wrapper .tag').length == 0){
+                    $('.tags-input-wrapper').addClass('border-error');
+                    return false;
+                }else{
+                    $('.tags-input-wrapper').removeClass('border-error');
+                }
+                $(this).parent().parent().find('.alert.text-danger').remove();
+            });
+            $('.require').on('change', function(){
+                if($(this).val()){
+                    $(this).removeClass('border-error');
+                    $(this).removeClass('error');
+                    $(this).parent().find('.alert.text-danger').remove();
+                }
+            });
+            $('#btn-submit').on('click', function(e){
+                e.preventDefault();
+                let checkValidate = validateRequiredFields();
+                
+                if ($('.alert').length === 0 && checkValidate) {
+                    $('#form-create-project').submit();
+                }
+            }); 
+        });
     </script>
 @endsection

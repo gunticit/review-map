@@ -31,7 +31,7 @@ class AuthService {
     {
         $this->authenticate($request);
         $user        = Auth::user();
-        $data = new UserResource($user);
+        $data = !empty($user) ? new UserResource($user) : null;
         return $data;
     }
 

@@ -23,7 +23,7 @@ class ProjectRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'url_map' => 'required',
+            'place_id' => 'required',
             'package' => 'required',
         ];
     }
@@ -31,8 +31,8 @@ class ProjectRequest extends FormRequest
     public function messages(): array{
         return [
             'name.required' => 'Vui lòng nhập tên dự án',
-            'url_map.required' => 'Vui lòng nhập đường dẫn bản đồ',
             'package.required' => 'Vui lòng chọn gói mua',
+            'place_id.required' => 'Bản đồ lỗi, Vui lòng chọn lại bản đồ',
         ];
     }
 }

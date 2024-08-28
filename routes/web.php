@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index']);
 
-Auth::routes(['login' => false,'register' => false,'logout' => false]);
+// Auth::routes(['login' => false,'register' => false,'logout' => false]);
 Route::group([
     'namespace' => '\App\Http\Controllers\Auth'],  // Chỉ định namespace cho group
     function(){
