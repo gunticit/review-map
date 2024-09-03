@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('url_map')->nullable();
             $table->string('description')->nullable();
             $table->string('package')->nullable();
+            $table->string('address_google')->nullable();
+            $table->string('telephone_google')->nullable();
+            $table->double('rating_google')->nullable(); // Giá trị rating Google
+            $table->double('total_rating_google')->nullable(); // Tổng giá trị rating Google
             $table->double('rating_desire')->nullable(); // Rating mong muốn
             $table->string('is_slow')->nullable(); // Rải chậm
             $table->string('point_slow')->nullable(); // Điểm chậm

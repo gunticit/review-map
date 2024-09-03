@@ -10,8 +10,8 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
 <script src="{{ asset('./assets/js/map.js') }}"></script>
 <script>
-    let latitude = Number('<?= $latitude ?>');
-    let longitude = Number('<?= $longitude ?>');
+    let latitude = Number('<?= $project->latitude ?>');
+    let longitude = Number('<?= $project->longitude ?>');
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             latitude = position.coords.latitude;
@@ -213,14 +213,15 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
-    <form action="{{ route('project.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('project.update', ['id' => $project->id]) }}" id="form-create-project" method="POST" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <div class="container">
             <div class="row">
                 <!-- cot 1 -->
                 <div class="col-xl-8 col-md-12 col-12 mb-4 mb-xl-0">
                     <div class="col-inner">
-                        <h2 class="section-title mb-4">Tạo dự án</h2>
+                        <h2 class="section-title mb-4">Chi tiết dự án</h2>
                         <!-- Form Group (list-table)-->
                         @if ($errors->any())
                             <div class="alert alert-danger">
@@ -234,7 +235,7 @@
                         <div class="mb-4"><!-- class: invalid -->
                             <label for="inputlist-table">Tên dự án <span class="required">*</span>
                             </label>
-                            <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="" required>
+                            <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="{{ $project->name }}" required>
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -250,9 +251,9 @@
                                 <div class="col-12">
                                     <button type="button" class="btn btn-primary btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">Nhấn để Map</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
                                 </div>
-                                <input id="lat" type="hidden" name="latitude" />
-                                <input id="long" type="hidden" name="longitude" />
-                                <input id="place-id" type="hidden" name="place_id" />
+                                <input id="lat" type="hidden" name="latitude" value="{{ $project->latitude }}" />
+                                <input id="long" type="hidden" name="longitude" value="{{ $project->place_id }}" />
+                                <input id="place-id" type="hidden" name="place_id" value="{{ $project->place_id }}" />
                             </div>
                         </div>
                         <!-- Form Group (Description)-->
@@ -268,11 +269,11 @@
                                     <label for="inputReview">Chọn gói review <span class="required">*</span>
                                     </label>
                                     <select class="form-control form-select require" name="package" id="inputReview" required>
-                                        <option value="">--- Chọn gói ---</option>
-                                        <option value="1">RIVI10 - 45.000 VND/đánh giá - 10 lượt đánh giá</option>
-                                        <option value="2">RIVI50 - 35.000 VND/đánh giá - 50 lượt đánh giá</option>
-                                        <option value="3">RIVI100 - 30.000 VND/đánh giá - 100 lượt đánh giá</option>
-                                        <option value="4">RIVI200 - 25.000 VND/đánh giá - 200 lượt đánh giá</option>
+                                        <option <?= !isset($project->package) ? 'selected' : '' ?> value="">--- Chọn gói ---</option>
+                                        <option <?= $project->package == 1 ? 'selected' : '' ?> value="1">RIVI10 - 45.000 VND/đánh giá - 10 lượt đánh giá</option>
+                                        <option <?= $project->package == 2 ? 'selected' : '' ?> value="2">RIVI50 - 35.000 VND/đánh giá - 50 lượt đánh giá</option>
+                                        <option <?= $project->package == 3 ? 'selected' : '' ?> value="3">RIVI100 - 30.000 VND/đánh giá - 100 lượt đánh giá</option>
+                                        <option <?= $project->package == 4 ? 'selected' : '' ?> value="4">RIVI200 - 25.000 VND/đánh giá - 200 lượt đánh giá</option>
                                     </select>
                                     @error('package')
                                         <span class="invalid-feedback" role="alert">
@@ -293,9 +294,9 @@
                                     </button>
                                     <div class="input-group" id="group-raicham">
                                         <span class="input-group-text" for="inputRaiChamCheck">
-                                            <input type="checkbox" name="is_slow" class="form-check-input" id="inputRaiChamCheck">
+                                            <input type="checkbox" <?= $project->is_slow ? 'checked' : '' ?> name="is_slow" class="form-check-input" id="inputRaiChamCheck">
                                         </span>
-                                        <input type="number" min="2" name="point_slow" readonly class="form-control" id="inputRaiCham">
+                                        <input type="number" min="2" name="point_slow" value="{{ $project->point_slow }}" readonly class="form-control" id="inputRaiCham">
                                     </div>
                                 </div>
                             </div>
@@ -346,7 +347,30 @@
                 <!-- cot 2 -->
                 <div class="col-xl-4 col-md-12 col-12 ">
                     <div class="col-inner col-guide">
-                        <div id="info-map-reviews" style="display:none"></div>
+                        <div id="info-map-reviews">
+                            <h3>{{ $project->name }}</h3>
+                            <div class="list-star">
+                                <span>{{ $project->rating_google }}</span>
+                                <p>
+                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 1 ? 'active' : ''!!}"></i>
+                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 2 ? 'active' : ''!!}"></i>
+                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 3 ? 'active' : ''!!}"></i>
+                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 4 ? 'active' : ''!!}"></i>
+                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 5 ? 'active' : ''!!}" aria-hidden="true"></i>
+                                </p>
+                                {{ $project->total_rating_google }}
+                            </div>
+                            <p>{{ $project->address_google }}</p>
+                            <p>{{ $project->telephone_google }}</p>
+                            <div class="rating-row">
+                                <h4>Đánh giá: <span id="avg-rating">{{ $project->rating_google }}</span></h4>
+                                <span>{{ $project->total_rating_google }}</span>
+                            </div>
+                            <div id="rating-desire-group">
+                                <input type="hidden" name="rating_google" id="rating-google" value="{{ $project->rating_google }}"/>
+                                <input type="number" onclick="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" value="{{ $project->rating_desire }}" name="rating_desire" id="rating-desire"/>
+                            </div>
+                        </div>
                         <div id="video-intro">
                             <h2>Hướng dẫn lấy URL</h2>
                             <div id="detail-video">
@@ -556,7 +580,6 @@
                 $('#group-raicham small').remove();
             }, 5000);
         });
-
         // Upload image
         $('input[name=has_image]').on('change', function(){
             if($(this).is(':checked') && $(this).val() === '1'){

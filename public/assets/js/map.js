@@ -70,6 +70,7 @@ function initMap() {
                 <span>${place?.user_ratings_total !== undefined ? '(' + place?.user_ratings_total + ' lượt)' : ''}</span>
             </div>
             <div id="rating-desire-group">
+                <input type="hidden" name="rating_google" id="rating-google" value="${place?.rating}"/>
                 <input type="number" onclick="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" name="rating_desire" id="rating-desire"/>
             </div>
             `;

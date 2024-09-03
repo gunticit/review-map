@@ -84,10 +84,10 @@
                         <tr>
                             <td>{{ $project->id }}</td>
                             <td class="list-table-title">
-                                <a href="#">{{ $project->name }}</a>
+                                <a href="{{ route('project.edit', ['id' => $project->id]) }}">{{ $project->name }}</a>
                             </td>
                             <td class="list-table-link-map">
-                                <a class="btn" target="_blank" href="#" role="button">
+                                <a class="btn" target="_blank" href="{{ route('project.edit', ['id' => $project->id]) }}" role="button">
                                     <span class="material-symbols-outlined">link</span>
                                 </a>
                             </td>
@@ -95,7 +95,7 @@
                                 <a class="btn {{ checkStatus($project->status)['className'] }}">{{ checkStatus($project->status)['labelStatus'] }}</a>
                             </td>
                             <td class="list-table-status">
-                                <a class="btn" href="#" role="button">
+                                <a class="btn" href="{{ route('project.update.status', ['id' => $project->id]) }}" role="button">
                                     <span class="material-symbols-outlined">motion_photos_paused</span> Tạm dừng 
                                 </a>
                             </td>

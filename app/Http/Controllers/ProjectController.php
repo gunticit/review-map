@@ -37,7 +37,7 @@ class ProjectController extends Controller
     }
 
     public function store(ProjectRequest $request){
-        // try{
+        try{
         //     DB::beginTransaction();
             $data = $this->projectService->create($request);
             if($data){
@@ -45,15 +45,43 @@ class ProjectController extends Controller
                     $this->projectImageService->createDataImages($request, $data->id);
                 }
                 Session::flash('success', 'Khởi tạo dự án thành công');
-                DB::commit();
+                // DB::commit();
                 return redirect()->route('project.list');
             }
             // DB::rollBack();
             Session::flash('error', 'Tạo dự án không thành công');
             return redirect()->back()->withInput();
-        // }catch(\Exception $e){
+        }catch(\Exception $e){
         //     DB::rollBack();
-        //     throw new ProcessException($e);
-        // }
+            throw new ProcessException($e);
+        }
+    }
+
+    public function edit($id){
+        $data = $this->projectService->show($id);
+        return view('pages.projects.edit',[
+            'project' => $data
+        ]);
+    }
+
+    public function update(ProjectRequest $request, $id){
+        try{
+            $data = $this->projectService->update($request, $id);
+            if($data){
+                if ($request->has('has_image') && $request->has_image == 1) {
+                    $this->projectImageService->updateDataImages($request, $data->id);
+                }
+                Session::flash('success', 'Cập nhật dự án thành công');
+                return redirect()->route('project.list');
+            }
+            Session::flash('error', 'Không thể cập nhật dự án');
+            return redirect()->back()->withInput();
+        }catch(\Exception $e){
+            throw new ProcessException($e);
+        }
+    }
+
+    public function updateStatus(Request $request, $id){
+        return redirect()->back();
     }
 }

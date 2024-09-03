@@ -54,6 +54,18 @@ class ProjectService {
         return $data;
     }
 
+    public function show($id){
+        $data = $this->projectRepository->find($id);
+        return $data;
+    }
+
+    public function update($request, $id){
+        $project = $this->filterData($request);
+        $data = $this->projectRepository->update($project, $id);
+        return $data; 
+    }
+
+
     private function filterData($request): array{
         $data = $request->all();
         return array(
@@ -61,6 +73,7 @@ class ProjectService {
             'description' => $data['description'] ?? null,
             'package' => $data['package'] ?? null,
             'is_slow' => $data['is_slow'] ?? null,
+            'point_slow' => $data['point_slow'] ?? null,
             'keyword' => $data['keyword'] ?? null,
             'latitude' => $data['latitude'] ?? null,
             'longitude' => $data['longitude'] ?? null,
@@ -68,6 +81,10 @@ class ProjectService {
             'has_image' => $data['has_image'] ?? null,
             'description' => $data['description'] ?? null,
             'description' => $data['description'] ?? null,
+            'address_google' => $data['address_google'] ?? null,
+            'telephone_google' => $data['telephone_google'] ?? null,
+            'rating_google' => $data['rating_google'] ?? null,
+            'total_rating_google' => $data['total_rating_google'] ?? null,
             'rating_desire' => $data['rating_desire'] ?? null,
             'status' => $data['status'] ?? 1,
         );

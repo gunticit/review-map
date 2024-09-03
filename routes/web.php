@@ -64,6 +64,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/list-projects', [App\Http\Controllers\ProjectController::class, 'index'])->name('project.list');
     Route::get('/create-project', [App\Http\Controllers\ProjectController::class, 'create'])->name('project.create');
     Route::post('/create-project', [App\Http\Controllers\ProjectController::class, 'store'])->name('project.store');
+    Route::get('/edit-project/{id}', [App\Http\Controllers\ProjectController::class, 'edit'])->name('project.edit');
+    Route::put('/update-project/{id}', [App\Http\Controllers\ProjectController::class, 'update'])->name('project.update');
+    Route::put('/update-status-project/{id}', [App\Http\Controllers\ProjectController::class, 'updateStatus'])->name('project.update.status');
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
 });
