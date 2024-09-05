@@ -46,16 +46,12 @@ Route::group([
     'middleware' => ['auth', 'customer']], function () {
 });
 
-// Route::group(['middleware' => 'locale'], function() {
-//     Route::get('change-language/{language}', 'App\Http\Controllers\DashboardController@changeLanguage')
-//         ->name('user.language');
-// });
 Route::group(['middleware' => 'locale'], function() {
     Route::get('change-language/{language}', 'App\Http\Controllers\DashboardController@changeLanguage')
         ->name('user.language');
 });
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/terms', [App\Http\Controllers\TermsController::class, 'index'])->name('terms');
     Route::get('/faq', [App\Http\Controllers\FaqController::class, 'index'])->name('faq');
     Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history');

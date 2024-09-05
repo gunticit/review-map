@@ -220,7 +220,7 @@
                 <!-- cot 1 -->
                 <div class="col-xl-8 col-md-12 col-12 mb-4 mb-xl-0">
                     <div class="col-inner">
-                        <h2 class="section-title mb-4">Tạo dự án</h2>
+                        <h2 class="section-title mb-4">{{ __('project.create_project') }}</h2>
                         <!-- Form Group (list-table)-->
                         @if ($errors->any())
                             <div class="alert alert-danger">
@@ -232,7 +232,7 @@
                             </div>
                         @endif
                         <div class="mb-4"><!-- class: invalid -->
-                            <label for="inputlist-table">Tên dự án <span class="required">*</span>
+                            <label for="inputlist-table">{{ __('project.name') }} <span class="required">*</span>
                             </label>
                             <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="" required>
                             @error('name')
@@ -244,11 +244,11 @@
                         </div>
                         <!-- Form Group (UrlMap)-->
                         <div class="mb-4"><!-- class: active -->
-                            <label>Chọn Map<span class="required">*</span>
+                            <label>{{ __('project.choose_map') }}<span class="required">*</span>
                             </label>
                             <div class="row">
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-primary btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">Nhấn để Map</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-primary btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">{{ __('project.press_to_choose') }}</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
                                 </div>
                                 <input id="lat" type="hidden" name="latitude" />
                                 <input id="long" type="hidden" name="longitude" />
@@ -257,18 +257,18 @@
                         </div>
                         <!-- Form Group (Description)-->
                         <div class="mb-4">
-                            <label for="inputDescription">Mô tả dự án
+                            <label for="inputDescription">{{ __('project.description') }}
                             </label>
-                            <textarea class="form-control" name="description" id="inputDescription" placeholder="Nhập mô tả"></textarea>
+                            <textarea class="form-control" name="description" id="inputDescription" placeholder="{{ __('project.placeholder_description') }}"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <!-- Form Group (Review)-->
                                 <div class="mb-4">
-                                    <label for="inputReview">Chọn gói review <span class="required">*</span>
+                                    <label for="inputReview">{{ __('project.review_package') }} <span class="required">*</span>
                                     </label>
                                     <select class="form-control form-select require" name="package" id="inputReview" required>
-                                        <option value="">--- Chọn gói ---</option>
+                                        <option value="">--- {{ __('project.choose_package') }} ---</option>
                                         <option value="1">RIVI10 - 45.000 VND/đánh giá - 10 lượt đánh giá</option>
                                         <option value="2">RIVI50 - 35.000 VND/đánh giá - 50 lượt đánh giá</option>
                                         <option value="3">RIVI100 - 30.000 VND/đánh giá - 100 lượt đánh giá</option>
@@ -285,7 +285,7 @@
                                 <!-- Form Group (RaiCham)-->
                                 <div class="mb-4 RaiCham">
                                     <label for="inputRaiCham">
-                                        Rải chậm
+                                        {{ __('project.slow_spread') }}
                                     </label>
                                     <button type="button" class="btn" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Rải chậm là hình thức đánh giá review mỗi ngày.
                                 Ví dụ: Nếu bạn nhập số lượng rải chậm là 2 tương đương dự án của bạn sẽ nhận 2 lượt đánh giá mỗi ngày">
@@ -302,7 +302,7 @@
                         </div>
                         <!-- Form Group (Tags)-->
                         <div class="mb-4">
-                            <label for="Tagslist-table">Từ khóa <span class="required">*</span>
+                            <label for="Tagslist-table">{{ __('project.keyword') }} <span class="required">*</span>
                             </label>
                             <div class="Tagslist-wrap">
                                 <span>Đồ uống ngon</span>
@@ -321,7 +321,7 @@
                         </div>
                         <!-- Form Group (Img)-->
                         <div class="inputImg"><!-- class: active -->
-                            <label class="d-block" for="inputImg">Hình ảnh
+                            <label class="d-block" for="inputImg">{{ __('project.images') }}
                             </label>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="has_image" id="inputImg1" value="1">
@@ -363,19 +363,19 @@
                             </div>
                         </div>
                         <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/MLpWrANjFbI?si=ZGXqWQK6lxYSxRAW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
-                        <h3 class="col-title">Rải chậm</h3>
-                        <p>Rải chậm giúp các đánh giá thật hơn. Chi phí rải chậm một ngày là 2.000 VND</p>
-                        <h3 class="col-title">Từ khóa</h3>
-                        <p>RIVI AI sẽ dùng trí tuệ nhân tạo để tạo ra các nội dung đánh giá bám sát vào sản phẩm/dịch vụ của bạn. <br>
-                            <strong>Ví dụ:</strong> Khi bạn có từ khóa “Cà phê ngon” thì RIVI AI sẽ tạo ra các nội dung sau:
+                        <h3 class="col-title">{{ __('project.slow_spread') }}</h3>
+                        <p>{{ __('project.desc_slow_spread') }}</p>
+                        <h3 class="col-title">{{ __('project.keyword') }}</h3>
+                        <p>{{ __('project.desc_keyword_1') }}<br>
+                            <strong>{{ __('project.example') }}:</strong> {{ __('project.desc_keyword_1') }}
                         </p>
                         <ul>
-                            <li>Quán cà phê ngon, đồ uống bổ dưỡng, không gian thoải mái, phục vụ nhanh nhẹn</li>
-                            <li>Không gian quán cà phê ngon và ấm cúng, đồ uống tuyệt vời, nhân viên thân thiện</li>
-                            <li>Đồ uống tại quán cà phê ngon và đa dạng , không gian sang trong và sạch sẽ</li>
-                            <li>Quán cà phê ngon, đồ uống chất lượng, không gian yên tĩnh và thư giãn</li>
+                            <li>{{ __('project.desc_sub_slow_1') }}</li>
+                            <li>{{ __('project.desc_sub_slow_2') }}</li>
+                            <li>{{ __('project.desc_sub_slow_3') }}</li>
+                            <li>{{ __('project.desc_sub_slow_4') }}</li>
                         </ul>
-                        <input class="btn btn-primary btn-full" type="button" id="btn-submit" value="Đặt đơn" />
+                        <input class="btn btn-primary btn-full" type="button" id="btn-submit" value="{{ __('project.order') }}" />
                     </div>
                 </div>
             </div>

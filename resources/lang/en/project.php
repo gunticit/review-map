@@ -1,0 +1,25 @@
+<?php
+    return [
+        'create_project' => 'Create project',
+        'name' => 'Project name',
+        'choose_map' => 'Choose map',
+        'press_to_choose' => 'Press to choose map',
+        'description' => 'Project description',
+        'placeholder_description' => 'Enter project description',
+        'review_package' => 'Choose review package',
+        'choose_package' => 'Choose package',
+        'slow_spread' => 'Slow spread',
+        'keyword' => 'Keyword',
+        'images' => 'Images',
+        'desc_slow_spread' => 'Slow spread makes reviews more authentic. The cost of slow spread per day is 2,000 VND',
+        'desc_keyword_1' => 'RIVI AI will use artificial intelligence to generate review content tailored to your product/service.',
+        'desc_keyword_2' => 'When you have the keyword "Delicious coffee", RIVI AI will generate the following content:',
+        'example' => 'Example',
+        'desc_sub_slow_1' => 'Delicious coffee shop, nutritious drinks, comfortable space, quick service',
+        'desc_sub_slow_2' => 'Cozy and delicious coffee shop, great drinks, friendly staff',
+        'desc_sub_slow_3' => 'The coffee shop offers delicious and diverse drinks, luxurious and clean space',
+        'desc_sub_slow_4' => 'Delicious coffee shop, quality drinks, quiet and relaxing atmosphere',
+        'order' => 'Place order',
+        'intro_get_url' => 'Guide to get URL',
+    ];
+?>
