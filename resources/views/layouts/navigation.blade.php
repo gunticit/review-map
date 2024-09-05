@@ -1,7 +1,7 @@
 
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Navbar Brand-->
-    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="index.php">
+    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="{{ route('home') }}">
         <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="rivi logo">
     </a>
     <!-- Sidenav Toggle Button-->

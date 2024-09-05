@@ -21,7 +21,7 @@ class NotificationSeeder extends Seeder
             Notification::create([
                 'title' => $faker->sentence,
                 'content' => $faker->paragraph,
-                'status' => $faker->randomElement(['Đã đọc', 'Chưa đọc']),
+                'status' => $faker->randomElement([1, 2]),
                 'user_id' => 2, 
             ]);
         }
