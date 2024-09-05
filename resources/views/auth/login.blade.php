@@ -65,6 +65,11 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Đăng nhập</button>
+              @error('login')
+                <div class="alert alert-danger" role="alert">
+                    <strong>{{ $message }}</strong>
+                </div>
+                @enderror
             </form>
             <div class="login-other">
                 <span>Hoặc đăng nhập với</span>

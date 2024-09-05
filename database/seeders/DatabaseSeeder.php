@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserTableSeeder;
 use Database\Seeders\RolePermissionSeeder;
+use Database\Seeders\NotificationSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             UserTableSeeder::class,
             TagSeeder::class
+            NotificationSeeder::class
         ]);
     }
 }

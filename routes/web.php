@@ -65,6 +65,8 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::put('/update-status-project/{id}', [App\Http\Controllers\ProjectController::class, 'updateStatus'])->name('project.update.status');
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
+    Route::get('/notification/{id}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notification.show');
+
 });
 
 Route::get('/get-long-url', [App\Http\Controllers\DashboardController::class, 'getLongUrl'])->name('get.long.url');
