@@ -38,6 +38,6 @@ class UserTableSeeder extends Seeder
             'password' => bcrypt('123123123123'),
         ];
         $userGuest = User::create($guest);
-        $userGuest->assignRole([Role::GUEST_ROLE]);
+        $userGuest->assignRole([Role::PARTNER_ROLE]);
     }
 }

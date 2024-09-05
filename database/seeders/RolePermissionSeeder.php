@@ -16,17 +16,55 @@ class RolePermissionSeeder extends Seeder
     {
         $permissions = [
             [
-                'name' => 'edit articles',
+                'name' => 'view notifications',
                 'guard_name' => 'web'
             ], 
+            [
+                'name' => 'create notifications',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'edit notifications',
+                'guard_name' => 'web'
+            ],
             [
                 'name' => 'delete articles',
                 'guard_name' => 'web'
             ],
+            //------------ Project -------------
             [
-                'name' => 'publish articles',
+                'name' => 'view projects',
                 'guard_name' => 'web'
-            ]
+            ], 
+            [
+                'name' => 'create projects',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'edit projects',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'delete projects',
+                'guard_name' => 'web'
+            ],
+            //------------ Wallet (customer: deposit, partner: withdraw) -------------
+            [
+                'name' => 'view wallet',
+                'guard_name' => 'web'
+            ], 
+            [
+                'name' => 'create wallet',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'edit wallet',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'delete wallet',
+                'guard_name' => 'web'
+            ],
         ];
         Permission::upsert($permissions, ['name', 'guard_name']);
 
@@ -35,7 +73,7 @@ class RolePermissionSeeder extends Seeder
         $roles = [
             ['name' => Role::ADMIN_ROLE, 'guard_name' => 'web'],
             ['name' => Role::CUSTOMER_ROLE, 'guard_name' => 'web'],
-            ['name' => Role::GUEST_ROLE, 'guard_name' => 'web'],
+            ['name' => Role::PARTNER_ROLE, 'guard_name' => 'web'],
         ];
         Role::upsert($roles, ['name', 'guard_name']);
     }
