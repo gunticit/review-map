@@ -14,14 +14,29 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = ['edit articles', 'delete articles', 'publish articles'];
-        foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'web']);
-        }
+        $permissions = [
+            [
+                'name' => 'edit articles',
+                'guard_name' => 'web'
+            ], 
+            [
+                'name' => 'delete articles',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'publish articles',
+                'guard_name' => 'web'
+            ]
+        ];
+        Permission::upsert($permissions, ['name', 'guard_name']);
 
         // Tạo vai trò và gán quyền
-        Role::create(['name' => 'admin', 'guard_name' => 'web']);
-        Role::create(['name' => 'customer', 'guard_name' => 'web']);
-        Role::create(['name' => 'guest', 'guard_name' => 'web']);
+
+        $roles = [
+            ['name' => Role::ADMIN_ROLE, 'guard_name' => 'web'],
+            ['name' => Role::CUSTOMER_ROLE, 'guard_name' => 'web'],
+            ['name' => Role::GUEST_ROLE, 'guard_name' => 'web'],
+        ];
+        Role::upsert($roles, ['name', 'guard_name']);
     }
 }
