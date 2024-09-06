@@ -45,6 +45,7 @@
         'token_error'  => $token_error,
         'account_error'  => $account_error,
         'overview' => 'Tổng quan',
+        'total_customer' => 'Tổng số khách hàng'
     );
 
     return $langs;

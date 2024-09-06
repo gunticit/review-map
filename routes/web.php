@@ -69,5 +69,9 @@ Route::group(['middleware' => ['locale','auth']], function(){
 
 });
 
+
+include 'web_admin.php';
+include 'web_partner.php';
+
 Route::get('/get-long-url', [App\Http\Controllers\DashboardController::class, 'getLongUrl'])->name('get.long.url');
 Route::get('/list-tags', [App\Http\Controllers\TagController::class, 'index'])->name('list.tags');
