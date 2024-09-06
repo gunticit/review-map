@@ -20,7 +20,7 @@ class ProjectController extends Controller
     }
     public function index(Request $request){
         $data = $this->projectService->list($request);
-        return view('pages.projects.list',[
+        return view('pages.customer.projects.list',[
             'projects' => $data['projects'] ?? [],
             'total' => $data['total'] ?? 0,
             'working' => $data['working'] ?? 0,
@@ -33,33 +33,29 @@ class ProjectController extends Controller
             'latitude' => '10.8299',
             'longitude' => '106.68029'
         );
-        return view('pages.projects.create',$data);
+        return view('pages.customer.projects.create',$data);
     }
 
     public function store(ProjectRequest $request){
         try{
-        //     DB::beginTransaction();
             $data = $this->projectService->create($request);
             if($data){
                 if ($request->has('has_image') && $request->has_image == 1) {
                     $this->projectImageService->createDataImages($request, $data->id);
                 }
                 Session::flash('success', 'Khởi tạo dự án thành công');
-                // DB::commit();
                 return redirect()->route('project.list');
             }
-            // DB::rollBack();
             Session::flash('error', 'Tạo dự án không thành công');
             return redirect()->back()->withInput();
         }catch(\Exception $e){
-        //     DB::rollBack();
             throw new ProcessException($e);
         }
     }
 
     public function edit($id){
         $data = $this->projectService->show($id);
-        return view('pages.projects.edit',[
+        return view('pages.customer.projects.edit',[
             'project' => $data
         ]);
     }

@@ -13,7 +13,7 @@
                 </nav>
             </div>
             <div class="col-xl-3 col-md-8 col-12 text-right">
-                <a href="8.1.tao-yeu-cau.php" class="btn btn-primary">
+                <a href="{{ route('support.create') }}" class="btn btn-primary">
                     <span class="material-symbols-outlined">add</span>
                     Tạo yêu cầu
                 </a>
