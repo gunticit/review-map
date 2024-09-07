@@ -15,7 +15,18 @@ class DashboardController extends Controller
         return redirect()->back();
     }
     public function index(){
-        return view('pages.dashboard');
+        $total_project = 0;
+        $total_doing = 0;
+        $total_pause = 0;
+        $money_spend = 0;
+        $total_by_month = [];
+        return view('pages.dashboard', [
+            'total_project' => $total_project,
+            'total_doing' => $total_doing,
+            'total_pause' => $total_pause,
+            'money_spend' => $money_spend,
+            'total_by_month' => $total_by_month
+        ]);
     }
     public function getLongUrl(Request $request)
     {

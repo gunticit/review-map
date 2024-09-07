@@ -1,7 +1,7 @@
 
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Navbar Brand-->
-    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="index.php">
+    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="{{ route('home') }}">
         <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="rivi logo">
     </a>
     <!-- Sidenav Toggle Button-->
@@ -15,18 +15,23 @@
         <!-- Documentation Dropdown-->
         <li class="nav-item dropdown no-caret d-none d-md-block me-3">
             <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="{{ asset('./assets/img/vi.svg') }}" alt="vi">
-                <div class="fw-500">Tiếng Việt</div>
+                @if (config('app.locale') === 'vi')
+                    <img src="{{ asset('./assets/img/vi.svg') }}" alt="vi">
+                    <div class="fw-500">Tiếng Việt</div>
+                @else
+                    <img src="{{ asset('./assets/img/en.svg') }}" alt="en">
+                    <div class="fw-500">English</div>
+                @endif
                 <span class="material-symbols-outlined">chevron_right</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up" aria-labelledby="navbarDropdownDocs">
-                <a class="dropdown-item " href="{!! route('user.language', ['vi']) !!}">
+                <a class="dropdown-item " href="{!! route('user.language', ['language'=>'vi']) !!}">
                     <div class="dropdown-item-icon">
                         <img src="{{ asset('./assets/img/vi.svg') }}" alt="vi">
                     </div>
                     <div> {{ __('auth.vietnamese') }} </div>
                 </a>
-                <a class="dropdown-item " href="{!! route('user.language', ['en']) !!}">
+                <a class="dropdown-item " href="{!! route('user.language', ['language'=>'en']) !!}">
                     <div class="dropdown-item-icon">
                         <img src="{{ asset('./assets/img/en.svg') }}" alt="en">
                     </div>

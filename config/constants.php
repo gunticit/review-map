@@ -7,7 +7,13 @@
         'setting_columns' => [
             'language', 
             'dark_mode'
-        ]
+        ],
+        'status_support' => [
+            1 => 'support.status_support.done', // Đã thực hiện 
+            2 => 'support.status_support.unprocessed', // Chưa xử lý
+            3 => 'support.status_support.in_progress', // Đang thực hiện
+            4 => 'support.status_support.close', // Đóng
+        ],
     );
 ?>
  

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,16 +13,13 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('content');
-            $table->integer('status'); // 1: Đã đọc, 2: Chưa đọc
-            $table->integer('user_id');
+            $table->string('content');
+            $table->string('status');
+
+            // Thêm khóa ngoại liên kết đến bảng users
+            $table->unsignedBigInteger('user_id');
+
             $table->timestamps();
-            $table->softDeletes();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
-            $table->integer('sort')->default(99);
-            $table->boolean('active')->default(true);
         });
     }
 

@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-<!-- thong-bao -->
 <section class="section thong-bao mb-5 mt-5">
     <div class="container">
         <div class="col-inner">
@@ -16,181 +15,99 @@
             <table class="table list-table">
                 <thead>
                     <tr>
-                        <th class="list-table-stt" scope="col">STT</th>
-                        <th class="list-table-time" scope="col">Thời gian</th>
+                        {{-- <th class="list-table-stt" scope="col">STT</th> --}}
                         <th class="list-table-title" scope="col">Tiêu đề</th>
+                        <th class="list-table-creator" scope="col">Người tạo</th>
                         <th class="list-table-progree" scope="col">Trạng thái</th>
+                        <th class="list-table-time" scope="col">Thời gian</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($notifications as $index => $notification)
                     <tr>
-                        <td>1</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
+                        {{-- <td>{{ $index + 1 }}</td> --}}
                         <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
+                            <a href="10.1.chi-tiet-thong-bao.php">{{ $notification->title }}</a>
+                        </td>
+                        <td class="list-table-creator">
+                            {{ $notification->user->name }}
                         </td>
                         <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã đọc</a>
+                            <a class="btn btn-{{ $notification->status == 'Đã đọc' ? 'success' : 'danger' }}">{{
+                                $notification->status }}</a>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
                         <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-danger ">Chưa đọc</a>
+                            <a href="#">{{ $notification->created_at->format('d/m/Y') }} <span>{{
+                                    $notification->created_at->format('H:i') }}</span></a>
                         </td>
                     </tr>
-                    <tr>
-                        <td>3</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã đọc</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã đọc</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã đọc</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã đọc</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã đọc</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã đọc</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã đọc</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="10.1.chi-tiet-thong-bao.php">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã đọc</a>
-                        </td>
-                    </tr>
-                    
+                    @endforeach
                 </tbody>
             </table>
+
+            {{-- Phần phân trang và các thành phần khác giữ nguyên --}}
+
             <div class="list-table-footer d-flex justify-content-between align-items-center">
                 <div class="list-table-per-page">
                     <span class="form-label">Hiển thị kết quả</span>
-                    <select class="form-select d-inline-block" name="" id="">
-                        <option selected>10</option>
-                        <option value="">20</option>
-                        <option value="">30</option>
-                        <option value="">40</option>
-                    </select>
+                    <form action="{{ route('notification') }}" method="GET">
+                        <select class="form-select d-inline-block" name="perPage" id="perPageSelect" onchange="this.form.submit()">
+                            <option value="10" {{ $notifications->perPage() == 10 ? 'selected' : '' }}>10</option>
+                            <option value="20" {{ $notifications->perPage() == 20 ? 'selected' : '' }}>20</option>
+                            <option value="30" {{ $notifications->perPage() == 30 ? 'selected' : '' }}>30</option>
+                            <option value="40" {{ $notifications->perPage() == 40 ? 'selected' : '' }}>40</option>
+                        </select>
+                    </form>
                 </div>
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span class="material-symbols-outlined">chevron_left</span>
-                            </a>
-                        </li>
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item">
-                            <span class="page-link" href="#">...</span>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">20</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span class="material-symbols-outlined">chevron_right</span>
-                            </a>
-                        </li>
+
+                        {{-- Nút "Previous" --}}
+                        @if ($notifications->onFirstPage())
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span class="material-symbols-outlined">chevron_left</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $notifications->previousPageUrl() }}" aria-label="Previous">
+                                    <span class="material-symbols-outlined">chevron_left</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        {{-- Các trang --}}
+                        @foreach ($notifications->links()->elements[0] as $page => $url)
+                            @if ($page == $notifications->currentPage())
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="#">{{ $page }}</a>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                </li>
+                            @endif
+                        @endforeach
+                
+                        {{-- Nút "Next" --}}
+                        @if ($notifications->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $notifications->nextPageUrl() }}" aria-label="Next">
+                                    <span class="material-symbols-outlined">chevron_right</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span class="material-symbols-outlined">chevron_right</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </nav>
             </div>
         </div>
     </div>
 </section>
-<!-- end thong-bao -->
 @endsection

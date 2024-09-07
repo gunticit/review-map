@@ -46,21 +46,16 @@ Route::group([
     'middleware' => ['auth', 'customer']], function () {
 });
 
-// Route::group(['middleware' => 'locale'], function() {
-//     Route::get('change-language/{language}', 'App\Http\Controllers\DashboardController@changeLanguage')
-//         ->name('user.language');
-// });
 Route::group(['middleware' => 'locale'], function() {
     Route::get('change-language/{language}', 'App\Http\Controllers\DashboardController@changeLanguage')
         ->name('user.language');
 });
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/terms', [App\Http\Controllers\TermsController::class, 'index'])->name('terms');
     Route::get('/faq', [App\Http\Controllers\FaqController::class, 'index'])->name('faq');
     Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history');
     Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
-    Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support');
     Route::get('/list-projects', [App\Http\Controllers\ProjectController::class, 'index'])->name('project.list');
     Route::get('/create-project', [App\Http\Controllers\ProjectController::class, 'create'])->name('project.create');
     Route::post('/create-project', [App\Http\Controllers\ProjectController::class, 'store'])->name('project.store');
@@ -69,7 +64,21 @@ Route::group(['middleware' => 'auth'], function(){
     Route::put('/update-status-project/{id}', [App\Http\Controllers\ProjectController::class, 'updateStatus'])->name('project.update.status');
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
+    Route::get('/notification/{id}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notification.show');
+
+    // Customer
+    Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support');
+    Route::get('/support/create', [App\Http\Controllers\SupportController::class, 'create'])->name('support.create');
+    Route::post('/support/store', [App\Http\Controllers\SupportController::class, 'store'])->name('support.store');
+    Route::get('/support/edit/{id}', [App\Http\Controllers\SupportController::class, 'edit'])->name('support.edit');
+    Route::put('/support/update/{id}', [App\Http\Controllers\SupportController::class, 'update'])->name('support.update');
+    Route::delete('/support/delete/{id}', [App\Http\Controllers\SupportController::class, 'delete'])->name('support.delete');
+    Route::delete('/support/delete-by-ids/{ids}', [App\Http\Controllers\SupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
 });
+
+
+include 'web_admin.php';
+include 'web_partner.php';
 
 Route::get('/get-long-url', [App\Http\Controllers\DashboardController::class, 'getLongUrl'])->name('get.long.url');
 Route::get('/list-tags', [App\Http\Controllers\TagController::class, 'index'])->name('list.tags');

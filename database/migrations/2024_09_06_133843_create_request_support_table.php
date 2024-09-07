@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('supports', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('support_code');
+            $table->integer('department_id');
+            $table->integer('project_id');
             $table->text('content');
-            $table->integer('status'); // 1: Đã đọc, 2: Chưa đọc
-            $table->integer('user_id');
+            $table->string('filepath');
+            $table->integer('status');  // 1: Đã trả lời, 2: Chưa xử lý, 3: Đang thực hiện, 4: Đóng
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('request_support');
     }
 };
