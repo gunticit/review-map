@@ -5,18 +5,25 @@ namespace App\Http\Controllers;
 use App\Exceptions\ProcessException;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest;
+use App\Services\HistoryService;
 use App\Services\ProjectService;
 use App\Services\ProjectImageService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Validate;
 
 class ProjectController extends Controller
 {
-    protected $projectService, $projectImageService;
-    public function __construct(ProjectService $projectService, ProjectImageService $projectImageService){
+    protected $projectService, $projectImageService, $historyService;
+    public function __construct(
+        ProjectService $projectService, 
+        ProjectImageService $projectImageService, 
+        HistoryService $historyService
+    ){
         $this->projectService = $projectService;
         $this->projectImageService = $projectImageService;
+        $this->historyService = $historyService;
     }
     public function index(Request $request){
         $data = $this->projectService->list($request);
@@ -43,9 +50,29 @@ class ProjectController extends Controller
                 if ($request->has('has_image') && $request->has_image == 1) {
                     $this->projectImageService->createDataImages($request, $data->id);
                 }
+                $content_history = [
+                    'title' => 'Dự án khởi tạo thành công',
+                    'content' => 'Dự án khởi tạo thành công vào lúc: ' . $data['created_at'],
+                    'status' => 1,
+                    'user_id' => Auth::user()->id
+                ];
+                $this->historyService->create([
+                    'content' => json_encode($content_history),
+                    'user_id' => Auth::user()->id
+                ]);
                 Session::flash('success', 'Khởi tạo dự án thành công');
                 return redirect()->route('project.list');
             }
+            $content_history = [
+                'title' => 'Dự án tạo không thành công',
+                'content' => 'Dự án tạo không thành công vào lúc: ' . $data['created_at'],
+                'status' => 0,
+                'user_id' => Auth::user()->id
+            ];
+            $this->historyService->create([
+                'content' => json_encode($content_history),
+                'user_id' => Auth::user()->id
+            ]);
             Session::flash('error', 'Tạo dự án không thành công');
             return redirect()->back()->withInput();
         }catch(\Exception $e){

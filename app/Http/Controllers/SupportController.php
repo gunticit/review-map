@@ -22,16 +22,18 @@ class SupportController extends Controller
     }
     public function index(Request $request){
         $supports =  $this->supportService->list($request);
+        $projects = $this->projectService->list($request);
         $data = SupportResource::collection($supports)->resource;
         return view('pages.customer.support.list', [
-            'supports' => $data
+            'supports' => $data,
+            'projects' => $projects,
         ]);
     }
     public function edit(){
         return view('pages.customer.support.edit');
     }
     public function create(Request $request){
-        $projects = $this->projectService->list($request);
+        $projects = $this->projectService->fullList($request);
         return view('pages.customer.support.create',[
             'projects' => $projects,
         ]);

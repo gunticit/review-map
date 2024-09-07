@@ -9,6 +9,7 @@ class Message extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    public $timestamps = true;
 
     public function user()
     {

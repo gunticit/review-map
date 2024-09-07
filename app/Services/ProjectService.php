@@ -2,18 +2,17 @@
 
 namespace App\Services;
 
-use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Http\Resources\ProjectResource;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class ProjectService {
     protected $projectRepository;
 
-    public function __construct(ProjectRepositoryInterface $projectRepository)
+    public function __construct(
+        ProjectRepositoryInterface $projectRepository,
+    )
     {
         $this->projectRepository = $projectRepository;
     }
@@ -48,6 +47,11 @@ class ProjectService {
         return $data;
     }
 
+    public function fullList($request){
+        $projects = $this->projectRepository->list($request);
+        return $projects;
+    }
+
     public function create($request){
         $project = $this->filterData($request);
         $data = $this->projectRepository->create($project);
@@ -67,7 +71,7 @@ class ProjectService {
 
 
     private function filterData($request): array{
-        $data = $request->all();
+        $data = is_array($request) ? $request : $request->all();
         return array(
             'name' => $data['name'] ?? null,
             'description' => $data['description'] ?? null,

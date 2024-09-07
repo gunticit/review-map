@@ -24,6 +24,14 @@ use App\Repositories\Support\SupportRepositoryInterface;
 use App\Repositories\Tag\TagRepository;
 use App\Repositories\Tag\TagRepositoryInterface;
 
+# History
+use App\Repositories\History\HistoryRepository;
+use App\Repositories\History\HistoryRepositoryInterface;
+
+# Notification
+use App\Repositories\Notification\NotificationRepository;
+use App\Repositories\Notification\NotificationRepositoryInterface;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -36,6 +44,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProjectImageRepositoryInterface::class, ProjectImageRepository::class);
         $this->app->bind(SupportRepositoryInterface::class, SupportRepository::class);
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
+        $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
+        $this->app->bind(HistoryRepositoryInterface::class, HistoryRepository::class);
     }
 
     /**

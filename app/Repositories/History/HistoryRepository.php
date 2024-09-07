@@ -1,17 +1,17 @@
 <?php
-namespace App\Repositories\Support;
+namespace App\Repositories\History;
 
 use App\Repositories\BaseRepository;
-use App\Models\Support;
-use App\Repositories\Support\SupportRepositoryInterface;
+use App\Models\History;
+use App\Repositories\History\HistoryRepositoryInterface;
 
-class  SupportRepository extends BaseRepository implements SupportRepositoryInterface
+class  HistoryRepository extends BaseRepository implements HistoryRepositoryInterface
 {
     protected $model;
 
-    public function __construct(Support $support)
+    public function __construct(History $history)
     {
-        $this->model = $support;
+        $this->model = $history;
     }
 
     public function list($request){

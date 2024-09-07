@@ -1,17 +1,17 @@
 <?php
-namespace App\Repositories\Support;
+namespace App\Repositories\Notification;
 
 use App\Repositories\BaseRepository;
-use App\Models\Support;
-use App\Repositories\Support\SupportRepositoryInterface;
+use App\Models\Notification;
+use App\Repositories\Notification\NotificationRepositoryInterface;
 
-class  SupportRepository extends BaseRepository implements SupportRepositoryInterface
+class  NotificationRepository extends BaseRepository implements NotificationRepositoryInterface
 {
     protected $model;
 
-    public function __construct(Support $support)
+    public function __construct(Notification $notification)
     {
-        $this->model = $support;
+        $this->model = $notification;
     }
 
     public function list($request){

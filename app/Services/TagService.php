@@ -2,13 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Auth;
 use App\Repositories\Tag\TagRepositoryInterface;
-use App\Http\Resources\TagResource;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
 class TagService {
     protected $projectImageRepository;
@@ -19,14 +13,6 @@ class TagService {
     {
         $this->projectImageRepository = $projectImageRepository;
     }
-
-    /**
-     * Authenticates the projectImage with the given credentials.
-     *
-     * @param array $credentials The projectImage's login credentials.
-     * @return mixed|null The authenticated projectImage if successful, null otherwise.
-     * @throws ValidationException
-     */
 
     public function list($request){
         $data = $this->projectImageRepository->list($request);
@@ -54,5 +40,14 @@ class TagService {
             $this->projectImageRepository->insert($data);
         }
         return $data;
+    }
+
+    private function filterData($request): array{
+        $data = $request->all();
+        return array(
+            'name' => $data['name'] ?? null,
+            'slug' => $data['slug'] ?? null,
+            'subject_id' => $data['subject_id'] ?? null
+        );
     }
 }

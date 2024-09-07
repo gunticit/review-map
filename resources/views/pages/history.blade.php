@@ -30,103 +30,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title"> Nạp thành công số tiền <strong>1.000.000</strong> vào tài khoản</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title">Nạp tiền thất bại</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title">Đăng nhập thành công</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title">Tạo dự án <strong>[Dự án cho Gói Review Map Đánh Giá Cho Nhà Hàng]</strong></td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title">Đã thanh toán cho <strong> [Dự án cho Gói Review Map Đánh Giá Cửa hàng ABC]</strong> với số tiền <strong>5.000.000 VND</strong></td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title"> Nạp thành công số tiền <strong>1.000.000</strong> vào tài khoản</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title"> Nạp thành công số tiền <strong>1.000.000</strong> vào tài khoản</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title"> Nạp thành công số tiền <strong>1.000.000</strong> vào tài khoản</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title"> Nạp thành công số tiền <strong>1.000.000</strong> vào tài khoản</td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td class="list-table-time">27/06/2024 <span>07:28</span></td>
-                        <td class="list-table-title"> Nạp thành công số tiền <strong>1.000.000</strong> vào tài khoản</td>
-                    </tr>
-                    
-                    
+                    @if(!empty($histories))
+                        @php $stt = 1; @endphp
+                        @foreach($histories as $history)
+                        <tr>
+                            <td>{{ $stt }}</td>
+                            <td class="list-table-time">{!! $history[0]['created_at']->format('d/m/Y') !!} <span>{!! $history[0]['created_at']->format('H:i') !!}</span></td>
+                            <td class="list-table-title"> {{ $history[0]['content'] }}</td>
+                        </tr>
+                        @php $stt++; @endphp
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
-            <div class="list-table-footer d-flex justify-content-between align-items-center">
-                <div class="list-table-per-page">
-                    <span class="form-label">Hiển thị kết quả</span>
-                    <select class="form-select d-inline-block" name="" id="">
-                        <option selected>10</option>
-                        <option value="">20</option>
-                        <option value="">30</option>
-                        <option value="">40</option>
-                    </select>
-                </div>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span class="material-symbols-outlined">chevron_left</span>
-                            </a>
-                        </li>
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item">
-                            <span class="page-link" href="#">...</span>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">20</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span class="material-symbols-outlined">chevron_right</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            {{ $histories->links('vendor.pagination.custom') }}
         </div>
     </div>
 </section>

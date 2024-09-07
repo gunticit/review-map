@@ -68,12 +68,12 @@ Route::group(['middleware' => ['locale','auth']], function(){
 
     // Customer
     Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support');
-    Route::get('/support/create', [App\Http\Controllers\SupportController::class, 'create'])->name('support.create');
-    Route::post('/support/store', [App\Http\Controllers\SupportController::class, 'store'])->name('support.store');
-    Route::get('/support/edit/{id}', [App\Http\Controllers\SupportController::class, 'edit'])->name('support.edit');
-    Route::put('/support/update/{id}', [App\Http\Controllers\SupportController::class, 'update'])->name('support.update');
-    Route::delete('/support/delete/{id}', [App\Http\Controllers\SupportController::class, 'delete'])->name('support.delete');
-    Route::delete('/support/delete-by-ids/{ids}', [App\Http\Controllers\SupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
+    Route::get('/support-create', [App\Http\Controllers\SupportController::class, 'create'])->name('support.create');
+    Route::post('/support-store', [App\Http\Controllers\SupportController::class, 'store'])->name('support.store');
+    Route::get('/support-edit/{id}', [App\Http\Controllers\SupportController::class, 'edit'])->name('support.edit');
+    Route::put('/support-update/{id}', [App\Http\Controllers\SupportController::class, 'update'])->name('support.update');
+    Route::delete('/support-delete/{id}', [App\Http\Controllers\SupportController::class, 'delete'])->name('support.delete');
+    Route::delete('/support-delete-by-ids/{ids}', [App\Http\Controllers\SupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
 });
 
 

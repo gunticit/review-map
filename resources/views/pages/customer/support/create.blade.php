@@ -41,7 +41,7 @@
                         <label for="inputPhongBan">{{ __('support.department') }} <span class="required">*</span>
                         </label>
                         <select class="form-control form-select" name="phong-ban" id="inputPhongBan" required>
-                            <option>Chọn dự án</option>
+                            <option>Chọn phòng ban</option>
                             <option value="">Kỹ thuật</option>
                             <option value="">Kế toán</option>
                         </select>
@@ -51,17 +51,15 @@
                         <label for="inputDuAn">{{ __('support.project') }} <span class="required">*</span>
                         </label>
                         <select class="form-control form-select" name="du-an" id="inputDuAn" required>
-                            <option>Chọn dự án</option>
-                            @if(!empty($projects))
-                                @foreach($projects as $project)
-                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
-                                @endforeach
-                            @endif
+                            <option>{{ __('support.select_project') }}</option>
+                            @foreach($projects as $project)
+                                <option value="{{ $project['id'] }}">{{ $project['name'] }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <!-- Form Group (Description)-->
                     <div class="mb-4">
-                        <label for="inputDescription">Nội dung <span class="required">*</span>
+                        <label for="inputDescription">{{ __('support.content') }} <span class="required">*</span>
                         </label>
                         <textarea class="form-control" name="noi-dung" id="inputDescription" placeholder="Nhập mô tả"></textarea>
                     </div>
