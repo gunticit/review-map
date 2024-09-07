@@ -2,25 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Role;
+use Spatie\Permission\Models\Permission as PackagePermission;
 
-class Permission extends Model
+class Permission extends PackagePermission
 {
-    use HasFactory;
-    protected $fillable = ['name', 'guard_name'];
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'role_has_permissions', 'permission_id', 'role_id');
-    }
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'model_has_permissions', 'permission_id', 'model_id')
-                    ->wherePivot('model_type', User::class);
-    }
-
-    public $timestamps = true;
 }

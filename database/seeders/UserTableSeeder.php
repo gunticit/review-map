@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-
+use App\Models\User;
 class UserTableSeeder extends Seeder
 {
     /**
@@ -13,32 +12,32 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $data = [
-            [
-                'name' => 'admin',
-                'role_id' => 1,
-                'permission_id' => 1,
-                'email' => 'admin@gmail.com',
-                'telephone' => '0909123123',
-                'password' => bcrypt('123123123123'),
-            ],
-            [
-                'name' => 'customer',
-                'role_id' => 2,
-                'permission_id' => 2,
-                'email' => 'customer@gmail.com',
-                'telephone' => '0909123124',
-                'password' => bcrypt('123123123123'),
-            ],
-            [
-                'name' => 'guest',
-                'role_id' => 3,
-                'permission_id' => 3,
-                'email' => 'guest@gmail.com',
-                'telephone' => '0909123125',
-                'password' => bcrypt('123123123123'),
-            ],
+        $admin =  [
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'telephone' => '0909123123',
+            'password' => bcrypt('123123123123'),
         ];
-        DB::table('users')->insert($data);
+        $userAdmin = User::create($admin);
+        $userAdmin->assignRole([Role::ADMIN_ROLE]);
+
+
+        $customer = [
+            'name' => 'customer',
+            'email' => 'customer@gmail.com',
+            'telephone' => '0909123124',
+            'password' => bcrypt('123123123123'),
+        ];
+        $userCustomer = User::create($customer);
+        $userCustomer->assignRole([Role::CUSTOMER_ROLE]);
+
+        $guest = [
+            'name' => 'guest',
+            'email' => 'guest@gmail.com',
+            'telephone' => '0909123125',
+            'password' => bcrypt('123123123123'),
+        ];
+        $userGuest = User::create($guest);
+        $userGuest->assignRole([Role::GUEST_ROLE]);
     }
 }

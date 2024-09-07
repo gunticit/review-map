@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Resources\UserResource;
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -38,6 +39,7 @@ class AuthService {
     public function registerUser($request){
         $data = $this->filterData($request);
         $user = $this->userRepository->create($data);
+        $user->assignRole(Role::CUSTOMER_ROLE);
         $user = UserResource::make($user);
         return $user;
     }
@@ -59,11 +61,10 @@ class AuthService {
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey($request));
             return redirect()->back()->withErrors([
-                'login' => __('These credentials do not match our records.'),
+                'login' => __('Credential is wrong.'),
             ]);
         }
         RateLimiter::clear($this->throttleKey($request));
-        return redirect()->route('home');
     }
 
     /**
@@ -101,8 +102,6 @@ class AuthService {
             'name' => $data['name'],
             'email' => $data['email'],
             'telephone' => $data['telephone'],
-            'role_id' => isset($data['role_id'])?$data['role_id']:1,
-            'permission_id' => isset($data['permission_id'])?$data['permission_id']:1,
             'password' => Hash::make($data['password']),
         );
     }
