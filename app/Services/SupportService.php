@@ -28,8 +28,8 @@ class SupportService {
      */
 
     public function list($request){
-        $data = $this->supportRepository->list($request);
-        $data = SupportResource::collection($data)->resource;
+        $supports = $this->supportRepository->list($request);
+        $data = SupportResource::collection($supports)->resource;
         return $data;
     }
 

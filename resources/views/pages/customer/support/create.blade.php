@@ -16,9 +16,7 @@
     <!-- tao-yeu-cau -->
     <section class="section tao-yeu-cau mb-5">
         <form action="" method="POST" enctype="multipart/form-data">
-            @method ('PUT')
             @csrf
-
             <div class="container">
                 <div class="col-inner">
                     <h2 class="section-title mb-4">Tạo yêu cầu</h2>
@@ -34,13 +32,13 @@
                     @endif
                     <div class="mb-4">
                         <!-- class: invalid -->
-                        <label for="inputlist-table">Tiêu đề <span class="required">*</span>
+                        <label for="inputlist-table">{{ __('support.title') }} <span class="required">*</span>
                         </label>
                         <input class="form-control" name="tieu-de" id="inputlist-table" type="text" placeholder="Nhập tiêu đề" value="" required>
                     </div>
                     <!-- Form Group (inputPhongBan)-->
                     <div class="mb-4">
-                        <label for="inputPhongBan">Phòng ban <span class="required">*</span>
+                        <label for="inputPhongBan">{{ __('support.department') }} <span class="required">*</span>
                         </label>
                         <select class="form-control form-select" name="phong-ban" id="inputPhongBan" required>
                             <option>Chọn dự án</option>
@@ -50,13 +48,15 @@
                     </div>
                     <!-- Form Group (DuAn)-->
                     <div class="mb-4">
-                        <label for="inputDuAn">Dự án <span class="required">*</span>
+                        <label for="inputDuAn">{{ __('support.project') }} <span class="required">*</span>
                         </label>
                         <select class="form-control form-select" name="du-an" id="inputDuAn" required>
                             <option>Chọn dự án</option>
-                            <option value="">Dự án Review Cửa hàng số 01</option>
-                            <option value="">Dự án Review Cửa hàng số 02</option>
-                            <option value="">Dự án Review Cửa hàng số 03</option>
+                            @if(!empty($projects))
+                                @foreach($projects as $project)
+                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <!-- Form Group (Description)-->
@@ -66,7 +66,7 @@
                         <textarea class="form-control" name="noi-dung" id="inputDescription" placeholder="Nhập mô tả"></textarea>
                     </div>
                     <!-- Form Group (inputFile)-->
-                    <label>Tệp đính kèm <small>(Nếu có)</small>
+                    <label>{{ __('support.attachment') }} <small>(Nếu có)</small>
                     </label>
                     <div class="mb-4">
                         <label for="inputFile" class="custom-file-upload"><span class="material-symbols-outlined">link</span> Tải lên tệp</label>

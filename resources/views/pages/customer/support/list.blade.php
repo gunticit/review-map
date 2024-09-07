@@ -50,157 +50,25 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if(!empty($supports))
+                    @foreach ($supports as $support)
                     <tr>
                         <td>1</td>
                         <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
+                            <a href="#">{{ $support->title }}</a>
                         </td>
                         <td class="list-table-sku">
-                            <a href="#">HT00001</a>
+                            <a href="#">{{ $support->title }}</a>
                         </td>
                         <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
+                            {!! date('d/m/Y', strtotime($support->created_at)) !!} <span>{!! date('hh:mm', strtotime($support->created_at)) !!}</span>
                         </td>
                         <td class="list-table-progree">
-                            <a class="btn btn-primary ">Đã tiếp nhận</a>
+                            <span class="btn btn-primary ">{!! __($support->status) !!}</span>
                         </td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">HT00001</a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success ">Đã trả lời</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">HT00001</a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-danger">Đóng</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">HT00001</a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-warning">Chưa xử lý</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">HT00001</a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-primary ">Đang thực hiện</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">HT00001</a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-primary ">Đang thực hiện</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">HT00001</a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-primary ">Đang thực hiện</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">HT00001</a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-primary ">Đang thực hiện</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">HT00001</a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-primary ">Đang thực hiện</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td class="list-table-title">
-                            <a href="#">Yêu cầu hỗ trợ Dự án số 01</a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">HT00001</a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-primary ">Đang thực hiện</a>
-                        </td>
-                    </tr>
-                    
+                    @endforeach
+                    @endif
                 </tbody>
             </table>
             <div class="list-table-footer d-flex justify-content-between align-items-center">

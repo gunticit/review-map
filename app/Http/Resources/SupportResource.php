@@ -14,6 +14,7 @@ class SupportResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $status_config = config('constants.support_status');
         return [
             'id'         => $this->id,
             'name'     => $this->name,
@@ -26,7 +27,7 @@ class SupportResource extends JsonResource
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'place_id' => $this->place_id,
-            'status'  => $this->status,
+            'status'  => $this->status ? $status_config[$this->status] : null,
         ];
     }
 }
