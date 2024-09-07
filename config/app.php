@@ -53,6 +53,9 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'customer_url' => env('CUSTOMER_DOMAIN', 'http://khachhang.rivi.com'),
+    'partner_url' => env('PARTNER_DOMAIN', 'http://doitac.rivi.com'),
+    'admin_url' => env('ADMIN_DOMAIN', 'http://quantri.rivi.com'),
 
     /*
     |--------------------------------------------------------------------------

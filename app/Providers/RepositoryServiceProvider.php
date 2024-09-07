@@ -20,6 +20,10 @@ use App\Repositories\ProjectImage\ProjectImageRepositoryInterface;
 use App\Repositories\Support\SupportRepository;
 use App\Repositories\Support\SupportRepositoryInterface;
 
+# Tag
+use App\Repositories\Tag\TagRepository;
+use App\Repositories\Tag\TagRepositoryInterface;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -31,6 +35,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProjectRepositoryInterface::class, ProjectRepository::class);
         $this->app->bind(ProjectImageRepositoryInterface::class, ProjectImageRepository::class);
         $this->app->bind(SupportRepositoryInterface::class, SupportRepository::class);
+        $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
     }
 
     /**

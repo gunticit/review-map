@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ProcessException;
 use App\Http\Resources\TagResource;
+use App\Services\TagService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

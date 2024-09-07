@@ -11,7 +11,7 @@
             <h5>Tổng dự án</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{{ $total_project }}</h6>
+            <h6 class="text-primary">{!! $projects['total'] ?? 0 !!}</h6>
           </div>
         </div>
       </div>
@@ -22,7 +22,7 @@
             <h5>{{ __('common.doing') }}</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{{ $total_doing }}</h6>
+            <h6 class="text-primary">{!! $projects['total_working'] ?? 0 !!}</h6>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
             <h5>Đã tạm dừng</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{{ $total_pause }}</h6>
+            <h6 class="text-primary">{!! $projects['total_stopped'] ?? 0 !!}</h6>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@
             <h5>Đã chi tiêu</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-danger">{{ $money_spend }} VND</h6>
+            <h6 class="text-danger">{{ $money['spent'] }} VND</h6>
           </div>
         </div>
       </div>
@@ -66,9 +66,11 @@
         <div class="col-md-2 col-12">
           <select class="form-select" aria-label="Default select example">
             <option>Năm</option>
-            <option value="1">2024</option>
-            <option value="2">2023</option>
-            <option value="3">2025</option>
+            @if(!empty($filters['years']))
+              @foreach($filters['years'] as $year)
+                <option value="{{ $year }}">{{ $year }}</option>
+              @endforeach
+            @endif
           </select>
         </div>
       </div>
@@ -95,43 +97,7 @@
                 name: "Đánh giá đã hoàn thành",
                 showInLegend: true,
                 color: "#436CFF",
-                dataPoints: [{
-                  label: "Tháng 1",
-                  y: 60
-                }, {
-                  label: "Tháng 2",
-                  y: 40
-                }, {
-                  label: "Tháng 3",
-                  y: 100
-                }, {
-                  label: "Tháng 4",
-                  y: 70
-                }, {
-                  label: "Tháng 5",
-                  y: 50
-                }, {
-                  label: "Tháng 6",
-                  y: 60
-                }, {
-                  label: "Tháng 7",
-                  y: 50
-                }, {
-                  label: "Tháng 8",
-                  y: 49
-                }, {
-                  label: "Tháng 9",
-                  y: 70
-                }, {
-                  label: "Tháng 10",
-                  y: 34
-                }, {
-                  label: "Tháng 11",
-                  y: 24
-                }, {
-                  label: "Tháng 12",
-                  y: 64
-                }, ]
+                dataPoints: @json($data_chars['completed'])
               },
               // set data Đánh giá đã phân phối
               {
@@ -140,43 +106,7 @@
                 axisYType: "secondary",
                 showInLegend: true,
                 color: "#95ADFF",
-                dataPoints: [{
-                  label: "Tháng 1",
-                  y: 70
-                }, {
-                  label: "Tháng 2",
-                  y: 30
-                }, {
-                  label: "Tháng 3",
-                  y: 30
-                }, {
-                  label: "Tháng 4",
-                  y: 40
-                }, {
-                  label: "Tháng 5",
-                  y: 70
-                }, {
-                  label: "Tháng 6",
-                  y: 30
-                }, {
-                  label: "Tháng 7",
-                  y: 40
-                }, {
-                  label: "Tháng 8",
-                  y: 79
-                }, {
-                  label: "Tháng 9",
-                  y: 80
-                }, {
-                  label: "Tháng 10",
-                  y: 20
-                }, {
-                  label: "Tháng 11",
-                  y: 50
-                }, {
-                  label: "Tháng 12",
-                  y: 20
-                }, ]
+                dataPoints: @json($data_chars['distributed'])
               },
               // set data Giá trị chi tiêu
               {
@@ -185,43 +115,7 @@
                 axisYType: "thirdary",
                 showInLegend: true,
                 color: "#E8EDFF",
-                dataPoints: [{
-                  label: "Tháng 1",
-                  y: 30
-                }, {
-                  label: "Tháng 2",
-                  y: 20
-                }, {
-                  label: "Tháng 3",
-                  y: 10
-                }, {
-                  label: "Tháng 4",
-                  y: 60
-                }, {
-                  label: "Tháng 5",
-                  y: 80
-                }, {
-                  label: "Tháng 6",
-                  y: 50
-                }, {
-                  label: "Tháng 7",
-                  y: 30
-                }, {
-                  label: "Tháng 8",
-                  y: 29
-                }, {
-                  label: "Tháng 9",
-                  y: 30
-                }, {
-                  label: "Tháng 10",
-                  y: 24
-                }, {
-                  label: "Tháng 11",
-                  y: 14
-                }, {
-                  label: "Tháng 12",
-                  y: 34
-                }, ]
+                dataPoints: @json($data_chars['spents'])
               }
             ]
           });
