@@ -30,8 +30,8 @@ class SupportController extends Controller
     public function edit(){
         return view('pages.customer.support.edit');
     }
-    public function create(){
-        $projects = $this->projectService->list();
+    public function create(Request $request){
+        $projects = $this->projectService->list($request);
         return view('pages.customer.support.create',[
             'projects' => $projects,
         ]);

@@ -27,4 +27,12 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         $perPage = $request->per_page ?? 15;
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
+
+    public function countData($filter = array()){
+        $query = $this->model->query();
+        if(isset($filter['status'])){
+            $query->where('status', $filter['status']);
+        }
+        return $query->count();
+    }
 }
