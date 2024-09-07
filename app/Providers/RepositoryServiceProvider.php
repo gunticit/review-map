@@ -32,6 +32,10 @@ use App\Repositories\History\HistoryRepositoryInterface;
 use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Notification\NotificationRepositoryInterface;
 
+# Faq
+use App\Repositories\Faq\FaqRepositoryInterface;
+use App\Repositories\Faq\FaqRepository;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -46,6 +50,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
         $this->app->bind(HistoryRepositoryInterface::class, HistoryRepository::class);
+        $this->app->bind(FaqRepositoryInterface::class, FaqRepository::class);
     }
 
     /**

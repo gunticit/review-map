@@ -25,21 +25,13 @@ class TagService {
         return $data;
     }
 
-    public function createDataImages($request, $project_id){
-        $data = array();
-        if ($request->hasFile('images')) {
-            $this->projectImageRepository->deleteByKey('project_id',$project_id);
-            $folder = 'uploads' . '/' . date('Y-m') . '/' . date('d') . '/' . $project_id;
-            foreach ($request->file('images') as $image) {
-                $path = $image->store($folder, 'public');
-                $data[] = array(
-                    'image_url' => $path,
-                    'project_id' => $project_id
-                );
-            }
-            $this->projectImageRepository->insert($data);
-        }
-        return $data;
+    private function filterData($request): array{
+        $data = $request->all();
+        return array(
+            'name' => $data['name'],
+            'slug' => $data['slug'],
+            'subject_id' => $data['subject_id'],
+        );
     }
 
     private function filterData($request): array{

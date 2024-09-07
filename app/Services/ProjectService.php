@@ -69,7 +69,6 @@ class ProjectService {
         return $data; 
     }
 
-
     private function filterData($request): array{
         $data = is_array($request) ? $request : $request->all();
         return array(

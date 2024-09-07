@@ -6,11 +6,11 @@ use App\Traits\UserStamp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model
+class Faq extends Model
 {
     use HasFactory, UserStamp;
 
-    protected $table = 'tags';
+    protected $table = 'faqs';
     protected $guarded = [];
     public $timestamps = true;
 }
