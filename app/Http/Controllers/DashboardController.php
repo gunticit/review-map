@@ -20,11 +20,56 @@ class DashboardController extends Controller
     }
     public function index(Request $request){
         $data = $this->dashboardService->info($request);
+        $filters =  array(
+            'years' => array(
+                date('Y'),
+                date('Y') - 1,
+                date('Y') + 1
+            ) 
+        );
+        
+        $data_completed = $data_distributed = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $data_completed[$i] = [
+                "label" => "Tháng $i",
+                "y" => 0 
+            ];
+            $data_distributed[$i] = [
+                "label" => "Tháng $i",
+                "y" => 0 
+            ];
+        }
+        $completed = $this->dashboardService->getProjectsCompleted();
+        foreach ($completed as $value) {
+            $month = (int)$value['month'];
+            if ($month >= 1 && $month <= 12) {
+                $data_completed[$month]['y'] = $value['total']; // Gán giá trị đúng cho tháng
+            }
+        }
+        $data_completed = array_values($data_completed);
+
+        $distributed = $this->dashboardService->getProjectsDistributed();
+        foreach ($distributed as $value) {
+            $month = (int)$value['month'];
+            if ($month >= 1 && $month <= 12) {
+                $data_distributed[$month]['y'] = $value['total']; // Gán giá trị đúng cho tháng
+            }
+        }
+        $data_distributed = array_values($data_distributed);
+
+        $data_chars = array(
+            'completed' =>  $data_completed,
+            'distributed' =>  $data_distributed,
+            'spents' =>  $this->dashboardService->getMoneySpents('spents'),
+        );
         return view('pages.dashboard', [
             'projects' => $data['projects'] ?? array(),
             'money' => array(
                 'spent' => 0
-            )
+            ),
+            'filters' => $filters,
+            'data_chars' => $data_chars
         ]);
     }
     public function getLongUrl(Request $request)
