@@ -50,46 +50,24 @@
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </h6>
-                <!-- Example Alert 1-->
-                <a class="dropdown-item dropdown-notifications-item active" href="#!">
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-title">Lorem ipsum dolor sit amet, consectetur !</div>
-                        <div class="dropdown-notifications-item-content-text">Tempor orci dapibus ultrices in iaculis. Sed enim ut sem viverra aliquet eget sit amet.</div>
-                        <div class="dropdown-notifications-item-content-details">27/06/2024 - 07:57</div>
+                @if(!empty($notifications))
+                    @foreach($notifications as $notification)
+                        <a class="dropdown-item dropdown-notifications-item active" href="#!">
+                            <div class="dropdown-notifications-item-content">
+                                <div class="dropdown-notifications-item-content-title">{{ $notification->title }}</div>
+                                <div class="dropdown-notifications-item-content-text">{{ $notification->content }}</div>
+                                <div class="dropdown-notifications-item-content-details">{{ date('d/m/Y', strtotime($notification->created_at)) }} - {{ date('H:i', strtotime($notification->created_at)) }}</div>
+                            </div>
+                        </a>
+                    @endforeach
+                @else
+                    <div class="col-sm-12 text-center p-5">
+                        <span class="material-symbols-outlined">
+                            notifications_off
+                        </span>
+                        <h6>Không có thông báo mới </h6>
                     </div>
-                </a>
-                <!-- Example Alert 2-->
-                <a class="dropdown-item dropdown-notifications-item active" href="#!">
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-title">Lorem ipsum dolor sit amet, consectetur !</div>
-                        <div class="dropdown-notifications-item-content-text">Tempor orci dapibus ultrices in iaculis. Sed enim ut sem viverra aliquet eget sit amet.</div>
-                        <div class="dropdown-notifications-item-content-details">27/06/2024 - 07:57</div>
-                    </div>
-                </a>
-                <!-- Example Alert 3-->
-                <a class="dropdown-item dropdown-notifications-item" href="#!">
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-title">Lorem ipsum dolor sit amet, consectetur !</div>
-                        <div class="dropdown-notifications-item-content-text">Tempor orci dapibus ultrices in iaculis. Sed enim ut sem viverra aliquet eget sit amet.</div>
-                        <div class="dropdown-notifications-item-content-details">27/06/2024 - 07:57</div>
-                    </div>
-                </a>
-                <!-- Example Alert 4-->
-                <a class="dropdown-item dropdown-notifications-item" href="#!">
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-title">Lorem ipsum dolor sit amet, consectetur !</div>
-                        <div class="dropdown-notifications-item-content-text">Tempor orci dapibus ultrices in iaculis. Sed enim ut sem viverra aliquet eget sit amet.</div>
-                        <div class="dropdown-notifications-item-content-details">27/06/2024 - 07:57</div>
-                    </div>
-                </a>
-                <!-- Example Alert 5-->
-                <a class="dropdown-item dropdown-notifications-item" href="#!">
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-title">Lorem ipsum dolor sit amet, consectetur !</div>
-                        <div class="dropdown-notifications-item-content-text">Tempor orci dapibus ultrices in iaculis. Sed enim ut sem viverra aliquet eget sit amet.</div>
-                        <div class="dropdown-notifications-item-content-details">27/06/2024 - 07:57</div>
-                    </div>
-                </a>
+                @endif
             </div>
         </li>
         <!-- User Dropdown-->

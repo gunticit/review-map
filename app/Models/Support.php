@@ -11,4 +11,13 @@ class Support extends Model
     protected $table = 'supports';
     protected $guarded = [];
     public $timestamps = true;
+
+    const COMPLETE_SUPPORT = 1; // Đã xử lý
+    const INCOMPLETE_SUPPORT = 2; // Chưa xử lý
+    const PROCESSING_SUPPORT = 3; // Đang xử lý
+    const CLOSE_SUPPORT = 4; // Đóng
+    
+    static public function generateSupportCode(){
+        return 'SPC_'.time().rand(1000,9999);
+    }
 }

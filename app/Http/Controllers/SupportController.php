@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SupportRequest;
 use App\Http\Resources\SupportResource;
+use App\Models\Department;
 use App\Services\ProjectService;
 use App\Services\SupportService;
 use Exception;
@@ -33,9 +34,12 @@ class SupportController extends Controller
         return view('pages.customer.support.edit');
     }
     public function create(Request $request){
+        $request->merge(['user_id' => auth()->id()]);
         $projects = $this->projectService->fullList($request);
+        $departments = Department::all();
         return view('pages.customer.support.create',[
             'projects' => $projects,
+            'departments' => $departments,
         ]);
     }
     public function store(SupportRequest $request){

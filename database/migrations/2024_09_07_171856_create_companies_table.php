@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('supports', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('support_code');
-            $table->integer('department_id');
-            $table->integer('project_id');
-            $table->text('content');
-            $table->string('filepath');
-            $table->integer('status');  // 1: Đã trả lời, 2: Chưa xử lý, 3: Đang thực hiện, 4: Đóng
+            $table->integer('user_id');
+            $table->string('name')->nullable();
+            $table->string('tax')->nullable();
+            $table->string('email');
+            $table->integer('is_receive')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('request_support');
+        Schema::dropIfExists('companies');
     }
 };

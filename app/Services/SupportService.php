@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Repositories\Support\SupportRepositoryInterface;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\SupportResource;
+use App\Models\Support;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -34,9 +35,17 @@ class SupportService {
     }
 
     public function create($request){
-        $data = $this->filterData($request);
-        $data = $this->supportRepository->create($data);
-        return $data;
+        try{
+            $data = $this->filterData($request);
+            $file_path = $this->uploadImage($request);
+            $data['filepath'] = implode('|', $file_path);
+            $data['status'] = Support::INCOMPLETE_SUPPORT; // Đang xử lý
+            $data['support_code'] = Support::generateSupportCode();
+            $data = $this->supportRepository->create($data);
+            return $data;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     public function show($id){
@@ -50,6 +59,18 @@ class SupportService {
         return $data; 
     }
 
+    public function uploadImage($request){
+        $data = array();
+        $project_id = $request->project_id ?? 'undefined'; 
+        if ($request->hasFile('images')) {
+            $folder = 'uploads' . '/supports/' . date('Y-m') . '/' . date('d') . '/' . $project_id;
+            foreach ($request->file('images') as $image) {
+                $path = $image->store($folder, 'public');
+                $data[] = $path;
+            }
+        }
+        return $data;
+    }
 
     private function filterData($request): array{
         $data = $request->all();
@@ -58,7 +79,6 @@ class SupportService {
             'department_id' => $data['department_id'] ?? null,
             'project_id' => $data['project_id'] ?? null,
             'content' => $data['content'] ?? null,
-            'filepath' => $data['filepath'] ?? null,
             'status' => $data['status'] ?? null
         );
     }

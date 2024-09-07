@@ -33,13 +33,4 @@ class TagService {
             'subject_id' => $data['subject_id'],
         );
     }
-
-    private function filterData($request): array{
-        $data = $request->all();
-        return array(
-            'name' => $data['name'] ?? null,
-            'slug' => $data['slug'] ?? null,
-            'subject_id' => $data['subject_id'] ?? null
-        );
-    }
 }

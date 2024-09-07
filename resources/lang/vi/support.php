@@ -11,5 +11,6 @@
             'in_progress' => 'Đang thực hiện',
             'close' => 'Đóng'
         ],
+        'attachment' => 'Tệp đính kèm'
     ];
 ?>

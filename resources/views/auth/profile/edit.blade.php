@@ -30,28 +30,29 @@
                                     <div class="mb-4">
                                         <label for="inputUsername">Họ và tên <span class="required">*</span>
                                         </label>
-                                        <input class="form-control" id="inputUsername" type="text" value="Nguyen Van A" disabled>
+                                        <input class="form-control" id="inputUsername" type="text" value="{{ $profile['name'] }}" disabled>
                                     </div>
                                     <!-- Form Group (email address)-->
                                     <div class="mb-4">
                                         <label for="inputEmailAddress">Email <span class="required">*</span>
                                         </label>
-                                        <input class="form-control form-control-lg" id="inputEmailAddress" type="email" value="customer.kh_01@gmail.com" disabled>
+                                        <input class="form-control form-control-lg" id="inputEmailAddress" type="email" value="{{ $profile['email'] }}" disabled>
                                     </div>
                                     <!-- Form Group (phone)-->
                                     <div class="mb-4">
                                         <label for="inputPhone">Số điện thoại <span class="required">*</span>
                                         </label>
-                                        <input type="tel" class="form-control form-control-lg" id="phone" name="phone" placeholder="Số điện thoại" value="123 45 67 89" disabled />
+                                        <input type="tel" class="form-control form-control-lg" id="phone" name="phone" placeholder="Số điện thoại" value="{{ $profile['telephone'] }}" disabled />
                                         <div class="form-check mt-2"></div>
                                     </div>
                                     <!-- Form Group (country)-->
                                     <div class="mb-4">
                                         <label for="inputcountry">Quốc gia <span class="required">*</span>
                                         </label>
-                                        <select class="form-control form-select form-select-lg" name="" id="" disabled>
-                                            <option selected>Việt Nam</option>
-                                            <option value="">English</option>
+                                        <select class="form-control form-select form-select-lg" name="country_id" id="country-id" disabled>
+                                            <option value="">--- Chọn ---</option>
+                                            <option {!! $profile['country_code'] == 'vi'? 'selected': '' !!} value="vi">Việt Nam</option>
+                                            <option {!! $profile['country_code'] == 'en'? 'selected': '' !!}  value="en">English</option>
                                         </select>
                                     </div>
                                 </div>
@@ -84,7 +85,7 @@
                             <div class="mb-4">
                                 <label for="inputEmailAddress">Email <span class="required">*</span>
                                 </label>
-                                <input class="form-control mb-1" id="inputEmailAddress" type="email" placeholder="Email" value="" disabled>
+                                <input class="form-control mb-1" id="inputEmailAddress" type="email" name="email" placeholder="Email" value="{{ $profile['email'] }}" disabled>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -105,4 +106,9 @@
     </div>
 </section>
 <!-- end tai khoan -->
+<script>
+    $(document).ready(function(){
+
+    });
+</script>
 @endsection

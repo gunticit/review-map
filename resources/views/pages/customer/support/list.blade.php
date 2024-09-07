@@ -51,9 +51,9 @@
                 </thead>
                 <tbody>
                     @if(!empty($supports))
-                    @foreach ($supports as $support)
+                    @foreach ($supports as $key => $support)
                     <tr>
-                        <td>1</td>
+                        <td>{{ $key + 1 }}</td>
                         <td class="list-table-title">
                             <a href="#">{{ $support->title }}</a>
                         </td>
@@ -64,56 +64,19 @@
                             {!! date('d/m/Y', strtotime($support->created_at)) !!} <span>{!! date('hh:mm', strtotime($support->created_at)) !!}</span>
                         </td>
                         <td class="list-table-progree">
-                            <span class="btn btn-primary ">{!! __($support->status) !!}</span>
+                            <span class="btn {!! 
+                                $support->status == 1 ? 'btn-success' : 
+                                ($support->status == 2 ? 'btn-primary' :
+                                ($support->status == 3 ? 'btn-info' : 
+                                ($support->status == 4 ? 'btn-danger' : 'btn-danger')))
+                            !!} ">{!! __( config('constants.status_support')[$support->status]) !!}</span>
                         </td>
                     </tr>
                     @endforeach
                     @endif
                 </tbody>
             </table>
-            <div class="list-table-footer d-flex justify-content-between align-items-center">
-                <div class="list-table-per-page">
-                    <span class="form-label">Hiển thị kết quả</span>
-                    <select class="form-select d-inline-block" name="" id="">
-                        <option selected>10</option>
-                        <option value="">20</option>
-                        <option value="">30</option>
-                        <option value="">40</option>
-                    </select>
-                </div>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span class="material-symbols-outlined">chevron_left</span>
-                            </a>
-                        </li>
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item">
-                            <span class="page-link" href="#">...</span>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">20</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span class="material-symbols-outlined">chevron_right</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            {{ $supports->links('vendor.pagination.custom') }}
         </div>
     </div>
 </section>

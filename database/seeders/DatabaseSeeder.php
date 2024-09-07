@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             UserTableSeeder::class,
             TagSeeder::class,
-            NotificationSeeder::class
+            NotificationSeeder::class,
+            DepartmentSeeder::class
         ]);
     }
 }
