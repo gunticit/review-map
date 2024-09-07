@@ -38,14 +38,23 @@
         'inactive' => "Tài khoản chưa được kích hoạt",
     );
 
-    $langs = array(
+    // Label form
+    $labels = array(
+        'title' => 'Tiêu đề',
+        'department' => 'Phòng ban',
+        'project' => 'Dự án',
+        'content' => 'Nội dung',
+        'attachment' => 'Tệp đính kèm'
+    );
+
+
+    return array(
         'action_success' => $action_success,
         'action_error' => $action_error,
         'response_code'  => $response_code,
         'token_error'  => $token_error,
         'account_error'  => $account_error,
         'overview' => 'Tổng quan',
-        'total_customer' => 'Tổng số khách hàng'
+        'total_customer' => 'Tổng số khách hàng',
+        'doing' => 'Đang thực hiện',
     );
-
-    return $langs;

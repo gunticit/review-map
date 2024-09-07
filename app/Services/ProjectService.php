@@ -79,8 +79,6 @@ class ProjectService {
             'longitude' => $data['longitude'] ?? null,
             'place_id' => $data['place_id'] ?? null,
             'has_image' => $data['has_image'] ?? null,
-            'description' => $data['description'] ?? null,
-            'description' => $data['description'] ?? null,
             'address_google' => $data['address_google'] ?? null,
             'telephone_google' => $data['telephone_google'] ?? null,
             'rating_google' => $data['rating_google'] ?? null,

@@ -11,7 +11,7 @@
             <h5>Tổng dự án</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">100</h6>
+            <h6 class="text-primary">{{ $total_project }}</h6>
           </div>
         </div>
       </div>
@@ -19,10 +19,10 @@
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">task</span>
-            <h5>Đang thực hiện</h5>
+            <h5>{{ __('common.doing') }}</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">90</h6>
+            <h6 class="text-primary">{{ $total_doing }}</h6>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
             <h5>Đã tạm dừng</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">10</h6>
+            <h6 class="text-primary">{{ $total_pause }}</h6>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@
             <h5>Đã chi tiêu</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-danger">500.000 VND</h6>
+            <h6 class="text-danger">{{ $money_spend }} VND</h6>
           </div>
         </div>
       </div>

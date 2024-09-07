@@ -56,7 +56,6 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/faq', [App\Http\Controllers\FaqController::class, 'index'])->name('faq');
     Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history');
     Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
-    Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support');
     Route::get('/list-projects', [App\Http\Controllers\ProjectController::class, 'index'])->name('project.list');
     Route::get('/create-project', [App\Http\Controllers\ProjectController::class, 'create'])->name('project.create');
     Route::post('/create-project', [App\Http\Controllers\ProjectController::class, 'store'])->name('project.store');
@@ -67,6 +66,14 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
     Route::get('/notification/{id}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notification.show');
 
+    // Customer
+    Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support');
+    Route::get('/support/create', [App\Http\Controllers\SupportController::class, 'create'])->name('support.create');
+    Route::post('/support/store', [App\Http\Controllers\SupportController::class, 'store'])->name('support.store');
+    Route::get('/support/edit/{id}', [App\Http\Controllers\SupportController::class, 'edit'])->name('support.edit');
+    Route::put('/support/update/{id}', [App\Http\Controllers\SupportController::class, 'update'])->name('support.update');
+    Route::delete('/support/delete/{id}', [App\Http\Controllers\SupportController::class, 'delete'])->name('support.delete');
+    Route::delete('/support/delete-by-ids/{ids}', [App\Http\Controllers\SupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
 });
 
 
