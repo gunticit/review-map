@@ -20,6 +20,7 @@ Route::group([
 Route::group(['middleware' => 'locale'], function() {
     Route::get('/home', [App\Http\Controllers\DashboardController::class, 'index'])->name('home');
 });
+
 // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::group([

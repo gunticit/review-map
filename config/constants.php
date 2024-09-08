@@ -7,7 +7,8 @@
         'setting_columns' => [
             'language', 
             'dark_mode'
-        ]
+        ],
+        'main_domain' => env('MAIN_DOMAIN')
     );
 ?>
  

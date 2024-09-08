@@ -38,8 +38,9 @@ class AuthController extends BaseController
     public function authenticate(AuthRequest $request){
         try{
             $user = $this->authService->login($request);
-            if(!empty($user) && $user->hasRole(Role::ADMIN_ROLE)){
-                return redirect()->route('home');
+            if(!empty($user)){
+                $domain = $this->switchDomain($user);
+                return redirect()->intended($domain);
             }
             Session::flash('error', __('auth.failed'));
             return redirect()->back()->withInput();
@@ -48,6 +49,25 @@ class AuthController extends BaseController
             Session::flash('error', __('auth.failed'));
             return redirect()->back()->withInput();
         }
+    }
+
+    private function switchDomain($user)
+    {
+        $domain = null;
+        switch (true) {
+            case $user->hasRole(Role::ADMIN_ROLE):
+                $domain = "http://". Role::ADMIN_ROLE . '.' . config('constants.main_domain') ."/home";
+                break;
+            case $user->hasRole(Role::CUSTOMER_ROLE):
+                    $domain = "http://". Role::CUSTOMER_ROLE . '.' . config('constants.main_domain') ."/home";
+                break;
+            case $user->hasRole(Role::PARTNER_ROLE):
+                    $domain = "http://". Role::PARTNER_ROLE . '.' . config('constants.main_domain') ."/home";
+                    break;
+            default:
+                break;
+        }
+        return $domain;
     }
 
     public function registerUser(RegisterRequest $request){

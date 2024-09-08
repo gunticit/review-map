@@ -4,7 +4,7 @@ up all-images:
 	docker compose up -d --build
 down:
 	docker compose down
-exec app:
+connect-app:
 	docker exec -it app bash
-exec pgsql:
-	docker exec -it pgsql bash
+connect-pgsql:
+	docker exec -it postgres bash
