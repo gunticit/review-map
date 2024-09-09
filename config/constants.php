@@ -14,6 +14,7 @@
             3 => 'support.status_support.in_progress', // Đang thực hiện
             4 => 'support.status_support.close', // Đóng
         ],
+        'pusher_app_key' => env('PUSHER_APP_KEY'),
     );
 ?>
  

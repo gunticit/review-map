@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('content');
             $table->integer('status'); // 1: Đã đọc, 2: Chưa đọc
             $table->integer('user_id');
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

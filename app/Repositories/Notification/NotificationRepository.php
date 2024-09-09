@@ -28,4 +28,8 @@ class  NotificationRepository extends BaseRepository implements NotificationRepo
         $perPage = $request->per_page ?? 15;
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
+
+    public function markAsRead($id){
+        $this->model->where('id', $id)->update(['read_at' => now()]);
+    }
 }

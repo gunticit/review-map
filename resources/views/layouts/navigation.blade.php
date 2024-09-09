@@ -1,4 +1,31 @@
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script>
+    Pusher.logToConsole = true;
 
+    const pusher = new Pusher('{{ config('constants.pusher_app_key') }}', {
+      cluster: 'ap1'
+    });
+
+    const channel = pusher.subscribe('NotificationEvent');
+    channel.bind('send-message', function(data) {
+        const newNotificationHtml = `
+            <li>
+                <a class="dropdown-item dropdown-notifications-item active" href="#!">
+                    <div class="dropdown-notifications-item-content">
+                        <div class="dropdown-notifications-item-content-title">${data.title}</div>
+                        <div class="dropdown-notifications-item-content-text">${data.content}</div>
+                        <div class="dropdown-notifications-item-content-details">
+                            ${new Date(data.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })} - 
+                            ${new Date(data.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                    </div>
+                </a>
+            </li>
+        `;
+
+        $('.list-notifications').prepend(newNotificationHtml);
+    });
+</script>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Navbar Brand-->
     <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="{{ route('home') }}">
@@ -50,16 +77,20 @@
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </h6>
-                @if(!empty($notifications))
-                    @foreach($notifications as $notification)
-                        <a class="dropdown-item dropdown-notifications-item active" href="#!">
-                            <div class="dropdown-notifications-item-content">
-                                <div class="dropdown-notifications-item-content-title">{{ $notification->title }}</div>
-                                <div class="dropdown-notifications-item-content-text">{{ $notification->content }}</div>
-                                <div class="dropdown-notifications-item-content-details">{{ date('d/m/Y', strtotime($notification->created_at)) }} - {{ date('H:i', strtotime($notification->created_at)) }}</div>
-                            </div>
-                        </a>
-                    @endforeach
+                @if(!empty(Auth::user()->notifications))
+                    <ul class="list-notifications">
+                        @foreach(Auth::user()->notifications as $notification)
+                            <li>
+                                <a class="dropdown-item dropdown-notifications-item active" href="#!">
+                                    <div class="dropdown-notifications-item-content">
+                                        <div class="dropdown-notifications-item-content-title">{{ $notification->title }}</div>
+                                        <div class="dropdown-notifications-item-content-text">{{ $notification->content }}</div>
+                                        <div class="dropdown-notifications-item-content-details">{{ date('d/m/Y', strtotime($notification->created_at)) }} - {{ date('H:i', strtotime($notification->created_at)) }}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 @else
                     <div class="col-sm-12 text-center p-5">
                         <span class="material-symbols-outlined">
