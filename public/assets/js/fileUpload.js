@@ -109,6 +109,7 @@
             });
 
             fileUploadDiv.find(`#${fileUploadId}`).change(function () {
+                console.log(this.files);
                 handleFiles(this.files);
             });
         });

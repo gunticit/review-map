@@ -11,4 +11,5 @@ Route::group([
     Route::get('/overview-partner',  [DashboardController::class, 'partnerOverview'])->name('overview.partner');
     Route::get('/order',  [DashboardController::class, 'order'])->name('order');
     Route::get('/approve-application',  [ApproveApplicationController::class, 'index'])->name('approve_application');
+    Route::resource('/statistics', StatisticController::class);
 });

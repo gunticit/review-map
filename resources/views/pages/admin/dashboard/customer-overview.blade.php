@@ -4,7 +4,7 @@
 <section class="thong-ke">
   <div class="container">
     <div class="row">
-      <div class="col-xl-4 col-md-4 col-6 mb-4 mb-xl-0">
+      <div class="col-xl-4 col-md-4 col-6 mb-4">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">contract</span>
@@ -15,18 +15,18 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4 mb-xl-0">
+      <div class="col-xl-4 col-md-4 col-6 mb-4">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">task</span>
             <h5>Tổng số dự án</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{!! $projects['total_project'] ?? 0 !!}</h6>
+            <h6 class="text-primary">{!! $overview['total_project'] ?? 0 !!}</h6>
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4 mb-xl-0">
+      <div class="col-xl-4 col-md-4 col-6 mb-4">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">
@@ -39,7 +39,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4 mb-xl-0">
+      <div class="col-xl-4 col-md-4 col-6 mb-4">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">
@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4 mb-xl-0">
+      <div class="col-xl-4 col-md-4 col-6 mb-4">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">
@@ -65,7 +65,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4 mb-xl-0">
+      <div class="col-xl-4 col-md-4 col-6 mb-4">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">
@@ -73,10 +73,7 @@
             </span>
             <h5>Số dự án yêu cầu bảo hành</h5>
           </div>
-          <div class="thong-ke-content">
-            <span class="material-symbols-outlined">
-                home_pin
-            </span> <h6 class="text-danger">{{ $overview['total_project_guarantee'] }}</h6>
+          <div class="thong-ke-content"><h6 class="text-danger">{{ $overview['total_project_guarantee'] }}</h6>
           </div>
         </div>
       </div>
@@ -91,7 +88,10 @@
       <div class="row">
         <div class="col-md-10 col-12">
           <div class="section-title">
-            <h2>Biểu đồ số lượng và vị trí khách hàng</h2>
+            <span class="material-symbols-outlined">
+              home_pin
+            </span> 
+            <h2>Bản đồ, số lượng và vị trí khách hàng</h2>
           </div>
         </div>
         <div class="col-md-2 col-12">
@@ -106,7 +106,7 @@
         </div>
       </div>
       <!-- end chart  -->
-      <div id="chartContainer" style="height: 290px; max-width: 100%; margin: 0px auto;"></div>
+      <div id="map-customer" style="height: 290px; max-width: 100%; margin: 0px auto;"></div>
     </div>
   </div>
 </section>

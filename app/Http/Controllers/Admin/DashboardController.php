@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function customerOverview(){
+        $total_customer = User::role('customer')->count();
         $data =  array(
+            'total_customer' => $total_customer,
             'total_project' => 0,
             'total_project_complete' => 0,
             'total_project_working' => 0,

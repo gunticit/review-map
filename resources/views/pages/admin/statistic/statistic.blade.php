@@ -37,17 +37,6 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-md-4 col-6 mb-4 mb-xl-0">
-        <div class="thong-ke-item text-center">
-          <div class="thong-ke-head">
-            <span class="material-symbols-outlined">attach_money</span>
-            <h5>Đã chi tiêu</h5>
-          </div>
-          <div class="thong-ke-content">
-            <h6 class="text-danger">{{ $money['spent'] }} VND</h6>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -97,8 +86,9 @@
                 name: "Đánh giá đã hoàn thành",
                 showInLegend: true,
                 color: "#436CFF",
-                dataPoints: @json($data_chars['completed'])
+                dataPoints: @json($data_chars['revenue'])
               },
+
               // set data Đánh giá đã phân phối
               {
                 type: "column",
@@ -106,16 +96,17 @@
                 axisYType: "secondary",
                 showInLegend: true,
                 color: "#95ADFF",
-                dataPoints: @json($data_chars['distributed'])
+                dataPoints: @json($data_chars['commission'])
               },
-              // set data Giá trị chi tiêu
+
+              // set data Tổng lợi nhuận
               {
                 type: "column",
-                name: "Giá trị chi tiêu",
+                name: "Chi phí bảo hành",
                 axisYType: "thirdary",
                 showInLegend: true,
                 color: "#E8EDFF",
-                dataPoints: @json($data_chars['spents'])
+                dataPoints: @json($data_chars['profits'])
               }
             ]
           });
