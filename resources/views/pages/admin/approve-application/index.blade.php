@@ -20,10 +20,18 @@
                                                 </div>
                                                 <div class="text-description" class="mb-1">{{ $project['description'] }}</div>
                                                 <small class="text-keyword">{{ $project['keyword'] }}</small>
+                                                <inpyut type="hidden" class="project-id" value="{{ $project['id'] }}">
                                             </div>
                                         </li>
                                     @endforeach
                                 </ul>
+                            @else
+                                <div class="text-center">
+                                    <span class="material-symbols-outlined">
+                                        upcoming
+                                    </span>
+                                    <p>Vui lòng chọn dự án cần duyệt</p>
+                                </div>
                             @endif
                           </div>
                     </div>
@@ -55,11 +63,11 @@
                 <div class="form-detail">
                     <div class="form-group">
                         <label>Tên dự án</label>
-                        <input type="text" class="form-control" readonly value="{{ $project['name'] }}">
+                        <input type="text" class="form-control" readonly value="">
                     </div>
                     <div class="form-group">
                         <label>Mô tả</label> 
-                        <textarea class="form-control" readonly rows="5">{{ $project['description'] }}</textarea>
+                        <textarea class="form-control" readonly rows="5"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Hình ảnh</label>
@@ -68,6 +76,12 @@
                             
                             </li>
                         </ul>
+                    </div>
+                    <div class="group-actiion">
+                        <button class="btn btn-info">Xem đánh giá</button>    
+                        <button class="btn btn-danger">Không thấy ảnh, sai ảnh</button>  
+                        <button class="btn btn-danger">Không thấy đánh giá</button>  
+                        <button class="btn btn-primary">Duyệt</button>
                     </div>
                 </div>
             `);

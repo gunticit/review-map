@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('longitude')->nullable();
             $table->string('place_id')->nullable();
             $table->boolean('has_image')->default(false)->nullable();
-            $table->integer('status'); // 0: Huỷ, 1: Hoàn thành, 2: Đang thực hiện, 3: Hoàn lại, 4: Tạm ngưng, 5: Chưa thanh toán
+            $table->integer('status'); // 0: Huỷ, 1: Hoàn thành, 2: Đang thực hiện, 3: Hoàn lại, 4: Tạm ngưng, 5: Chưa thanh toán, 6: Đang chờ duyệt
             // Dành cho admin
             $table->integer('id_confirm')->nullable();
             $table->timestamp('id_confirm_at')->nullable();

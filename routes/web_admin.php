@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ApproveApplicationController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\StatisticController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([

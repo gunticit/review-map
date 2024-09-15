@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupportController;
 // Customer
@@ -10,3 +11,4 @@ use App\Http\Controllers\SupportController;
     Route::put('/support-update/{id}', [SupportController::class, 'update'])->name('support.update');
     Route::delete('/support-delete/{id}', [SupportController::class, 'delete'])->name('support.delete');
     Route::delete('/support-delete-by-ids/{ids}', [SupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
+    Route::get('/generate-comment', [ProjectController::class, 'generateComment'])->name('generate.comment');
