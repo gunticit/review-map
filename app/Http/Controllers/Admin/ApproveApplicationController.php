@@ -16,6 +16,12 @@ class ApproveApplicationController extends Controller
         $now = Carbon::now();
         if(!empty($projects)){
             foreach($projects as $project){
+                $createdAt = $project['created_at'] ?? null;
+                if ($createdAt) {
+                    $created_at = $createdAt->diffInMonths($now) < 1 ? Carbon::parse($createdAt)->locale(app()->getLocale())->diffForHumans():$createdAt->format('d/m/Y H:i');
+                } else {
+                    $created_at = null;
+                }
                 $data['projects'][] = array(
                     'id' => $project['id'],
                     'name' => $project['name'],
@@ -25,9 +31,7 @@ class ApproveApplicationController extends Controller
                     'status' => $project['status'],
                     'id_confirm' => $project['id_confirm'],
                     'id_cancel' => $project['id_cancel'],
-                    'created_at' => $project['createdAt']->diffInMonths($now) < 1 ? 
-                    Carbon::parse($project['created_at'])->
-                    diffForHumans():$project['createdAt']->format('d/m/Y H:i'),
+                    'created_at' => $created_at,
                 );
             }
         }
