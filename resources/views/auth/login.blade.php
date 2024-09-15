@@ -1,6 +1,11 @@
 @extends('layouts.app')
-
 @section('content')
+<style>
+    #layoutSidenav #layoutSidenav_content{
+        padding-left: 0 !important;
+        top: 0 !important;
+    }
+</style>
 <section class="login">
     <div class="row g-0">
     <div class="col-xl-6 col-md-12 col-12">

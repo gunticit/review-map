@@ -22,6 +22,9 @@ class AuthController extends BaseController
     }
     public function login()
     {
+        if(Auth::check()){
+            return redirect()->route('home');
+        }
         return view('auth.login');
     }
 
@@ -38,7 +41,7 @@ class AuthController extends BaseController
     public function authenticate(AuthRequest $request){
         try{
             $user = $this->authService->login($request);
-            if(!empty($user) && $user->hasRole(Role::ADMIN_ROLE)){
+            if(!empty($user)){ // && $user->hasRole(Role::ADMIN_ROLE)
                 return redirect()->route('home');
             }
             Session::flash('error', __('auth.failed'));

@@ -1,5 +1,7 @@
 <?php
     return [
+        'home_customer' => 'Khách hàng',
+        'home_partner' => 'Đối tác',
         'overview' => 'Tổng quan',
         'notifications' => 'Thông báo',
         'project' => 'Dự án của tôi',

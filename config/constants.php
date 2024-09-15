@@ -14,6 +14,10 @@
             3 => 'support.status_support.in_progress', // Đang thực hiện
             4 => 'support.status_support.close', // Đóng
         ],
+        "status_notification" => [
+            1 => "common.status_notification.read",
+            2 => "common.status_notification.unread"
+        ]
     );
 ?>
  

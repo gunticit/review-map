@@ -7,7 +7,7 @@ body {
   overflow-x: hidden;
   font-family: "Montserrat";
   color: #32343A;
-  background: #fff;
+  background: #f0f0f0;
 }
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   font-weight: 700;
@@ -4613,4 +4613,10 @@ pre[class*=language-] {
 
 .token.variable {
   color: #ff6666;
+}
+
+.panel{
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
 }

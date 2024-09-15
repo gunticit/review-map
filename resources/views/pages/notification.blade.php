@@ -15,7 +15,7 @@
             <table class="table list-table">
                 <thead>
                     <tr>
-                        {{-- <th class="list-table-stt" scope="col">STT</th> --}}
+                        <th class="list-table-stt" scope="col">STT</th>
                         <th class="list-table-title" scope="col">Tiêu đề</th>
                         <th class="list-table-creator" scope="col">Người tạo</th>
                         <th class="list-table-progree" scope="col">Trạng thái</th>
@@ -25,7 +25,7 @@
                 <tbody>
                     @foreach ($notifications as $index => $notification)
                     <tr>
-                        {{-- <td>{{ $index + 1 }}</td> --}}
+                        <td>{{ $index + 1 }}</td>
                         <td class="list-table-title">
                             <a href="10.1.chi-tiet-thong-bao.php">{{ $notification->title }}</a>
                         </td>
@@ -33,8 +33,11 @@
                             {{ $notification->user->name }}
                         </td>
                         <td class="list-table-progree">
-                            <a class="btn btn-{{ $notification->status == 'Đã đọc' ? 'success' : 'danger' }}">{{
-                                $notification->status }}</a>
+                            <a class="btn btn-{{ $notification->status == 1 ? 'success' : 'danger' }}">
+                                {{
+                                __(config('constants.status_notification')[$notification->status]) 
+                                }}
+                            </a>
                         </td>
                         <td class="list-table-time">
                             <a href="#">{{ $notification->created_at->format('d/m/Y') }} <span>{{
