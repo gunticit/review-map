@@ -16,7 +16,7 @@
                                             <div href="#" class="list-group-item list-group-item-action active" aria-current="true">
                                                 <div class="d-flex w-100 justify-content-between">
                                                     <h5 class="mb-1">{{ $project['name'] }}</h5>
-                                                    <small>3 days ago</small>
+                                                    <small>{{ $project['created_at'] }}</small>
                                                 </div>
                                                 <div class="text-description" class="mb-1">{{ $project['description'] }}</div>
                                                 <small class="text-keyword">{{ $project['keyword'] }}</small>
