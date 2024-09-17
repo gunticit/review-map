@@ -46,7 +46,7 @@
         </span>
     </div> Quản lý dự án
 </a>
-<a class="nav-link" href="{{ route('approve_application') }}">
+<a class="nav-link" href="#">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             fact_check
@@ -72,7 +72,7 @@
         <a class="nav-link {!! request()->routeIs('overview.customer') ? 'active' : '' !!}" href="{{ route('overview.customer') }}">Quản lý bảo hành</a>
     </nav>
 </div>
-<a class="nav-link" href="{{ route('approve_application') }}">
+<a class="nav-link" href="#">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             group

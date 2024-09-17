@@ -77,9 +77,7 @@
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </h6>
-                @if(!empty(Auth::user()->notifications))
-                    <ul class="list-notifications">
-                        @foreach(Auth::user()->notifications as $notification)
+                    {{-- <ul class="list-notifications">
                             <li>
                                 <a class="dropdown-item dropdown-notifications-item active" href="#!">
                                     <div class="dropdown-notifications-item-content">
@@ -89,16 +87,13 @@
                                     </div>
                                 </a>
                             </li>
-                        @endforeach
-                    </ul>
-                @else
+                    </ul> --}}
                     <div class="col-sm-12 text-center p-5">
                         <span class="material-symbols-outlined">
                             notifications_off
                         </span>
                         <h6>Không có thông báo mới </h6>
                     </div>
-                @endif
             </div>
         </li>
         <!-- User Dropdown-->
