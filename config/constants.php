@@ -15,6 +15,10 @@
             4 => 'support.status_support.close', // Đóng
         ],
         'pusher_app_key' => env('PUSHER_APP_KEY'),
+        "status_notification" => [
+            1 => "common.status_notification.read",
+            2 => "common.status_notification.unread"
+        ]
     );
 ?>
  

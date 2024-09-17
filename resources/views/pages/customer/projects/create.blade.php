@@ -313,6 +313,7 @@
                                 <span>Ưu đãi hấp dẫn</span>
                             </div>
                             <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
+                            <input class="form-control hidden" id="keyword_value" hidden type="text" name="keyword_value" readonly>
                             @error('keyword')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -436,7 +437,7 @@
     });
 </script> 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&callback=initMap&fields=id,displayName,rating,reviews,userRatingCount&libraries=places&v=weekly" defer></script>
-    <script>
+    <script> 
         function addTag(tagText) {
             var exists = false;
             $('.tags-input-wrapper .tag').each(function() {
@@ -447,6 +448,17 @@
                 }
             });
             if (!exists) {
+                let textValue = tagText.trim();
+                let keyword_value = $('#keyword_value').val();
+                let keywordArray = keyword_value.split(',');
+                let index = keywordArray.indexOf(textValue);
+                if (index === -1) {
+                    keywordArray.push(textValue);
+                } else {
+                    keywordArray.splice(index, 1);
+                }
+                keyword_value = keywordArray.join(',');
+                $('#keyword_value').val(keyword_value);
                 var newTag = $('<span class="tag">' + tagText + '<a>×</a></span>');
                 $('.tags-input-wrapper').prepend(newTag);
             }

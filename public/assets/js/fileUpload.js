@@ -109,7 +109,30 @@
             });
 
             fileUploadDiv.find(`#${fileUploadId}`).change(function () {
-                handleFiles(this.files);
+                let package = $('#inputReview').val();
+                let limit = 0;
+                if(package == 1){
+                    limit = 1;
+                }else if(package == 2){
+                    limit = 5;
+                }else if(package == 3){
+                    limit = 10;
+                }else if(package == 4){
+                    limit = 20;
+                }
+                let lenght = this.files.length;
+                if(lenght > limit){
+                    $('#fileUpload').append(`<small class="text-danger">Số lượng hình của gói tối đa là ${limit}</small>`);
+                    setTimeout(() => {
+                        $('#fileUpload small').remove();
+                    }, 5000);
+                    return;
+                }else{
+                    $('#text-danger .text-danger').remove();
+                }
+                if(package && this.files){
+                    handleFiles(this.files);
+                }
             });
         });
     };

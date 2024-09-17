@@ -47,6 +47,11 @@
         'attachment' => 'Tệp đính kèm'
     );
 
+    $status_notification = [
+        'read' => 'Đã đọc',
+        'unread' => 'Chưa đọc'
+    ];
+
 
     return array(
         'action_success' => $action_success,
@@ -54,6 +59,7 @@
         'response_code'  => $response_code,
         'token_error'  => $token_error,
         'account_error'  => $account_error,
+        'status_notification' => $status_notification,
         'overview' => 'Tổng quan',
         'total_customer' => 'Tổng số khách hàng',
         'doing' => 'Đang thực hiện',

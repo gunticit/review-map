@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -43,7 +44,9 @@ class AuthService {
         $user = UserResource::make($user);
         return $user;
     }
-
+    // private function checkRoleByDomain($request){
+    //     $user = 
+    // }
     /**
      * Attempt to authenticate the request's credentials.
      *
@@ -53,6 +56,22 @@ class AuthService {
     {
         $this->ensureIsNotRateLimited($request);
         $loginType = filter_var($request->input('username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'telephone';
+        $userCheck = User::where($loginType, $request->input('username'))->first();
+        if($userCheck->hasRole(Role::ADMIN_ROLE) && $request->getHost() !== env('ADMIN_DOMAIN')){
+            return redirect()->to(env('ADMIN_DOMAIN'))->withErrors([
+                'login' => __('Vui lòng đăng nhập đúng đường dẫn'),
+            ]);
+        }
+        if($userCheck->hasRole(Role::PARTNER_ROLE) && $request->getHost() !== env('PARTNER_DOMAIN')){
+            return redirect()->to(env('PARTNER_DOMAIN'))->withErrors([
+                'login' => __('Vui lòng đăng nhập đúng đường dẫn'),
+            ]);
+        }
+        if($userCheck->hasRole(Role::CUSTOMER_ROLE) && $request->getHost() !== env('CUSTOMER_DOMAIN')){
+            return redirect()->to(env('CUSTOMER_DOMAIN'))->withErrors([
+                'login' => __('Vui lòng đăng nhập đúng đường dẫn'),
+            ]);
+        }
         $credentials = [
             $loginType => $request->input('username'),
             'password' => $request->input('password'),
@@ -61,7 +80,7 @@ class AuthService {
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey($request));
             return redirect()->back()->withErrors([
-                'login' => __('Credential is wrong.'),
+                'login' => __('Thông tin đăng nhập không chính xác.'),
             ]);
         }
         RateLimiter::clear($this->throttleKey($request));

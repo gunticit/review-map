@@ -5,25 +5,26 @@ namespace App\Http\Controllers;
 use App\Exceptions\ProcessException;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest;
+use App\Services\CommentService;
 use App\Services\HistoryService;
 use App\Services\ProjectService;
 use App\Services\ProjectImageService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Livewire\Attributes\Validate;
 
 class ProjectController extends Controller
 {
-    protected $projectService, $projectImageService, $historyService;
+    protected $projectService, $projectImageService, $historyService, $commentService;
     public function __construct(
         ProjectService $projectService, 
         ProjectImageService $projectImageService, 
+        CommentService $commentService, 
         HistoryService $historyService
     ){
         $this->projectService = $projectService;
         $this->projectImageService = $projectImageService;
         $this->historyService = $historyService;
+        $this->commentService = $commentService;
     }
     public function index(Request $request){
         $data = $this->projectService->list($request);
@@ -47,6 +48,13 @@ class ProjectController extends Controller
         try{
             $data = $this->projectService->create($request);
             if($data){
+                $request->request->add(['project_id' => $data->id]);
+                $request->request->add(['noJson' => true]);
+                $comment = $this->generateComment($request);
+                if(!empty($comment)){
+                    $request->request->add(['comment' => $comment]);
+                    $this->commentService->create($request);
+                }
                 if ($request->has('has_image') && $request->has_image == 1) {
                     $this->projectImageService->createDataImages($request, $data->id);
                 }
@@ -106,5 +114,13 @@ class ProjectController extends Controller
 
     public function updateStatus(Request $request, $id){
         return redirect()->back();
+    }
+
+    public function generateComment($request){
+        $comments = $this->commentService->generateComment($request);
+        if(isset($request->noJson)){
+            return $comments;
+        }
+        return response()->json($comments);
     }
 }

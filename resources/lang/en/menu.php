@@ -1,5 +1,7 @@
 <?php
     return [
+        'home_customer' => 'Customer',
+        'home_partner' => 'Partner',
         'overview' => 'Overview',
         'notifications' => 'Notifications',
         'project' => 'My Projects',

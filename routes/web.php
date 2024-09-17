@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-// use App\Modules\Dashboard\Controllers\DashboardController;
 
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index']);
 
@@ -66,19 +64,13 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
     Route::get('/notification/{id}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notification.show');
 
-    // Customer
-    Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support');
-    Route::get('/support-create', [App\Http\Controllers\SupportController::class, 'create'])->name('support.create');
-    Route::post('/support-store', [App\Http\Controllers\SupportController::class, 'store'])->name('support.store');
-    Route::get('/support-edit/{id}', [App\Http\Controllers\SupportController::class, 'edit'])->name('support.edit');
-    Route::put('/support-update/{id}', [App\Http\Controllers\SupportController::class, 'update'])->name('support.update');
-    Route::delete('/support-delete/{id}', [App\Http\Controllers\SupportController::class, 'delete'])->name('support.delete');
-    Route::delete('/support-delete-by-ids/{ids}', [App\Http\Controllers\SupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
+    
+    include 'web_customer.php';
+    include 'web_admin.php';
+    include 'web_partner.php';
 });
 
 
-include 'web_admin.php';
-include 'web_partner.php';
 
 Route::get('/get-long-url', [App\Http\Controllers\DashboardController::class, 'getLongUrl'])->name('get.long.url');
 Route::get('/list-tags', [App\Http\Controllers\TagController::class, 'index'])->name('list.tags');
