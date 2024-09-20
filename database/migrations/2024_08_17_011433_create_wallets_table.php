@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('wallets', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('content');
-            $table->integer('status'); // 1: Đã đọc, 2: Chưa đọc
-            $table->integer('user_id')->nullable();
-            $table->integer('role_id')->nullable(); 
-            $table->timestamp('read_at')->nullable();
+            $table->integer('user_id');
+            $table->decimal('balance', 15, 0)->default(0); // Số dư của ví
+            $table->string('unit_currency', 10)->default('VND'); // Loại tiền tệ
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('wallets');
     }
 };

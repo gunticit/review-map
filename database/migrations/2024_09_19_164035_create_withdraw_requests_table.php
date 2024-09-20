@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wallets_create', function (Blueprint $table) {
+        Schema::create('withdraw_requests', function (Blueprint $table) {
             $table->id();
-            $table->integer('total');
             $table->integer('user_id');
-            $table->integer('total_spent'); // đã chi
+            $table->decimal('amount', 15, 0);
+            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wallets_create');
+        Schema::dropIfExists('withdraw_requests');
     }
 };

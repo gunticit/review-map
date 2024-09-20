@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('content');
-            $table->integer('status'); // 1: Đã đọc, 2: Chưa đọc
-            $table->integer('user_id')->nullable();
-            $table->integer('role_id')->nullable(); 
-            $table->timestamp('read_at')->nullable();
+            $table->integer('order_id');
+            $table->decimal('amount', 15, 0); // Số tiền thanh toán
+            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending'); // Trạng thái
+            $table->enum('payment_method', ['credit_card', 'bank_transfer', 'cash_on_delivery']);
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('payments');
     }
 };

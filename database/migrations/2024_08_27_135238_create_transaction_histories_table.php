@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('transaction_histories', function (Blueprint $table) {
             $table->id();
-            $table->integer('balance'); // Số dư
-            $table->enum('type', ['deposit', 'withdraw']); // deposit | withdraw
+            $table->integer('wallet_id'); // Id ví
+            $table->enum('type', ['deposit', 'withdraw', 'payment']); // nạp | rút | thanh toán
+            $table->decimal('amount', 15, 0); // Số tiền
+            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->integer('payment_method_id')->nullable(); // Id phương thức thanh toán
+            $table->string('reference_id')->unique();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
