@@ -14,8 +14,17 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending'); // Trạng thái đơn hàng
+            $table->decimal('total', 15, 0); // Tổng giá trị
+            $table->string('shipping_address'); // Địa chỉ giao
+            $table->enum('payment_method', ['credit_card', 'bank_transfer', 'cash_on_delivery']);
             $table->timestamps();
+            $table->softDeletes();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->integer('sort')->default(99);
+            $table->boolean('active')->default(true);
         });
     }
 
