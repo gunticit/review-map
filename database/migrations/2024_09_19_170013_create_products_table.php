@@ -16,6 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->integer('category_id');
             $table->string('slug')->nullable();
+            $table->string('customer_id')->nullable();
+            $table->text('description')->nullable();
+            $table->decimal('price', 15, 0);
+            $table->string('product_code')->nullable();
+            $table->string('sku')->nullable();
+            $table->integer('stock')->default(0);
+            $table->string('keyword');
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

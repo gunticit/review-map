@@ -60,7 +60,7 @@
         </span>
     </div> Quản lý đối tác
 </a>
-<a class="nav-link {!! request()->routeIs('order') ? 'active' : '' !!}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#  " aria-expanded="false" aria-controls="collapseOrder">
+<a class="nav-link {!! request()->routeIs('order') ? 'active' : '' !!}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#" aria-expanded="false" aria-controls="collapseOrder">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">list_alt</span>
     </div> Quản lý đơn hàng <div class="sidenav-collapse-arrow">
@@ -79,18 +79,18 @@
         </span>
     </div> Quản lý đối tác
 </a>
-<a class="nav-link {!! request()->routeIs('order') ? 'active' : '' !!}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#  " aria-expanded="false" aria-controls="collapseOrder">
+<a class="nav-link {!! request()->routeIs('order') ? 'active' : '' !!}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseProduct" aria-expanded="false" aria-controls="collapseProduct">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">list_alt</span>
     </div> Quản lý cửa hàng <div class="sidenav-collapse-arrow">
         <span class="material-symbols-outlined">chevron_right</span>
     </div>
 </a>
-<div class="collapse {!! request()->routeIs('home') || request()->routeIs('overview.customer') || request()->routeIs('overview.partner') ? 'show' : '' !!}" id="collapseOrder" data-bs-parent="#accordionOrder">
-    <nav class="sidenav-menu-nested nav accordion" id="accordionHomeChild">
-        <a class="nav-link {!! request()->routeIs('overview.customer') ? 'active' : '' !!}" href="{{ route('overview.customer') }}">Quản lý sản phẩm</a>
-        <a class="nav-link {!! request()->routeIs('overview.customer') ? 'active' : '' !!}" href="{{ route('overview.customer') }}">Danh sách sản phẩm</a>
-        <a class="nav-link {!! request()->routeIs('overview.customer') ? 'active' : '' !!}" href="{{ route('overview.customer') }}">Quản lý đơn đặt hàng</a>
+<div class="collapse {!! request()->routeIs('category.index') || request()->routeIs('product.index') || request()->routeIs('order.index') ? 'show' : '' !!}" id="collapseProduct" data-bs-parent="#accordionProduct">
+    <nav class="sidenav-menu-nested nav accordion" id="accordionProductChild">
+        <a class="nav-link {!! request()->routeIs('category.index') ? 'active' : '' !!}" href="{{ route('category.index') }}">Danh mục sản phẩm</a>
+        <a class="nav-link {!! request()->routeIs('product.index') ? 'active' : '' !!}" href="{{ route('product.index') }}">Danh sách sản phẩm</a>
+        <a class="nav-link {!! request()->routeIs('order.index') ? 'active' : '' !!}" href="{{ route('order.index') }}">Quản lý đơn đặt hàng</a>
     </nav>
 </div>
 <a class="nav-link" href="{{ route('support') }}">

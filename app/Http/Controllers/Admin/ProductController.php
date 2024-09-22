@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrderResource;
-use App\Services\OrderService;
+use App\Http\Resources\ProductResource;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class OrderController extends Controller
+class ProductController extends Controller
 {
-    protected $orderService;
-    public function __construct(OrderService $orderService)
+    protected $productService;
+    public function __construct(ProductService $productService)
     {
-        $this->orderService = $orderService;
+        $this->productService = $productService;
     }
     /**
      * Display a listing of the resource.
@@ -21,9 +21,9 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $data = array();
-        $categories = $this->orderService->list($request);
-        $categories = OrderResource::collection($categories)->resource;
-        return view('pages.admin.order.list', [
+        $categories = $this->productService->list($request);
+        $categories = ProductResource::collection($categories)->resource;
+        return view('pages.admin.product.list', [
             'categories' => $categories,
         ]);
     }
@@ -34,7 +34,7 @@ class OrderController extends Controller
     public function create()
     {
         $data = array();
-        return view('pages.admin.order.create', $data);
+        return view('pages.admin.product.create', $data);
     }
 
     /**
@@ -53,8 +53,8 @@ class OrderController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            $this->orderService->create($request);
-            return redirect()->route('order.index')->with('success', 'Thêm Danh mục thành công');
+            $this->productService->create($request);
+            return redirect()->route('product.index')->with('success', 'Thêm Danh mục thành công');
         }catch(\Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -65,7 +65,7 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        return view('pages.admin.order.show');
+        return view('pages.admin.product.show');
     }
 
     /**
@@ -73,7 +73,7 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
-        return view('pages.admin.order.edit');
+        return view('pages.admin.product.edit');
     }
 
     /**
@@ -90,24 +90,24 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         try{
-            $this->orderService->delete($id);
-            return redirect()->route('order.index')->with('success', 'Xoá Danh mục thành công');
+            $this->productService->delete($id);
+            return redirect()->route('product.index')->with('success', 'Xoá Danh mục thành công');
         }catch(\Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
     public function categoriesList(Request $request){
-        $data = $this->orderService->fullList($request);
+        $data = $this->productService->fullList($request);
         return response()->json([
             'title' => 'Load data Danh mục',
             'data' => $data
         ]);
     }
-    public function destroyOrderById(string $id)
+    public function destroyProductById(string $id)
     {
         try{
-            $this->orderService->delete($id);
+            $this->productService->delete($id);
             return response()->json([
                 'status' => true,
                 'id' => $id,

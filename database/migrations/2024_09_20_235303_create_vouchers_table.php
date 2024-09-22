@@ -11,13 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('slug')->nullable();
-            $table->string('image')->nullable();
-            $table->integer('parent_id')->nullable();
+            $table->string('code');
+            $table->text('description');
+            $table->enum('discount_type', array('fixed', 'percent'));
+            $table->decimal('discount_value', 10, 0);
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->integer('max_uses')->default(0);
+            $table->integer('uses_left')->default(0);
+            $table->enum('status', ['active', 'expired', 'used', 'inactive']);
+            $table->decimal('min_order_value', 10, 0)->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -33,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('vouchers');
     }
 };

@@ -3940,7 +3940,19 @@ table.bt .list-table-title a {
   padding: 6px 8px;
   margin-right: 6px;
 }
-
+.input-group, .group-search{
+  flex: 1;
+}
+.group-search{
+  gap: 15px;
+}
+.btn-default{
+  background-color: #FAFAFA;
+}
+.btn-filter{
+  display: flex;
+  gap: 10px;
+}
 .tags-input-wrapper > span {
   font-size: 16px;
 }
