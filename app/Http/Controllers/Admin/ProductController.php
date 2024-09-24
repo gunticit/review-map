@@ -21,10 +21,10 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $data = array();
-        $categories = $this->productService->list($request);
-        $categories = ProductResource::collection($categories)->resource;
+        $products = $this->productService->list($request);
+        $products = ProductResource::collection($products)->resource;
         return view('pages.admin.product.list', [
-            'categories' => $categories,
+            'products' => $products,
         ]);
     }
 
@@ -45,7 +45,7 @@ class ProductController extends Controller
         try{
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
-                'parent' => 'nullable|exists:categories,id',
+                'parent' => 'nullable|exists:products,id',
                 'description' => 'nullable|string',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Giới hạn kích thước ảnh 2MB
             ]);
@@ -97,7 +97,7 @@ class ProductController extends Controller
         }
     }
 
-    public function categoriesList(Request $request){
+    public function productsList(Request $request){
         $data = $this->productService->fullList($request);
         return response()->json([
             'title' => 'Load data Danh mục',

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 0); // Số tiền thanh toán
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending'); // Trạng thái
             $table->enum('payment_method', ['credit_card', 'bank_transfer', 'cash_on_delivery']);
+            $table->string('transaction_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

@@ -21,10 +21,10 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $data = array();
-        $categories = $this->orderService->list($request);
-        $categories = OrderResource::collection($categories)->resource;
+        $orders = $this->orderService->list($request);
+        $orders = OrderResource::collection($orders)->resource;
         return view('pages.admin.order.list', [
-            'categories' => $categories,
+            'orders' => $orders,
         ]);
     }
 
@@ -45,7 +45,7 @@ class OrderController extends Controller
         try{
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
-                'parent' => 'nullable|exists:categories,id',
+                'parent' => 'nullable|exists:orders,id',
                 'description' => 'nullable|string',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Giới hạn kích thước ảnh 2MB
             ]);
@@ -97,7 +97,7 @@ class OrderController extends Controller
         }
     }
 
-    public function categoriesList(Request $request){
+    public function ordersList(Request $request){
         $data = $this->orderService->fullList($request);
         return response()->json([
             'title' => 'Load data Danh mục',
