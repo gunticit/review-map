@@ -101,6 +101,17 @@ use Illuminate\Support\Facades\Storage;
         }
     }
 
+    if (!function_exists('convertUserName')) {
+        function convertUserName($fullname)
+        {
+            $name = explode(' ', $fullname);
+            $name = array_slice($name, -2);
+            $name = implode('_', $name);
+            $name = strtolower($name) . '_' . time();
+            return $name;
+        }
+    }
+
     if(!function_exists('checkStatus')){
         function checkStatus($status){
             $className = '';

@@ -119,6 +119,7 @@ class AuthService {
         $data = $request->all();
         return array(
             'name' => $data['name'],
+            'username' => convertUserName($data['name']),
             'email' => $data['email'],
             'telephone' => $data['telephone'],
             'password' => Hash::make($data['password']),
