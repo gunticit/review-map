@@ -40,7 +40,7 @@ class AuthService {
     public function registerUser($request){
         $data = $this->filterData($request);
         $user = $this->userRepository->create($data);
-        $user->assignRole(Role::CUSTOMER_ROLE);
+        $this->setRole($user, $request);
         $user = UserResource::make($user);
         return $user;
     }
@@ -123,5 +123,17 @@ class AuthService {
             'telephone' => $data['telephone'],
             'password' => Hash::make($data['password']),
         );
+    }
+
+    private function setRole($user, $request){
+        if($request->getHost() === env('ADMIN_DOMAIN')){
+            $user->assignRole(Role::ADMIN_ROLE);
+        }
+        if($request->getHost() === env('PARTNER_DOMAIN')){
+            $user->assignRole(Role::PARTNER_ROLE);
+        }
+        if($request->getHost() === env('CUSTOMER_DOMAIN')){
+            $user->assignRole(Role::CUSTOMER_ROLE);
+        }
     }
 }

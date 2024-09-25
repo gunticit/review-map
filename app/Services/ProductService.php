@@ -27,12 +27,7 @@ class ProductService {
 
     public function list($request){
         $products = $this->productRepository->list($request);
-        $products = ProductResource::collection($products)->resource;
-        $data = array(
-            'products' => $products,
-            'total' => count($products)
-        );
-        return $data;
+        return $products;
     }
 
     public function fullList($request){

@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="clear col-sm-12 text-right">
-                    <button class="btn btn-primary my-3" type="button" onclick="window.location.href='{{ route('category.create') }}'">
+                    <button class="btn btn-primary my-3" type="button" onclick="window.location.href='{{ route('product.create') }}'">
                         <i class="fas fa-plus"></i> Đăng sản phẩm
                     </button>
                 </div>
@@ -37,7 +37,7 @@
                             <th class="list-table-image" scope="col">   
                                 Hình đại diện
                             </th>
-                            <th class="list-table-category">
+                            <th class="list-table-product">
                                 Danh mục
                             </th>
                             <th class="list-table-price">
@@ -52,7 +52,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                            @foreach($categories as $category)
+                            @foreach($products as $product)
                             <tr>
                                 <th class="list-table-product-name" scope="col">Tên sản phẩm</th>
                                 <th class="list-table-product-code" scope="col">
@@ -61,7 +61,7 @@
                                 <th class="list-table-image" scope="col">   
                                     Hình đại diện
                                 </th>
-                                <th class="list-table-category">
+                                <th class="list-table-product">
                                     Danh mục
                                 </th>
                                 <th class="list-table-price">
@@ -77,7 +77,7 @@
                             @endforeach
                     </tbody>
                 </table>
-                {{ $categories->links('vendor.pagination.custom') }}
+                {{ $products->links('vendor.pagination.custom') }}
             </div>
         </div>
     </section>

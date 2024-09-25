@@ -51,6 +51,8 @@ use App\Repositories\Product\ProductRepositoryInterface;
 # Order
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\Voucher\VoucherRepository;
+use App\Repositories\Voucher\VoucherRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -71,6 +73,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(CommentRepositoryInterface::class, CommentRepository::class);
+        $this->app->bind(VoucherRepositoryInterface::class, VoucherRepository::class);
     }
 
     /**

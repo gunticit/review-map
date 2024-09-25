@@ -18,6 +18,8 @@ return new class extends Migration
             $table->decimal('total', 15, 0); // Tổng giá trị
             $table->string('shipping_address'); // Địa chỉ giao
             $table->enum('payment_method', ['credit_card', 'bank_transfer', 'cash_on_delivery']);
+            $table->string('recipient_name')->nullable();
+            $table->string('recipient_phone')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

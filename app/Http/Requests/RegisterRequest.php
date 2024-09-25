@@ -44,7 +44,7 @@ class RegisterRequest extends FormRequest
         ];
     }
 
-    public static function messages(): array
+    public function messages(): array
     {
         return [
             'name.required' => __('auth.name_required'),

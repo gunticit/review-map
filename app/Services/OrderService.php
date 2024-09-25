@@ -33,23 +33,7 @@ class OrderService {
     public function list($request){
         $orders = $this->orderRepository->list($request);
         $orders = OrderResource::collection($orders)->resource;
-        $working = 0;
-        $stopped = 0;
-        foreach($orders as $order){
-            if($order->status == 1){
-                $working++;
-            }
-            if($order->status == 4){
-                $stopped++;
-            }
-        }
-        $data = array(
-            'orders' => $orders,
-            'total' => count($orders),
-            'working' => $working,
-            'stopped' => $stopped
-        );
-        return $data;
+        return $orders;
     }
 
     public function fullList($request){
