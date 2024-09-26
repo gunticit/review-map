@@ -12,17 +12,18 @@
                         <div class="card-header d-xl-flex justify-content-between align-items-center">
                             <h2 class="card-title">Thông tin cá nhân</h2>
                             <button class="btn btn-primary" type="button">Chỉnh sửa</button>
-                            <button class="btn btn-outline-primary" type="submit">Lưu thông tin</button>
+                            <button class="btn btn-outline-primary" id="btn-save-info" type="button">Lưu thông tin</button>
                         </div>
                         <div class="card-body">
                             <div class="row ">
                                 <div class="col-md-4">
                                     <label for="inputUsername">Ảnh đại diện</label>
                                     <div class="position-relative">
-                                        <img src="{{ asset('./assets/img/acount-img.svg') }}" alt="account img">
-                                        <a class="btn btn-primary position-absolute bottom-0" href="#" role="button">
+                                        <img src="{{ $profile['avatar'] ? asset($profile['avatar']) : asset('./assets/img/acount-img.svg') }}" id="avatar" onclick="document.getElementById('inputAvatar').click()" alt="account img">
+                                        <a class="btn btn-primary position-absolute bottom-0 btn-edit-profile" href="#" role="button">
                                             <span class="material-symbols-outlined">border_color</span>
                                         </a>
+                                        <input type="file" name="avatar" class="d-none" id="inputAvatar">
                                     </div>
                                 </div>
                                 <div class="col-md-8">
@@ -42,17 +43,16 @@
                                     <div class="mb-4">
                                         <label for="inputPhone">Số điện thoại <span class="required">*</span>
                                         </label>
-                                        <input type="tel" class="form-control form-control-lg" id="phone" name="phone" placeholder="Số điện thoại" value="{{ $profile['telephone'] }}" disabled />
+                                        <input type="tel" class="form-control form-control-lg" id="telephone" name="telephone" placeholder="Số điện thoại" value="{{ $profile['telephone'] }}" disabled />
                                         <div class="form-check mt-2"></div>
                                     </div>
                                     <!-- Form Group (country)-->
                                     <div class="mb-4">
                                         <label for="inputcountry">Quốc gia <span class="required">*</span>
                                         </label>
-                                        <select class="form-control form-select form-select-lg" name="country_id" id="country-id" disabled>
+                                        <select class="form-control form-select form-select-lg" name="country_id" id="countryId" disabled>
                                             <option value="">--- Chọn ---</option>
                                             <option {!! $profile['country_code'] == 'vi'? 'selected': '' !!} value="vi">Việt Nam</option>
-                                            <option {!! $profile['country_code'] == 'en'? 'selected': '' !!}  value="en">English</option>
                                         </select>
                                     </div>
                                 </div>
@@ -107,8 +107,53 @@
 </section>
 <!-- end tai khoan -->
 <script>
-    $(document).ready(function(){
+    $('#btn-save-info').on('click', function(e) {
+        e.preventDefault();
+        const file = document.getElementById('inputAvatar').files[0];
+        let formData = new FormData();
+        formData.append('_token', "{{ csrf_token() }}");
+        formData.append('avatar', file);
+        formData.append('name', $('#inputUsername').val());
+        formData.append('email', $('#inputEmailAddress').val());
+        formData.append('telephone', $('#telephone').val());
+        formData.append('country_id', $('#countryId').val());
+        $.ajax({
+            url: '{{ route("profile.update") }}',
+            method: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            data: formData,
+            success: function(res) {
+                Toastify({
+                    text: "Thay đổi thông tin thành công!",
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top", 
+                    position: "center", 
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    },
+                    onClick: function(){} // Callback after click
+                }).showToast();
+            },
+            error: function() {
+            }
+        })
+    });
+    document.getElementById('inputAvatar').addEventListener('change', function() {
+        const file = this.files[0];
+        const reader = new FileReader();
 
+        reader.onload = function(event) {
+            const imageData = event.target.result;
+            const img = document.getElementById('avatar');
+            img.src = imageData;
+        };
+
+        reader.readAsDataURL(file);
     });
 </script>
 @endsection

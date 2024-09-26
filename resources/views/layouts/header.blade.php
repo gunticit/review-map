@@ -20,6 +20,7 @@
         <link href="{{ asset('./assets/css/select2.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('./assets/css/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('./assets/css/style.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
         <!-- js chart-->
         <script src="{{ asset('./assets/js/canvasjs.min.js') }}"></script>
@@ -27,5 +28,6 @@
         <script src="{{ asset('./assets/js/jquery-3.7.1.min.js') }}"></script>
         <script src="{{ asset('./assets/js/jquery.basictable.js') }}"></script>
         <script src="{{ asset('./assets/js/select2.min.js') }}"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     </head>
     <body class="nav-fixed">

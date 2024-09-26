@@ -4,12 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\User;
+use App\Services\ProfileService;
+use App\Traits\UploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
+    use UploadFile;
+
+    protected $profileService;
+
+    public function __construct(ProfileService $profileService)
+    {
+        $this->profileService = $profileService;   
+    }
+    
     public function create(){
         return view('auth.profile.create');
     }
@@ -17,8 +28,8 @@ class ProfileController extends Controller
         if($request->method() == 'POST'){
             $validator = Validator::make($request->all(), [
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($this->user()->id)],
-                'telephone' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($this->user()->id)],
+                'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore(auth()->user()->id)],
+                'telephone' => ['required', 'string', 'max:255', Rule::unique('users')->ignore(auth()->user()->id)],
             ]);
             if($validator->fails()){
                 return response()->json([
@@ -26,12 +37,7 @@ class ProfileController extends Controller
                     'message' => $validator->errors()
                 ]);
             }
-            $profile = User::find(auth()->user()->id);
-            $profile->name = $request->name;
-            $profile->email = $request->email;
-            $profile->telephone = $request->telephone;
-            $profile->country_code = $request->country_code ?? '';
-            $profile->save();
+            $this->profileService->edit($request);
             return response()->json([
                 'status' => true,
                 'message' => __('message.success')
@@ -41,8 +47,7 @@ class ProfileController extends Controller
         $company = Company::where('user_id', auth()->user()->id)->first();
         return view('auth.profile.edit', [
             'profile' => $profile,
-            'company' => $company,
-            'departments' => $departments
+            'company' => $company
         ]);
     }
 }

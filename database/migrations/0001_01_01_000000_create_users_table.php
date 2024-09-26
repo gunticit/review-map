@@ -19,6 +19,11 @@ return new class extends Migration
             $table->string('role_id')->nullable();
             $table->string('email')->unique();
             $table->string('telephone')->unique();
+            $table->string('company_name')->nullable();
+            $table->string('tax')->nullable();
+            $table->string('email_company')->nullable();
+            $table->string('telephone_company')->nullable();
+            $table->string('address_company')->nullable();
             $table->timestamp('telephone_verified_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('country_code')->nullable();

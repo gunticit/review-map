@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\Role;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
@@ -41,7 +40,7 @@ class AuthController extends BaseController
     public function authenticate(AuthRequest $request){
         try{
             $user = $this->authService->login($request);
-            if(!empty($user)){ // && $user->hasRole(Role::ADMIN_ROLE)
+            if(!empty($user)){
                 return redirect()->route('home');
             }
             Session::flash('error', __('auth.failed'));
