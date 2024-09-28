@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\PhoneNumber;
 use App\Rules\Email;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
 {
@@ -40,7 +41,17 @@ class RegisterRequest extends FormRequest
                 'unique:users',
                 new PhoneNumber
             ],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()
+                    ->letters() 
+                    ->numbers() 
+                    ->symbols() 
+                    ->uncompromised() 
+            ]
         ];
     }
 
@@ -53,7 +64,13 @@ class RegisterRequest extends FormRequest
             'role_id.required' => 'Role is required',
             'permission_id.required' => 'Permission is required',
             'telephone.required' => 'Telephone is required',
-            'password.required' => 'Password is required',
+            'password.required' => 'Mật khẩu là bắt buộc.',
+            'password.min' => 'Mật khẩu phải ít nhất :min ký tự.',
+            'password.mixedCase' => 'Mật khẩu phải bao gồm cả chữ hoa và chữ thường.',
+            'password.letters' => 'Mật khẩu phải chứa ít nhất một chữ cái.',
+            'password.numbers' => 'Mật khẩu phải chứa ít nhất một số.',
+            'password.symbols' => 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt.',
+            'password.uncompromised' => 'Mật khẩu này đã bị rò rỉ. Vui lòng chọn mật khẩu khác.'
         ];
     }
 }

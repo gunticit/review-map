@@ -33,7 +33,7 @@
                 </div>
             @endif
             <form method="POST" action="{{ route('auth.authenticate') }}">
-                @csrf
+                {{ csrf_field() }}
                 <div class="input-group mb-3">
                     <input id="username" type="text" placeholder="{{ __('auth.username') }}" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
 

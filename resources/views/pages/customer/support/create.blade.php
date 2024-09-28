@@ -16,7 +16,7 @@
     <!-- tao-yeu-cau -->
     <section class="section tao-yeu-cau mb-5">
         <form action="{{ route('support.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+            {{ csrf_field() }}
             <div class="container">
                 <div class="col-inner">
                     <h2 class="section-title mb-4">Tạo yêu cầu</h2>
@@ -85,6 +85,7 @@
                     <div class="mb-4">
                         <label for="inputFile" class="custom-file-upload"><span class="material-symbols-outlined">link</span> Tải lên tệp</label>
                         <input type="file" class="form-control" name="images[]" multiple id="inputFile">
+                        <div id="previewImages"></div>
                     </div>
                     <!-- Form Group (inputFile)-->
                     <div class="text-right">
@@ -93,4 +94,28 @@
                 </div>
         </form>
     </section>
+    <script>
+        $(document).ready(function () {
+            $('#inputFile').on('change', function () {
+                $('#previewImages').html('');
+                var files = this.files;
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (file.type.match('image.*')) {
+                        var reader = new FileReader();
+                        reader.onload = (function (f) {
+                            return function (e) {
+                                var img = $('<img>').attr('src', e.target.result).attr('class', 'img-thumbnail').css({
+                                    'width': '150px', 
+                                    'margin': '10px'
+                                });
+                                $('#previewImages').append(img);
+                            };
+                        })(file);
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

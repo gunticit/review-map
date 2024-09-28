@@ -56,9 +56,14 @@ class ProductService {
         $data = is_array($request) ? $request : $request->all();
         return array(
             'name' => $data['name'] ?? null,
+            'category_id' => $data['category_id'] ?? null,
             'slug' => $data['slug'] ?? null,
-            'package' => $data['package'] ?? null,
-            'is_slow' => $data['is_slow'] ?? null,
+            'price' => $data['price'] ?? null,
+            'description' => $data['description'] ?? null,
+            'product_code' => $data['product_code'] ?? null,
+            'sku' => $data['sku'] ?? null,
+            'stock' => $data['stock'] ?? null,
+            'keyword' => $data['keyword'] ?? null
         );
     }
 }

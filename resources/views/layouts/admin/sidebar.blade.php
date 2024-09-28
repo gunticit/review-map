@@ -32,26 +32,27 @@
         <a class="nav-link {!! request()->routeIs('overview.partner') ? 'active' : '' !!}" href="{{ route('overview.partner') }}">Thông báo đối tác</a>
     </nav>
 </div>
-<a class="nav-link" href="{{ route('support') }}">
+<a class="nav-link" href="{{ route('manage-customer.index') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             group
         </span>
     </div> Quản lý khách hàng
 </a>
-<a class="nav-link" href="{{ route('support') }}">
+<a class="nav-link" href="{{ route('project.list') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             description
         </span>
     </div> Quản lý dự án
 </a>
-<a class="nav-link" href="#">
+<a class="nav-link" href="{{ route('approve.project') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             fact_check
         </span>
-    </div> <span>Duyệt đơn</span> <span class="badge bg-danger rounded-pill ms-2">2</span>
+    </div> <span>Duyệt đơn</span> 
+    {{-- <span class="badge bg-danger rounded-pill ms-2">2</span> --}}
 </a>
 <a class="nav-link" href="{{ route('support') }}">
     <div class="nav-link-icon">

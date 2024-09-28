@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SupportRequest;
 use App\Http\Resources\SupportResource;
 use App\Models\Department;
+use App\Services\CategoryService;
 use App\Services\ProjectService;
 use App\Services\SupportService;
 use Exception;
@@ -13,13 +14,15 @@ use Illuminate\Support\Facades\Session;
 
 class SupportController extends Controller
 {
-    protected $supportService, $projectService;
+    protected $supportService, $projectService, $categoryService;
     public function __construct(
         SupportService $supportService,
-        ProjectService $projectService
+        ProjectService $projectService,
+        CategoryService $categoryService
     ){
         $this->supportService = $supportService;
         $this->projectService = $projectService;
+        $this->categoryService = $categoryService;
     }
     public function index(Request $request){
         $supports =  $this->supportService->list($request);
@@ -36,10 +39,13 @@ class SupportController extends Controller
     public function create(Request $request){
         $request->merge(['user_id' => auth()->id()]);
         $projects = $this->projectService->fullList($request);
+        $categories = $this->categoryService->fullList($request);
+        dd($categories);
         $departments = Department::all();
         return view('pages.customer.support.create',[
             'projects' => $projects,
             'departments' => $departments,
+            'heading_title' => 'Tạo yêu cầu hỗ trợ'
         ]);
     }
     public function store(SupportRequest $request){

@@ -3,6 +3,7 @@ namespace App\Repositories\Project;
 
 use App\Repositories\BaseRepository;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 class  ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -15,7 +16,7 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
 
     public function list($request){
         $query = $this->model->query();
-        if(isset($request->user_id)){
+        if(isset($request->user_id) && Auth::user()->getRoleNames()->first() != 'admin'){
             $query->where('created_by', $request->user_id);
         }
         $orderBy = $request->order_by ?? [];
@@ -36,6 +37,15 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
             $query->where('status', $filter['status']);
         }
         return $query->count();
+    }
+
+    public function wrongImages($id){
+        $this->model->where('id', $id)->update(['is_wrong_image' => 1]);
+    }
+
+    public function find($id)
+    {
+        return $this->model->with('images')->find($id);
     }
 
     public function countDataGroupMonth($filter = array()){

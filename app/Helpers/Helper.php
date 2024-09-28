@@ -2,8 +2,11 @@
     namespace App\Helpers;
     use Illuminate\Support\Facades\File;
     use Illuminate\Support\Facades\Log;
+    use Illuminate\Http\UploadedFile;
+    use App\Traits\FileManager;
     
     class Helper{
+        use FileManager;
         # Lấy danh sách tất cả các module của hệ thống
         public static function allModules()
         {
@@ -65,5 +68,23 @@
                     break;
             }
             return $url;
+        }
+
+        public static function uploadFile(UploadedFile $file, string $path, string|null $disk = '')
+        {
+            $hashName = hashName();
+            $extension = $file->getClientOriginalExtension();
+            $newName = "$hashName.$extension";
+            (new self)->upload($file, $path, $newName, $disk);
+            $thumbnail = self::createThumbnail($extension);
+            return [
+                'path' => $path . '/' . $newName,
+                'file_name' => $file->getClientOriginalName(),
+                'hash_name' => $newName,
+                'extension' => $extension,
+                'mime_type' => $file->getClientMimeType(),
+                'size' => $file->getSize(),
+                'thumbnail_url' => $thumbnail,
+            ];
         }
     }

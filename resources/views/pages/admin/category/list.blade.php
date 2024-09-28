@@ -61,6 +61,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if(!empty($categories))
                             @foreach($categories as $category)
                             <tr class="category-{{ $category->id }}">
                                 <td class="list-table-stt" scope="col">{{ $category->id }}</td>
@@ -87,6 +88,7 @@
                                 </td>
                             </tr>
                             @endforeach
+                        @endif
                     </tbody>
                 </table>
                 {{ $categories->links('vendor.pagination.custom') }}

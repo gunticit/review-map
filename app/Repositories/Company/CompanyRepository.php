@@ -1,15 +1,15 @@
 <?php
-namespace App\Repositories\Profile;
+namespace App\Repositories\Company;
 
+use App\Models\Company;
 use App\Repositories\BaseRepository;
-use App\Models\User;
-use App\Repositories\Profile\ProfileRepositoryInterface;
+use App\Repositories\Company\CompanyRepositoryInterface;
 
-class  ProfileRepository extends BaseRepository implements ProfileRepositoryInterface
+class  CompanyRepository extends BaseRepository implements CompanyRepositoryInterface
 {
     protected $model;
 
-    public function __construct(User $project)
+    public function __construct(Company $project)
     {
         $this->model = $project;
     }

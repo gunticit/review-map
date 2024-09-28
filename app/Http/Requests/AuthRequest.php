@@ -23,15 +23,14 @@ class AuthRequest extends FormRequest
     {
         return [
             'username' => 'required',
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string'],
         ];
     }
 
     public function messages(){
         return [
             'username.required' => 'Vui lòng nhập tài khoản',
-            'password.required' => 'Vui lòng nhập mật khẩu',
-            'password.required' => 'Mật khẩu ít nhất 8 ký tự'
+            'password.required' => 'Vui lòng nhập mật khẩu'
         ];
     }
 }

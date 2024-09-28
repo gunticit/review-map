@@ -214,7 +214,7 @@
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
     <form action="{{ route('project.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
-        @csrf
+        {{ csrf_field() }}
         <div class="container">
             <div class="row">
                 <!-- cot 1 -->

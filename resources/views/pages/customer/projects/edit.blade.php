@@ -214,7 +214,7 @@
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
     <form action="{{ route('project.update', ['id' => $project->id]) }}" id="form-create-project" method="POST" enctype="multipart/form-data">
-        @csrf
+        {{ csrf_field() }}
         @method('PUT')
         <div class="container">
             <div class="row">
@@ -325,21 +325,49 @@
                             <label class="d-block" for="inputImg">Hình ảnh
                             </label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="has_image" id="inputImg1" value="1">
+                                <input class="form-check-input" type="radio" name="has_image" id="inputImg1" value="1" {!! $project->has_image == 1 ? 'checked' : '' !!}>
                                 <label class="form-check-label" for="inputImg1"> Có </label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="has_image" id="inputImg2" value="0" checked>
+                                <input class="form-check-input" type="radio" name="has_image" id="inputImg2" value="0" {!! $project->has_image == 0 ? 'checked' : '' !!}>
                                 <label class="form-check-label" for="inputImg2"> Không </label>
                             </div>
-                            <div class="d-none" id="group-upload-image">
+                            <div class="{!! $project->has_image == 1 ? '' :'d-none' !!}" id="group-upload-image">
                                 <p>
                                     <small>Các hình ảnh bắt buộc phải được chụp bằng thiết bị thật, chúng tôi sẽ phân phối mỗi đánh giá kèm với 1 ảnh. Đánh giá có ảnh sẽ được phân phối ngẫu nhiên xen kẽ với đánh giá chỉ có chữ.</small>
                                 </p>
                                 <p>
                                     <small>Số lượng ảnh không vượt quá 10% số lượng gói đánh giá. Định dạng ảnh là (*.jpeg, *.png). Giá của 1 tấm ảnh là 5k/tấm.</small>
                                 </p>
-                                <div id="fileUpload"></div>
+                                <div id="fileUpload">
+                                    @if(!empty($project->images))
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th style="width: 30%;">File Name</th>
+                                                <th>Preview</th>
+                                                <th style="width: 20%;">Size</th>
+                                                <th>Type</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($project->images as $key => $image)
+                                                @foreach($image as $img)
+                                                    <tr>
+                                                        <td class="stt">1</td>
+                                                        <td class="fileName"></td>
+                                                        <td class="preview">
+                                                        </td>
+                                                        <td class="delete"><button type="button" class="deleteBtn"><i class="material-symbols-outlined">delete</i></button></td>
+                                                    </tr>
+                                                @endforeach
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -368,7 +396,7 @@
                             </div>
                             <div id="rating-desire-group">
                                 <input type="hidden" name="rating_google" id="rating-google" value="{{ $project->rating_google }}"/>
-                                <input type="number" onclick="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" value="{{ $project->rating_desire }}" name="rating_desire" id="rating-desire"/>
+                                <input type="number" step="0.1" min="{{ $project->rating_google }}" max="4.9" class="form-control" value="{{ $project->rating_desire }}" name="rating_desire" id="rating-desire"/>
                             </div>
                         </div>
                         <div id="video-intro">

@@ -31,6 +31,10 @@ return new class extends Migration
             $table->string('place_id')->nullable();
             $table->boolean('has_image')->default(false)->nullable();
             $table->integer('status'); // 0: Huỷ, 1: Hoàn thành, 2: Đang thực hiện, 3: Hoàn lại, 4: Tạm ngưng, 5: Chưa thanh toán, 6: Đang chờ duyệt
+            $table->integer('is_wrong_image')->default(0)->nullable();
+            $table->date('update_wrong_image')->nullable(); // Ngày cập nhật lại hình
+            $table->integer('is_wrong_rate')->default(0)->nullable();
+            $table->date('update_wrong_rate')->nullable(); // Ngày cập nhật lại rate
             $table->enum('is_payment', [1,2])->nullable(); // 1: Đã thanh toán, 2: Chưa thanh toán
             // Dành cho admin
             $table->integer('id_confirm')->nullable();

@@ -36,7 +36,7 @@
         <span class="material-symbols-outlined">chevron_left</span>
     </button>
     <!-- Navbar title-->
-    <h1 class="topnav-title">Quản lý dự án</h1>
+    <h1 class="topnav-title">{{ $heading_title ?? 'Quản lý dự án' }}</h1>
     <!-- Navbar Items-->
     <ul class="navbar-nav align-items-center ms-auto">
         <!-- Documentation Dropdown-->
@@ -70,7 +70,7 @@
         <li class="nav-item dropdown no-caret  me-3 dropdown-notifications">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="material-symbols-outlined">notifications_active</span>
-                <span class="dropdown-notifications-count">9</span>
+                {{-- <span class="dropdown-notifications-count">9</span> --}}
             </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
                 <h6 class="dropdown-notifications-header"> Thông báo <button class="btn btn-icon">

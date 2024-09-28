@@ -61,9 +61,11 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::put('/update-project/{id}', [App\Http\Controllers\ProjectController::class, 'update'])->name('project.update');
     Route::put('/update-status-project/{id}', [App\Http\Controllers\ProjectController::class, 'updateStatus'])->name('project.update.status');
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.update');
+    Route::post('/update-profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/update-profile-company', [App\Http\Controllers\ProfileController::class, 'updateProfileCompany'])->name('profile.update.company');
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
     Route::get('/notification/{id}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notification.show');
+    Route::post('/change-password', [App\Http\Controllers\Auth\AuthController::class, 'changePassword'])->name('profile.change.password');
 
     
     include 'web_customer.php';

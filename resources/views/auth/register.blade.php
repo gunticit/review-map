@@ -10,6 +10,9 @@
         height: 100%;
         object-fit: cover;
     }
+    .alert ul, .alert ul li:last-child{
+        margin-bottom: 0;
+    }
 </style>
 <section class="login">
     <div class="row">
@@ -42,7 +45,7 @@
                 <div class="login-form text-center">
                     <h1>{{ __('auth.register') }}</h1>
                     <form method="POST" action="{{ route('auth.registerUser') }}">
-                        @csrf
+                        {{ csrf_field() }}
                         <div class="input-group mb-3">
                             <input id="FullName" placeholder="{{ __('auth.full_name') }}" required type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                             @error('name')

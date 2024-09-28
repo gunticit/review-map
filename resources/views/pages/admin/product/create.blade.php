@@ -201,8 +201,8 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
-    <form action="{{ route('category.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
-        @csrf
+    <form action="{{ route('product.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
+        {{ csrf_field() }}
         <div class="container">
             <div class="row">
                 <!-- cot 1 -->
@@ -231,11 +231,28 @@
                         </div>
                         <div class="mb-4">
                             <label for="inputlist-table">Thuộc danh mục <span>(nếu có)</span></label>
-                            <select class="form-select form-control" name="parent" id="parent" data-placeholder="Thuộc sản phẩm"></select>
+                            <select class="form-select form-control" name="category_id" id="category_id" data-placeholder="Thuộc danh mục">
+                                <option value="">Chọn thuộc danh mục</option>
+                                @if(!empty($categories))
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
                         <div class="mb-4">
                             <label for="inputlist-table">Mô tả <span>(nếu có)</span></label>
                             <textarea id="description" name="description" class="form-control"></textarea>
+                        </div>
+                        <div class="mb-4 row">
+                            <div class="col-sm-8">
+                                <label for="inputlist-table">Giá sản phẩm</label>
+                                <input class="form-control" id="price" name="price" type="number" placeholder="Tên sản phẩm" value="">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="inputlist-table">Số lượng trong kho</label>
+                                <input class="form-control" id="stock" name="stock" type="number" placeholder="Tên sản phẩm" value="">
+                            </div>
                         </div>
                         <div class="mb-4">
                             <label>Hình ảnh <span>(nếu có)</span></label>

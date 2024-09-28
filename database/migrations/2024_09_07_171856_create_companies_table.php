@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
             $table->string('name')->nullable();
             $table->string('tax')->nullable();
             $table->string('email');
-            $table->integer('is_receive')->nullable();
+            $table->integer('is_receive')->nullable(); // nhận hóa đơn theo email công ty
             $table->string('address')->nullable();
             $table->timestamps();
             $table->softDeletes();

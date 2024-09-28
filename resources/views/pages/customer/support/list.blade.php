@@ -5,17 +5,17 @@
   <div class="container">
     
         <div class="row align-items-center">
-            <div class="col-xl-9 col-md-8 col-12">
+            <div class="col-xl-10 col-md-8 col-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item active" aria-current="page">Yêu cầu hỗ trợ</li>
                     </ol>
                 </nav>
             </div>
-            <div class="col-xl-3 col-md-8 col-12 text-right">
-                <a href="{{ route('support.create') }}" class="btn btn-primary">
+            <div class="col-xl-2 col-md-8 col-12 text-right">
+                <a href="{{ route('support.create') }}" class="btn btn-primary d-flex flex-wrap">
                     <span class="material-symbols-outlined">add</span>
-                    Tạo yêu cầu
+                    <span>Tạo yêu cầu</span>
                 </a>
             </div>
         </div>

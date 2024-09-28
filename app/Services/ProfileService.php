@@ -2,19 +2,22 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Auth;
-use App\Repositories\Product\ProductRepositoryInterface;
-use App\Http\Resources\UserResource;
+use App\Helpers\Helper;
+use App\Repositories\Company\CompanyRepositoryInterface;
+use App\Repositories\Profile\ProfileRepositoryInterface;
 use Illuminate\Validation\ValidationException;
 
 class ProfileService {
-    protected $profileRepository;
+    protected $profileRepository, $companyRepository;
+    protected $folderAvatar = 'avatars';
 
     public function __construct(
-        ProductRepositoryInterface $profileRepository,
+        ProfileRepositoryInterface $profileRepository,
+        CompanyRepositoryInterface $companyRepository
     )
     {
         $this->profileRepository = $profileRepository;
+        $this->companyRepository = $companyRepository;
     }
 
     /**
@@ -47,17 +50,46 @@ class ProfileService {
     }
 
     public function update($request, $id){
-        $data = $this->profileRepository->update($request, $id);
+        $data = $this->filterData($request);
+        if ($request->hasFile('avatar')) {
+            $dataAvatar = Helper::uploadFile($request->file('avatar'), $this->folderAvatar);
+            $fileAvatar = $dataAvatar['hash_name'];
+            $data = array_merge($data, ['avatar' => $fileAvatar]);
+        }
+        $data = $this->profileRepository->update($data, $id);
         return $data; 
+    }
+
+    public function updateProfileCompany($request){
+        $data = $this->filterDataCompany($request);
+        $company = $this->companyRepository->findWith($data, 'tax|email');
+        if(!$company){
+            $company_data = $this->companyRepository->create($data);
+        }else{
+            $company_data = $this->companyRepository->update($data, $company->id);
+        }
+        $this->profileRepository->update(['company_id' => $company_data['id']], auth()->user()->id);
+        return $company_data;
     }
 
     private function filterData($request): array{
         $data = is_array($request) ? $request : $request->all();
         return array(
             'name' => $data['name'] ?? null,
-            'slug' => $data['slug'] ?? null,
-            'package' => $data['package'] ?? null,
-            'is_slow' => $data['is_slow'] ?? null,
+            'email' => $data['email'] ?? null,
+            'telephone' => $data['telephone'] ?? null,
+            'country_code' => $data['country_code'] ?? null
+        );
+    }
+    
+    public function filterDataCompany($request){
+        $data = is_array($request) ? $request : $request->all();
+        return array(
+            'name' => $data['company_name'] ?? null,
+            'email' => $data['company_email'] ?? null,
+            'tax' => $data['tax'] ?? null,
+            'is_receive' => $data['is_receive'] ?? 0,
+            'address' => $data['company_address'] ?? null,
         );
     }
 }

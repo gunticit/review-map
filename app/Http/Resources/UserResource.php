@@ -18,7 +18,7 @@ class UserResource extends JsonResource
             'id'         => $this->id ?? null,
             'name'   => $this->name ?? null,
             'username' => $this->username ?? null,
-            'avatar' => $this->avatar ? 'avatars/'.$this->avatar : null,
+            'avatar' => $this->avatar ? getAssetStorageLocal("avatars/{$this->avatar}") : null,
             'email'     => $this->email ?? null,
             'telephone'   => $this->telephone ?? null,
             'language'   => $this->language ?? null,

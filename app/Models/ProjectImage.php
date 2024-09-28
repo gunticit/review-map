@@ -12,4 +12,8 @@ class ProjectImage extends Model
     protected $table = 'image_projects';
     protected $guarded = [];
     public $timestamps = true;
+
+    public function project(){
+        return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
 }

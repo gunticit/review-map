@@ -234,4 +234,15 @@ class BaseRepository implements RepositoryInterface
  
         return implode(', ', $selectStatements);
     }
+
+    public function findWith($data, $columns = 'id'){
+        $columns = explode('|', $columns);
+        $query = $this->model->query();
+        foreach($columns as $column){
+            if(isset($data[$column])){
+                $query = $query->where($column, $data[$column]);
+            }
+        }
+        return $query->first();
+    }
 }

@@ -1,8 +1,18 @@
 <?php
+    use Illuminate\Support\Facades\Storage;
 
-    # Lấy thông tin chi tiết ngoại lệ trả về
-
-use Illuminate\Support\Facades\Storage;
+    if (!function_exists('randomNumber')) {
+        function randomNumber($size = 10)
+        {
+            $characters = '0123456789';
+            $randomString = '';
+            for ($i = 0; $i < $size; $i++) {
+                $index = rand(0, strlen($characters) - 1);
+                $randomString .= $characters[$index];
+            }
+            return $randomString;
+        }
+    }
 
     if (!function_exists('getMessage')) {
         function getMessage($e)
@@ -148,5 +158,35 @@ use Illuminate\Support\Facades\Storage;
                 'className' => $className,
                 'labelStatus' => $labelStatus
             ];
+        }
+    }
+
+    if(!function_exists('hashName')) {
+        function hashName(string $prefix = '')
+        {
+            return ($prefix ? $prefix . '_' : '') . date('ymd') . "_" . randomNumber(20);
+        }
+    }
+
+    if (!function_exists('getPathFolder')) {
+        function getPathFolder($pathFolder)
+        {
+            $parentDir = 'public/uploads';
+            return $parentDir.'/' . getPortal() . "/" . $pathFolder;
+        }
+    }
+
+    if (!function_exists('getPathTempFolder')) {
+        function getPathTempFolder($pathFolder){
+            $parentDir = 'temp';
+            return $parentDir.'/' . getPortal() . "/" . $pathFolder;
+        }
+    }
+
+    if (!function_exists('getAssetStorageLocal')) {
+        function getAssetStorageLocal($publicFolder)
+        {
+            $parentDir = 'storage/uploads';
+            return asset($parentDir.'/'. getPortal() . "/" . $publicFolder);
         }
     }

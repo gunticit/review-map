@@ -8,7 +8,7 @@ use App\Models\Project;
 use Carbon\Carbon;
 
 
-class ApproveApplicationController extends Controller
+class ApproveProjectController extends Controller
 {
     public function index(){
         $data = array();
@@ -35,6 +35,6 @@ class ApproveApplicationController extends Controller
                 );
             }
         }
-        return view('pages.admin.approve-application.index', $data);
+        return view('pages.admin.approve-project.index', $data);
     }
 }

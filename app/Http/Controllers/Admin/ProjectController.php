@@ -3,25 +3,25 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
-use App\Services\ProductService;
+use App\Http\Resources\ProjectResource;
+use App\Services\ProjectService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ProductController extends Controller
+class ProjectController extends Controller
 {
-    protected $productService;
-    public function __construct(ProductService $productService)
+    protected $projectService;
+    public function __construct(ProjectService $projectService)
     {
-        $this->productService = $productService;
+        $this->projectService = $projectService;
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $products = $this->productService->list($request);
-        $products = ProductResource::collection($products)->resource;
+        $products = $this->projectService->list($request);
+        $products = ProjectResource::collection($products)->resource;
         return view('pages.admin.product.list', [
             'products' => $products,
         ]);
@@ -44,7 +44,7 @@ class ProductController extends Controller
         try{
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
-                'category_id' => 'nullable|exists:categories,id',
+                'parent' => 'nullable|exists:products,id',
                 'description' => 'nullable|string',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Giới hạn kích thước ảnh 2MB
             ]);
@@ -52,7 +52,7 @@ class ProductController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            $this->productService->create($request);
+            $this->projectService->create($request);
             return redirect()->route('product.index')->with('success', 'Thêm Danh mục thành công');
         }catch(\Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
@@ -64,7 +64,15 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        return view('pages.admin.product.show');
+        $data = $this->projectService->show($id);
+        return view('pages.admin.product.show', $data);
+    }
+
+    public function showJson(string $id){
+        $data = $this->projectService->show($id);
+        return response()->json([
+            'data' => $data
+        ]);
     }
 
     /**
@@ -89,7 +97,7 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         try{
-            $this->productService->delete($id);
+            $this->projectService->delete($id);
             return redirect()->route('product.index')->with('success', 'Xoá Danh mục thành công');
         }catch(\Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
@@ -97,16 +105,32 @@ class ProductController extends Controller
     }
 
     public function productsList(Request $request){
-        $data = $this->productService->fullList($request);
-        return response()->json([
-            'title' => 'Load data Danh mục',
-            'data' => $data
-        ]);
+        try{
+            $data = $this->projectService->fullList($request);
+            return response()->json([
+                'title' => 'Load data Danh mục',
+                'data' => $data
+            ]);
+        }catch(\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
-    public function destroyProductById(string $id)
+
+    public function wrongImage($id){
+        try{
+            $data = $this->projectService->wrongImage($id);
+            return response()->json([
+                'data' => $data
+            ]);
+        }catch(\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function destroyProjectById(string $id)
     {
         try{
-            $this->productService->delete($id);
+            $this->projectService->delete($id);
             return response()->json([
                 'status' => true,
                 'id' => $id,

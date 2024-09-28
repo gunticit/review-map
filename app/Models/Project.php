@@ -19,4 +19,8 @@ class Project extends Model
     const RETURN_PROJECT = 3; // Hoàn lại
     const STOPPED_PROJECT = 4; // Tạm ngưng
     const UNPAID = 5; // Chưa thanh toán
+
+    public function images(){
+        return $this->hasMany(ProjectImage::class, 'project_id', 'id');
+    }
 }

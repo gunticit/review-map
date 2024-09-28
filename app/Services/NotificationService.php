@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Repositories\Notification\NotificationRepositoryInterface;
 use App\Notifications\AlertNotification;
+use App\Traits\PusherTrait;
 use Pusher\Pusher;
 
 class NotificationService {
+    use PusherTrait;
     protected $notificationRepository;
 
 
@@ -26,18 +28,9 @@ class NotificationService {
         $data = $this->notificationRepository->create($notification);
         $user = auth()->user();
         $user->notify(new AlertNotification($data));
-        $options = array(
-            'cluster' => 'ap1',
-            'encrypted' => true
-        );
-
-        $pusher = new Pusher(
-            env('PUSHER_APP_KEY'),
-            env('PUSHER_APP_SECRET'),
-            env('PUSHER_APP_ID'),
-            $options
-        );
-        $pusher->trigger('NotificationEvent', 'send-message', $data);
+        $this->sendNotification([
+            'message' => $notification['title']
+        ]);
         return $data;
     }
     
@@ -53,5 +46,14 @@ class NotificationService {
             'content' => $data['content'] ?? null,
             'status' => $data['status'] ?? null
         );
+    }
+
+
+    public function sendNotification($data = array(
+        'message' => '',
+    ))
+    {
+        $this->triggerEvent('notify-channel', 'notify-event', $data);
+        return response()->json(['status' => 'Notification sent!']);
     }
 }

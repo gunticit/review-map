@@ -5,9 +5,11 @@ namespace App\Services;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Http\Resources\ProjectResource;
+use App\Traits\PusherTrait;
 use Illuminate\Validation\ValidationException;
 
 class ProjectService {
+    use PusherTrait;
     protected $projectRepository;
 
     public function __construct(
@@ -26,6 +28,7 @@ class ProjectService {
      */
 
     public function list($request){
+        $request = $request->merge(['user_id' => Auth::user()->id]);
         $projects = $this->projectRepository->list($request);
         $projects = ProjectResource::collection($projects)->resource;
         $working = 0;
@@ -67,6 +70,19 @@ class ProjectService {
         $project = $this->filterData($request);
         $data = $this->projectRepository->update($project, $id);
         return $data; 
+    }
+
+    public function wrongImages($id){
+        $data = $this->projectRepository->wrongImages($id);
+        return $data;
+    }
+
+    public function sendNotification($data = array(
+        'message' => '',
+    ))
+    {
+        $this->triggerEvent('notify-channel', 'notify-event', $data);
+        return response()->json(['status' => 'Notification sent!']);
     }
 
     private function filterData($request): array{

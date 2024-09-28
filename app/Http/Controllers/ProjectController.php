@@ -100,7 +100,7 @@ class ProjectController extends Controller
             $data = $this->projectService->update($request, $id);
             if($data){
                 if ($request->has('has_image') && $request->has_image == 1) {
-                    $this->projectImageService->updateDataImages($request, $data->id);
+                    $this->projectImageService->createDataImages($request, $data->id);
                 }
                 Session::flash('success', 'Cập nhật dự án thành công');
                 return redirect()->route('project.list');
@@ -122,5 +122,12 @@ class ProjectController extends Controller
             return $comments;
         }
         return response()->json($comments);
+    }
+    
+    public function wrongImages($id){
+        $data = $this->projectService->wrongImages($id);
+        return response()->json([
+            'data' => $data
+        ]);
     }
 }

@@ -2662,9 +2662,8 @@ iframe {
 }
 
 .btn.btn-outline-primary, .btn.btn-primary {
-  font-size: 16px;
-  font-weight: 700;
-  height: 54px;
+  padding: 15px 20px;
+  display: inline-block;
 }
 .btn.btn-lg {
   min-width: 210px;
@@ -3169,8 +3168,10 @@ iframe {
 }
 .accout .card .position-relative .btn {
   right: 15px;
-  height: 40px;
-  width: 40px;
+  color: #5f6b79;
+  border: 1px solid #4a6e87;
+  background: #fff;
+  padding: 2px 3px;
 }
 
 .section .inputImg small {
@@ -3983,6 +3984,14 @@ table.bt .list-table-title a {
 .tags-input-wrapper > span:nth-child(14), .tags-input-wrapper > span:nth-child(7) {
   color: #0963B6;
   background-color: #E4F2FF;
+}
+input.form-control{
+  border:1px solid transparent;
+  border-radius: 8px !important;
+}
+input.has-error{
+  border: 1px solid #f00;
+  color: #f00
 }
 
 @media (max-width: 576px) {
