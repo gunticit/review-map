@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Customer;
 
 use App\Http\Requests\SupportRequest;
 use App\Http\Resources\SupportResource;

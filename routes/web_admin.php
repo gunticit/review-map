@@ -31,6 +31,5 @@ Route::group([
         Route::post('/project-wrong-image', [ProjectController::class, 'wrongImage'])->name('project.wrong.image');
         Route::resource('/manage-customer', ManageCustomerController::class);
         Route::post('/admin-company-update', [ManageCustomerController::class, 'adminCompanyUpdate'])->name('admin.company.update');
-        
     });
 });

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('url_map')->nullable();
             $table->string('description')->nullable();
-            $table->string('package')->nullable();
+            $table->string('package')->nullable(); // 1: 10, 2: 50, 3: 100, 4: 200
             $table->string('name_google')->nullable(); // Tên thực thể trên google map
             $table->string('address_google')->nullable();
             $table->string('telephone_google')->nullable();

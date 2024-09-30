@@ -54,12 +54,6 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/faq', [App\Http\Controllers\FaqController::class, 'index'])->name('faq');
     Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history');
     Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
-    Route::get('/list-projects', [App\Http\Controllers\ProjectController::class, 'index'])->name('project.list');
-    Route::get('/create-project', [App\Http\Controllers\ProjectController::class, 'create'])->name('project.create');
-    Route::post('/create-project', [App\Http\Controllers\ProjectController::class, 'store'])->name('project.store');
-    Route::get('/edit-project/{id}', [App\Http\Controllers\ProjectController::class, 'edit'])->name('project.edit');
-    Route::put('/update-project/{id}', [App\Http\Controllers\ProjectController::class, 'update'])->name('project.update');
-    Route::put('/update-status-project/{id}', [App\Http\Controllers\ProjectController::class, 'updateStatus'])->name('project.update.status');
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/update-profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/update-profile-company', [App\Http\Controllers\ProfileController::class, 'updateProfileCompany'])->name('profile.update.company');
