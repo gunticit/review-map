@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupportController;
 // Customer
     Route::get('/support', [SupportController::class, 'index'])->name('support');
-    Route::get('/support-create', [SupportController::class, 'create'])->name('support.create');
     Route::post('/support-store', [SupportController::class, 'store'])->name('support.store');
     Route::get('/support-edit/{id}', [SupportController::class, 'edit'])->name('support.edit');
     Route::put('/support-update/{id}', [SupportController::class, 'update'])->name('support.update');

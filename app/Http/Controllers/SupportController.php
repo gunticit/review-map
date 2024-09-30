@@ -40,7 +40,6 @@ class SupportController extends Controller
         $request->merge(['user_id' => auth()->id()]);
         $projects = $this->projectService->fullList($request);
         $categories = $this->categoryService->fullList($request);
-        dd($categories);
         $departments = Department::all();
         return view('pages.customer.support.create',[
             'projects' => $projects,

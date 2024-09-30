@@ -50,18 +50,14 @@ class ProjectController extends Controller
             if($data){
                 $request->request->add(['project_id' => $data->id]);
                 $request->request->add(['noJson' => true]);
-                $comment = $this->generateComment($request);
-                if(!empty($comment)){
-                    $request->request->add(['comment' => $comment]);
-                    $this->commentService->create($request);
-                }
+                $this->commentService->generateComment($request);
                 if ($request->has('has_image') && $request->has_image == 1) {
                     $this->projectImageService->createDataImages($request, $data->id);
                 }
                 $content_history = [
                     'title' => 'Dự án khởi tạo thành công',
                     'content' => 'Dự án khởi tạo thành công vào lúc: ' . $data['created_at'],
-                    'status' => 1,
+                    'status' => 6, // Chờ admin duyệt
                     'user_id' => Auth::user()->id
                 ];
                 $this->historyService->create([
@@ -114,14 +110,6 @@ class ProjectController extends Controller
 
     public function updateStatus(Request $request, $id){
         return redirect()->back();
-    }
-
-    public function generateComment($request){
-        $comments = $this->commentService->generateComment($request);
-        if(isset($request->noJson)){
-            return $comments;
-        }
-        return response()->json($comments);
     }
     
     public function wrongImages($id){

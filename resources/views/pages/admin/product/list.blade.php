@@ -12,6 +12,25 @@
             </div>
             <div class="col-inner">
                 <h2 class="section-title mb-4">Danh sách dự án</h2>
+                <div id="group-alert">
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    @if(session('success') || session('error'))
+                        <script>
+                            $('.alert').setTimeout(() => {
+                                $('.alert').remove();
+                            }, 5000);
+                        </script>
+                    @endif
+                </div>
                 <form>
                     <div class="input-group group-search">
                         <div class="input-group">
@@ -54,12 +73,12 @@
                     <tbody>
                             @foreach($products as $product)
                             <tr>
-                                <th class="list-table-product-name" scope="col">Tên sản phẩm</th>
+                                <th class="list-table-product-name" scope="col">{{ $product->id }}</th>
                                 <th class="list-table-product-code" scope="col">
-                                    Mã sản phẩm
+                                   
                                 </th>
                                 <th class="list-table-image" scope="col">   
-                                    Hình đại diện
+                                    <img src="{{ asset($product->image) }}" alt="image" width="100px">
                                 </th>
                                 <th class="list-table-product">
                                     Danh mục

@@ -144,4 +144,29 @@ class ProjectController extends Controller
             ]);
         }
     }
+
+    public function updateStatus(Request $request, $id){
+        try{
+            $validator = Validator::make($request->all(), [
+                'status' => 'required|in:1,2,3,4'
+            ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'messaage' => $validator->errors()->all()
+                ]);
+            }
+            $data = $this->projectService->updateStatus($request, $id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Cập nhật trạng thái thành công',
+                'data' => $data
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }

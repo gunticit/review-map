@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\SupportController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -27,10 +28,16 @@ Route::group([
         Route::resource('/voucher', VoucherController::class);
         Route::get('/categories-list', [CategoryController::class, 'categoriesList'])->name('categories.list');
         Route::post('/destroy-category-id/{id}', [CategoryController::class, 'destroyCategoryById'])->name('destroy.category.id');
-        Route::post('/show-project-json/{id}', [ProjectController::class, 'showJson'])->name('show.project.json');
-        Route::post('/project-wrong-image', [ProjectController::class, 'wrongImage'])->name('project.wrong.image');
         Route::resource('/manage-customer', ManageCustomerController::class);
         Route::post('/admin-company-update', [ManageCustomerController::class, 'adminCompanyUpdate'])->name('admin.company.update');
+
+
+        Route::post('/show-project-json/{id}', [ProjectController::class, 'showJson'])->name('show.project.json');
+        Route::post('/project-wrong-image', [ProjectController::class, 'wrongImage'])->name('project.wrong.image');
+        Route::post('/update-project-status/{id}', [ProjectController::class, 'updateStatus'])->name('update.project.status');
+
+
+        Route::get('/support-create', [SupportController::class, 'create'])->name('support.create');
         
     });
 });

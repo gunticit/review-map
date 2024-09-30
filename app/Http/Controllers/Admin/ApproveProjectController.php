@@ -33,6 +33,7 @@ class ApproveProjectController extends Controller
                     'id_cancel' => $project['id_cancel'],
                     'created_at' => $created_at,
                 );
+                $data['status_complete'] = Project::COMPLETED_PROJECT;
             }
         }
         return view('pages.admin.approve-project.index', $data);

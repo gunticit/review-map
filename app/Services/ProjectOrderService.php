@@ -3,20 +3,20 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\Project\ProjectRepositoryInterface;
+use App\Repositories\Project\ProjectOrderRepository;
 use App\Http\Resources\ProjectResource;
 use App\Traits\PusherTrait;
 use Illuminate\Validation\ValidationException;
 
-class ProjectService {
+class ProjectOrderService {
     use PusherTrait;
-    protected $projectRepository;
+    protected $projectOrderRepository;
 
     public function __construct(
-        ProjectRepositoryInterface $projectRepository,
+        ProjectOrderRepository $projectOrderRepository,
     )
     {
-        $this->projectRepository = $projectRepository;
+        $this->projectOrderRepository = $projectOrderRepository;
     }
 
     /**
@@ -29,51 +29,38 @@ class ProjectService {
 
     public function list($request){
         $request = $request->merge(['user_id' => Auth::user()->id]);
-        $projects = $this->projectRepository->list($request);
-        $projects = ProjectResource::collection($projects)->resource;
-        $working = 0;
-        $stopped = 0;
-        foreach($projects as $project){
-            if($project->status == 1){
-                $working++;
-            }
-            if($project->status == 4){
-                $stopped++;
-            }
-        }
+        $projectOrders = $this->projectOrderRepository->list($request);
         $data = array(
-            'projects' => $projects,
-            'total' => count($projects),
-            'working' => $working,
-            'stopped' => $stopped
+            'projectOrders' => $projectOrders,
+            'total' => count($projectOrders),
         );
         return $data;
     }
 
     public function fullList($request){
-        $projects = $this->projectRepository->list($request);
+        $projects = $this->projectOrderRepository->list($request);
         return $projects;
     }
 
     public function create($request){
         $project = $this->filterData($request);
-        $data = $this->projectRepository->create($project);
+        $data = $this->projectOrderRepository->create($project);
         return $data;
     }
 
     public function show($id){
-        $data = $this->projectRepository->find($id);
+        $data = $this->projectOrderRepository->find($id);
         return $data;
     }
 
     public function update($request, $id){
         $project = $this->filterData($request);
-        $data = $this->projectRepository->update($project, $id);
+        $data = $this->projectOrderRepository->update($project, $id);
         return $data; 
     }
 
     public function wrongImages($id){
-        $data = $this->projectRepository->wrongImages($id);
+        $data = $this->projectOrderRepository->wrongImages($id);
         return $data;
     }
 
@@ -83,14 +70,6 @@ class ProjectService {
     {
         $this->triggerEvent('notify-channel', 'notify-event', $data);
         return response()->json(['status' => 'Notification sent!']);
-    }
-
-    public function updateStatus($request, $id){
-        $data = [
-            'status' => $request->status
-        ];
-        $data = $this->projectRepository->update($data, $id);
-        return $data;
     }
 
     private function filterData($request): array{

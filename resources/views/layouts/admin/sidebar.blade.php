@@ -51,7 +51,7 @@
         <span class="material-symbols-outlined">
             fact_check
         </span>
-    </div> <span>Duyệt đơn</span> 
+    </div> <span>Kiểm duyệt</span> 
     {{-- <span class="badge bg-danger rounded-pill ms-2">2</span> --}}
 </a>
 <a class="nav-link" href="{{ route('support') }}">

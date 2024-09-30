@@ -658,6 +658,7 @@
                 let checkValidate = validateRequiredFields();
                 
                 if ($('.alert').length === 0 && checkValidate) {
+                    $(this).prop('disabled', true);
                     $('#form-create-project').submit();
                 }
             }); 

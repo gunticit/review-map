@@ -220,14 +220,28 @@
                             </div>
                         @endif
                         <div class="mb-4"><!-- class: invalid -->
-                            <label for="inputlist-table">Tên sản phẩm <span class="required">*</span>
-                            </label>
-                            <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="Tên sản phẩm" value="" required>
-                            @error('name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="inputlist-table">Mã sản phẩm <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control require" id="inputlist-table" name="product_code" type="text" placeholder="Mã sản phẩm" value="" required>
+                                    @error('product_code')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-8">
+                                    <label for="inputlist-table">Tên sản phẩm <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="Tên sản phẩm" value="" required>
+                                    @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-4">
                             <label for="inputlist-table">Thuộc danh mục <span>(nếu có)</span></label>
