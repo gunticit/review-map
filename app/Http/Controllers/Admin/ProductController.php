@@ -80,7 +80,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try{
+            $this->productService->update($request, $id);
+            return redirect()->route('product.index')->with('success', 'Cập nhật sản phẩm thành công');
+        }catch(\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -90,7 +95,7 @@ class ProductController extends Controller
     {
         try{
             $this->productService->delete($id);
-            return redirect()->route('product.index')->with('success', 'Xoá Danh mục thành công');
+            return redirect()->route('product.index')->with('success', 'Xoá sản phẩm thành công');
         }catch(\Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -110,7 +115,7 @@ class ProductController extends Controller
             return response()->json([
                 'status' => true,
                 'id' => $id,
-                'message' => 'Xoá Danh mục thành công'
+                'message' => 'Xoá sản phẩm thành công'
             ]);
         }catch(\Exception $e){
             return response()->json([

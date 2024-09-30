@@ -20,10 +20,10 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $products = $this->projectService->list($request);
-        $products = ProjectResource::collection($products)->resource;
-        return view('pages.admin.product.list', [
-            'products' => $products,
+        $projects = $this->projectService->list($request);
+        $projects = ProjectResource::collection($projects)->resource;
+        return view('pages.admin.project.list', [
+            'projects' => $projects,
         ]);
     }
 
@@ -33,7 +33,7 @@ class ProjectController extends Controller
     public function create()
     {
         $data = array();
-        return view('pages.admin.product.create', $data);
+        return view('pages.admin.project.create', $data);
     }
 
     /**
@@ -44,7 +44,7 @@ class ProjectController extends Controller
         try{
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
-                'parent' => 'nullable|exists:products,id',
+                'parent' => 'nullable|exists:projects,id',
                 'description' => 'nullable|string',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Giới hạn kích thước ảnh 2MB
             ]);
@@ -53,7 +53,7 @@ class ProjectController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
             $this->projectService->create($request);
-            return redirect()->route('product.index')->with('success', 'Thêm Danh mục thành công');
+            return redirect()->route('project.index')->with('success', 'Thêm Danh mục thành công');
         }catch(\Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -65,7 +65,7 @@ class ProjectController extends Controller
     public function show(string $id)
     {
         $data = $this->projectService->show($id);
-        return view('pages.admin.product.show', $data);
+        return view('pages.admin.project.show', $data);
     }
 
     public function showJson(string $id){
@@ -80,7 +80,7 @@ class ProjectController extends Controller
      */
     public function edit(string $id)
     {
-        return view('pages.admin.product.edit');
+        return view('pages.admin.project.edit');
     }
 
     /**
@@ -88,7 +88,12 @@ class ProjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try{
+            $this->projectService->update($request, $id);
+            return redirect()->route('project.index')->with('success', 'Cập nhật Danh mục thành công');
+        }catch(\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -98,13 +103,13 @@ class ProjectController extends Controller
     {
         try{
             $this->projectService->delete($id);
-            return redirect()->route('product.index')->with('success', 'Xoá Danh mục thành công');
+            return redirect()->route('project.index')->with('success', 'Xoá Danh mục thành công');
         }catch(\Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
-    public function productsList(Request $request){
+    public function projectsList(Request $request){
         try{
             $data = $this->projectService->fullList($request);
             return response()->json([
