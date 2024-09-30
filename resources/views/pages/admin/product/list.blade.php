@@ -62,9 +62,6 @@
                             <th class="list-table-price">
                                 Giá sản phẩm
                             </th>
-                            <th class="list-table-status">
-                                Trạng thái
-                            </th>
                             <th class="list-table-handle">
                                 Thao tác
                             </th>
@@ -77,20 +74,24 @@
                                 <th class="list-table-product-code" scope="col">
                                    
                                 </th>
+                                <th class="list-table-product-code" scope="col">
+                                   {{ $product->name }}
+                                </th>
+                                <th class="list-table-product-code" scope="col">
+                                   {{ $product->product_code }}
+                                </th>
                                 <th class="list-table-image" scope="col">   
                                     <img src="{{ asset($product->image) }}" alt="image" width="100px">
                                 </th>
                                 <th class="list-table-product">
-                                    Danh mục
+                                    
                                 </th>
                                 <th class="list-table-price">
-                                    Giá sản phẩm
-                                </th>
-                                <th class="list-table-status">
-                                    Trạng thái
+                                    {!! $product->price ? formatVND($product->price) : '' !!}
                                 </th>
                                 <th class="list-table-handle">
-                                    Thao tác
+                                    {{$product->id}}
+                                    
                                 </th>
                             </tr>
                             @endforeach
