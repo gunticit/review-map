@@ -21,3 +21,7 @@
     </div>
 </div>
 @endsection
+
+@section('script')
+<script src="{{ asset('js/main.js?'.config('constants.version')) }}"></script>
+@endsection

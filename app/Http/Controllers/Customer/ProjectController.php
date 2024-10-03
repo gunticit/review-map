@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Exceptions\ProcessException;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest;
 use App\Services\CommentService;

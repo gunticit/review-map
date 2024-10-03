@@ -7,6 +7,9 @@ use App\Http\Resources\VoucherResource;
 use App\Services\VoucherService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Voucher;
+use App\Http\Requests\VoucherRequest;
+use App\Helpers\Helper;
 
 class VoucherController extends Controller
 {
@@ -15,110 +18,71 @@ class VoucherController extends Controller
     {
         $this->voucherService = $voucherService;
     }
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        $data = array();
-        $vouchers = $this->voucherService->list($request);
-        $vouchers = VoucherResource::collection($vouchers)->resource;
+        $vouchers = Voucher::all();
         return view('pages.admin.voucher.list', [
             'vouchers' => $vouchers,
         ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $data = array();
         return view('pages.admin.voucher.create', $data);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(VoucherRequest $request)
     {
-        try{
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'parent' => 'nullable|exists:vouchers,id',
-                'description' => 'nullable|string',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Giới hạn kích thước ảnh 2MB
+        try {
+            $data = $request->except('_token');
+            Voucher::create($data);
+            return response()->json([
+                'status' => true,
+                'message' => 'Voucher created successfully!',
             ]);
-    
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-            $this->voucherService->create($request);
-            return redirect()->route('voucher.index')->with('success', 'Thêm Danh mục thành công');
-        }catch(\Exception $e){
-            return redirect()->back()->with('error', $e->getMessage());
+        } catch (\Exception $e) {
+            $module = 'Voucher';
+            Helper::trackingError($module, $e->getMessage());
+
+            return redirect()->bcak()->with(key: 'resp_error', value: 'An error occurred during the operation.');
         }
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        return view('pages.admin.voucher.show');
+        $voucher = Voucher::findOrFail($id);
+        return view('pages.admin.voucher.edit', compact('voucher'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        return view('pages.admin.voucher.edit');
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $voucher = Voucher::findOrFail($id);
+        $voucher->update($request->all());
+        return redirect()->route('voucher.index')->with('success', 'Cập nhật mã giảm giá thành công!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        try{
-            $this->voucherService->delete($id);
-            return redirect()->route('voucher.index')->with('success', 'Xoá Danh mục thành công');
-        }catch(\Exception $e){
-            return redirect()->back()->with('error', $e->getMessage());
+        try {
+            $voucher = Voucher::findOrFail($id);
+            $voucher->delete();
+
+            return redirect()->route('voucher.index')->with('success', 'Xóa mã giảm giá thành công!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Đã có lỗi xảy ra khi xóa mã giảm giá.');
         }
     }
-
-    public function vouchersList(Request $request){
+    public function vouchersList(Request $request)
+    {
         $data = $this->voucherService->fullList($request);
         return response()->json([
             'title' => 'Load data Danh mục',
             'data' => $data
         ]);
-    }
-    public function destroyVoucherById(string $id)
-    {
-        try{
-            $this->voucherService->delete($id);
-            return response()->json([
-                'status' => true,
-                'id' => $id,
-                'message' => 'Xoá Danh mục thành công'
-            ]);
-        }catch(\Exception $e){
-            return response()->json([
-                'status' => false,
-                'id' => $id,
-                'message' => $e->getMessage()
-            ]);
-        }
     }
 }

@@ -48,99 +48,44 @@
                     <thead>
                         <tr>
                             <th class="list-table-stt" scope="col">STT</th>
-                            <th class="list-table-name">
-                                Mã
-                            </th>
-                            <th>Thuộc nhóm</th>
-                            <th class="list-table-creater" scope="col">Tên mã</th>
-                            <th class="list-table-progree" scope="col">Mô tả</th>
-                            <th class="list-table-time" scope="col">Số tiền giảm</th>
-                            <th class="list-table-handle">
-                                Số lượng
-                            </th>
-                            <th>
-                                Ngày hết hạn
-                            </th>
+                            <th class="list-table-code">Mã</th>
+                            <th class="list-table-name" scope="col">Tên mã</th>
+                            <th class="list-table-description" scope="col">Mô tả</th>
+                            <th class="list-table-money" scope="col">Số tiền giảm</th>
+                            <th class="list-table-number" scope="col">Số lượng</th>
+                            <th class="list-table-date" scope="col">Ngày bắt đầu</th>
+                            <th class="list-table-actions" scope="col">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if(!empty($vouchers))
                             @foreach($vouchers as $voucher)
                                 <tr class="voucher-{{ $voucher->id }}">
-                                    <td class="list-table-stt" scope="col">{{ $voucher->id }}</td>
-                                    <td class="list-table-name">
-                                        {{ $voucher->name }}
-                                    </td>
-                                    <td class="list-table-name">
-                                        {{ $voucher->parent_name }}
-                                    </td>
-                                    <td class="list-table-creater" scope="col">
-                                    </td>
-                                    <td class="list-table-progree" scope="col">
-                                        {{ $voucher->status }}
-                                    </td>
-                                    <td class="list-table-time" scope="col">
-                                        {{ $voucher->ccreated_at }}
-                                    </td>
-                                    <td class="list-table-handle">
-                                        <button class="btn btn-default" type="button" onclick="handleDelete({{ $voucher->id }})">
-                                            <span class="material-symbols-outlined">
-                                                delete
-                                            </span>
-                                        </button>
+                                    <td class="list-table-stt">{{ $voucher->id }}</td>
+                                    <td class="list-table-code">{{ $voucher->code }}</td>
+                                    <td class="list-table-name">{{ $voucher->name }}</td>
+                                    <td class="list-table-description">{{ $voucher->description }}</td>
+                                    <td class="list-table-money">{{ number_format($voucher->discount_value) }} %</td>
+                                    <td class="list-table-money">{{ number_format($voucher->max_uses) }}</td>
+                                    <td class="list-table-date">{{ date('d/m/Y', strtotime($voucher->start_date)) }}</td>
+                                    <td class="list-table-actions">
+                                        <a href="{{ route('voucher.edit', $voucher->id) }}" class="btn btn-warning">Sửa</a>
+                                        <form action="{{ route('voucher.destroy', $voucher->id) }}" method="POST" style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
+                        @else
+                            <tr>
+                                <td colspan="11" class="text-center">Không có mã giảm giá nào được tìm thấy</td>
+                            </tr>
                         @endif
                     </tbody>
                 </table>
-                {{ $vouchers->links('vendor.pagination.custom') }}
             </div>
         </div>
     </section>
-    <script>
-        function handleDelete(id) {
-            if (id === null || id === undefined) {
-                alert('Lỗi: Không thể xóa bài viết!');
-                return;
-            }
-
-            if (confirm('Bạn có chắc muốn xoá ?')) {
-                $.ajax({
-                    url: "{{ route('destroy.voucher.id', ':id') }}".replace(':id', id),
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}' // Thêm CSRF token
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        if(response.status){
-                            $('#group-alert').append(`
-                                <div class="alert alert-success">
-                                    Xóa danh mục thành công
-                                </div>`);
-                            $('.voucher-' + id).remove();
-                        }else{
-                            $('#group-alert').append(`
-                                <div class="alert alert-error">
-                                    Xóa danh mục thất bại
-                                </div>`);
-                        }
-                        setTimeout(() => {
-                            $('.alert').remove();
-                        }, 5000);
-                    },
-                    error: function(xhr, status, error) {
-                        if (xhr.status === 404) {
-                            alert('Lỗi: Không tìm thấy bài viết!');
-                        } else if (xhr.status === 403) {
-                            alert('Lỗi: Không có quyền xóa bài viết!');
-                        } else {
-                            alert('Lỗi: ' + error);
-                        }
-                    }
-                });
-            }
-        }
-    </script>
 @endsection
