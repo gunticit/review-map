@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
             $table->string('code');
+            $table->string('name');
             $table->text('description');
             $table->enum('discount_type', array('fixed', 'percent'));
             $table->decimal('discount_value', 10, 0);
             $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->date(column: 'end_date')->nullable();
             $table->integer('max_uses')->default(0);
             $table->integer('uses_left')->default(0);
             $table->enum('status', ['active', 'expired', 'used', 'inactive']);

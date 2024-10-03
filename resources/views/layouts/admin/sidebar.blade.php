@@ -94,7 +94,7 @@
         <a class="nav-link {!! request()->routeIs('order.index') ? 'active' : '' !!}" href="{{ route('order.index') }}">Quản lý đơn đặt hàng</a>
     </nav>
 </div>
-<a class="nav-link" href="{{ route('support') }}">
+<a class="nav-link" href="{{ route('voucher.index') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             barcode_scanner

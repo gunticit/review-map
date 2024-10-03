@@ -94,28 +94,32 @@
                 </div>
         </form>
     </section>
-    <script>
-        $(document).ready(function () {
-            $('#inputFile').on('change', function () {
-                $('#previewImages').html('');
-                var files = this.files;
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
-                    if (file.type.match('image.*')) {
-                        var reader = new FileReader();
-                        reader.onload = (function (f) {
-                            return function (e) {
-                                var img = $('<img>').attr('src', e.target.result).attr('class', 'img-thumbnail').css({
-                                    'width': '150px', 
-                                    'margin': '10px'
-                                });
-                                $('#previewImages').append(img);
-                            };
-                        })(file);
-                        reader.readAsDataURL(file);
-                    }
+    
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#inputFile').on('change', function () {
+            $('#previewImages').html('');
+            var files = this.files;
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (file.type.match('image.*')) {
+                    var reader = new FileReader();
+                    reader.onload = (function (f) {
+                        return function (e) {
+                            var img = $('<img>').attr('src', e.target.result).attr('class', 'img-thumbnail').css({
+                                'width': '150px', 
+                                'margin': '10px'
+                            });
+                            $('#previewImages').append(img);
+                        };
+                    })(file);
+                    reader.readAsDataURL(file);
                 }
-            });
+            }
         });
-    </script>
+    });
+</script>
 @endsection
