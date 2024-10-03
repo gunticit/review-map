@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class VoucherRequest extends FormRequest
 {
@@ -21,8 +22,13 @@ class VoucherRequest extends FormRequest
      */
     public function rules(): array
     {
+        $voucherId = $this->route('voucher');
         return [
-            'code' => 'required|string|max:255|unique:vouchers,code',
+            'code' => [
+                'required',
+                'max:255',
+                Rule::unique('vouchers', 'code')->ignore($voucherId),
+            ],
             'description' => 'nullable|string',
             'discount_type' => 'required|in:fixed,percent',
             'discount_value' => 'required|numeric|min:0',
@@ -39,15 +45,15 @@ class VoucherRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'code.required' => 'The voucher code is required.',
-            'code.unique' => 'This voucher code has already been taken.',
-            'discount_type.required' => 'Please specify the discount type.',
-            'discount_value.required' => 'Please specify the discount value.',
-            'discount_value.numeric' => 'The discount value must be numeric.',
-            'start_date.date' => 'Please provide a valid start date.',
-            'end_date.after_or_equal' => 'The end date must be equal to or after the start date.',
-            'max_uses.required' => 'Please specify the maximum number of uses.',
-            'min_order_value.numeric' => 'The minimum order value must be numeric.',
+            'code.required' => 'Mã giảm giá là bắt buộc.',
+            'code.unique' => 'Mã giảm giá này đã được sử dụng.',
+            'discount_type.required' => 'Vui lòng chỉ định loại giảm giá.',
+            'discount_value.required' => 'Vui lòng nhập giá trị giảm giá.',
+            'discount_value.numeric' => 'Giá trị giảm giá phải là số.',
+            'start_date.date' => 'Vui lòng cung cấp ngày bắt đầu hợp lệ.',
+            'end_date.after_or_equal' => 'Ngày kết thúc phải bằng hoặc sau ngày bắt đầu.',
+            'max_uses.required' => 'Vui lòng chỉ định số lần sử dụng tối đa.',
+            'min_order_value.numeric' => 'Giá trị đơn hàng tối thiểu phải là số.',
         ];
     }
 }

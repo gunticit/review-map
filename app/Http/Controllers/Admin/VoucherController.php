@@ -14,6 +14,7 @@ use App\Helpers\Helper;
 class VoucherController extends Controller
 {
     protected $voucherService;
+
     public function __construct(VoucherService $voucherService)
     {
         $this->voucherService = $voucherService;
@@ -35,15 +36,16 @@ class VoucherController extends Controller
         try {
             $data = $request->except('_token');
             Voucher::create($data);
-            return response()->json([
-                'status' => true,
-                'message' => 'Voucher created successfully!',
-            ]);
+            return redirect()->route('voucher.index')->with('success', 'Thêm voucher thành công!');
         } catch (\Exception $e) {
-            $module = 'Voucher';
-            Helper::trackingError($module, $e->getMessage());
+            $logs = array(
+                'module' => 'Voucher',
+                'action' => 'Create',
+                'msg_log' => $e->getMessage(),
+            );
+            Helper::trackingError($logs);
 
-            return redirect()->bcak()->with(key: 'resp_error', value: 'An error occurred during the operation.');
+            return redirect()->back()->with(key: 'resp_error', value: 'An error occurred during the operation.');
         }
     }
     public function edit($id)
@@ -56,11 +58,15 @@ class VoucherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(VoucherRequest $request, $id)
     {
-        $voucher = Voucher::findOrFail($id);
-        $voucher->update($request->all());
-        return redirect()->route('voucher.index')->with('success', 'Cập nhật mã giảm giá thành công!');
+        try{
+            $voucher = Voucher::findOrFail($id);
+            $voucher->update($request->all());
+            return redirect()->route('voucher.index')->with('success', 'Cập nhật mã giảm giá thành công!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Đã có lỗi xảy ra khi cập nhật má giảm giá.');
+        }
     }
 
     /**

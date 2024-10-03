@@ -3173,7 +3173,9 @@ iframe {
   background: #fff;
   padding: 2px 3px;
 }
-
+.alert ul{
+  margin-bottom: 0;
+}
 .section .inputImg small {
   color: #5D6A83;
 }
