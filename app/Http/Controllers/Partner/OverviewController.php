@@ -3,28 +3,22 @@
 namespace App\Http\Controllers\Partner;
 
 use App\Http\Controllers\Controller;
-use App\Services\MissionService;
 use Illuminate\Http\Request;
 
-class MissionController extends Controller
+class OverviewController extends Controller
 {
-    protected $missionService;
-
-    public function __construct(MissionService $missionService){
-        $this->missionService = $missionService;
-    }
-
     /**
-     * Trang nhận nhiệm vụ
+     * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $data = array();
-        $user_id = auth()->user()->id;
-        $request = $request->merge(['user_id' => $user_id]);
-        $missions = $this->missionService->getRandomMission($request);
-        $data['missions'] = $missions;
-        return view('pages.partner.mission.index', $data);
+        $data = array(
+            'data_chars' => array(
+                'completed' => 0,
+                'money_earned' => 0
+            )
+        );
+        return view('pages.partner.overview.index', $data);
     }
 
     /**

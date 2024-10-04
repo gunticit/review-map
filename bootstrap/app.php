@@ -32,6 +32,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'locale' => \App\Http\Middleware\Locale::class,
             'auth' => \App\Http\Middleware\Authenticate::class,
+            'admin.auth' => \App\Http\Middleware\AdminAuth::class,
+            'customer.auth' => \App\Http\Middleware\CustomerAuth::class,
+            'partner.auth' => \App\Http\Middleware\PartnerAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

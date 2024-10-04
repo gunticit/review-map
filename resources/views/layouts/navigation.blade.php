@@ -28,7 +28,7 @@
 </script>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Navbar Brand-->
-    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="{{ route('home') }}">
+    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="{{ route('admin.overview.customer') }}">
         <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="rivi logo">
     </a>
     <!-- Sidenav Toggle Button-->

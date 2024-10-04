@@ -7,8 +7,8 @@
                     @include('layouts.customer.sidebar')
                 @endif
                 <!-- Sidenav partner -->
-                @if(Auth::user()->getRoleNames()->first() == 'parner')
-                    @include('layouts.admin.sidebar')
+                @if(Auth::user()->getRoleNames()->first() == 'partner')
+                    @include('layouts.partner.sidebar')
                 @endif
                 <!-- Sidenav Admin-->
                 @if(Auth::user()->getRoleNames()->first() == 'admin')

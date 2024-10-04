@@ -2,11 +2,8 @@
 
 namespace App\Services;
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Auth;
 use App\Repositories\Mission\MissionRepositoryInterface;
 use App\Http\Resources\MissionResource;
-use App\Models\Mission;
 use Illuminate\Validation\ValidationException;
 
 class MissionService {
@@ -27,7 +24,7 @@ class MissionService {
 
     public function list($request){
         $supports = $this->missionRepository->list($request);
-        $data = SupportResource::collection($supports)->resource;
+        $data = MissionResource::collection($supports)->resource;
         return $data;
     }
 

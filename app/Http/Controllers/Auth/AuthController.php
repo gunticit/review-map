@@ -23,7 +23,13 @@ class AuthController extends BaseController
     public function login()
     {
         if(Auth::check()){
-            return redirect()->route('home');
+            if(Auth::user()->getRoleNames()->first() == 'customer'){
+                return redirect()->route('customer.overview');
+            }
+            if(Auth::user()->getRoleNames()->first() == 'partner'){
+                return redirect()->route('partner.overview');
+            }
+            return redirect()->route('admin.overview.customer');
         }
         return view('auth.login');
     }
@@ -42,7 +48,13 @@ class AuthController extends BaseController
         try{
             $user = $this->authService->login($request);
             if(!empty($user)){
-                return redirect()->route('home');
+                if(Auth::user()->getRoleNames()->first() == 'customer'){
+                    return redirect()->route('customer.overview');
+                }
+                if(Auth::user()->getRoleNames()->first() == 'partner'){
+                    return redirect()->route('partner.overview');
+                }
+                return redirect()->route('admin.overview.customer');
             }
             Session::flash('error', __('auth.failed'));
             return redirect()->back()->withInput();

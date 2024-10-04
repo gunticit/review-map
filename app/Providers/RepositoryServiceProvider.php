@@ -25,6 +25,8 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Company\CompanyRepository;
 use App\Repositories\Company\CompanyRepositoryInterface;
+use App\Repositories\Mission\MissionRepository;
+use App\Repositories\Mission\MissionRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Order\OrderRepository;
@@ -59,6 +61,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
         $this->app->bind(ProductImageRepositoryInterface::class, ProductImageRepository::class);
+        $this->app->bind(MissionRepositoryInterface::class, MissionRepository::class);
     }
 
     /**

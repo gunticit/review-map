@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
         'prefix' => '/admin',
-        'middleware' => ['locale','auth']
+        'middleware' => ['admin.auth']
     ], function(){
         Route::group(['middleware' => ['locale','auth']], function(){
-        Route::get('/overview-customer',  [DashboardController::class, 'customerOverview'])->name('overview.customer');
-        Route::get('/overview-partner',  [DashboardController::class, 'partnerOverview'])->name('overview.partner');
+        Route::get('/overview-customer',  [DashboardController::class, 'customerOverview'])->name('admin.overview.customer');
+        Route::get('/overview-partner',  [DashboardController::class, 'partnerOverview'])->name('admin.overview.partner');
         Route::get('/order',  [DashboardController::class, 'order'])->name('order');
         Route::get('/approve-project',  [ApproveProjectController::class, 'index'])->name('approve.project');
         Route::resource('/statistics', StatisticController::class);

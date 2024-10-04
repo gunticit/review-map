@@ -15,34 +15,18 @@ Route::group([
         Route::post('/registerUser', 'AuthController@registerUser')->name('auth.registerUser');
     }
 );
-Route::group(['middleware' => 'locale'], function() {
-    Route::get('/home', [App\Http\Controllers\DashboardController::class, 'index'])->name('home');
-});
 // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::group([
-    'prefix' => '/v1/admin',
-    'as' => 'admin.',
-    'namespace' => 'App\Http\Controllers\Admin',
-    'middleware' => ['auth']], function () {
-        Route::get('/test', function(){
-            return 'test';
-        });
-});
+// Route::group([
+//     'prefix' => '/v1/admin',
+//     'as' => 'admin.',
+//     'namespace' => 'App\Http\Controllers\Admin',
+//     'middleware' => ['auth']], function () {
+//         Route::get('/test', function(){
+//             return 'test';
+//         });
+// });
 
-Route::group([
-    'prefix' => '/v1/customer',
-    'as' => 'customer.',
-    'namespace' => 'App\Http\Controllers\Customer',
-    'middleware' => ['auth', 'customer']], function () {
-});
-
-Route::group([
-    'prefix' => '/v1/guest',
-    'as' => 'guest.',
-    'namespace' => 'App\Http\Controllers\Guest',
-    'middleware' => ['auth', 'customer']], function () {
-});
 
 Route::group(['middleware' => 'locale'], function() {
     Route::get('change-language/{language}', 'App\Http\Controllers\DashboardController@changeLanguage')
