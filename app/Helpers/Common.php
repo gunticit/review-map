@@ -128,27 +128,27 @@
             $labelStatus = '';
             switch($status) {
                 case 0:
-                    $className = 'btn-danger';
+                    $className = 'text-danger';
                     $labelStatus = 'Huỷ';
                     break;
                 case 1:
-                    $className = 'btn-primary';
+                    $className = 'text-success';
                     $labelStatus = 'Đang thực hiện';
                     break;
                 case 2:
-                    $className = 'btn-success';
+                    $className = 'text-success';
                     $labelStatus = 'Hoàn thành';
                     break;
                 case 3:
-                    $className = 'btn-warning';
+                    $className = 'text-warning';
                     $labelStatus = 'Hoàn lại';
                     break;
                 case 4:
-                    $className = 'btn-danger';
+                    $className = 'text-warning';
                     $labelStatus = 'Tạm ngưng';
                     break;
                 case 5:
-                    $className = 'btn-warning';
+                    $className = 'text-warning';
                     $labelStatus = 'Chưa thanh toán';
                     break;
                 default:

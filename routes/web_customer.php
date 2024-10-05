@@ -19,10 +19,17 @@ Route::group([
     Route::get('/support-create', [SupportController::class, 'create'])->name('support.create');
     
     Route::get('/generate-comment', [ProjectController::class, 'generateComment'])->name('generate.comment');
+    Route::post('/list-order-project', [ProjectController::class, 'listOrderProject'])->name('list.order.project');
     Route::get('/list-projects', [ProjectController::class, 'index'])->name('project.list');
     Route::get('/create-project', [ProjectController::class, 'create'])->name('project.create');
+    Route::post('/order-project', [ProjectController::class, 'orderProject'])->name('order.project');
     Route::post('/create-project', [ProjectController::class, 'store'])->name('project.store');
     Route::get('/edit-project/{id}', [ProjectController::class, 'edit'])->name('project.edit');
     Route::put('/update-project/{id}', [ProjectController::class, 'update'])->name('project.update');
     Route::put('/update-status-project/{id}', [ProjectController::class, 'updateStatus'])->name('project.update.status');
+    Route::delete('/delete-project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
+    Route::delete('/delete-project-by-ids', [ProjectController::class, 'destroyByIds'])->name('project.destroy.ids');
+
+    Route::put('/update-order-project/{id}', [ProjectController::class, 'updateOrderProject'])->name('update.order.project');
+    Route::get('/page-order-project/{id}', [ProjectController::class, 'pageOrderProject'])->name('page.order.project');
 });

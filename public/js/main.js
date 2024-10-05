@@ -36,6 +36,7 @@ $(document).ready(function () {
             if (reload) window.location.reload();
         });
     }
+
     function showHideLoading() {
         $("#loading").fadeToggle(200);
     }

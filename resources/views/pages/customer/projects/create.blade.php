@@ -8,6 +8,7 @@
 <script src="https://kit.fontawesome.com/5ad6bf3d69.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+<script src="{{ asset('./js/main.js') }}"></script>
 <script src="{{ asset('./assets/js/map.js') }}"></script>
 <script>
     let latitude = Number('<?= $latitude ?>');
@@ -213,6 +214,14 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
+    <div class="loading-section">
+        <div class="loading-wave">
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+        </div>
+    </div>
     <form action="{{ route('project.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="container">
@@ -232,16 +241,52 @@
                             </div>
                         @endif
                         <div class="mb-4"><!-- class: invalid -->
-                            <label for="inputlist-table">{{ __('project.name') }} <span class="required">*</span>
-                            </label>
-                            <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="" required>
-                            @error('name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <small class="d-none">Tên dự án cho phép dưới 50 ký tự bao gồm các khoảng trắng.</small>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label for="inputlist-table">{{ __('Mã dự án') }} <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control require" id="project-code" readonly name="project_code" type="text" placeholder="RIVI" value="" required>
+                                    @error('project_code')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-9">
+                                    <label for="inputlist-table">{{ __('project.name') }} <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control require" id="name-project" name="name" type="text" placeholder="RIVI" value="" required>
+                                    @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    <small class="d-none">Tên dự án cho phép dưới 50 ký tự bao gồm các khoảng trắng.</small>
+                                </div>
+                            </div>
                         </div>
+                        <script>
+                            function removeAccents(str) {
+                                str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Loại bỏ dấu
+                                str = str.replace(/đ/g, 'd').replace(/Đ/g, 'D'); // Thay thế đ và Đ
+                                return str;
+                            }
+                            function getFirstLettersFromInput(selector) {
+                                var text = $(selector).val();
+                                var words = removeAccents(text).split(' ');
+                                var initials = '';
+
+                                words.forEach(function(word) {
+                                    initials += word.charAt(0).toUpperCase();
+                                });
+
+                                return initials;
+                            }
+                            $('#name-project').keyup(function(){
+                                let project_code = getFirstLettersFromInput('#name-project');
+                                $('#project-code').val('RIVI_' + project_code + '_' + Math.floor((Math.random() * 100) + 1));
+                            });
+                        </script>
                         <!-- Form Group (UrlMap)-->
                         <div class="mb-4"><!-- class: active -->
                             <label>{{ __('project.choose_map') }}<span class="required">*</span>

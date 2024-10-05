@@ -213,6 +213,14 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
+    <div class="loading-section">
+        <div class="loading-wave">
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+        </div>
+    </div>
     <form action="{{ route('project.update', ['id' => $project->id]) }}" id="form-create-project" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         @method('PUT')
@@ -367,7 +375,7 @@
                                 <span>{{ $project->total_rating_google }}</span>
                             </div>
                             <div id="rating-desire-group">
-                                <input type="hidden" name="rating_google" id="rating-google" value="{{ $project->rating_google }}"/>
+                                <input type="hidden" name="rating_google" id="rating-google" value="{{ $project->rating_google ?? 0 }}"/>
                                 <input type="number" onclick="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" value="{{ $project->rating_desire }}" name="rating_desire" id="rating-desire"/>
                             </div>
                         </div>

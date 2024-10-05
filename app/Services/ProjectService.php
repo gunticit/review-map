@@ -29,10 +29,12 @@ class ProjectService {
 
     public function list($request){
         $request = $request->merge(['user_id' => Auth::user()->id]);
+        $total_projects = $this->projectRepository->countData($request);
         $projects = $this->projectRepository->list($request);
         $projects = ProjectResource::collection($projects)->resource;
         $working = 0;
         $stopped = 0;
+        $unpaid = 0;
         foreach($projects as $project){
             if($project->status == 1){
                 $working++;
@@ -40,12 +42,16 @@ class ProjectService {
             if($project->status == 4){
                 $stopped++;
             }
+            if($project->status == 5){
+                $unpaid++;
+            }
         }
         $data = array(
             'projects' => $projects,
-            'total' => count($projects),
+            'total' => $total_projects,
             'working' => $working,
-            'stopped' => $stopped
+            'stopped' => $stopped,
+            'unpaid' => $unpaid
         );
         return $data;
     }
@@ -85,6 +91,11 @@ class ProjectService {
         return response()->json(['status' => 'Notification sent!']);
     }
 
+    public function findWithComments($project_id, $request){
+        $data = $this->projectRepository->findWithComments($project_id, $request);
+        return $data;
+    }
+
     public function updateStatus($request, $id){
         $data = [
             'status' => $request->status
@@ -93,10 +104,32 @@ class ProjectService {
         return $data;
     }
 
+    public function updateOrderProject($project_id){
+        // Xử lý api thanh toán 
+        // Xử lý lưu transaction
+        // Cập nhật lại trạng thái project từ chưa thanh toán sang đang hoạt động
+        $data = array(
+            'status' => 1,
+        );
+        $data = $this->projectRepository->update($data,$project_id);
+        return $data;
+    }
+
+    public function destroyByIds($request){
+        $ids = $request->ids;
+        if(count($ids) == 0){
+            throw new \Exception("Bạn phải chọn ít nhất một dự án để xóa");
+        }
+        $ids = $request->ids;
+        $data = $this->projectRepository->destroyByIds($ids);
+        return $data;
+    }
+
     private function filterData($request): array{
         $data = is_array($request) ? $request : $request->all();
         return array(
             'name' => $data['name'] ?? null,
+            'project_code' => $data['project_code'] ?? null,
             'description' => $data['description'] ?? null,
             'package' => $data['package'] ?? null,
             'is_slow' => $data['is_slow'] ?? null,
@@ -111,7 +144,7 @@ class ProjectService {
             'rating_google' => $data['rating_google'] ?? null,
             'total_rating_google' => $data['total_rating_google'] ?? null,
             'rating_desire' => $data['rating_desire'] ?? null,
-            'status' => $data['status'] ?? 1,
+            'status' => $data['status'] ?? 5,
         );
     }
 }

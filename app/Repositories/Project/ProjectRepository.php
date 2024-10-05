@@ -48,6 +48,13 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         return $this->model->with('images')->find($id);
     }
 
+    public function findWithComments($project_id, $request){
+        $query = $this->model->query();
+        $query->with('comments');
+        $query->where('id', $project_id);
+        return $query->first();
+    }
+
     public function countDataGroupMonth($filter = array()){
         $query = $this->model->query();
         $filter['year'] = $filter['year'] ?? date('Y');

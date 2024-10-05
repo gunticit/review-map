@@ -171,7 +171,6 @@ function handleWrongImage(id) {
         },
         dataType: 'json',
         success: function(data) {
-            console.log(data.id);   
             if(data.id){
                 $('.project-id-'+data.id).class('approve');
             }

@@ -26,4 +26,8 @@ class Project extends Model
     public function images(){
         return $this->hasMany(ProjectImage::class, 'project_id', 'id');
     }
+
+    public function comments(){
+        return $this->hasMany(Comment::class, 'project_id', 'id');
+    }
 }

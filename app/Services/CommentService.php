@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Jobs\GenerateCommentJob;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Comment\CommentRepositoryInterface;
+use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Validation\ValidationException;
 
 class CommentService {
@@ -35,15 +36,7 @@ class CommentService {
     }
 
     public function create($request){
-        $data = $this->filterData($request);
-        $data_create = array();
-        foreach($data['comment'] as $comment){
-            $data_create[] = array(
-                'project_id' => $data['project_id'],
-                'comment' => $comment,
-                'keyword' => $data['keyword']
-            );
-        }
+        $data_create = $this->filterData($request);
         $data = $this->commentRepository->insert($data_create);
         return $data;
     }
@@ -60,8 +53,43 @@ class CommentService {
     }
 
     public function generateComment($request){
-        GenerateCommentJob::dispatch($request);
-        return true;
+        // GenerateCommentJob::dispatch($request);
+        $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
+        $keyword_value = isset($request->keyword_value) ? explode(',', $request->keyword_value): array();
+        $common = array_intersect($keyword, $keyword_value);
+        $diff1 = array_diff($keyword, $keyword_value);
+        $diff2 = array_diff($keyword_value, $keyword);
+        $keywords = array_merge($diff1, $diff2, $common);
+        $comments = '';
+        $sl_comment = 10;
+        if(isset($request->package)){
+            switch($request->package){
+                case '1':
+                    $sl_comment = 10;
+                    break;
+                case '2':
+                    $sl_comment = 50;
+                    break;
+                case '3':
+                    $sl_comment = 100;
+                    break;
+                default: 
+                    $sl_comment = 200;
+                    break;
+            }
+        }
+        if(!empty($keywords)){
+            $stream = Gemini::geminiPro()
+                ->generateContent('Tạo cho tôi '.$sl_comment.' comments cuối mỗi comment cách nhau bởi dấu | cho mô tả sau "'.$request->description.'" và keyword chủ đề là: ', implode(', ', $keywords));
+            if(!empty($stream)){
+                foreach ($stream as $response) {
+                    if(!empty($response[0]->content->parts[0]->text)){
+                        $comments =  $response[0]->content->parts[0]->text;
+                    }
+                }
+            }
+        }
+        return $comments;
 
     }
 
