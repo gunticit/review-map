@@ -102,7 +102,7 @@
                                 <a href="{{ route('project.edit', ['id' => $project->id]) }}">{{ $project->name }}</a>
                             </td>
                             <td class="list-table-link-map">
-                                <a class="btn" target="_blank" href="{{ route('project.edit', ['id' => $project->id]) }}" role="button">
+                                <a class="btn" target="_blank" href="https://www.google.com/maps/place/?q=place_id:{{$project->place_id}}" role="button">
                                     <span class="material-symbols-outlined">link</span>
                                 </a>
                             </td>

@@ -1,5 +1,36 @@
 @extends('layouts.app')
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .textarea-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    #comment-textarea.loading {
+        background-color: #f0f0f0; /* Màu nền cho hiệu ứng loading */
+        color: transparent; /* Làm chữ không hiển thị */
+    }
+
+    .loading .loading-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top: 4px solid #007bff;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
     <!-- danh-sach-du-an -->
     <section class="section tao-du-an mb-5 mt-5">
         <div class="loading-section">
@@ -42,18 +73,21 @@
                                 @if(!empty($projects))
                                     @foreach($projects as $key => $project)
                                         <tr>
-                                            <td class="list-table-stt" scope="col">{{ $key + 1 }}</td>
-                                            <td class="list-table-time" scope="col">{{ $project_info->project_code }}</td>
-                                            <td class="list-table-so-tien" scope="col">{{ $project->comment }} 
-                                                <button class="btn btn-default p-0 bg-white ms-2"><span class="material-symbols-outlined">
-                                                    border_color
-                                                </span></button>
+                                            <td class="list-table-stt" scope="col">{{ $key + 1 }}<input type="hidden" class="comment-id" value="{{ $project->id }}"></td>
+                                            <td class="list-table-time" scope="col">RO-{{ $project->id }}</td>
+                                            <td class="list-table-content" scope="col">
+                                                <div class="content-comment-{{ $project->id }}">{{ $project->comment }}
+                                                    <button type="button" class="btn btn-default render-comment-again p-0 bg-white ms-2">
+                                                        <span class="material-symbols-outlined">
+                                                            border_color
+                                                        </span>
+                                                    </button>
+                                                </div> 
+                                                <input type="text" class="text-comment d-none ip-comment-id-{{ $project->id }}" value="{{ $project->comment }}">
                                             </td>
                                             <td class="list-table-content-3" scope="col">{{ $project_info->point_slow }}</td>
                                             <td class="list-table-so-du" scope="col">
-                                                <span class="material-symbols-outlined">
-                                                    wallpaper
-                                                </span>
+                                                {!! $project_info->has_image?'Có':'Không' !!}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -125,7 +159,7 @@
                         
                         <div class="mb-4 total d-flex justify-content-between align-items-center">
                             <label for="total" class="fw-700">Tổng cộng</label>
-                            <h4>1,666,000 VND</h4>
+                            <h4>{!! number_format($price_order, 0, ',', '.') . ' VND'; !!}</h4>
                         </div>
 
                         <button type="button" id="btn-deposit" class="btn btn-primary btn-full" > Thanh toán </button>
@@ -142,29 +176,138 @@
                         </div>
                         <p class="text-center"><i style="color: #f00">(Tính năng đang phát triển)</i></p>
                         <div class="modal-body">
-                            <div class="depositAmount mb-4">
+                            {{-- <div class="depositAmount mb-4">
                                 <label class="d-block" for="depositAmount">Số tiền nạp</span></label>
                                 <input type="text" readonly class="form-control" name="depositAmount" id="depositAmount5" placeholder="Số tiền khác" />
-                            </div>
+                            </div> --}}
                             <div class="mb-4">
-                                <label for="payment-info">Thống tin thanh toán</label>
+                                <label for="payment-info">Thông tin thanh toán</label>
                             </div>
                             <div class="mb-4 total d-flex justify-content-between align-items-center">
                                 <label for="total" class="fw-700">Tổng cộng</label>
-                                <h4>1,666,000 VND</h4>
+                                <h4>{!! number_format($price_order, 0, ',', '.') . ' VND'; !!}</h4>
                             </div>
-                            <button type="button" id="btn-deposit" class="btn btn-primary btn-full" > Xác nhận </button>
+                            <button type="button" id="btn-confirm-deposit" class="btn btn-primary btn-full" > Xác nhận </button>
                         </div>
                     </div>
                 </div>      
             </div>
         </div>
     </section>
-
+    <div class="modal fade" id="modalComment" tabindex="-1" aria-labelledby="modalCommentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p class="text-center text-black">Nội dung được RIVI AI tự sinh ra dựa theo từ khóa: <span id="keyword-comment">"{{ $project->keyword }}"</span></p>
+              <div class="textarea-wrapper group-comment-text">
+                <textarea readonly id="comment-textarea" class="form-control" rows="5"></textarea>
+                <div class="loading-spinner"></div>
+              </div>
+              <input type="hidden" name="comment_id_edit" id="comment-id-edit"/>
+            </div>
+            <div class="modal-footer justify-space-between">
+              <button type="button" id="btn-comment-auto" class="btn btn-outline-primary">Tạo nội dung tự động</button>
+              <button type="button" class="btn btn-primary" id="btn-confirm-comment" data-bs-dismiss="modal">Đồng ý</button>
+            </div>
+          </div>
+        </div>
+    </div>
     <script>
+        function startLoading() {
+            $('#comment-textarea, .group-comment-text').addClass('loading');
+            $('.loading-spinner').show();
+        }
+
+        function stopLoading() {
+            $('#comment-textarea, .group-comment-text').removeClass('loading');
+            $('.loading-spinner').hide();
+        }
+
         $(document).ready(function() {
             $('#btn-deposit').on('click', function(){
                 $('#depositModal').modal('show');
+            });
+            $('.render-comment-again').on('click', function(e){
+                e.stopPropagation();
+                let comment_val = $(this).closest('tr').find('.text-comment').val();
+                let comment_id = $(this).closest('tr').find('.comment-id').val();
+                $('#comment-textarea').val(comment_val);
+                $('#comment-id-edit').val(comment_id);
+                $('#modalComment').modal('show');
+            });
+            $('body #btn-comment-auto').on('click', function(){
+                $(this).attr('disabled', 'disabled');
+                let comment_val = $('body #comment-textarea').val();
+                startLoading();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('generate.comment.sample') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        keyword: "{{ $project->keyword }}",
+                        comment_sample: comment_val
+                    },
+                    success: function(response) {
+                        $('#comment-textarea').val(response);
+                    },
+                    complete: function() {
+                        stopLoading();
+                        $('body #btn-comment-auto').removeAttr('disabled');
+                    }
+                });
+            });
+            $('body #btn-confirm-comment').on('click', function(){
+                $(this).attr('disabled', 'disabled');
+                let comment_val = $('body #comment-textarea').val();
+                let comment_id = $('body #comment-id-edit').val();
+                startLoading();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('update.new.comment', ['id' => ':id']) }}".replace(':id', comment_id),
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        comment: comment_val
+                    },
+                    success: function(response) {
+                        $('.ip-comment-id-'+response.id).val(response.comment);
+                        $('.content-comment-'+response.id).html(response.comment);
+                        Swal.fire({
+                            title: "Thông báo",
+                            text: "Cập nhật comment thành công",
+                            icon: "success"
+                        });
+                    },
+                    complete: function() {
+                        stopLoading();
+                        $('#comment-textarea').val('');
+                        $('#comment-id-edit').val('');
+                        $('body #btn-confirm-comment').removeAttr('disabled');
+                    }
+                });
+            });
+            $('body #btn-confirm-deposit').on('click', function(){
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('confirm.checkout') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        project_id: "{{ $project_info->id }}"
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            title: "Thông báo",
+                            text: "Thanh toán thành công",
+                            icon: "success"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{{ route('project.list') }}";
+                            }
+                        });
+                    }
+                })
             });
         });
     </script>

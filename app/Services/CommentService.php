@@ -52,6 +52,15 @@ class CommentService {
         return $data; 
     }
 
+    public function updateNewComment($request, $id){
+        $comment = $request->comment ?? '';
+        if($comment !== ''){
+            $data = $this->commentRepository->update(['comment' => $comment], $id);
+            return $data;
+        }
+        return [];
+    }
+
     public function generateComment($request){
         // GenerateCommentJob::dispatch($request);
         $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
@@ -90,7 +99,23 @@ class CommentService {
             }
         }
         return $comments;
-
+    }
+    
+    public function generateCommentBySample($request){
+        $keyword = isset($request->keyword) ? $request->keyword: '';
+        $sample = isset($request->comment_sample) ? $request->comment_sample : '';
+        $comments = '';
+        if(!empty($keyword) && !empty($sample)){
+            $stream = Gemini::geminiPro()->generateContent('Tạo cho tôi comment tương tự như comment sau '.$sample.' và keyword chủ đề là: ', $keyword);
+            if(!empty($stream)){
+                foreach ($stream as $response) {
+                    if(!empty($response[0]->content->parts[0]->text)){
+                        $comments =  $response[0]->content->parts[0]->text;
+                    }
+                }
+            }
+        }
+        return $comments;
     }
 
     private function filterData($request): array{

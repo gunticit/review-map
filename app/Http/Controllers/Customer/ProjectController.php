@@ -163,8 +163,9 @@ class ProjectController extends Controller
 
     public function pageOrderProject($project_id, Request $request){
         $project_comments = $this->projectService->findWithComments($project_id, $request);
-        dd($project_comments);
-        $projects = array();
+        if($project_comments->status !== 5){
+            return redirect()->route('project.list');
+        }
         if($project_comments && $project_comments->comments){
             $comments = $project_comments->comments;
             $perPage = 15;
@@ -178,10 +179,29 @@ class ProjectController extends Controller
                 ['path' => LengthAwarePaginator::resolveCurrentPath()]
             );
         }
+        $price_order = 0;
+        if($project_comments->package){
+            $price_order = match ($project_comments->package) {
+                1, "1" => 45000 * 10,
+                2, "2" => 35000 * 50,
+                3, "3" => 30000 * 100,
+                4, "4" => 25000 * 200,
+                default => 0
+            };
+        }
         return view('pages.customer.projects.order', [
             'projects' => $paginatedComments,
-            'project_info' => $project_comments
+            'project_info' => $project_comments,
+            'price_order' => $price_order
         ]);
+    }
+
+    public function generateCommentBySample(Request $request){
+        return $this->commentService->generateCommentBySample($request);
+    }
+
+    public function updateNewComment(Request $request, string $id){
+        return $this->commentService->updateNewComment($request, $id);
     }
 
     public function destroyByIds(Request $request){

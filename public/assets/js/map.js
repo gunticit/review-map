@@ -106,6 +106,7 @@ function handleRatingDesire() {
     $('body #rating-desire-group .alert').remove();
     let rating_desire = $('body #rating-desire').val();
     let rsTest = $('body #avg-rating').text().trim();
+    rsTest = parseFloat((rsTest) + 0.2).toFixed(1);
     if (rating_desire.includes(',')) {
         rating_desire = rating_desire.replace(',', '.');
     }
@@ -118,8 +119,10 @@ function handleRatingDesire() {
         $('body #rating-desire-group').append('<p class="alert text-danger">Vui lòng nhập giá trị mong muốn</p>');
     }else{
         $('body #rating-desire').removeClass('border-error');
-        if(rating_desire < 4.1) {
+        if(rating_desire < 4.1 && rsTest < 4.1) {
             $('body #rating-desire').val(4.1);
+        }else if(rating_desire < 4.1 && rsTest > 4.1) {
+            $('body #rating-desire').val(rsTest);
         }
         if(rating_desire > 4.9) {
             $('body #rating-desire').val(4.9);
@@ -128,11 +131,10 @@ function handleRatingDesire() {
             if(rating_desire > rsTest) {
                 $('body #rating-desire').val(rating_desire);
             }else{
-                let check = parseFloat((rsTest) + 0.2).toFixed(1);
-                if(check > 4.9) {
+                if(rsTest > 4.9) {
                     $('body #rating-desire').val(4.9);
                 }else{
-                    $('body #rating-desire').val(check);
+                    $('body #rating-desire').val(rsTest);
                 }
             }
         }
