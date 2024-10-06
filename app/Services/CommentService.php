@@ -102,7 +102,7 @@ class CommentService {
             'project_id' => $data['project_id'] ?? null,
             'comment' => $data['comment'] ?? null,
             'keyword' => $keyword,
-            'is_used' => $data['is_used'] ?? null,
+            'is_used' => $data['is_used'] ?? 0,
         );
     }
 }

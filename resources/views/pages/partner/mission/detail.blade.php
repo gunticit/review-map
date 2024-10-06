@@ -13,7 +13,7 @@
                 <p class="card-text mb-0">Bạn cần đánh giá 5 sao cho map</p>
                 <h4 class="d-flex my-3 justify-content-center text-primary">{{ $mission->project->name }}</h4>
                 <p style="color: #96A3BE">Vui lòng copy nội dung bên dưới</p>
-                <div class="p-5 text-center bg-body-tertiary rounded-3">
+                <div id="content-mission" class="p-5 text-center bg-body-tertiary rounded-3">
                     {{ $mission->comments->comment }}
                 </div>
                 <div class="text-end">
@@ -24,7 +24,7 @@
                         Copy nội dung
                     </button>
 
-                    <button class="btn btn-outline-black mt-3" id="btn-copy">
+                    <button class="btn btn-outline-black mt-3" id="btn-download-image">
                         <span class="material-symbols-outlined">
                             download
                         </span>
@@ -42,4 +42,15 @@
             </div>
         </div>
     </section>
+    <script>
+        $('#btn-copy').on('click', function() {
+            var content = $('#content-mission').text();
+            var $tempInput = $('<textarea>');
+            $('body').append($tempInput);
+            $tempInput.val(content).select();
+            document.execCommand('copy');
+            $tempInput.remove();
+            alert('Đã sao chép nội dung!');
+        });
+    </script>
 @endsection

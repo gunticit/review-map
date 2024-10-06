@@ -24,7 +24,7 @@
                     near_me
                     </span></a>
                 <p style="color: #96A3BE">Vui lòng nhập link chia sẻ</p>
-                <input class="bg-body-tertiary rounded-3 p-2 input-link-confirm" type="text" value="{{ $mission->link_confirm }}">
+                <input class="bg-body-tertiary rounded-3 p-2 input-link-confirm" type="text" value="{{ $mission->link_confirm ?? '' }}">
                 <div class="mt-3 d-flex justify-content-center">
                     <a href="javascript:void(0)" id="btn-confirm-mission" class="btn btn-success">
                         Xác nhận hoàn thành 

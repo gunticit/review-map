@@ -36,7 +36,7 @@ class MissionService {
     public function update($request, $id){
         $mission = $this->missionRepository->update([
             'status' => 1,
-            'link_confirm' => $request->link_confirm
+            'link_confirm' => $request->link_confirm ?? '',
         ], $id);
         return $mission;
     }

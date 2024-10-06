@@ -19,7 +19,7 @@ class CommentResource extends JsonResource
             'comment'     => $this->comment,
             'project_id'   => $this->project_id,
             'keyword'  => $this->keyword,
-            'is_used' => $this->is_used,
+            'is_used' => $this->is_used ?? 0,
         ];
     }
 }
