@@ -435,7 +435,9 @@
                             <li>Đồ uống tại quán cà phê ngon và đa dạng , không gian sang trong và sạch sẽ</li>
                             <li>Quán cà phê ngon, đồ uống chất lượng, không gian yên tĩnh và thư giãn</li>
                         </ul>
-                        <input class="btn btn-primary btn-full" type="button" id="btn-submit" value="Đặt đơn" />
+                        @if($project->status == 5)
+                            <input class="btn btn-primary btn-full" type="button" id="btn-submit" value="Đặt đơn" />
+                        @endif
                     </div>
                 </div>
             </div>
