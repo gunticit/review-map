@@ -29,6 +29,7 @@ class ProjectResource extends JsonResource
             'place_id' => $this->place_id,
             'status'  => $this->status,
             'comments' => CommentResource::collection($this->comments),
+            'images' => ProjectImageResource::collection($this->images),
         ];
     }
 }

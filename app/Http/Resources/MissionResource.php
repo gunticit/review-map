@@ -14,6 +14,13 @@ class MissionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'comment' => $this->comments->comment,
+            'keyword' => $this->comments->keyword,
+            'project_name' => $this->project->name,
+            'project_code' => $this->project->project_code,
+            'project_description' => $this->project->description,
+            'project' => new ProjectResource($this->project)
+        ];
     }
 }

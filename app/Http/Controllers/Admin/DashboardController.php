@@ -23,13 +23,13 @@ class DashboardController extends Controller
         $total_project_working = 0;
         $total_project_guarantee = 0;
         foreach($total_project_status as $project_status){
-            if($project_status->status == 1){
+            if($project_status->status == Project::COMPLETED_PROJECT){
                 $total_project_complete = $project_status->count;
             }
-            if($project_status->status == 2){
+            if($project_status->status == Project::WORKING_PROJECT){
                 $total_project_working = $project_status->count;
             }
-            if($project_status->status == 4){
+            if($project_status->status == Project::STOPPED_PROJECT){
                 $total_project_pause = $project_status->count;
             }
             $total_project_guarantee = 0;

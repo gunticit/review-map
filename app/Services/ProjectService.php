@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Http\Resources\ProjectResource;
+use App\Models\Project;
 use App\Traits\PusherTrait;
 use Illuminate\Validation\ValidationException;
 
@@ -36,10 +37,10 @@ class ProjectService {
         $stopped = 0;
         $unpaid = 0;
         foreach($projects as $project){
-            if($project->status == 1){
+            if($project->status == Project::WORKING_PROJECT){
                 $working++;
             }
-            if($project->status == 4){
+            if($project->status == Project::STOPPED_PROJECT){
                 $stopped++;
             }
             if($project->status == 5){

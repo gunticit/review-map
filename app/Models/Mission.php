@@ -14,4 +14,11 @@ class Mission extends Model
     public $timestamps = true;
     const STATUS_SUCCESS = 1;
     const STATUS_WORKING = 2;
+
+    public function comments(){
+        return $this->belongsTo(Comment::class, 'comment_id', 'id');
+    }
+    public function project(){
+        return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
 }

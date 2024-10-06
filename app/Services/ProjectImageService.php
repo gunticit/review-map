@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\ProjectImage\ProjectImageRepositoryInterface;
 use App\Http\Resources\ProjectImageResource;
+use App\Models\Project;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -32,10 +33,10 @@ class ProjectImageService {
         $working = 0;
         $stopped = 0;
         foreach($projectImages as $projectImage){
-            if($projectImage->status == 1){
+            if($projectImage->status == Project::WORKING_PROJECT){
                 $working++;
             }
-            if($projectImage->status == 4){
+            if($projectImage->status == Project::STOPPED_PROJECT){
                 $stopped++;
             }
         }

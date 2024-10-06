@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('project_id');
+            $table->integer('comment_id');
             $table->integer('status'); // 2: Đang thực hiện, 1: Đã hoàn thành
+            $table->string('link_confirm')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

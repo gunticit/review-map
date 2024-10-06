@@ -14,4 +14,7 @@ Route::group([
     Route::resource('/mission',  MissionController::class);
     Route::get('/wallet-withdraw',  [WalletController::class, 'withdraw'])->name('wallet.withdraw');
     Route::get('/store-product',  [ProductController::class, 'index'])->name('store.product');
+    Route::post('/create-mission-ajax', [MissionController::class, 'createMissionAjax'])->name('create.mission.ajax');
+    Route::get('/mission/confirm/{id}', [MissionController::class, 'missionConfirm'])->name('mission.confirm');
+    Route::get('/mission-success', [MissionController::class, 'success'])->name('mission.success');
 });

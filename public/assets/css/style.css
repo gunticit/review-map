@@ -2663,7 +2663,7 @@ iframe {
 
 .btn.btn-outline-primary, .btn.btn-primary {
   padding: 15px 20px;
-  display: inline-block;
+  /* display: inline-block; */
 }
 .btn.btn-lg {
   min-width: 210px;

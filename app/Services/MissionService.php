@@ -28,6 +28,19 @@ class MissionService {
         return $data;
     }
 
+    public function find($id){
+        $mission = $this->missionRepository->find($id);
+        return $mission;
+    }
+
+    public function update($request, $id){
+        $mission = $this->missionRepository->update([
+            'status' => 1,
+            'link_confirm' => $request->link_confirm
+        ], $id);
+        return $mission;
+    }
+
     public function getRandomMission($request){
         $data = $this->missionRepository->getRandomMission($request);
         return $data;

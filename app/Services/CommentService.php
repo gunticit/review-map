@@ -101,7 +101,8 @@ class CommentService {
         return array(
             'project_id' => $data['project_id'] ?? null,
             'comment' => $data['comment'] ?? null,
-            'keyword' => $keyword
+            'keyword' => $keyword,
+            'is_used' => $data['is_used'] ?? null,
         );
     }
 }

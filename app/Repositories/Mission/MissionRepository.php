@@ -31,6 +31,14 @@ class  MissionRepository extends BaseRepository implements MissionRepositoryInte
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
+    public function find($id){
+        $query = $this->model->query();
+        $query->with('comments');
+        $query->with('project');
+        $query->where('id', $id);
+        return $query->first();
+    }
+
     public function getRandomMission($request){
         if(isset($request->user_id) && Auth::user()->getRoleNames()->first() === 'partner'){
             $query = $this->model->query();
