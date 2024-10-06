@@ -700,6 +700,7 @@
             });
             $('#btn-submit').on('click', function(e){
                 e.preventDefault();
+                $('.loading-section').show();
                 let checkValidate = validateRequiredFields();
                 
                 if ($('.alert').length === 0 && checkValidate) {

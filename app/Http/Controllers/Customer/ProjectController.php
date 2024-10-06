@@ -65,13 +65,11 @@ class ProjectController extends Controller
                 if(!empty($comments)){
                     $comments = explode('|', $comments);
                     foreach($comments as $comment){
-                        if($comment != ''){
-                            $data_comment = array(
-                                'project_id' => $project_id,
-                                'comment' => $comment,
-                                'keyword' => implode(',', $keyword_data)
-                            );
-                        }
+                        $data_comment = array(
+                            'project_id' => $project_id,
+                            'comment' => $comment,
+                            'keyword' => implode(',', $keyword_data)
+                        );
                         $this->commentService->create($data_comment);
                     }
                 }
