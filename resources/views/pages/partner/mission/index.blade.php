@@ -21,23 +21,21 @@
     <script>
         $(document).ready(function() {
             $('#btn-create-mission').click(function(){
-                if($project->id){
-                    $.ajax({
-                        url: "{{ route('create.mission.ajax') }}",
-                        type: "POST",
-                        data: {
-                            '_token': '{{ csrf_token() }}',
-                            'project_id': {{$project->id}},
-                            'user_id': {{$user_id}}
-                        },
-                        dataType: 'json',
-                        success: function(data) {
-                            if(data.status == 'success'){
-                                location.href = "{{ route('mission.show', ['mission' => ':id']) }}".replace(':id', data.data.id);
-                            }
+                $.ajax({
+                    url: "{{ route('create.mission.ajax') }}",
+                    type: "POST",
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'project_id': {{$project->id}},
+                        'user_id': {{$user_id}}
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if(data.status == 'success'){
+                            location.href = "{{ route('mission.show', ['mission' => ':id']) }}".replace(':id', data.data.id);
                         }
-                    });
-                }
+                    }
+                });
             });
         });
     </script>

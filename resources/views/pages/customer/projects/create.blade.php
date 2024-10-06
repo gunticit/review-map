@@ -242,17 +242,12 @@
                         @endif
                         <div class="mb-4"><!-- class: invalid -->
                             <div class="row">
-                                <div class="col-sm-3">
+                                <div class="col-sm-3 d-none">
                                     <label for="inputlist-table">{{ __('Mã dự án') }} <span class="required">*</span>
                                     </label>
                                     <input class="form-control require" id="project-code" readonly name="project_code" type="text" placeholder="RIVI" value="" required>
-                                    @error('project_code')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
-                                <div class="col-sm-9">
+                                <div class="col-sm-12">
                                     <label for="inputlist-table">{{ __('project.name') }} <span class="required">*</span>
                                     </label>
                                     <input class="form-control require" id="name-project" name="name" type="text" placeholder="RIVI" value="" required>
@@ -472,6 +467,10 @@
             $('#CheckUrl').modal('hide');
             $('#video-intro').hide();
             $('#info-map-reviews').show();
+            let ratingGoogle = $('#rating-google').val();
+            if(ratingGoogle == 0){
+                alert('Vị trí đánh giá không hợp lệ!');
+            }
             
             if($('#place-id').val() == ''){
                 $('.btn-check-map').addClass('border-error');
@@ -564,16 +563,16 @@
                 $('#info-map-reviews .group-reviews-alert').remove();
             }, 3500);
         }
-        $('#inputReview').on('change', function(){
-            if($(this).val()){
-                $('#inputRaiCham').prop('readonly',false);
-                $('#inputRaiChamCheck').prop('checked', true);
-                $('#inputRaiCham').focus();
-            }else{
-                $('#inputRaiCham').prop('readonly',true);
-                $('#inputRaiChamCheck').prop('checked', false);
-            }
-        })
+        // $('#inputReview').on('change', function(){
+        //     if($(this).val()){
+        //         $('#inputRaiCham').prop('readonly',false);
+        //         $('#inputRaiChamCheck').prop('checked', true);
+        //         $('#inputRaiCham').focus();
+        //     }else{
+        //         $('#inputRaiCham').prop('readonly',true);
+        //         $('#inputRaiChamCheck').prop('checked', false);
+        //     }
+        // })
         $('#inputRaiChamCheck').on('change', function(){
             if($(this).is(':checked')){
                 $('#inputRaiCham').prop('readonly',false);
@@ -700,7 +699,7 @@
             });
             $('#btn-submit').on('click', function(e){
                 e.preventDefault();
-                $('.loading-section').show();
+                // $('.loading-section').show();
                 let checkValidate = validateRequiredFields();
                 
                 if ($('.alert').length === 0 && checkValidate) {

@@ -38,7 +38,6 @@ class MissionService {
             'status' => 1,
             'link_confirm' => $request->link_confirm ?? '',
         ], $id);
-        dd($mission);
         return $mission;
     }
 

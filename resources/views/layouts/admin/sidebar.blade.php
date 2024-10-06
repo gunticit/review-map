@@ -8,8 +8,8 @@
 </a>
 <div class="collapse {!! request()->routeIs('home') || request()->routeIs('overview.customer') || request()->routeIs('overview.partner') ? 'show' : '' !!}" id="collapseHome" data-bs-parent="#accordionHome">
     <nav class="sidenav-menu-nested nav accordion" id="accordionHomeChild">
-        <a class="nav-link {!! request()->routeIs('overview.customer') ? 'active' : '' !!}" href="{{ route('overview.customer') }}"><?= __('menu.home_customer') ?></a>
-        <a class="nav-link {!! request()->routeIs('overview.partner') ? 'active' : '' !!}" href="{{ route('overview.partner') }}"><?= __('menu.home_partner') ?></a>
+        {{-- <a class="nav-link {!! request()->routeIs('overview.customer') ? 'active' : '' !!}" href="{{ route('overview.customer') }}"><?= __('menu.home_customer') ?></a> --}}
+        {{-- <a class="nav-link {!! request()->routeIs('overview.partner') ? 'active' : '' !!}" href="{{ route('overview.partner') }}"><?= __('menu.home_partner') ?></a> --}}
     </nav>
 </div>
 <a class="nav-link" href="{{ route('support') }}">

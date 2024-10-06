@@ -44,7 +44,11 @@
                                         <tr>
                                             <td class="list-table-stt" scope="col">{{ $key + 1 }}</td>
                                             <td class="list-table-time" scope="col">{{ $project_info->project_code }}</td>
-                                            <td class="list-table-so-tien" scope="col">{{ $project->comment }}</td>
+                                            <td class="list-table-so-tien" scope="col">{{ $project->comment }} 
+                                                <button class="btn btn-default p-0 bg-white ms-2"><span class="material-symbols-outlined">
+                                                    border_color
+                                                </span></button>
+                                            </td>
                                             <td class="list-table-content-3" scope="col">{{ $project_info->point_slow }}</td>
                                             <td class="list-table-so-du" scope="col">
                                                 <span class="material-symbols-outlined">

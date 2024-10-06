@@ -71,7 +71,7 @@ function initMap() {
             </div>
             <div id="rating-desire-group">
                 <input type="hidden" name="rating_google" id="rating-google" value="${place?.rating !== undefined ? place?.rating : 0}"/>
-                <input type="number" onclick="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" name="rating_desire" id="rating-desire"/>
+                <input type="text" onchange="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" name="rating_desire" id="rating-desire"/>
             </div>
             `;
             const stars = document.querySelectorAll('.list-star .fa-star');
@@ -104,17 +104,37 @@ function initMap() {
 
 function handleRatingDesire() {
     $('body #rating-desire-group .alert').remove();
-    if($('body #rating-desire').val() == 0 || $('body #rating-desire').val() == null || $('body #rating-desire').val() == ''){
+    let rating_desire = $('body #rating-desire').val();
+    let rsTest = $('body #avg-rating').text().trim();
+    if (rating_desire.includes(',')) {
+        rating_desire = rating_desire.replace(',', '.');
+    }
+    rating_desire = parseFloat(rating_desire);
+    if (!isNaN(rating_desire)) {
+        $('body #rating-desire').val(rating_desire.toFixed(1));
+    } 
+    if(rating_desire == 0 || rating_desire == null || rating_desire == ''){
         $('body #rating-desire').addClass('border-error');
         $('body #rating-desire-group').append('<p class="alert text-danger">Vui lòng nhập giá trị mong muốn</p>');
     }else{
         $('body #rating-desire').removeClass('border-error');
-        let rsTest = $('#avg-rating').text().trim();
-        if($('body #rating-desire').val() < 4.1 && $('body #rating-desire').val() > Number(rsTest) && $('body #rating-desire').val() < 5) {
+        if(rating_desire < 4.1) {
             $('body #rating-desire').val(4.1);
-        } else if($('body #rating-desire').val() > 4.1 && $('body #rating-desire').val() < Number(rsTest) && $('body #rating-desire').val() < 5) {
-            let rsDesire = Number(rsTest) + 0.1;
-            $('body #rating-desire').val(rsDesire);
+        }
+        if(rating_desire > 4.9) {
+            $('body #rating-desire').val(4.9);
+        }
+        if(rating_desire >= 4.1 && rating_desire <= 4.9) {
+            if(rating_desire > rsTest) {
+                $('body #rating-desire').val(rating_desire);
+            }else{
+                let check = parseFloat((rsTest) + 0.2).toFixed(1);
+                if(check > 4.9) {
+                    $('body #rating-desire').val(4.9);
+                }else{
+                    $('body #rating-desire').val(check);
+                }
+            }
         }
         $('body #rating-desire-group').find('p').remove();
     }

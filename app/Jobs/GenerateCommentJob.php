@@ -53,7 +53,6 @@ class GenerateCommentJob implements ShouldQueue
         if(!empty($keywords)){
             $stream = Gemini::geminiPro()
                 ->generateContent('Tạo cho tôi '.$sl_comment.' comments cuối mỗi comment cách nhau bởi dấu | cho mô tả sau "'.$request->description.'" và keyword chủ đề là: ', implode(', ', $keywords));
-            dd($stream);
             if(!empty($stream)){
                 foreach ($stream as $response) {
                     $comments[] = $response->text();

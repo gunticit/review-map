@@ -163,6 +163,7 @@ class ProjectController extends Controller
 
     public function pageOrderProject($project_id, Request $request){
         $project_comments = $this->projectService->findWithComments($project_id, $request);
+        dd($project_comments);
         $projects = array();
         if($project_comments && $project_comments->comments){
             $comments = $project_comments->comments;

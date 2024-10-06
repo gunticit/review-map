@@ -29,7 +29,7 @@ class AuthController extends BaseController
             if(Auth::user()->getRoleNames()->first() == 'partner'){
                 return redirect()->route('partner.overview');
             }
-            return redirect()->route('admin.overview.customer');
+            return redirect()->route('overview.customer');
         }
         return view('auth.login');
     }
@@ -54,7 +54,7 @@ class AuthController extends BaseController
                 if(Auth::user()->getRoleNames()->first() == 'partner'){
                     return redirect()->route('partner.overview');
                 }
-                return redirect()->route('admin.overview.customer');
+                return redirect()->route('overview.customer');
             }
             Session::flash('error', __('auth.failed'));
             return redirect()->back()->withInput();

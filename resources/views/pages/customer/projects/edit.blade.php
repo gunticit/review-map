@@ -567,16 +567,16 @@
                 $('#info-map-reviews .group-reviews-alert').remove();
             }, 3500);
         }
-        $('#inputReview').on('change', function(){
-            if($(this).val()){
-                $('#inputRaiCham').prop('readonly',false);
-                $('#inputRaiChamCheck').prop('checked', true);
-                $('#inputRaiCham').focus();
-            }else{
-                $('#inputRaiCham').prop('readonly',true);
-                $('#inputRaiChamCheck').prop('checked', false);
-            }
-        })
+        // $('#inputReview').on('change', function(){
+        //     if($(this).val()){
+        //         $('#inputRaiCham').prop('readonly',false);
+        //         $('#inputRaiChamCheck').prop('checked', true);
+        //         $('#inputRaiCham').focus();
+        //     }else{
+        //         $('#inputRaiCham').prop('readonly',true);
+        //         $('#inputRaiChamCheck').prop('checked', false);
+        //     }
+        // })
         $('#inputRaiChamCheck').on('change', function(){
             if($(this).is(':checked')){
                 $('#inputRaiCham').prop('readonly',false);
