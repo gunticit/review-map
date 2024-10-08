@@ -30,6 +30,8 @@ class MissionService {
 
     public function find($id){
         $mission = $this->missionRepository->find($id);
+        dd($mission);
+        $mission = new MissionResource($mission);
         return $mission;
     }
 

@@ -1,97 +1,507 @@
 @extends('layouts.app')
 @section('content')
-    <section class="section danh-sach-du-an mb-5">
-        <div class="container">
-            <div class="row">
-                <div class="clear col-sm-12 text-right">
-                    <button class="btn btn-primary my-3" type="button" onclick="window.location.href='{{ route('category.create') }}'">
-                        <i class="fas fa-plus"></i> Tạo danh mục
-                    </button>
-                </div>
+<section class="section nhan-nhiem-vu mb-5 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-2 col-md-3 col-12 mb-4 mb-md-0">
+                <a class="btn btn-primary btn-full" href="#" id="btn-get-mission" data-bs-target="#nhanNhiemVuModal">Nhận nhiệm vụ</a>
             </div>
-            <div class="col-inner">
-                <h2 class="section-title mb-4">Danh sách dự án</h2>
-                <div id="group-alert">
-                    @if(session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-                    @if(session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                    @if(session('success') || session('error'))
-                        <script>
-                            $('.alert').setTimeout(() => {
-                                $('.alert').remove();
-                            }, 5000);
-                        </script>
-                    @endif
-                </div>
-                <form id="formSearch" action="{{ route('category.index') }}" method="GET">
-                    <div class="input-group group-search">
-                        <div class="input-group">
-                            <button class="input-group-text" type="submit">
-                                <span class="material-symbols-outlined">search</span>
-                            </button>
-                            <input type="text" value="{{ request()->name }}" placeholder="Tìm kiếm" name="name" class="form-control" id="inputSearch">
-                        </div>
-                        <button class="bttn-filter btn btn-default btn-filter" type="button" onclick="filter()">
-                            <img src="{{ asset('./assets/img/filter.svg') }}" alt="filter"> <span>Tìm kiếm</span>
-                        </button>
+            <div class="col-xl-10 col-md-9 col-12 mb-4 mb-md-0 ">
+                <!-- class: bg-warning, bg-success, bg-danger  -->
+                <div id="message-location" class="message bg-danger">
+                    <div class="d-flex align-items-center" id="alert-location">
+                        <span class="material-symbols-outlined me-2">info</span>
                     </div>
-                </form>
-                <table class="table list-table">
-                    <thead>
-                        <tr>
-                            <th class="list-table-stt" scope="col">STT</th>
-                            <th class="list-table-name">
-                                Tên danh mục
-                            </th>
-                            <th>Thuộc nhóm</th>
-                            <th class="list-table-creater" scope="col">Người tạo</th>
-                            <th class="list-table-progree" scope="col">Trạng thái</th>
-                            <th class="list-table-time" scope="col">Ngày tạo</th>
-                            <th class="list-table-handle">
-                                Thao tác
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(!empty($categories))
-                            @foreach($categories as $category)
-                            <tr class="category-{{ $category->id }}">
-                                <td class="list-table-stt" scope="col">{{ $category->id }}</td>
-                                <td class="list-table-name">
-                                    {{ $category->name }}
-                                </td>
-                                <td class="list-table-name">
-                                    {{ $category->parent_name }}
-                                </td>
-                                <td class="list-table-creater" scope="col">
-                                </td>
-                                <td class="list-table-progree" scope="col">
-                                    {{ $category->status }}
-                                </td>
-                                <td class="list-table-time" scope="col">
-                                    {{ $category->ccreated_at }}
-                                </td>
-                                <td class="list-table-handle">
-                                    <button class="btn btn-default" type="button" onclick="handleDelete({{ $category->id }})">
-                                        <span class="material-symbols-outlined">
-                                            delete
-                                        </span>
-                                    </button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-                {{ $categories->links('vendor.pagination.custom') }}
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+<!-- nhiem vu -->
+<section class="section nhiem-vu mb-5">
+    <div class="container">
+        <div class="col-inner">
+            <h2 class="section-title mb-4">Lịch sử nhiệm vụ</h2>
+            
+            <form>
+                <div class="input-group">
+                    <button class="input-group-text" type="submit">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                    <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
+                </div>
+            </form>     
+
+            </form>
+            <table class="table list-table">
+                <thead>
+                    <tr>
+                        <th class="list-table-stt" scope="col">STT</th>
+                        <th class="list-table-time" scope="col">Thời gian</th>
+                        <th class="list-table-sku" scope="col">Mã đơn hàng</th>
+                        <th class="list-table-title" scope="col">Tên dự án</th>
+                        <th class="list-table-link-map" scope="col">URL Google Map</th>
+                        <th class="list-table-content-2" scope="col">Nội dung</th>
+                        <th class="list-table-progree" scope="col">Trạng thái</th>
+                        <th class="list-table-profit" scope="col">Lợi nhuận</th>
+                        <th class="list-table-note" scope="col">Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-primary">Chờ nhân viên duyệt</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="text-warning">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-danger">Đã từ chối</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>3</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-success">Đã hoàn thành</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="text-success">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>4</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-light">Đã hết hạn</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>5</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="text-warning">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>6</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="text-warning">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>7</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="text-warning">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>8</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="text-warning">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>9</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="text-warning">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>10</td>
+                        <td class="list-table-time">
+                            <a href="#">27/06/2024 <span>07:28</span></a>
+                        </td>
+                        <td class="list-table-sku">
+                            <a href="#">RO1234</a>
+                        </td>
+                        <td class="list-table-title">
+                            <a href="#">Dự án Review Cửa hàng số 01</a>
+                        </td>
+                        <td class="list-table-link-map">
+                            <a class="btn " href="#" role="button">
+                                <span class="material-symbols-outlined">link</span>
+                            </a>
+                        </td>
+                        <td class="list-table-content-2">
+                            <a href="#">Nội dung đánh giá</a>
+                        </td>
+                        <td class="list-table-progree">
+                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
+                        </td>
+                        <td class="list-table-profit">
+                            <a href="#" class="text-warning">10.000 VND</a>
+                        </td>
+                        <td class="list-table-note">
+                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+            <div class="list-table-footer d-flex justify-content-between align-items-center">
+                <div class="list-table-per-page">
+                    <span class="form-label">Hiển thị kết quả</span>
+                    <select class="form-select d-inline-block" name="" id="">
+                        <option selected>10</option>
+                        <option value="">20</option>
+                        <option value="">30</option>
+                        <option value="">40</option>
+                    </select>
+                </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span class="material-symbols-outlined">chevron_left</span>
+                            </a>
+                        </li>
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item">
+                            <span class="page-link" href="#">...</span>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">20</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span class="material-symbols-outlined">chevron_right</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end danh-sach-du-an --> 
+
+<!-- Modal Vi Tri -->
+<div class="modal fade ViTri" id="ViTri" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header ">
+                <h2 class="modal-title" id="ViTriLabel">Yêu cầu cho phép <br> truy cập vị trí</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <p>Chúng tôi cần biết vị trí của bạn để phân phối nhiệm vụ ở gần bạn. 
+                    Hãy <span class="text-primary">Cho phép truy cập vị trí</span> để tiếp tục
+                </p>
+                <img src="{{ asset('assets/img/Group-1000006623.png')}}" alt="1000006623">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal vi tri  -->
+
+<!-- Modal thông báo -->
+<div class="modal fade alert-modal" id="warning-location-modal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header ">
+                <h2 class="modal-title" id="alert-modal-label">Thông báo</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Chúng tôi không thể lấy vị trí hiện tại của bạn. <br />
+                    Hãy <span class="text-primary">Cho phép truy cập vị trí</span> để tiếp tục
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal vi tri  -->
+
+<!-- Modal nhan Nhiem Vu -->
+<div class="modal fade nhanNhiemVuModal" id="nhanNhiemVuModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header ">
+                <h2 class="modal-title" id="nhanNhiemVuModalLabel">Nhận nhiệm vụ</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4 class="fw-500 text-primary">60 phút</h4>
+                <p>Phần thưởng <span class="fw-500">10.000 VND</span> khi Review <span class="fw-500">RO1234</span></p>
+                <img src="assets/ma-captcha.png" alt="captcha">
+
+            </div>
+            <div class="modal-footer">
+                <a  class="btn btn-outline-primary btn-lg" data-bs-dismiss="modal" aria-label="Close" >Hủy</a>
+                <a href="{{ route('mission.index') }}" class="btn btn-primary btn-lg">Đồng ý</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal vi tri  -->
+ 
+<script>
+    // Jquery
+    jQuery(document).ready(function($){
+        let check_location = localStorage.getItem('current_location');
+        console.log(check_location);
+        if(!check_location){
+            $('#ViTri').modal('show');
+            $('#alert-location').append(`
+                <p class="alert-alert mb-0">Bạn cần cung cấp vị trí để có thể làm nhiệm vụ. Vui lòng tải lại trang.
+                    <a href="#" class="ms-2">Tải lại trang <span class="material-symbols-outlined">replay</span></a>
+                </p>
+            `);
+            // modal auto show
+            $(window).on('load', function() {
+                if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        $('#ViTri').modal('hide');
+                        $('#message-location').remove();
+                        localStorage.setItem('current_location', JSON.stringify(position.coords));
+                    },
+                    function(error) {
+                    }
+                );
+                }
+            });
+        }else{
+            $('#message-location').remove();
+        }
+
+        // Get mission
+        $('#btn-get-mission').on('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            let check_location = localStorage.getItem('current_location');
+            if(!check_location){
+                $('#warning-location-modal').modal('show');
+            }else{
+                var targetModal = $(this).attr('data-bs-target');
+                $(targetModal).modal('show');
+            }
+        })
+    });
+</script>
 @endsection

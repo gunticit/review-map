@@ -1,42 +1,117 @@
 @extends('layouts.app')
 @section('content')
-<style>
-    .bg-body-tertiary{
-        background: #f8f9fa
-    }
-</style>
-    <!-- danh-sach-du-an -->
-    <section class="section danh-sach-du-an mb-5 mt-5">
-        <div class="container">
-            <div id="step1" class="col-inner p-5 text-center">
-                <h5 class="card-title mb-2">Nhận nhiệm vụ</h5>
-                <p class="card-text mb-0">Bạn cần đánh giá 5 sao cho map</p>
-                <h4 class="d-flex my-3 justify-content-center text-primary">{{ $project->name ?? '' }}</h4>
-                <a href="javascript:void(0)" id="btn-create-mission" class="btn btn-primary mt-3"><span>Bước tiếp</span> <span class="material-symbols-outlined">
-                    arrow_forward_ios
-                    </span></a>
-            </div>
+<section class="section nhan-nhiem-vu-step mb-5 mt-5">
+    <div class="container">
+        <div class="col-inner text-center">
+            <div class="section-step">
+                <h3>step 1</h3>
+                <section>
+                    <h2 class="mb-3">Nhận nhiệm vụ</h2>
+                    <p>Bạn cần phải đánh giá 5 sao cho map</p>
+                    <h2 class="text-primary">{{ $project->name }}</h2>
+                </section>
+                <h3>step 2</h3>
+                <section>
+                    <h2 class="mb-3">Nhận nhiệm vụ</h2>
+                    <p>Bạn cần phải đánh giá 5 sao cho map</p>
+                    <h2 class="text-primary mb-4">{{ $project->name }}</h2>
+                    <p class="text-black-50">Vui lòng copy nội dung bên dưới</p>
+                    
+                    <textarea class="form-control mb-3 textarea-copy" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">
+                        {!! trim($project->description) !!}
+                    </textarea>
+                    <div class="text-right">
+                        <a class="btn btn-outline-primary btn-copy" href="#">
+                            <span class="material-symbols-outlined">content_copy</span>
+                            Copy nội dung
+                        </a>
+                    </div>
+                </section>
+                <h3>step 3</h3>
+                <section>
+                    <h2 class="mb-3">Nhận nhiệm vụ</h2>
+                    <p>Bạn cần phải đánh giá 5 sao cho map</p>
+                    <h2 class="text-primary mb-4">{{ $project->name }}</h2>
+                    <p class="text-black-50">Vui lòng copy nội dung bên dưới</p>
+                    
+                    <div class="mb-4 download-img-wrap position-relative">
+                        <img src="assets/image-53.jpg" alt="image download" class="download-img">
+                        <a class="btn btn-outline-primary btn-download-img" href="#">
+                            <span class="material-symbols-outlined">download</span>
+                            Tải hình ảnh
+                        </a>
+                    </div>
+                    <textarea class="form-control mb-3 textarea-copy" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">Đồ uống tại quán cà phê ngon và đa dạng, không gian sang trọng và sạch sẽ. Nhân viên phục vụ nhanh, thân thiện, nhiệt tình và rất chu đáo. Từ nay chính thức trở thành khách ruột của quán, nhất định sẽ trở lại quán thêm nhiều lần nữa!</textarea>
+                    <div class="text-right ">
+                        <a class="btn btn-outline-primary btn-copy" href="#">
+                            <span class="material-symbols-outlined">content_copy</span>
+                            Copy nội dung
+                        </a>
+                        <a class="btn btn-outline-primary ms-3 btn-download-img" href="#">
+                            <span class="material-symbols-outlined">download</span>
+                            Tải hình ảnh
+                        </a>
+                    </div>
+                </section>
+                <h3>step 4</h3>
+                <section>
+                    <h2 class="mb-3">Nhận nhiệm vụ</h2>
+                    <iframe width="560" height="315" src="https://www.google.com/maps/place/?q=place_id:{{$project->place_id}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </section>
+                <h3>step 6</h3>
+                <section>
+                    <h2 class="mb-3">Cám ơn bạn đã thực hiện nhiệm vụ</h2>
+                    <p>Hệ thống đang tiến hành xử lý nhiệm vụ của bạn, thao tác <br> này có thể sẽ tốn một ít thời gian.</p>
+                    
+                    <div class="text-center">
+                        <img src="assets/nhiem-vu-hoan-thanh.jpg" alt="nhiem-vu" class="mb-4 hoan-thanh-img" >
+                        <a class="btn btn-primary mb-4" href="#" >Trở lại trang nhiệm vụ</a>
+                    </div>
+                </section>
+            </div> 
+            <!-- end step  -->
         </div>
-    </section>
-    <script>
-        $(document).ready(function() {
-            $('#btn-create-mission').click(function(){
-                $.ajax({
-                    url: "{{ route('create.mission.ajax') }}",
-                    type: "POST",
-                    data: {
-                        '_token': '{{ csrf_token() }}',
-                        'project_id': {{$project->id}},
-                        'user_id': {{$user_id}}
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        if(data.status == 'success'){
-                            location.href = "{{ route('mission.show', ['mission' => ':id']) }}".replace(':id', data.data.id);
-                        }
-                    }
-                });
-            });
+    </div>
+</section>
+<script src="{{ asset('assets/js/jquery.steps.min.js') }}"></script>
+<script>
+    // Jquery
+    jQuery(document).ready(function($){
+        $(".section-step").steps({
+            headerTag: "h3",
+            bodyTag: "section",
+            transitionEffect: "slideLeft",
+            autoFocus: true,
+            enableKeyNavigation: false,
+            labels: {
+                cancel: "Huỷ bỏ",
+                current: "Bước hiện tại:",
+                pagination: "Phân trang",
+                finish: "Hoàn thành",
+                next: "Tiếp tục",
+                previous: "Quay lại",
+                loading: "Đang tải ..."
+            }
         });
-    </script>
+
+
+        $('.btn-copy').click(function(){
+            var textareaContent = $(this).parents('section').find('.textarea-copy').val();
+            var tempTextarea = $('<textarea>');
+            $('body').append(tempTextarea);
+            tempTextarea.val(textareaContent).select();
+            document.execCommand('copy');
+            tempTextarea.remove();
+        });
+        $('.btn-download-img').click(function(){
+            var imageUrl = $('.download-img').attr('src');
+            var a = $('<a>')
+                .attr('href', imageUrl)
+                .attr('download', 'downloaded_image.png'); 
+            $('body').append(a);
+            a[0].click();
+            a.remove();
+        });
+    });
+</script>
 @endsection

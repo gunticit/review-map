@@ -33,8 +33,7 @@ class  MissionRepository extends BaseRepository implements MissionRepositoryInte
 
     public function find($id){
         $query = $this->model->query();
-        $query->with('comments');
-        $query->with('project');
+        $query->with(['comments','project', 'images']);
         $query->where('id', $id);
         return $query->first();
     }

@@ -8,7 +8,22 @@ return new class extends Migration
 {
     /**
      * Nếu mission được tạo project đang được thực hiện
+     * 
+     *  Status: Sau khi đối tác làm xong thì có 2 trường hợp:
+     *  TH1: Nếu mission có image_id thì: 
+     *  + Trạng thái sẽ là chờ hệ thống duyệt
+     *  + Sau khi hệ thống duyệt là chờ nhân viên duyệt
+     * 
+     *  TH2: Nếu mission không image_id thì:
+     *  + Trạng thái sẽ phụ thuộc vào admin thiết lập (bằng tay hay hệ thống)
+     *  
+     *  -----------------
+     *  Status: Từ chối
+     *  + Hệ thống: Phụ thuộc vào X,Y admin thiết lập (X số giờ, Y số lần)
+     *  + Duyệt bằng tay
      */
+
+
     public function up(): void
     {
         Schema::create('missions', function (Blueprint $table) {
@@ -16,7 +31,12 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('project_id');
             $table->integer('comment_id');
-            $table->integer('status'); // 2: Đang thực hiện, 1: Đã hoàn thành
+            $table->integer('image_id')->nullable; // Có thể có hoặc không, có liên quan đến trạng thái
+            // Status chú ý comment phía trên
+            $table->integer('status'); // 2: Đang thực hiện, 1: Đã hoàn thành, 3: Chờ hệ thống duyệt, 4: Chờ nhân viên duyệt, 5: Đã từ chối, 6: Đã hết hạn 
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->string('link_confirm')->nullable();
             $table->timestamps();
             $table->softDeletes();

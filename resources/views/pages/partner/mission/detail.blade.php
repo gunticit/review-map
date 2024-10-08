@@ -1,47 +1,126 @@
 @extends('layouts.app')
 @section('content')
+
+<section class="section nhan-nhiem-vu-step mb-5 mt-5">
+    <div class="container">
+        <div class="col-inner text-center">
+            <div class="section-step">
+                <h3>step 1</h3>
+                <section>
+                    <h2 class="mb-3">Nhận nhiệm vụ</h2>
+                    <p>Bạn cần phải đánh giá 5 sao cho map</p>
+                    <h2 class="text-primary mb-4">{{ $mission->project->name }}</h2>
+                    <p class="text-black-50">Vui lòng copy nội dung bên dưới</p>
+                    
+                    <div class="mb-4 download-img-wrap position-relative">
+                        @if(isset($mission->images->image_url))
+                        <img src="{{ url($mission->images->image_url) }}" alt="{{ $mission->project->name }}" class="download-img">
+                        @endif
+                        <a class="btn btn-outline-primary btn-download-img" href="#">
+                            <span class="material-symbols-outlined">download</span>
+                            Tải hình ảnh
+                        </a>
+                    </div>
+                    <textarea class="form-control mb-3 textarea-copy" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">
+                        {{ $mission->comments->comment }}
+                    </textarea>
+                    <div class="text-right ">
+                        <a class="btn btn-outline-primary btn-copy" href="#">
+                            <span class="material-symbols-outlined">content_copy</span>
+                            Copy nội dung
+                        </a>
+                        @if(isset($mission->images->image_url))
+                        <a class="btn btn-outline-primary ms-3 btn-download-img" href="#">
+                            <span class="material-symbols-outlined">download</span>
+                            Tải hình ảnh
+                        </a>
+                        @endif
+                    </div>
+                </section>
+                <h3>step 4</h3>
+                <section>
+                    <h2 class="mb-3">Nhận nhiệm vụ</h2>
+                    <iframe width="560" height="315" src="https://www.google.com/maps/place/?q=place_id:{{$mission->place_id}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </section>
+            </div> 
+            <!-- end step  -->
+        </div>
+    </div>
+</section>
+<script src="{{ asset('assets/js/jquery.steps.min.js') }}"></script>
+<script>
+    // Jquery
+    jQuery(document).ready(function($){
+        $(".section-step").steps({
+            headerTag: "h3",
+            bodyTag: "section",
+            transitionEffect: "slideLeft",
+            autoFocus: true,
+            enableKeyNavigation: false,
+            labels: {
+                cancel: "Huỷ bỏ",
+                current: "Bước hiện tại:",
+                pagination: "Phân trang",
+                finish: "Hoàn thành",
+                next: "Tiếp tục",
+                previous: "Quay lại",
+                loading: "Đang tải ..."
+            },
+            onFinished: function (event, currentIndex) {
+                window.location.href = "{{ route('mission.confirm', ['id' => ':id']) }}".replace(':id', {{$mission->id}});
+            }
+        });
+
+
+        $('.btn-copy').click(function(){
+            var textareaContent = $(this).parents('section').find('.textarea-copy').val();
+            var tempTextarea = $('<textarea>');
+            $('body').append(tempTextarea);
+            tempTextarea.val(textareaContent).select();
+            document.execCommand('copy');
+            tempTextarea.remove();
+        });
+        $('.btn-download-img').click(function(){
+            var imageUrl = $('.download-img').attr('src');
+            var a = $('<a>')
+                .attr('href', imageUrl)
+                .attr('download', 'downloaded_image.png'); 
+            $('body').append(a);
+            a[0].click();
+            a.remove();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function($){
+        $('.btn-copy').click(function(){
+            var textareaContent = $(this).parents('section').find('.textarea-copy').val();
+            var tempTextarea = $('<textarea>');
+            $('body').append(tempTextarea);
+            tempTextarea.val(textareaContent).select();
+            document.execCommand('copy');
+            tempTextarea.remove();
+        });
+
+        $('.btn-download-img').click(function(){
+            var imageUrl = $('.download-img').attr('src');
+            var a = $('<a>')
+                .attr('href', imageUrl)
+                .attr('download', 'downloaded_image.png');
+            $('body').append(a);
+            a[0].click();
+            a.remove();
+        });
+
+    });
+
+</script>
+
 <style>
     .bg-body-tertiary{
         background: #f8f9fa
     }
 </style>
-    <!-- danh-sach-du-an -->
-    <section class="section danh-sach-du-an mb-5 mt-5">
-        <div class="container">
-            <div id="step2" class="col-inner p-5 text-center">
-                <h5 class="card-title mb-2">Nhận nhiệm vụ</h5>
-                <p class="card-text mb-0">Bạn cần đánh giá 5 sao cho map</p>
-                <h4 class="d-flex my-3 justify-content-center text-primary">{{ $mission->project->name }}</h4>
-                <p style="color: #96A3BE">Vui lòng copy nội dung bên dưới</p>
-                <div id="content-mission" class="p-5 text-center bg-body-tertiary rounded-3">
-                    {{ $mission->comments->comment }}
-                </div>
-                <div class="text-end">
-                    <button class="btn btn-outline-black mt-3" id="btn-copy">
-                        <span class="material-symbols-outlined">
-                        content_copy
-                        </span>
-                        Copy nội dung
-                    </button>
-
-                    <button class="btn btn-outline-black mt-3" id="btn-download-image">
-                        <span class="material-symbols-outlined">
-                            download
-                        </span>
-                        Tải hình ảnh
-                    </button>
-                </div>
-                <div class="mt-3 d-flex justify-content-between">
-                    <a href="{{ route('mission.index') }}" class="btn btn-outline-primary"><span class="material-symbols-outlined">
-                        arrow_back_ios
-                        </span><span>Quay lại</span></a>
-                    <a href="{{ route('mission.confirm', ['id' => $mission_id]) }}" class="btn btn-primary">Tiếp tục <span class="material-symbols-outlined">
-                        arrow_forward_ios
-                        </span></a>
-                </div>
-            </div>
-        </div>
-    </section>
     <script>
         $('#btn-copy').on('click', function() {
             var content = $('#content-mission').text();

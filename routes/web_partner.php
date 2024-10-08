@@ -12,6 +12,7 @@ Route::group([
     ], function(){
     Route::get('/',  [OverviewController::class, 'index'])->name('partner.overview');
     Route::resource('/mission',  MissionController::class);
+    Route::get('/mission-histories', [MissionController::class, 'histories'])->name('mission.histories');
     Route::get('/wallet-withdraw',  [WalletController::class, 'withdraw'])->name('wallet.withdraw');
     Route::get('/store-product',  [ProductController::class, 'index'])->name('store.product');
     Route::post('/create-mission-ajax', [MissionController::class, 'createMissionAjax'])->name('create.mission.ajax');

@@ -1,14 +1,14 @@
 @include('layouts.header')
 <div id="layoutSidenav">
-    @auth
-        @include('layouts.sidebar')
-    @endauth
+        @auth
+            @include('layouts.sidebar')
+        @endauth
 
-    <div id="layoutSidenav_content">
-        <main>
-            @yield('content')
-        </main>
-    </div>
+        <div id="layoutSidenav_content">
+            <main>
+                @yield('content')
+            </main>
+        </div>
 </div>
 <div class="modal fade ChangePassoword" id="ChangePassoword" tabindex="-1" aria-labelledby="ChangePassowordLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

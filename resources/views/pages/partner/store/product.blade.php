@@ -1,66 +1,49 @@
 @extends('layouts.app')
 @section('content')
-    <style>
-        .no-data{
-            text-align: center;
-            padding: 150px 0;
-        }
-        .no-data .material-symbols-outlined{
-            font-size: 150px;
-            display: block;
-        }
-    </style>
-    <!-- danh-sach-du-an -->
-    <section class="section section-wallet mb-5 mt-5">
-    <div class="container">
-        <div class="row">
-            <!-- cot 1 -->
-                <div class="col-xl-12 col-md-12 col-12 mb-4 mb-xl-0">
-                    <div class="col-inner">
-                    <div class="section-title row">
-                        <h2 class="section-title mb-4 col-sm-8">Sản phẩm</h2>
-                        <div class="col-sm-4">
-                            <select class="form-control">
-                                <option value="*">Tất cả</option>
-                                @if(!empty($categories))
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
+    <section class="section shop mb-5 mt-5">
+        <div class="container">
+            <div class="col-inner">
+
+                <div class="shop-head d-flex justify-content-between align-items-center">
+                    <h2 class="section-title mb-4">Sản phẩm</h2>
+                    <div class="mb-3">
+                        <select class="form-select form-select-lg" name="" id="">
+                            <option selected>Tất cả</option>
+                            <option value="Thú bông">Thú bông</option>
+                            <option value="Bình nước">Bình nước</option>
+                            <option value="Giỏ/ túi xách">Giỏ/ túi xách</option>
+                            <option value="Giỏ/ túi xách">Móc khóa</option>
+                            <option value="Giỏ/ túi xách">Phụ kiện điện thoại</option>
+
+                        </select>
                     </div>
-                    <div class="list-table">
-                        @if(!empty($products))
-                            @foreach($products as $product)
-                                <div class="list-table-row d-flex">
-                                    <div class="list-table-img">
-                                        <img src="{{ asset($product->image) }}" alt="image">
+
+                </div>
+
+                <div class="product row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3">
+                    @if (!empty($products))
+                        @foreach ($products as $product)
+                            <div class="col">
+                                <div class="product-box">
+                                    <div class="product-image">
+                                        <a href="4.1.chi-tiet-san-pham.php"><img
+                                                src="{{ asset('assets/img/image-54.jpg') }}" alt=""></a>
                                     </div>
-                                    <div class="list-table-info">
-                                        <h3 class="list-table-name"><a href="{{ route('admin.product.edit', $product->id) }}">{{ $product->name }}</a></h3>
+                                    <h3 class="product-title">
+                                        <a href="4.1.chi-tiet-san-pham.php">
+                                            Lacus suspendisse faucibus interdum
+                                        </a>
+                                    </h3>
+                                    <div class="product-price">
+                                        <span>100.000 VND</span>
                                     </div>
-                                    <div class="list-table-price">
-                                        {!! $product->price ? formatVND($product->price) : '' !!}
-                                    </div>
-                                    <div class="list-table-handle">
-                                        <a href="javascript:void(0);" onclick="handleAddCart()" class="btn btn-outline-primary">Thêm vào giỏ</a>
-                                    </div>
+                                    <button class="add-to-cart btn btn-primary">Thêm vào giỏ</button>
                                 </div>
-                            @endforeach
-                        @else
-                            <div class="no-data">
-                                <span class="material-symbols-outlined">
-                                    production_quantity_limits
-                                </span>
-                                Không tìm thấy sản phẩm
                             </div>
-                        @endif
-                    </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </div>
-        
-    </div>
     </section>
 @endsection

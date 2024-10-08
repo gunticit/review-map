@@ -33,6 +33,9 @@ class MissionController extends Controller
         }
         $data['project'] = $project;
         $data['user_id'] = $user_id;
+        $data['mission'] = array(
+            'id' => 1
+        );
 
         return view('pages.partner.mission.index', $data);
     }
@@ -74,8 +77,7 @@ class MissionController extends Controller
     {
         $data = array();
         $mission = $this->missionService->find($id);
-        $data['mission'] = new MissionResource($mission);
-        $data['mission_id'] = $id;
+        $data['mission'] = $mission;
         return view('pages.partner.mission.detail', $data);
     }
 
@@ -139,5 +141,9 @@ class MissionController extends Controller
 
     public function success(Request $request){
         return view('pages.partner.mission.success');
+    }
+
+    public function histories(Request $request){
+        return view('pages.partner.mission.histories');
     }
 }
