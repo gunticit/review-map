@@ -11,14 +11,17 @@ use Illuminate\Validation\ValidationException;
 
 class ProductService {
     protected $productRepository, $productImageRepository;
+    protected $categoryService;
 
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        ProductImageRepositoryInterface $productImageRepository
+        ProductImageRepositoryInterface $productImageRepository,
+        CategoryService $categoryService
     )
     {
         $this->productRepository = $productRepository;
         $this->productImageRepository = $productImageRepository;
+        $this->categoryService = $categoryService;
     }
 
     /**
@@ -31,6 +34,7 @@ class ProductService {
 
     public function list($request){
         $products = $this->productRepository->list($request);
+        $products = ProductResource::collection($products)->resource;
         return $products;
     }
 
@@ -58,6 +62,11 @@ class ProductService {
 
     public function show($id){
         $data = $this->productRepository->find($id);
+        return $data;
+    }
+
+    public function getCategories($request){
+        $data = $this->categoryService->list($request);
         return $data;
     }
 

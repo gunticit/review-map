@@ -1,18 +1,11 @@
 @extends('layouts.app')
 @section('content')
 <script src="https://www.google.com/recaptcha/api.js"></script>
-<style>
-    .g-recaptcha{
-        text-align: center;
-        display: flex;
-        justify-content: center;
-    }
-</style>
 <section class="section nhan-nhiem-vu mb-5 mt-5">
     <div class="container">
         <div class="row">
             <div class="col-xl-2 col-md-3 col-12 mb-4 mb-md-0">
-                <a class="btn btn-primary btn-full" href="#" id="btn-get-mission" data-bs-target="#nhanNhiemVuModal">Nhận nhiệm vụ</a>
+                <a class="btn btn-primary btn-full" href="#" id="btn-get-mission2" data-bs-target="#missionModal">Nhận nhiệm vụ</a>
             </div>
             <div class="col-xl-10 col-md-9 col-12 mb-4 mb-md-0 ">
                 <!-- class: bg-warning, bg-success, bg-danger  -->
@@ -194,11 +187,11 @@
 <!-- end modal vi tri  -->
 
 <!-- Modal nhan Nhiem Vu -->
-<div class="modal fade nhanNhiemVuModal" id="nhanNhiemVuModal" role="dialog">
+<div class="modal fade missionModal" id="missionModal" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center">
             <div class="modal-header ">
-                <h2 class="modal-title" id="nhanNhiemVuModalLabel">Nhận nhiệm vụ</h2>
+                <h2 class="modal-title" id="missionModalLabel">Nhận nhiệm vụ</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="POST" action="{{ route('verify.recaptcha') }}">

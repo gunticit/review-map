@@ -9,12 +9,11 @@
                     <div class="mb-3">
                         <select class="form-select form-select-lg" name="" id="">
                             <option selected>Tất cả</option>
-                            <option value="Thú bông">Thú bông</option>
-                            <option value="Bình nước">Bình nước</option>
-                            <option value="Giỏ/ túi xách">Giỏ/ túi xách</option>
-                            <option value="Giỏ/ túi xách">Móc khóa</option>
-                            <option value="Giỏ/ túi xách">Phụ kiện điện thoại</option>
-
+                            @if(!empty($categories))
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
 

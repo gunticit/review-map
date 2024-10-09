@@ -51,6 +51,9 @@
                             <th class="list-table-name">
                                 Tên danh mục
                             </th>
+                            <th class="list-table-image">
+                                Hình ảnh
+                            </th>
                             <th>Thuộc nhóm</th>
                             <th class="list-table-creater" scope="col">Người tạo</th>
                             <th class="list-table-progree" scope="col">Trạng thái</th>
@@ -69,15 +72,21 @@
                                     {{ $category->name }}
                                 </td>
                                 <td class="list-table-name">
-                                    {{ $category->parent_name }}
+                                    <img src="{{ url($category->image) }}" width="50" alt="">
+                                </td>
+                                <td class="list-table-name">
+                                    {{ optional($category->parent)->name }}
                                 </td>
                                 <td class="list-table-creater" scope="col">
+                                    {{
+                                        optional($category->created_by)->name
+                                    }}
                                 </td>
                                 <td class="list-table-progree" scope="col">
                                     {{ $category->status }}
                                 </td>
                                 <td class="list-table-time" scope="col">
-                                    {{ $category->ccreated_at }}
+                                    {{ date('d/m/Y', strtotime($category->created_at)) }}
                                 </td>
                                 <td class="list-table-handle">
                                     <button class="btn btn-default" type="button" onclick="handleDelete({{ $category->id }})">
