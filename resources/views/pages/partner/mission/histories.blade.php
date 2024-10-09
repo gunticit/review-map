@@ -1,5 +1,13 @@
 @extends('layouts.app')
 @section('content')
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<style>
+    .g-recaptcha{
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+</style>
 <section class="section nhan-nhiem-vu mb-5 mt-5">
     <div class="container">
         <div class="row">
@@ -22,7 +30,20 @@
     <div class="container">
         <div class="col-inner">
             <h2 class="section-title mb-4">Lịch sử nhiệm vụ</h2>
-            
+            @if(session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session()->get('message') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <ul class="mb-0 mt-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form>
                 <div class="input-group">
                     <button class="input-group-text" type="submit">
@@ -48,306 +69,41 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-primary">Chờ nhân viên duyệt</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="text-warning">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>2</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-danger">Đã từ chối</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>3</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-success">Đã hoàn thành</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="text-success">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>4</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-light">Đã hết hạn</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>5</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="text-warning">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>6</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="text-warning">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>7</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="text-warning">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>8</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="text-warning">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>9</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="text-warning">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>10</td>
-                        <td class="list-table-time">
-                            <a href="#">27/06/2024 <span>07:28</span></a>
-                        </td>
-                        <td class="list-table-sku">
-                            <a href="#">RO1234</a>
-                        </td>
-                        <td class="list-table-title">
-                            <a href="#">Dự án Review Cửa hàng số 01</a>
-                        </td>
-                        <td class="list-table-link-map">
-                            <a class="btn " href="#" role="button">
-                                <span class="material-symbols-outlined">link</span>
-                            </a>
-                        </td>
-                        <td class="list-table-content-2">
-                            <a href="#">Nội dung đánh giá</a>
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-info">Chờ hệ thống duyệt</a>
-                        </td>
-                        <td class="list-table-profit">
-                            <a href="#" class="text-warning">10.000 VND</a>
-                        </td>
-                        <td class="list-table-note">
-                            <a href="#">Cần tối đa 60 phút để hệ thống kiểm tra</a>
-                        </td>
-                    </tr>
-                    
+                    @if(!empty($missions))
+                        @foreach($missions as $mission)
+                            <tr>
+                                <td>1</td>
+                                <td class="list-table-time">
+                                    {{ date('d/m/Y H:i', strtotime($mission->created_at)) }}
+                                </td>
+                                <td class="list-table-sku">
+                                    {{ 'RO'.$mission->id }}
+                                </td>
+                                <td class="list-table-title">
+                                    {{ $mission->project->name }}
+                                </td>
+                                <td class="list-table-link-map">
+                                    <a class="btn " href="https://www.google.com/maps/place/?q=place_id:{{ $mission->project->place_id }}" target="_blank" role="button">
+                                        <span class="material-symbols-outlined">link</span>
+                                    </a>
+                                </td>
+                                <td class="list-table-content-2">
+                                    {{ $mission->comments->comment }}
+                                </td>
+                                <td class="list-table-progree">
+                                    <span class="btn btn-primary">{{ statusMission($mission->status) }}</span>
+                                </td>
+                                <td class="list-table-profit">
+                                    <span class="text-warning">{{ $mission->price }} VND</span>
+                                </td>
+                                <td class="list-table-note">
+                                    @if(in_array($mission->status,$status_alert))
+                                    Cần tối đa 60 phút để hệ thống kiểm tra
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
             <div class="list-table-footer d-flex justify-content-between align-items-center">
@@ -445,16 +201,18 @@
                 <h2 class="modal-title" id="nhanNhiemVuModalLabel">Nhận nhiệm vụ</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <h4 class="fw-500 text-primary">60 phút</h4>
-                <p>Phần thưởng <span class="fw-500">10.000 VND</span> khi Review <span class="fw-500">RO1234</span></p>
-                <img src="assets/ma-captcha.png" alt="captcha">
-
-            </div>
-            <div class="modal-footer">
-                <a  class="btn btn-outline-primary btn-lg" data-bs-dismiss="modal" aria-label="Close" >Hủy</a>
-                <a href="{{ route('mission.index') }}" class="btn btn-primary btn-lg">Đồng ý</a>
-            </div>
+            <form method="POST" action="{{ route('verify.recaptcha') }}">
+                {{ csrf_field() }}
+                <div class="modal-body">
+                    <h4 class="fw-500 text-primary">60 phút</h4>
+                    <p>Phần thưởng <span class="fw-500">10.000 VND</span> khi Review <span class="fw-500">RO1234</span></p>
+                    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_V2_SITE_KEY') }}"></div>
+                </div>
+                <div class="modal-footer">
+                    <a  class="btn btn-outline-primary btn-lg" data-bs-dismiss="modal" aria-label="Close" >Hủy</a>
+                    <a href="javascript:void(0)" id="submit-captcha" class="btn btn-primary btn-lg">Đồng ý</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -503,5 +261,17 @@
             }
         })
     });
+</script>
+<!-- Recaptcha -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script type="text/javascript">
+    var onloadCallback = function() {
+      alert("grecaptcha is ready!");
+    };
+  </script>
+<script>
+    $('#submit-captcha').on('click', function(e){
+        e.preventDefault();
+    })
 </script>
 @endsection

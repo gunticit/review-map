@@ -14,16 +14,16 @@ class MissionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        dd($this);
         return [
-            'comment' => $this->comments->comment,
-            'keyword' => $this->comments->keyword,
-            'project_name' => $this->project->name,
-            'project_code' => $this->project->project_code,
-            'project_description' => $this->project->description,
-            'image' => $this->images->image_url,
-            'place_id' => $this->project->place_id,
-            'project' => new ProjectResource($this->project)
+            'comment' => optional($this->comments)->comment,
+            'keyword' => optional($this->comments)->keyword,
+            'project_name' => optional($this->project)->name,
+            'price' => formatCurrency($this->price),
+            'project_code' => optional($this->project)->project_code,
+            'project_description' => optional($this->project)->description,
+            'image' => optional($this->images)->image_url,
+            'place_id' => optional($this->project)->place_id,
+            'project' => new ProjectResource($this->whenLoaded($this->project))
         ];
     }
 }

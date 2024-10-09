@@ -29,6 +29,7 @@ return new class extends Migration
         Schema::create('missions', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->double('price', 15, 0)->default(0); // Đơn vị mặc định VNĐ
             $table->integer('project_id');
             $table->integer('comment_id');
             $table->integer('image_id')->nullable; // Có thể có hoặc không, có liên quan đến trạng thái

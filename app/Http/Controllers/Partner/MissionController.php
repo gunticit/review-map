@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReCaptchaV2Request;
 use App\Http\Resources\MissionResource;
 use App\Models\Comment;
 use App\Models\Mission;
@@ -144,6 +145,20 @@ class MissionController extends Controller
     }
 
     public function histories(Request $request){
-        return view('pages.partner.mission.histories');
+        $request = $request->merge(['user_id' => auth()->user()->id]);
+        $missions = $this->missionService->list($request);
+        $data = array(
+            'missions' => $missions
+        );
+        $data['status_alert'] = array(
+            Mission::STATUS_WATTING_SYSTEM,
+            Mission::STATUS_WATTING_ADMIN
+        );
+        return view('pages.partner.mission.histories', $data);
+    }
+
+
+    public function verifyRecaptcha(ReCaptchaV2Request $request, string $id){
+        return response()->json(['success' => true]);
     }
 }

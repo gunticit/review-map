@@ -212,3 +212,24 @@
             return number_format($number, 0, ',', '.') . ' ₫';
         }
     }
+
+    if(!function_exists('statusMission')){
+        function statusMission($status){
+            $status_label = match ($status) {
+                1 => 'Đã hoàn thành',
+                2 => 'Đang thực hiện',
+                3 => 'Chờ hệ thống duyệt',
+                4 => 'Chờ nhân viên duyệt',
+                5 => 'Đã từ chối',
+                6 => 'Đã hết hạn'
+            };
+            return $status_label;
+        }
+    }
+
+    if(!function_exists('formatCurrency')){
+        function formatCurrency($number, $currency = 'VND') {
+            $formattedNumber = number_format($number, 0, ',', '.');
+            return $formattedNumber . ' ' . $currency;
+        }
+    }
