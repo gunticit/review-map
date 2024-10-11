@@ -353,7 +353,7 @@
                                 <span>Ưu đãi hấp dẫn</span>
                             </div>
                             <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
-                            <input class="form-control hidden" id="keyword_value" hidden type="text" name="keyword_value" readonly>
+                            <input class="form-control hidden" hidden id="keyword_value" type="text" name="keyword_value" readonly>
                             @error('keyword')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -495,6 +495,7 @@
                 let textValue = tagText.trim();
                 let keyword_value = $('#keyword_value').val();
                 let keywordArray = keyword_value.split(',');
+                keywordArray = keywordArray.filter(keyword => keyword !== null && keyword !== '');
                 let index = keywordArray.indexOf(textValue);
                 if (index === -1) {
                     keywordArray.push(textValue);
@@ -516,6 +517,14 @@
             var textCheck = $(this).parent().text().trim(); 
             textCheck = textCheck.replace("×", ""); 
 
+            let keyword_value = $('#keyword_value').val();
+            let keywordArray = keyword_value.split(',');
+            let index = keywordArray.indexOf(textCheck);
+            if (index > -1) {
+                keywordArray.splice(index, 1);
+            }
+            keyword_value = keywordArray.join(',');
+            $('#keyword_value').val(keyword_value);
             $('.Tagslist-wrap span').each(function() {
                 var tagText = $(this).text().trim(); 
                 if (tagText === textCheck) { 
@@ -699,7 +708,7 @@
             });
             $('#btn-submit').on('click', function(e){
                 e.preventDefault();
-                // $('.loading-section').show();
+                $('.loading-section').show();
                 let checkValidate = validateRequiredFields();
                 
                 if ($('.alert').length === 0 && checkValidate) {

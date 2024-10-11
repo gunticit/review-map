@@ -65,12 +65,14 @@ class ProjectController extends Controller
                 if(!empty($comments)){
                     $comments = explode('|', $comments);
                     foreach($comments as $comment){
-                        $data_comment = array(
-                            'project_id' => $project_id,
-                            'comment' => $comment,
-                            'keyword' => implode(',', $keyword_data)
-                        );
-                        $this->commentService->create($data_comment);
+                        if(!empty($comment)){
+                            $data_comment = array(
+                                'project_id' => $project_id,
+                                'comment' => $comment,
+                                'keyword' => implode(',', $keyword_data)
+                            );
+                            $this->commentService->create($data_comment);
+                        }
                     }
                 }
                 if ($request->has('has_image') && $request->has_image == 1) {
@@ -166,7 +168,7 @@ class ProjectController extends Controller
         if($project_comments->status !== 5){
             return redirect()->route('project.list');
         }
-        if($project_comments && $project_comments->comments){
+        if($project_comments && $project_comments->comments && !empty($project_comments->comments)){
             $comments = $project_comments->comments;
             $perPage = 15;
             $currentPage = isset($request->page) ? $request->page  : LengthAwarePaginator::resolveCurrentPage();

@@ -201,7 +201,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <p class="text-center text-black">Nội dung được RIVI AI tự sinh ra dựa theo từ khóa: <span id="keyword-comment">"{{ $project->keyword }}"</span></p>
+              <p class="text-center text-black">Nội dung được RIVI AI tự sinh ra dựa theo từ khóa: <span id="keyword-comment">"{{ $project->keyword_value ?? '' }}"</span></p>
               <div class="textarea-wrapper group-comment-text">
                 <textarea readonly id="comment-textarea" class="form-control" rows="5"></textarea>
                 <div class="loading-spinner"></div>
@@ -247,7 +247,7 @@
                     url: "{{ route('generate.comment.sample') }}",
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        keyword: "{{ $project->keyword }}",
+                        keyword: "{{ $project->keyword_value ?? '' }}",
                         comment_sample: comment_val
                     },
                     success: function(response) {

@@ -67,7 +67,7 @@
                         <span class="material-symbols-outlined">support_agent</span>
                     </div> Yêu cầu hỗ trợ
                 </a>
-                <a class="nav-link" href="9.0.cau-hoi-thuong-gap.php">
+                <a class="nav-link" href="{{ route('faq') }}">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">quiz</span>
                     </div> FAQ
