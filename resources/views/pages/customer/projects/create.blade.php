@@ -7,9 +7,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/5ad6bf3d69.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
-<script src="{{ asset('./js/main.js') }}"></script>
-<script src="{{ asset('./assets/js/map.js') }}"></script>
 <script>
     let latitude = Number('<?= $latitude ?>');
     let longitude = Number('<?= $longitude ?>');
@@ -195,6 +192,10 @@
         cursor: pointer;
         transition: all ease .4s
     }
+    .btn-check-map.btn-success{
+        background: #00bb0e;
+        color: #ffffff;
+    }
     .btn-check-map:hover{
         background: #c1c1c1;
         color: #3c3b3b;
@@ -202,6 +203,55 @@
     .btn-check-map.border-error{
         border: 1px solid #f00;
         background: #f1f1f1;
+    }
+    .loader {
+        width: 48px;
+        height: 48px;
+        display: inline-block;
+        position: relative;
+    }
+    .loading-section{
+        display: none;
+        position: absolute;
+        z-index: 9;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: hsl(205.71deg 24.14% 17.06% / 32.16%);
+    }
+    .loading-section .loader{
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .loader::after,
+    .loader::before {
+        content: '';  
+        box-sizing: border-box;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid #FFF;
+        position: absolute;
+        left: 0;
+        top: 0;
+        animation: animloader 2s linear infinite;
+        }
+        .loader::after {
+        animation-delay: 1s;
+        }
+
+        @keyframes animloader {
+        0% {
+            transform: scale(0);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0;
+        }
     }
     @keyframes showBtnVideo{
         from{
@@ -215,12 +265,7 @@
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
     <div class="loading-section">
-        <div class="loading-wave">
-          <div class="loading-bar"></div>
-          <div class="loading-bar"></div>
-          <div class="loading-bar"></div>
-          <div class="loading-bar"></div>
-        </div>
+        <span class="loader"></span>
     </div>
     <form action="{{ route('project.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
@@ -287,7 +332,7 @@
                             <label>{{ __('project.choose_map') }}<span class="required">*</span>
                             </label>
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-12 group-check-map">
                                     <button type="button" class="btn btn-primary btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">{{ __('project.press_to_choose') }}</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
                                 </div>
                                 <input id="lat" type="hidden" name="latitude" />
@@ -474,8 +519,11 @@
             
             if($('#place-id').val() == ''){
                 $('.btn-check-map').addClass('border-error');
+                $('.group-check-map').append('<p class="text-danger">Chọn địa điểm cần đánh giá.</p>');
             }else{
                 $('.btn-check-map').removeClass('border-error');
+                $('.btn-check-map').addClass('btn-success');
+                $('.group-check-map .text-danger').remove();
             }
         });
     });
@@ -665,9 +713,12 @@
                 });
                 if($('#place-id').val() == ''){
                     $('.btn-check-map').addClass('border-error');
+                    $('.group-check-map').append('<p class="text-danger">Chọn địa điểm cần đánh giá.</p>');
                     return false;
                 }else{
                     $('.btn-check-map').removeClass('border-error');
+                    $('.group-check-map .text-danger').remove();
+
                 }
                 if($('.tags-input-wrapper .tag').length == 0){
                     $('.tags-input-wrapper').addClass('border-error');
@@ -708,12 +759,12 @@
             });
             $('#btn-submit').on('click', function(e){
                 e.preventDefault();
-                $('.loading-section').show();
                 let checkValidate = validateRequiredFields();
                 
                 if ($('.alert').length === 0 && checkValidate) {
                     $(this).prop('disabled', true);
                     $('#form-create-project').submit();
+                    $('.loading-section').show();
                 }
             }); 
         });

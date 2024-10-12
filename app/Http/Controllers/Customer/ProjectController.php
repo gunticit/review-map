@@ -39,6 +39,13 @@ class ProjectController extends Controller
         ]);
     }
 
+    public function search(Request $request){
+        $data = $this->projectService->list($request);
+        return view('pages.customer.projects.search',[
+            'projects' => $data['projects'] ?? []
+        ]);
+    }
+
     public function create(Request $request){
         $data = array(
             'latitude' => '10.8299',

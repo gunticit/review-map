@@ -455,6 +455,7 @@
                 $('.btn-check-map').addClass('border-error');
             }else{
                 $('.btn-check-map').removeClass('border-error');
+                $('.btn-check-map').addClass('btn-success');
             }
         });
     });

@@ -5036,6 +5036,10 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
 .preview.active label {
   opacity: 1;
 }
+.btn-default{
+  background: #b0b0b0;
+  color: #3c3b3b;
+}
 .preview input {
   line-height: 200px;
   font-size: 200px;
@@ -5043,7 +5047,12 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
   opacity: 0;
   z-index: 10;
 }
-
+#btn-delete{
+  padding: 7px;
+}
+#btn-delete > span{
+  font-size: 22px;
+}
 @media (max-width: 768px) {
   .step-xac-thuc .step-images {
     flex-direction: column;

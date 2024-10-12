@@ -175,9 +175,11 @@
     .border-error{
         border: 1px solid #f00 !important;
     }
-    .btn-check-map{
+    .btn-default{
         background: #b0b0b0;
         color: #3c3b3b;
+    }
+    .btn-check-map{
         border: transparent;
         cursor: pointer;
         transition: all ease .4s
