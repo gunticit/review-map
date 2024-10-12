@@ -2,49 +2,81 @@
 
 namespace App\Services;
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Auth;
-use App\Repositories\User\UserRepositoryInterface;
-use App\Http\Resources\UserResource;
 use App\Models\Role;
+use Config;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Repositories\AuthSocial\AuthSocialRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Laravel\Socialite\Facades\Socialite;
+use Log;
+use Number;
+use Session;
 
-class AuthSocialService {
-    protected $authSocialRepositoryInterface;
+class AuthSocialService
+{
+    protected $userRepository;
 
-    public function __construct(AuthSocialRepositoryInterface $authSocialRepositoryInterface)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->authSocialRepositoryInterface = $authSocialRepositoryInterface;
+        $this->userRepository = $userRepository;
     }
-
-    public function handleGoogleCallback($request){
-        $code = $request->input('code');
-        $googleUser = Socialite::driver('google')->user();
-        $user = User::where('email', $googleUser->getEmail())->first();
-        if($user){
-            $user->update([
-                'google_id' => $googleUser->getId(),
-                'token' => $googleUser->token,
-                'refresh_token' => $googleUser->refreshToken
-            ]);
-        }else{
-            $user = User::create([
-                'name' => $googleUser->getName(),
-                'email' => $googleUser->getEmail(),
-                'google_id' => $googleUser->getId(),
-                'password' => Hash::make(Str::random(8)),
-                'token' => $googleUser->token,
-                'refresh_token' => $googleUser->refreshToken
-            ]);
+    public function handleDomainRedirect()
+    {
+        $domain = request()->getHost();
+        switch ($domain) {
+            case env('CUSTOMER_DOMAIN'):
+                $googleRedirectUri = env('CUSTOMER_REDIRECT_URI');
+                break;
+            case env('PARTNER_DOMAIN'):
+                $googleRedirectUri = env('PARTNER_REDIRECT_URI');
+                break;
+            case env('ADMIN_DOMAIN'):
+                $googleRedirectUri = env('ADMIN_REDIRECT_URI');
+                break;
+            default:
+                return redirect()->route('login');
         }
-        Auth::login($user, true);
-        return $user;
+        Config::set('services.google.redirect', $googleRedirectUri);
+        Session::put('google_redirect_uri', $googleRedirectUri);
     }
 
+    public function handleGoogleCallback()
+    {
+        try {
+            $user = Socialite::driver('google')->user();
+            $finduser = User::where('google_id', $user->id)->first();
+            if (empty($finduser)) { // Nếu lần đầu tiên đăng nhập, tạo người dùng mới
+                $data = [
+                    'name' => $user->getName(),
+                    'email' => $user->getEmail(),
+                    'google_id' => $user->getId(),
+                    'password' => Hash::make(Str::random(8)),
+                ];
+                $finduser = $this->userRepository->create($data); // Đổi tên $user thành $finduser
+                $this->setRole($finduser);
+            }
+
+            // Đăng nhập người dùng (dù là mới tạo hay đã có)
+            Auth::login($finduser, true);
+
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
+    private function setRole($user)
+    {
+        if (request()->getHost() === env('ADMIN_DOMAIN')) {
+            $user->assignRole(Role::ADMIN_ROLE);
+        }
+        if (request()->getHost() === env('PARTNER_DOMAIN')) {
+            $user->assignRole(Role::PARTNER_ROLE);
+        }
+        if (request()->getHost() === env('CUSTOMER_DOMAIN')) {
+            $user->assignRole(Role::CUSTOMER_ROLE);
+        }
+    }
 }

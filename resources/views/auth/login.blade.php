@@ -79,7 +79,7 @@
             <div class="login-other">
                 <span>Hoặc đăng nhập với</span>
             </div>
-                <a href="#" class="btn btn-outline-secondary login-with-google">
+                <a href="{{route('auth.google')}}" class="btn btn-outline-secondary login-with-google">
                     <img src="{{ asset('./assets/img/google-logo.svg') }}" alt="google"> Google 
                 </a>
                 <div class="login-link-acount">

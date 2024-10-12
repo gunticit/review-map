@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SocicalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index']);
@@ -15,6 +16,11 @@ Route::group([
         Route::post('/registerUser', 'AuthController@registerUser')->name('auth.registerUser');
     }
 );
+// Đăng nhập bằng google
+Route::controller(SocicalController::class)->group(function () {
+    Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
+    Route::get('auth/google/callback', 'handleGoogleCallback');
+});
 // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Route::group([
