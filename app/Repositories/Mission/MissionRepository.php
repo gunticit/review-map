@@ -3,6 +3,7 @@ namespace App\Repositories\Mission;
 
 use App\Repositories\BaseRepository;
 use App\Models\Mission;
+use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 
 class  MissionRepository extends BaseRepository implements MissionRepositoryInterface
@@ -34,14 +35,51 @@ class  MissionRepository extends BaseRepository implements MissionRepositoryInte
     public function getRandomMission($request){
         if(isset($request->user_id) && Auth::user()->getRoleNames()->first() === 'partner'){
             $query = $this->model->query();
-            // Kiểm tra user có nvu nao đang lam khong
             $query->where('user_id', $request->user_id)->where('status',2);
             $check_mission = $query->first();
             if($check_mission){
                 return $check_mission;
             }
-            // Truong hop khong co nvu dang lam thi tao moi
-            
+
+            $projects = Project::all();
+
+            foreach ($projects as $project) {
+                $totalMissions = Mission::where('project_id', $project->id)->count();
+                $maxMissions = 0;
+                switch ($project->package) {
+                    case 1:
+                        $maxMissions = 10;
+                        break;
+                    case 2:
+                        $maxMissions = 50;
+                        break;
+                    case 3:
+                        $maxMissions = 100;
+                        break;
+                    case 4:
+                        $maxMissions = 200;
+                        break;
+                }
+
+                if ($totalMissions < $maxMissions) {
+                    $missionsToday = Mission::where('project_id', $project->id)
+                                            ->whereDate('created_at', now()->format('Y-m-d'))
+                                            ->count();
+
+                    if ($missionsToday < $project->point_slow) {
+                        $newMission = Mission::create([
+                            'user_id' => $userId,
+                            'project_id' => $project->id,
+                            'status' => 2, 
+                            'created_by' => $userId,
+                        ]);
+
+                        return $newMission;
+                    }
+                }
+            }
+            return null;
+
         }
     }
 

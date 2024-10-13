@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('missions', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $tbale->integer('project_id');
+            $table->integer('project_id');
             $table->integer('status'); // 2: Đang thực hiện, 1: Đã hoàn thành
             $table->timestamps();
             $table->softDeletes();
