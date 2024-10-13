@@ -17,36 +17,38 @@
             </main>
         </div>
 </div>
-<div class="modal fade ChangePassoword" id="ChangePassoword" tabindex="-1" aria-labelledby="ChangePassowordLabel" aria-hidden="true">
+<div class="modal fade change-password-form" id="change-password-form" tabindex="-1" aria-labelledby="change-password-formLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h2 class="modal-title" id="ChangePassowordLabel">Đổi mật khẩu</h2>
+                <h2 class="modal-title" id="change-password-formLabel">Đổi mật khẩu</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="form-change-password">
                 <div class="mb-4">
-                    <label  for="inputOlderPassword">Mật khẩu cũ <span class="required">*</span></label>
+                    <label  for="old_password">Mật khẩu cũ <span class="required">*</span></label>
                     <div class="input-group">
-                        <input class="form-control password" id="inputOlderPassword" type="password" name="password" placeholder="Mật khẩu cũ" required />
+                        <input class="form-control password" id="old_password" type="password" name="password" placeholder="Mật khẩu cũ" required />
                         <span class="input-group-text togglePassword">
                             <span class="material-symbols-outlined">visibility_off</span>
                         </span>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label  for="inputPassword">Mật khẩu mới <span class="required">*</span></label>
-                    <div class="input-group">
-                        <input class="form-control password" id="inputPassword" type="password" name="password" placeholder="Mật khẩu mới" required />
-                        <span class="input-group-text togglePassword">
-                            <span class="material-symbols-outlined">visibility_off</span>
-                        </span>
+                    <label  for="new_password">Mật khẩu mới <span class="required">*</span></label>
+                    <div class="g-new_password">
+                        <div class="input-group">
+                            <input class="form-control password" id="new_password" type="password" name="password" placeholder="Mật khẩu mới" required />
+                            <span class="input-group-text togglePassword">
+                                <span class="material-symbols-outlined">visibility_off</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label  for="inputPasswordConfirm">Xác nhận mật khẩu mới <span class="required">*</span></label>
-                    <div class="input-group">
-                        <input class="form-control password" id="inputPasswordConfirm" type="password" name="password" placeholder="Xác nhận mật khẩu mới" required />
+                    <label  for="confirm_password">Xác nhận mật khẩu mới <span class="required">*</span></label>
+                    <div class="input-group g-confirm_password">
+                        <input class="form-control password" id="confirm_password" type="password" name="password" placeholder="Xác nhận mật khẩu mới" required />
                         <span class="input-group-text togglePassword">
                             <span class="material-symbols-outlined">visibility_off</span>
                         </span>
@@ -87,9 +89,23 @@
 <script>
     $('document').ready(function(){
         $('#btn-save-change').on('click', function(){
-            let current_password = $('#inputOlderPassword').val();
-            let new_password = $('#inputPassword').val();
-            let confirm_password = $('#inputPasswordConfirm').val();
+            $('.g-new_password .text-danger').remove();
+            $('.g-confirm_password .text-danger').remove();
+            $('#new_password').removeClass('border-danger');
+            $('#confirm_password').removeClass('border-danger');
+            let current_password = $('#old_password').val();
+            let new_password = $('#new_password').val();
+            let confirm_password = $('#confirm_password').val();
+            if(new_password != confirm_password){
+                $('#confirm_password').addClass('border-danger');
+                $('.g-confirm_password').append('<p class="text-danger">Mật khẩu mới không trùng khớp. Vui lòng thử lại.</p>');
+                return;
+            }
+            if(current_password == new_password){
+                $('#new_password').addClass('border-danger');
+                $('.g-new_password').append('<p class="text-danger">Mật khẩu mới không được trùng lặp mật khẩu cũ.</p>');
+                return;
+            }
             $.ajax({
                 url: "{{ route('profile.change.password') }}",
                 method: 'POST',
@@ -100,55 +116,28 @@
                 },
                 dataType: 'json',
                 success: function(response){
-                    Toastify({
-                        text: "Đổi mật khẩu thành công!",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", 
-                        position: "center", 
-                        stopOnFocus: true,
-                        style: {
-                            background: "linear-gradient(to right, #00b09b, #96c93d)",
-                        }
-                    }).showToast();
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
                         
                         for (let key in errors) {
-                            if (errors.hasOwnProperty(key)) {
-                                Toastify({
-                                    text: errors[key][0],
-                                    duration: 3000,
-                                    newWindow: true,
-                                    close: true,
-                                    gravity: "top", 
-                                    position: "center", 
-                                    stopOnFocus: true,
-                                    style: {
-                                        background: "linear-gradient(to right, #ff5f6d, #ffc371)",
-                                    }
-                                }).showToast();
-                            }
+                            $('#error-message').append('<p class="text-danger">'+errors[key]+'</p>');
                         }
                     } else {
-                        Toastify({
-                            text: "Đã xảy ra lỗi. Vui lòng thử lại sau.",
-                            duration: 3000,
-                            newWindow: true,
-                            close: true,
-                            gravity: "top", 
-                            position: "center", 
-                            stopOnFocus: true,
-                            style: {
-                                background: "linear-gradient(to right, #ff5f6d, #ffc371)",
-                            }
-                        }).showToast();
+                        $('#error-message').append('<p class="text-danger">'+errors[key]+'</p>');
                     }
                 }
             });
+        });
+        $('#confirm_password').on('change', function(){
+            $('#confirm_password').removeClass('border-danger');
+            $('.g-confirm_password .text-danger').remove();
+        })
+
+        $('#new_password').on('change', function(){
+            $('.g-new_password .text-danger').remove();
+            $('#new_password').removeClass('border-danger');
         });
     })
 </script>

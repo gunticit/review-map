@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Partner\ProductController;
 use App\Http\Controllers\Partner\MissionController;
 use App\Http\Controllers\Partner\OverviewController;

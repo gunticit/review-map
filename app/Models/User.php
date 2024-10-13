@@ -59,4 +59,8 @@ class User extends Authenticatable
     public function company(){
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
+
+    public function transactionHistories(){
+        return $this->hasMany(TransactionHistory::class);
+    }
 }

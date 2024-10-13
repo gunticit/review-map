@@ -92,7 +92,12 @@ class CommentService {
                 ->generateContent('Tạo cho tôi '.$sl_comment.' comments cuối mỗi comment cách nhau bởi dấu | cho mô tả sau "'.$request->description.'" và keyword chủ đề là: ', implode(', ', $keywords));
             if(!empty($stream)){
                 foreach ($stream as $response) {
-                    if(!empty($response[0]->content->parts[0]->text)){
+                    if(
+                        !empty($response[0]) && 
+                        !empty($response[0]->content) && 
+                        !empty($response[0]->content->parts) &&
+                        !empty($response[0]->content->parts[0]->text)
+                    ){
                         $comments =  $response[0]->content->parts[0]->text;
                     }
                 }
@@ -109,7 +114,12 @@ class CommentService {
             $stream = Gemini::geminiPro()->generateContent('Tạo cho tôi comment tương tự như comment sau '.$sample.' và keyword chủ đề là: ', $keyword);
             if(!empty($stream)){
                 foreach ($stream as $response) {
-                    if(!empty($response[0]->content->parts[0]->text)){
+                    if(
+                        !empty($response[0]) && 
+                        !empty($response[0]->content) && 
+                        !empty($response[0]->content->parts) &&
+                        !empty($response[0]->content->parts[0]->text)
+                    ){
                         $comments =  $response[0]->content->parts[0]->text;
                     }
                 }

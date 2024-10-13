@@ -38,4 +38,5 @@ Route::group([
     Route::get('/page-order-project/{id}', [ProjectController::class, 'pageOrderProject'])->name('page.order.project');
 
     Route::post('/confirm-checkout', [CustomerCheckoutController::class, 'confirmCheckout'])->name('confirm.checkout');
+    Route::get('/project-search', [ProjectController::class, 'search'])->name('project.search'); 
 });

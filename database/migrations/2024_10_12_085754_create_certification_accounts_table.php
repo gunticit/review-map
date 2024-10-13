@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction_histories', function (Blueprint $table) {
+        Schema::create('certification_accounts', function (Blueprint $table) {
             $table->id();
-            $table->integer('wallet_id'); // Id ví
-            $table->enum('type', ['deposit', 'withdraw', 'payment']); // nạp | rút | thanh toán
-            $table->decimal('amount', 15, 0); // Số tiền
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
-            $table->integer('payment_method_id')->nullable(); // Id phương thức thanh toán
-            $table->decimal('temp_balance')->nullable();
-            $table->string('reference_id')->unique();
+            $table->integer('user_id');
+            $table->string('contract')->nullable();
+            $table->string('front_id_image')->nullable();
+            $table->string('back_id_image')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -35,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaction_histories');
+        Schema::dropIfExists('certification_accounts');
     }
 };

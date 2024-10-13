@@ -112,7 +112,7 @@
                         <span class="material-symbols-outlined">manage_accounts</span>
                     </div> Tài khoản
                 </a>
-                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ChangePassoword">
+                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#change-password-form">
                     <div class="dropdown-item-icon">
                         <span class="material-symbols-outlined">key</span>
                     </div> Đổi mật khẩu

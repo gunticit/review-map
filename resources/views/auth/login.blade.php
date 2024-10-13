@@ -44,7 +44,7 @@
                     @enderror
                 </div>
                 <div class="input-group mb-3">
-                    <input id="InputPassword" placeholder="{{ __('auth.password') }}" type="password" class="form-control @error('password') password is-invalid @enderror" name="password" required autocomplete="current-password">
+                    <input id="new_password" placeholder="{{ __('auth.password') }}" type="password" class="form-control @error('password') password is-invalid @enderror" name="password" required autocomplete="current-password">
                     @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
