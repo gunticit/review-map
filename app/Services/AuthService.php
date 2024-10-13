@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\User\UserRepositoryInterface;
@@ -145,5 +146,41 @@ class AuthService {
         $user->password = Hash::make($request->new_password);
         $user->save();
         return true;
+    }
+
+    public function sendOtp($email)
+    {
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            throw new Exception("Email không tồn tại trong hệ thống");
+        }
+        if (!empty($user->otp_expires_at) && now()->lessThanOrEqualTo($user->otp_expires_at)) {
+            throw new Exception("Hãy thử lại sau vài phút");
+        }
+        return $this->userRepository->generateOtp($user);
+    }
+
+    public function verifyOtp($email, $otp)
+    {
+        $user = User::where('email', $email)->first();
+        if (!$user || !$this->userRepository->verifyOtp($user, $otp)) {
+            return false;
+        }
+        return true;
+    }
+
+    public function updatePassword($email, $password)
+    {
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            $this->userRepository->resetPassword($user, $password);
+        }
+    }
+    public function clearOtp($email)
+    {
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            $this->userRepository->clearOtp($user);
+        }
     }
 }

@@ -4,27 +4,29 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Services\AuthSocialService;
-use Illuminate\Http\Request;
+use Config;
 use Laravel\Socialite\Facades\Socialite;
+use Session;
 
 class SocicalController extends Controller
 {
     protected $authSocialService;
 
-    public function __construct(AuthSocialService $authSocialService){
+    public function __construct(AuthSocialService $authSocialService)
+    {
         $this->authSocialService = $authSocialService;
     }
 
-    public function redirectToGoogle(){
-        $url = Socialite::driver('google')->redirect()->getTargetUrl();
-        return response()->json(['url' => $url], 200);
+    public function redirectToGoogle()
+    {
+        $this->authSocialService->handleDomainRedirect();
+        return Socialite::driver('google')->redirect();
     }
 
-    public function handleGoogleCallback(Request $request){
-        try{
-            $this->authSocialService->handleGoogleCallback($request);
-        }catch(\Exception $e){
-            return response()->json(['message' => 'Unthorized'], 500);
-        }
+    public function handleGoogleCallback()
+    {
+        Config::set('services.google.redirect', Session::get('google_redirect_uri'));
+        $this->authSocialService->handleGoogleCallback();
+        return redirect()->route('login');
     }
 }

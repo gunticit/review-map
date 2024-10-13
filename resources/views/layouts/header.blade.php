@@ -33,5 +33,6 @@
         <script src="{{ asset('./js/main.js') }}"></script>
         <script src="{{ asset('./js/password.js') }}"></script>
         <script src="{{ asset('./assets/js/map.js') }}"></script>
+        <script src="{{ asset('./assets/js/verifyOtp.js') }}?v={{ time() }}"></script>
     </head>
     <body class="nav-fixed">

@@ -22,7 +22,9 @@ class UserResource extends JsonResource
             'email'     => $this->email ?? null,
             'telephone'   => $this->telephone ?? null,
             'language'   => $this->language ?? null,
-            'dark_mode'  => $this->dark_mode ?? null
+            'dark_mode'  => $this->dark_mode ?? null,
+            'google_id'  => $this->google_id ?? null,
+
         ];
     }
 }
