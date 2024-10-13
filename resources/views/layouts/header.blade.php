@@ -29,5 +29,6 @@
         <script src="{{ asset('./assets/js/jquery.basictable.js') }}"></script>
         <script src="{{ asset('./assets/js/select2.min.js') }}"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script src="{{ asset('./assets/js/verifyOtp.js') }}?v={{ time() }}"></script>
     </head>
     <body class="nav-fixed">

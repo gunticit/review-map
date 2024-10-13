@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\SocicalController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,9 @@ Route::group([
         Route::get('/logout', 'AuthController@logout')->name('logout');
         Route::post('/authenticate', 'AuthController@authenticate')->name('auth.authenticate');
         Route::post('/registerUser', 'AuthController@registerUser')->name('auth.registerUser');
+        Route::post('/password/email', 'AuthController@sendOtp')->name('password.email');
+        Route::post('/password/otp', 'AuthController@verifyOtp')->name('password.otp');
+        Route::post('/password/update', 'AuthController@updatePassword')->name('password.update');
     }
 );
 // Đăng nhập bằng google
