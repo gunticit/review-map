@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\ProcessException;
 use App\Http\Requests\EmailRequest;
 use App\Http\Requests\PasswordResetRequest;
+use App\Models\Role;
 use App\Services\AuthService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -48,8 +49,26 @@ class AuthController extends BaseController
         return redirect()->route('login');
     }
 
-    public function authenticate(AuthRequest $request){
-        try{
+    public function authenticate(AuthRequest $request)
+    {
+        $userCheck = $this->authService->checkUserDomain($request->input('username'));
+        if (!empty($userCheck)) {
+            $url = 'http://';
+            if ($userCheck->hasRole(Role::ADMIN_ROLE) && $request->getHost() !== env('ADMIN_DOMAIN')) {
+                $url = $url . env('ADMIN_DOMAIN');
+                return redirect()->back()->with('wrong_path', $url);
+            }
+            if ($userCheck->hasRole(Role::PARTNER_ROLE) && $request->getHost() !== env('PARTNER_DOMAIN')) {
+                $url = $url . env('PARTNER_DOMAIN');
+                return redirect()->back()->with('wrong_path', $url);
+            }
+            if ($userCheck->hasRole(Role::CUSTOMER_ROLE) && $request->getHost() !== env('CUSTOMER_DOMAIN')) {
+                $url = $url . env('CUSTOMER_DOMAIN');
+                return redirect()->back()->with('wrong_path', $url);
+                ;
+            }
+        }
+        try {
             $user = $this->authService->login($request);
             if(!empty($user)){
                 if(Auth::user()->getRoleNames()->first() == 'customer'){
