@@ -31,7 +31,7 @@ class AuthService {
      */
 
     public function login($request)
-    {
+    {      
         $this->authenticate($request);
         $user        = Auth::user();
         $data = !empty($user) ? new UserResource($user) : null;
@@ -57,24 +57,6 @@ class AuthService {
     {
         $this->ensureIsNotRateLimited($request);
         $loginType = filter_var($request->input('username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'telephone';
-        $userCheck = User::where($loginType, $request->input('username'))->first();
-        if(!empty($userCheck)){
-            if($userCheck->hasRole(Role::ADMIN_ROLE) && $request->getHost() !== env('ADMIN_DOMAIN')){
-                return redirect()->to(env('ADMIN_DOMAIN'))->withErrors([
-                    'login' => __('Vui lòng đăng nhập đúng đường dẫn'),
-                ]);
-            }
-            if($userCheck->hasRole(Role::PARTNER_ROLE) && $request->getHost() !== env('PARTNER_DOMAIN')){
-                return redirect()->to(env('PARTNER_DOMAIN'))->withErrors([
-                    'login' => __('Vui lòng đăng nhập đúng đường dẫn'),
-                ]);
-            }
-            if($userCheck->hasRole(Role::CUSTOMER_ROLE) && $request->getHost() !== env('CUSTOMER_DOMAIN')){
-                return redirect()->to(env('CUSTOMER_DOMAIN'))->withErrors([
-                    'login' => __('Vui lòng đăng nhập đúng đường dẫn'),
-                ]);
-            }
-        }
         $credentials = [
             $loginType => $request->input('username'),
             'password' => $request->input('password'),
@@ -182,5 +164,12 @@ class AuthService {
         if ($user) {
             $this->userRepository->clearOtp($user);
         }
+    }
+    public function checkUserDomain($username)
+    {
+        $loginType = filter_var($username, FILTER_VALIDATE_EMAIL) ? 'email' : 'telephone';
+        $userCheck = User::where($loginType, $username)->first();
+        return $userCheck;
+
     }
 }
