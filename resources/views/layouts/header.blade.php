@@ -22,6 +22,10 @@
         <link href="{{ asset('./assets/css/style.css') }}" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
+        @yield('css')
+    </head>
+    <body class="nav-fixed">
+
         <!-- js chart-->
         <script src="{{ asset('./assets/js/canvasjs.min.js') }}"></script>
         <!-- jquery -->
@@ -29,9 +33,12 @@
         <script src="{{ asset('./assets/js/jquery.basictable.js') }}"></script>
         <script src="{{ asset('./assets/js/select2.min.js') }}"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script src="{{ asset('./assets/js/verifyOtp.js') }}?v={{ time() }}"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
         <script src="{{ asset('./js/main.js') }}"></script>
         <script src="{{ asset('./js/password.js') }}"></script>
         <script src="{{ asset('./assets/js/map.js') }}"></script>
-    </head>
-    <body class="nav-fixed">
+        <script src="{{ asset('./assets/js/verifyOtp.js') }}?v={{ time() }}"></script>
+        @yield('js')
+    </body>
+</html>

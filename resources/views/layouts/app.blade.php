@@ -28,7 +28,7 @@
                 <div class="mb-4">
                     <label  for="old_password">Mật khẩu cũ <span class="required">*</span></label>
                     <div class="input-group">
-                        <input class="form-control password" id="old_password" type="password" name="password" placeholder="Mật khẩu cũ" required />
+                        <input class="form-control password w-100" id="old_password" type="password" name="password" placeholder="Mật khẩu cũ" required />
                         <span class="input-group-text togglePassword">
                             <span class="material-symbols-outlined">visibility_off</span>
                         </span>
@@ -38,7 +38,7 @@
                     <label  for="new_password">Mật khẩu mới <span class="required">*</span></label>
                     <div class="g-new_password">
                         <div class="input-group">
-                            <input class="form-control password" id="new_password" type="password" name="password" placeholder="Mật khẩu mới" required />
+                            <input class="form-control password w-100" id="new_password" type="password" name="password" placeholder="Mật khẩu mới" required />
                             <span class="input-group-text togglePassword">
                                 <span class="material-symbols-outlined">visibility_off</span>
                             </span>
@@ -48,7 +48,7 @@
                 <div class="mb-4">
                     <label  for="confirm_password">Xác nhận mật khẩu mới <span class="required">*</span></label>
                     <div class="input-group g-confirm_password">
-                        <input class="form-control password" id="confirm_password" type="password" name="password" placeholder="Xác nhận mật khẩu mới" required />
+                        <input class="form-control password w-100" id="confirm_password" type="password" name="password" placeholder="Xác nhận mật khẩu mới" required />
                         <span class="input-group-text togglePassword">
                             <span class="material-symbols-outlined">visibility_off</span>
                         </span>

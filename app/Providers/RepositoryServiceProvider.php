@@ -35,8 +35,12 @@ use App\Repositories\ProductImage\ProductImageRepository;
 use App\Repositories\ProductImage\ProductImageRepositoryInterface;
 use App\Repositories\Profile\ProfileRepository;
 use App\Repositories\Profile\ProfileRepositoryInterface;
+use App\Repositories\TransactionHistory\TransactionHistoryRepositoryInterface;
+use App\Repositories\TransactionHistory\TransactionHistoryRepository;
 use App\Repositories\Voucher\VoucherRepository;
 use App\Repositories\Voucher\VoucherRepositoryInterface;
+use App\Repositories\Wallet\WalletRepository;
+use App\Repositories\Wallet\WalletRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -62,6 +66,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
         $this->app->bind(ProductImageRepositoryInterface::class, ProductImageRepository::class);
         $this->app->bind(MissionRepositoryInterface::class, MissionRepository::class);
+        $this->app->bind(WalletRepositoryInterface::class, WalletRepository::class);
+        $this->app->bind(TransactionHistoryRepositoryInterface::class, TransactionHistoryRepository::class);
     }
 
     /**

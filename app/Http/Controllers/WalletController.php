@@ -5,19 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\CertificationAccount;
 use App\Models\TransactionHistory;
 use App\Models\Wallet;
+use App\Services\WalletService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class WalletController extends Controller
-{
-
-    
-    public function __construct(){
+{   
+    protected $walletService;
+    public function __construct(
+        WalletService $walletService
+    ){
+        $this->walletService = $walletService;
     }
     public function index(){
-        return view('pages.wallet.list');
+        $data['balance'] = $this->walletService->getBalance();
+        $data['transaction_histories'] = $this->walletService->getTransactionHistories();
+        return view('pages.wallet.list', $data);
     }
     public function withdraw() {
         $user = Auth::user();

@@ -1,4 +1,12 @@
 @extends('layouts.app')
+@section('css')
+  <style>
+    .section-title span {
+      font-size: 30px;
+      color: #5D6A83;
+    }
+  </style>
+@endsection
 @section('content')
 <!-- thong ke -->
 <section class="thong-ke">
@@ -87,7 +95,7 @@
     <div class="col-inner">
       <div class="row">
         <div class="col-md-10 col-12">
-          <div class="section-title">
+          <div class="section-title d-flex">
             <span class="material-symbols-outlined">
               home_pin
             </span> 
@@ -111,3 +119,5 @@
   </div>
 </section>
 @endsection
+
+@section('css')
