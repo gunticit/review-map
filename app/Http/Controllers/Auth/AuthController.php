@@ -91,9 +91,11 @@ class AuthController extends BaseController
     public function registerUser(RegisterRequest $request){
         try{
             $data = $this->authService->registerUser($request);
-            if($data){
-                Session::flash('success', 'Bạn đã tạo user thành công');
-                return redirect()->route('login');
+            if ($data) {
+                return redirect()->back()->with([
+                    'email' => $data->email,
+                    'telephone' => $data->telephone,
+                ]);
             }
             Session::flash('error', 'Tạo user không thành công');
             return redirect()->back()->withInput();
@@ -142,7 +144,6 @@ class AuthController extends BaseController
         $otpArray = $request->input('otp');
 
         $otp = implode('', $otpArray);
-
         // Verify the OTP
         if ($this->authService->verifyOtp($email, $otp)) {
             return $this->sendResponse(['email' => $email], 'Xác nhận OTP thành công');

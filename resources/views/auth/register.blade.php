@@ -141,7 +141,7 @@
 <!-- Button trigger modal -->
 <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Xác thực danh tính</button> -->
 <!-- Modal -->
-<div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade " id="verifyModel" tabindex="-1" aria-labelledby="verifyModelLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-register">
         <div class="modal-content">
             <div class="modal-header">
@@ -153,48 +153,72 @@
             <div class="modal-body">
                 <div id="regForm">
                     <div class="tab">
+                        <form id="emailForm" action="{{ route('password.email') }}" method="POST">
+                                @csrf
+                                <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
                         <h2>Xác thực danh tính</h2>
                         <p>Vui lòng chọn phương thức nhận liên kết thay đổi mật khẩu.</p>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="regFormRadio" id="regFormSms">
-                            <label class="form-check-label" for="regFormSms"> Nhận mã bằng (SMS) tại: <span>+84 123 ****678</span>
+                            <input class="form-check-input" type="radio" name="regFormRadio" id="regFormSms" disabled>
+                            <label class="form-check-label" for="regFormSms"> 
+                                Nhận mã bằng (SMS) tại: 
+                                <span id="smsNumber"></span>
                             </label>
                         </div>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="regFormRadio" id="regFormEmail">
-                            <label class="form-check-label" for="regFormEmail"> Nhận mã qua email tại: <span>part*******01@gmail.com</span>
+                            <input class="form-check-input" type="radio" name="regFormRadio" id="regFormEmail" checked>
+                            <label class="form-check-label" for="regFormEmail"> 
+                                Nhận mã qua email tại: 
+                                <span id="emailAddress"></span>
+                                <input type="hidden" class="form-control" id="emailOtp" name="email" placeholder="Email" value="" required />
                             </label>
                         </div>
+                    </form>
                     </div>
+                    <!-- Bước 2: Nhập mã OTP -->
                     <div class="tab">
                         <h2>Nhập mã xác thực</h2>
-                        <p>Vui lòng nhập mã xác minh gồm 4 chữ số đã được gửi đến tin nhắn điện thoại của bạn.</p>
-                        <p class="fw-500 text-dark mb-0">Gửi mã xác thực đến:</p>
-                        <h5 class="btn btn-link fw-500 ">+84 123 45 67 89</h5>
-                        <form action="">
+                        <form id="otpForm" action="{{ route('password.otp') }}" method="POST">
+                            @csrf
+                            <p id="otpMessage"></p>
+                            <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
+                            <input type="hidden" class="form-control" id="emailOtp2" name="email" placeholder="Email" value="" required />
+                            <input type="hidden" class="form-control" id="otpAttempts" name="otp_attempts" value="0"/>    
                             <div class="d-flex form-check-number">
-                                <div class="p-2">
-                                    <input type="number" class="form-control" name="" id="" aria-describedby="helpId" placeholder="4" />
-                                </div>
-                                <div class="p-2">
-                                    <input type="number" class="form-control" name="" id="" aria-describedby="helpId" placeholder="4" />
-                                </div>
-                                <div class="p-2">
-                                    <input type="number" class="form-control" name="" id="" aria-describedby="helpId" placeholder="4" />
-                                </div>
-                                <div class="p-2">
-                                    <input type="number" class="form-control" name="" id="" aria-describedby="helpId" placeholder="4" />
-                                </div>
+                                    <div class="p-2">
+                                        <input type="number" class="form-control" name="otp[]" id="otp1"  required maxlength="1" min="0" max="9" oninput="limitInputLength(this)" />
+                                    </div>
+                                    <div class="p-2">
+                                        <input type="number" class="form-control" name="otp[]" id="otp2"  required maxlength="1" min="0" max="9" oninput="limitInputLength(this)" />
+                                    </div>
+                                    <div class="p-2">
+                                        <input type="number" class="form-control" name="otp[]" id="otp3"  required maxlength="1" min="0" max="9" oninput="limitInputLength(this)" />
+                                    </div>
+                                    <div class="p-2">
+                                        <input type="number" class="form-control" name="otp[]" id="otp4"  required maxlength="1" min="0" max="9" oninput="limitInputLength(this)" />
+                                    </div>
                             </div>
                         </form>
                     </div>
                     <div class="tab">
                         <h2>Thành công!</h2>
-                        <p>Chúc mừng! Bạn đã thay đổi mật khẩu thành công. Việc thiết lập tài khoản sẽ chưa mất đến 1 phút.</p>
+                        <p>Chúc mừng! Bạn đã xác thực thành công. Đăng nhập ngay thôi!!</p>
+                        <div class="text-center">
+                            <button class="btn btn-primary">
+                                <a href="{{route('login')}}" class="text-white">Đi tới trang đăng nhập</a>
+                            </button>
+                        </div>
                     </div>
                     <div class="text-center">
-                        <a type="button" id="nextBtn" onclick="nextPrev(1)" class="btn btn-primary">Tiếp tục <span class="material-symbols-outlined">arrow_forward</span>
-                        </a>
+                        <button id="nextBtnRegister" type="submit" class="btn btn-primary">
+                            <!-- Loading Message -->
+                        <div id="loadingMessage" style="display:none;" class="text-center">
+                            <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                         <span id="buttonText">Tiếp tục</span>
+                    </button>
                     </div>
                     <!-- Circles which indicates the steps of the form: -->
                     <div class="d-none">
@@ -208,3 +232,22 @@
     </div>
 </div>
 @endsection
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Check if there are any session messages
+    var email = "{{ session('email', '') }}";
+    var telephone = "{{ session('telephone', '') }}";
+    // If either session exists, show the modal
+    if (email || telephone) {
+        if (email) {
+            document.getElementById('emailAddress').textContent = email;
+            $('#emailOtp').val(email);
+        }
+        if (telephone) {
+            document.getElementById('smsNumber').textContent = telephone;
+        }
+        var verifyModal = new bootstrap.Modal(document.getElementById('verifyModel'));
+        verifyModal.show();
+    }
+});
+</script>
