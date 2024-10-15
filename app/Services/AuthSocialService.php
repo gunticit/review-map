@@ -5,14 +5,11 @@ namespace App\Services;
 use App\Models\Role;
 use Config;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
-use Log;
-use Number;
 use Session;
 
 class AuthSocialService
@@ -60,7 +57,7 @@ class AuthSocialService
             }
 
             // Đăng nhập người dùng (dù là mới tạo hay đã có)
-            Auth::login($finduser, true);
+          return $finduser;
 
         } catch (Exception $e) {
             dd($e->getMessage());

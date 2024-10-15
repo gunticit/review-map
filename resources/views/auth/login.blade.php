@@ -67,11 +67,12 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Đăng nhập</button>
-              @error('login')
-                <div class="alert alert-danger" role="alert">
-                    <strong>{{ $message }}</strong>
-                </div>
-                @enderror
+                @if(session('wrong_path'))
+                    <div class="alert alert-danger">
+                       Vui lòng điền đúng đường dẫn <a href="{{ session('wrong_path') }}"><strong>{{ session('wrong_path') }}</strong></a>
+                    </div> 
+                @endif
+
             </form>
             <div class="login-other">
                 <span>Hoặc đăng nhập với</span>
