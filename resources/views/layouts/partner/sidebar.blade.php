@@ -62,7 +62,7 @@
 
                 <!-- Sidenav Heading (Khac)-->
                 <div class="sidenav-menu-heading">Khác</div>
-                <a class="nav-link" href="8.0.yeu-cau-ho-tro.php">
+                <a class="nav-link" href="{{ route('support') }}/">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">support_agent</span>
                     </div> Yêu cầu hỗ trợ
