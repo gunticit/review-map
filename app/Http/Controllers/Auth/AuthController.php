@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\ProcessException;
 use App\Http\Requests\EmailRequest;
 use App\Http\Requests\PasswordResetRequest;
+use App\Http\Requests\UpdateCurrentLocationRequest;
 use App\Models\Role;
 use App\Services\AuthService;
 use Exception;
@@ -15,6 +16,7 @@ use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+
 
 
 class AuthController extends BaseController
@@ -156,6 +158,16 @@ class AuthController extends BaseController
         try {
             $this->authService->updatePassword($request->email, $request->password);
             return $this->sendResponse(null, 'Đổi mật khẩu thành công');
+        } catch (Exception $e) {
+            return $this->sendError(null, $e->getMessage(), 422); // Using sendError
+        }
+    }
+
+    public function updateCurrentLocation(UpdateCurrentLocationRequest $request)
+    {
+        try {
+            $this->authService->updateCurrentLocation($request);
+            return $this->sendResponse(null, 'Cập nhật vị trí thành công');
         } catch (Exception $e) {
             return $this->sendError(null, $e->getMessage(), 422); // Using sendError
         }

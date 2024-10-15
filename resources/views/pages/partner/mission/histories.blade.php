@@ -214,30 +214,41 @@
 <script>
     // Jquery
     jQuery(document).ready(function($){
-        let check_location = localStorage.getItem('current_location');
-        console.log(check_location);
-        if(!check_location){
+        // let check_location = localStorage.getItem('current_location');
+        if(!navigator.geolocation){
             $('#ViTri').modal('show');
             $('#alert-location').append(`
                 <p class="alert-alert mb-0">Bạn cần cung cấp vị trí để có thể làm nhiệm vụ. Vui lòng tải lại trang.
                     <a href="#" class="ms-2">Tải lại trang <span class="material-symbols-outlined">replay</span></a>
                 </p>
             `);
-            // modal auto show
-            $(window).on('load', function() {
-                if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
+  
+        }else{
+            navigator.geolocation.getCurrentPosition(
                     function(position) {
                         $('#ViTri').modal('hide');
                         $('#message-location').remove();
-                        localStorage.setItem('current_location', JSON.stringify(position.coords));
+                        console.log(position);
+                        $.ajax({
+                            url: "{{ route('profile.update.location') }}",    //the page containing php script
+                            type: "post",    //request type,
+                            dataType: 'json',
+                            data: {
+                                email: "abc@gmail.com",
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            },
+                            success:function(result){
+                                localStorage.setItem('current_location', JSON.stringify(position.coords));
+                            },
+                            error:function(result){
+                                console.log(result)
+                            }
+                        });
                     },
                     function(error) {
                     }
                 );
-                }
-            });
-        }else{
             $('#message-location').remove();
         }
 
