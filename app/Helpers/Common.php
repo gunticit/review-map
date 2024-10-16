@@ -248,3 +248,27 @@
             return compact('miles','feet','yards','kilometers','meters');
         }        
     }
+
+    if(!function_exists('getPriceFromPackage')) {
+        function getPriceFromPackage($package) {
+            $price = 0;
+            switch($package) {
+                case 1:
+                    $price = 45000;
+                    break;
+                case 2:
+                    $price = 35000;
+                    break;
+                case 3:
+                    $price = 30000;
+                    break;
+                case 4:
+                    $price = 25000;
+                    break;
+                default:
+                    break;
+            }
+            return $price;
+        }        
+    }
+

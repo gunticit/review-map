@@ -179,6 +179,7 @@ class AuthService {
     public function updateCurrentLocation($request)
     {
         $data = $request->validated();
+        $email = Auth::user()->email;
         return User::where('email', $email)->update([
             'latitude' => $data['latitude'],
             'longitude' => $data['longitude'],
