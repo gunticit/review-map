@@ -234,7 +234,7 @@
                             type: "post",    //request type,
                             dataType: 'json',
                             data: {
-                                email: "abc@gmail.com",
+                                email: "{{auth()->user()->email}}",
                                 latitude: position.coords.latitude,
                                 longitude: position.coords.longitude
                             },
