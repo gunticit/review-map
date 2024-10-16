@@ -86,7 +86,7 @@
                 name: "Đánh giá đã hoàn thành",
                 showInLegend: true,
                 color: "#436CFF",
-                dataPoints: @json($data_chars['revenue'])
+                dataPoints: @json($data_chars['revenue'] ?? [])
               },
 
               // set data Đánh giá đã phân phối
@@ -96,7 +96,7 @@
                 axisYType: "secondary",
                 showInLegend: true,
                 color: "#95ADFF",
-                dataPoints: @json($data_chars['commission'])
+                dataPoints: @json($data_chars['commission'] ?? [])
               },
 
               // set data Tổng lợi nhuận
@@ -106,7 +106,7 @@
                 axisYType: "thirdary",
                 showInLegend: true,
                 color: "#E8EDFF",
-                dataPoints: @json($data_chars['profits'])
+                dataPoints: @json($data_chars['profits'] ?? [])
               }
             ]
           });

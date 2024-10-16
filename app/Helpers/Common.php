@@ -228,8 +228,17 @@
     }
 
     if(!function_exists('formatCurrency')){
-        function formatCurrency($number, $currency = 'VND') {
+        function formatCurrency(int $number, $currency = '') {
             $formattedNumber = number_format($number, 0, ',', '.');
-            return $formattedNumber . ' ' . $currency;
+            return $formattedNumber . (isset($currency) ? ' ' . $currency : '');
         }
     }
+
+    if (!function_exists('parseCurrency')) {
+        function parseCurrency($formattedNumber) {
+            $number = str_replace('.', '', $formattedNumber);
+            $number = preg_replace('/\s[a-zA-Z]+/', '', $number);
+            return (int)$number;
+        }
+    }
+    

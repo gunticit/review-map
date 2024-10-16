@@ -3,6 +3,7 @@
 <!-- thong ke -->
 <section class="thong-ke">
     <div class="container">
+        @if($role_user === 'admin')
         <div class="row">
             <div class="col-xl-3 col-md-4 col-6 mb-4 mb-xl-0">
                 <div class="thong-ke-item text-center">
@@ -49,6 +50,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 </section>
 <!-- end thong ke  -->
@@ -62,9 +64,9 @@
                     @foreach($faqs as $key => $faq)
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button {!! $key != 0 ? 'collapsed' : '' !!}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">{{ $faq->title }}</button>
+                                <button class="accordion-button {!! $key != 0 ? 'collapsed' : '' !!}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{$key}}" aria-expanded="true" aria-controls="collapse-{{$key}}">{{ $faq->title }}</button>
                             </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse {!! $key == 0 ? 'show' : '' !!}" data-bs-parent="#accordionExample">
+                            <div id="collapse-{{$key}}" class="accordion-collapse collapse {!! $key == 0 ? 'show' : '' !!}" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     {{ $faq->content }}
                                 </div>

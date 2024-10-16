@@ -4,6 +4,7 @@ namespace App\Repositories\History;
 use App\Repositories\BaseRepository;
 use App\Models\History;
 use App\Repositories\History\HistoryRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class  HistoryRepository extends BaseRepository implements HistoryRepositoryInterface
 {
@@ -16,7 +17,8 @@ class  HistoryRepository extends BaseRepository implements HistoryRepositoryInte
 
     public function list($request){
         $query = $this->model->query();
-
+        $user_id = Auth::user()->id;
+        $query->where('user_id', $user_id);
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){
             foreach ($orderBy as $column => $direction) {

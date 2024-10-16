@@ -19,7 +19,9 @@ Route::group([
     Route::delete('/support-delete/{id}', [SupportController::class, 'delete'])->name('support.delete');
     Route::delete('/support-delete-by-ids/{ids}', [SupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
     Route::get('/support-create', [SupportController::class, 'create'])->name('support.create');
-    
+    Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
+    Route::post('/wallet-deposit', [App\Http\Controllers\WalletController::class, 'walletDeposit'])->name('wallet.deposit');
+
     Route::get('/generate-comment', [ProjectController::class, 'generateComment'])->name('generate.comment');
     Route::post('/list-order-project', [ProjectController::class, 'listOrderProject'])->name('list.order.project');
     Route::get('/list-projects', [ProjectController::class, 'index'])->name('project.list');

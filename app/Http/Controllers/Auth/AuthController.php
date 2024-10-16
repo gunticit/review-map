@@ -34,7 +34,9 @@ class AuthController extends BaseController
             if(Auth::user()->getRoleNames()->first() == 'partner'){
                 return redirect()->route('partner.overview');
             }
-            return redirect()->route('overview.customer');
+            if(Auth::user()->getRoleNames()->first() == 'admin'){
+                return redirect()->route('statistics.index');
+            }
         }
         return view('auth.login');
     }
@@ -144,7 +146,6 @@ class AuthController extends BaseController
         $otpArray = $request->input('otp');
 
         $otp = implode('', $otpArray);
-
         // Verify the OTP
         if ($this->authService->verifyOtp($email, $otp)) {
             return $this->sendResponse(['email' => $email], 'Xác nhận OTP thành công');

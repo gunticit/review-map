@@ -47,7 +47,6 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/terms', [App\Http\Controllers\TermsController::class, 'index'])->name('terms');
     Route::get('/faq', [App\Http\Controllers\FaqController::class, 'index'])->name('faq');
     Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history');
-    Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/update-profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/update-profile-company', [App\Http\Controllers\ProfileController::class, 'updateProfileCompany'])->name('profile.update.company');

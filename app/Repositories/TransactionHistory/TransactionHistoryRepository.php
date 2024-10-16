@@ -24,8 +24,12 @@ class TransactionHistoryRepository extends BaseRepository implements Transaction
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){
             foreach ($orderBy as $column => $direction) {
-                $query->orderBy($column, $direction);
+                if(!empty($column) && !empty($direction)){
+                    $query->orderBy($column, $direction);
+                }
             }
+        }else{
+            $query = $query->orderBy('id', 'DESC');
         }
         
         $page = $request->page ?? 1;

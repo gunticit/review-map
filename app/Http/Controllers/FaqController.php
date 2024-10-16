@@ -19,11 +19,13 @@ class FaqController extends Controller
     public function index(Request $request){
         $faqs = $this->faqService->list($request);
         $data = $this->dashboardService->info($request);
+        $roles = \Auth::user()->getRoleNames()->first();
         return view('pages.faq',[
             'faqs' => $faqs,
             'money' => array(
                 'spent' => 0
             ),
+            'role_user' => $roles,
             'projects' => $data['projects'] ?? array(),
         ]);
     }

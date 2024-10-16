@@ -62,7 +62,7 @@ class AuthService {
             'password' => $request->input('password'),
         ];
         $credentials['active'] = 1;
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey($request));
             return redirect()->back()->withErrors([
                 'login' => __('Thông tin đăng nhập không chính xác.'),
@@ -108,7 +108,7 @@ class AuthService {
             'email' => $data['email'],
             'telephone' => $data['telephone'],
             'password' => Hash::make($data['password']),
-            'active' => 0,
+            'active' => 1, // Cần xem lại chỗ active này - tài khoản verify hay chưa cũng đều đăng nhập được nhưng giới hạn chức năng
         );
     }
 

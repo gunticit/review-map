@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,6 +16,10 @@ class CustomerAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if(\Auth::user()->getRoleNames()->first() !== 'customer')
+        {
+            return redirect()->route('login');
+        }
         return $next($request);
     }
 }

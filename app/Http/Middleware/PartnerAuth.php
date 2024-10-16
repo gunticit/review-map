@@ -15,6 +15,10 @@ class PartnerAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if(\Auth::user()->getRoleNames()->first() !== 'partner')
+        {
+            return redirect()->route('login');
+        }
         return $next($request);
     }
 }

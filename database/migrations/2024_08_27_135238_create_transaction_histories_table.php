@@ -18,8 +18,8 @@ return new class extends Migration
             $table->decimal('amount', 15, 0); // Số tiền
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
             $table->integer('payment_method_id')->nullable(); // Id phương thức thanh toán
-            $table->decimal('temp_balance')->nullable();
-            $table->string('reference_id')->unique();
+            $table->decimal('temp_balance',12,0)->nullable();
+            $table->string('reference_id')->unique()->nullable(); // Mã này lưu id transaction của api trả về
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
