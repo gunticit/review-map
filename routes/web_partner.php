@@ -19,5 +19,5 @@ Route::group([
     Route::post('/create-mission-ajax', [MissionController::class, 'createMissionAjax'])->name('create.mission.ajax');
     Route::get('/mission/confirm/{id}', [MissionController::class, 'missionConfirm'])->name('mission.confirm');
     Route::get('/mission-success', [MissionController::class, 'success'])->name('mission.success');
-    Route::get('/verify-recaptcha', [MissionController::class, 'verifyRecaptcha'])->name('verify.recaptcha');
+    Route::post('/verify-recaptcha', [MissionController::class, 'verifyRecaptcha'])->name('verify.recaptcha');
 });

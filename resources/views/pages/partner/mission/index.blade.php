@@ -3,6 +3,7 @@
 <section class="section nhan-nhiem-vu-step mb-5 mt-5">
     <div class="container">
         <div class="col-inner text-center">
+            @if(!empty($project))
             <div class="section-step">
                 <h3>step 1</h3>
                 <section>
@@ -69,7 +70,12 @@
                     </div>
                 </section>
             </div> 
-            <!-- end step  -->
+            @else 
+            <span class="material-symbols-outlined" style="font-size: 120px">
+                dvr
+            </span>
+            <p>Hiện tại chưa có nhiệm vụ!</p>
+            @endif
         </div>
     </div>
 </section>

@@ -81,3 +81,16 @@
         </div>
     </nav>
 </div>
+
+<!-- Check captcha -->
+@if(Auth::user()->getRoleNames()->first() == 'partner')
+<script>
+    $(document).ready(function(){
+        let checkCaptcha = localStorage.getItem('captchaChecked');
+        if(checkCaptcha){
+            $('#btn-get-mission, #btn-get-mission2').removeAttr('data-bs-target');
+            $('#btn-get-mission, #btn-get-mission2').attr('href','{{route("mission.index")}}');
+        }
+    })
+</script>
+@endif

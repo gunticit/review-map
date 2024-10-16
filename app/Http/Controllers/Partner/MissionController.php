@@ -44,9 +44,7 @@ class MissionController extends Controller
     public function getCommentsNotInMissions($request)
     {
         $project_id = $request->project_id;
-        // Check xem có id comment của dự án đã được tạo trong mission
         $comment_id = Mission::pluck('comment_id')->where('project_id', $project_id)->toArray();
-        // Lấy những comment của dự án đó và chưa được dùng và không có trong mission
         $randomComment = Comment::whereNotIn('id', $comment_id)
         ->where('is_used', 0)
         ->where('project_id', $project_id)
@@ -158,7 +156,7 @@ class MissionController extends Controller
     }
 
 
-    public function verifyRecaptcha(ReCaptchaV2Request $request, string $id){
-        return response()->json(['success' => true]);
+    public function verifyRecaptcha(Request $request){
+        return redirect()->route('mission.index');
     }
 }
