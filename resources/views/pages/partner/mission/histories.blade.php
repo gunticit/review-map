@@ -99,49 +99,7 @@
                     @endif
                 </tbody>
             </table>
-            <div class="list-table-footer d-flex justify-content-between align-items-center">
-                <div class="list-table-per-page">
-                    <span class="form-label">Hiển thị kết quả</span>
-                    <select class="form-select d-inline-block" name="" id="">
-                        <option selected>10</option>
-                        <option value="">20</option>
-                        <option value="">30</option>
-                        <option value="">40</option>
-                    </select>
-                </div>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span class="material-symbols-outlined">chevron_left</span>
-                            </a>
-                        </li>
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item">
-                            <span class="page-link" href="#">...</span>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">20</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span class="material-symbols-outlined">chevron_right</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            {{ $missions->links('vendor.pagination.custom') }}
         </div>
     </div>
 </section>
@@ -194,7 +152,12 @@
                 <h2 class="modal-title" id="missionModalLabel">Nhận nhiệm vụ</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('verify.recaptcha') }}">
+            @if ($errors->has('captcha'))
+                <div class="alert alert-danger">
+                    {{ $errors->first('captcha') }}
+                </div>
+            @endif
+            <form method="POST" id="recaptcha-form" action="{{ route('verify.recaptcha') }}">
                 {{ csrf_field() }}
                 <div class="modal-body">
                     <h4 class="fw-500 text-primary">60 phút</h4>
@@ -253,7 +216,7 @@
         }
 
         // Get mission
-        $('#btn-get-mission').on('click', function(e){
+        $('#btn-get-mission, #btn-get-mission2').on('click', function(e){
             e.preventDefault();
             e.stopPropagation();
             let check_location = localStorage.getItem('current_location');
@@ -276,6 +239,11 @@
 <script>
     $('#submit-captcha').on('click', function(e){
         e.preventDefault();
+        const recaptcha = grecaptcha.getResponse();
+        if(recaptcha){
+            localStorage.setItem('captchaChecked', true);
+            $('#recaptcha-form').submit();
+        }
     })
 </script>
 @endsection
