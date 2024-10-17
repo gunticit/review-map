@@ -406,9 +406,8 @@
                             @enderror
                         </div>
                         <!-- Form Group (Img)-->
-                        <div class="inputImg"><!-- class: active -->
-                            <label class="d-block" for="inputImg">{{ __('project.images') }}
-                            </label>
+                      <div class="inputImg">
+                            <label class="d-block" for="inputImg">{{ __('project.images') }}</label>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="has_image" id="inputImg1" value="1">
                                 <label class="form-check-label" for="inputImg1"> Có </label>
@@ -418,12 +417,6 @@
                                 <label class="form-check-label" for="inputImg2"> Không </label>
                             </div>
                             <div class="d-none" id="group-upload-image">
-                                <p>
-                                    <small>Các hình ảnh bắt buộc phải được chụp bằng thiết bị thật, chúng tôi sẽ phân phối mỗi đánh giá kèm với 1 ảnh. Đánh giá có ảnh sẽ được phân phối ngẫu nhiên xen kẽ với đánh giá chỉ có chữ.</small>
-                                </p>
-                                <p>
-                                    <small>Số lượng ảnh không vượt quá 10% số lượng gói đánh giá. Định dạng ảnh là (*.jpeg, *.png). Giá của 1 tấm ảnh là 5k/tấm.</small>
-                                </p>
                                 <div id="fileUpload"></div>
                             </div>
                         </div>
@@ -507,7 +500,24 @@
         tagInput1.addData([]);
 
         // file Upload
-        $("#fileUpload").fileUpload();
+        $("#fileUpload").fileUpload({
+            maxFileCount: function() {
+                // Giới hạn số lượng tệp theo gói đánh giá đã chọn
+                var selectedPackage = $('#inputReview').val();
+                switch (selectedPackage) {
+                    case "1":
+                        return 10; // Giới hạn 10 tệp cho gói này
+                    case "2":
+                        return 50; // Giới hạn 50 tệp cho gói này
+                    case "3":
+                        return 100; // Giới hạn 100 tệp cho gói này
+                    case "4":
+                        return 200; // Giới hạn 200 tệp cho gói này
+                    default:
+                        return 0; // Không giới hạn
+                }
+            }
+        });
         $('#confirm-url-map').on('click', function(){
             $('#CheckUrl').modal('hide');
             $('#video-intro').hide();
