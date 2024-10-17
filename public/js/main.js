@@ -44,7 +44,6 @@ $(document).ready(function () {
     function showHideLoading() {
         $("#loading").fadeToggle(200);
     }
-<<<<<<< HEAD
   
 });
 
@@ -73,7 +72,6 @@ $(document).ready(function(){
             $('#codeInput').removeAttr('disabled');
         }
     })
-=======
 
     function setupFileInput(inputFileSelector, fileListSelector, fileErrorSelector, maxSizeMB = 2) {
         let selectedFiles = []; // Array to store selected files
@@ -149,5 +147,4 @@ $(document).ready(function(){
         };
     }
     
->>>>>>> dev
 });
