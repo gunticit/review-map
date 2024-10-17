@@ -42,24 +42,27 @@
                     <p>Bạn cần phải đánh giá 5 sao cho map</p>
                     <h2 class="text-primary mb-4">{{ $project->name }}</h2>
                     <p class="text-black-50">Vui lòng copy nội dung bên dưới</p>
-                    
+                    @if(!empty($mission))
                     <div class="mb-4 download-img-wrap position-relative">
-                        <img src="assets/image-53.jpg" alt="image download" class="download-img">
+                        <img src="{{$mission->images->image_url}}" alt="image download" class="download-img">
                         <a class="btn btn-outline-primary btn-download-img" href="#">
                             <span class="material-symbols-outlined">download</span>
                             Tải hình ảnh
                         </a>
                     </div>
+                    @endif
                     <textarea class="form-control mb-3 textarea-copy" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">Đồ uống tại quán cà phê ngon và đa dạng, không gian sang trọng và sạch sẽ. Nhân viên phục vụ nhanh, thân thiện, nhiệt tình và rất chu đáo. Từ nay chính thức trở thành khách ruột của quán, nhất định sẽ trở lại quán thêm nhiều lần nữa!</textarea>
                     <div class="text-right ">
                         <a class="btn btn-outline-primary btn-copy" href="#">
                             <span class="material-symbols-outlined">content_copy</span>
                             Copy nội dung
                         </a>
+                        @if(!empty($mission))
                         <a class="btn btn-outline-primary ms-3 btn-download-img" href="#">
                             <span class="material-symbols-outlined">download</span>
                             Tải hình ảnh
                         </a>
+                        @endif
                     </div>
                 </section>
                 <h3>step 4</h3>
