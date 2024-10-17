@@ -69,7 +69,12 @@
                 <h2 class="modal-title" id="nhanNhiemVuModalLabel">Nhận nhiệm vụ</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('verify.recaptcha') }}">
+            @if ($errors->has('captcha'))
+                <div class="alert alert-danger">
+                    {{ $errors->first('captcha') }}
+                </div>
+            @endif
+            <form method="POST" id="recaptcha-form" action="{{ route('verify.recaptcha') }}">
                 {{ csrf_field() }}
                 <div class="modal-body">
                     <h4 class="fw-500 text-primary">60 phút</h4>
@@ -85,7 +90,6 @@
     </div>
 </div>
 <!-- end modal vi tri  -->
-
 <script>
     $('document').ready(function(){
         $('#btn-save-change').on('click', function(){
@@ -141,4 +145,5 @@
         });
     })
 </script>
+
 @include('layouts.footer')

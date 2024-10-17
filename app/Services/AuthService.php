@@ -108,6 +108,7 @@ class AuthService {
             'email' => $data['email'],
             'telephone' => $data['telephone'],
             'password' => Hash::make($data['password']),
+            'active' => 0,
         );
     }
 
@@ -145,10 +146,12 @@ class AuthService {
     public function verifyOtp($email, $otp)
     {
         $user = User::where('email', $email)->first();
-        if (!$user || !$this->userRepository->verifyOtp($user, $otp)) {
-            return false;
+
+        if ($user && $user->otp === $otp && now()->lessThan($user->otp_expires_at)) {
+            $this->userRepository->verifyOtp($user);
+            return true;
         }
-        return true;
+        return false;
     }
 
     public function updatePassword($email, $password)
