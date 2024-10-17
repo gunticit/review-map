@@ -53,7 +53,7 @@ class AuthController extends BaseController
     {
         $userCheck = $this->authService->checkUserDomain($request->input('username'));
         if (!empty($userCheck)) {
-            $url = 'http://';
+            $url = request()->secure() ? 'https://' : 'http://';
             if ($userCheck->hasRole(Role::ADMIN_ROLE) && $request->getHost() !== env('ADMIN_DOMAIN')) {
                 $url = $url . env('ADMIN_DOMAIN');
                 return redirect()->back()->with('wrong_path', $url);
