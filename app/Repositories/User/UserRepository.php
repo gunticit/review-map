@@ -46,7 +46,6 @@ class  UserRepository extends BaseRepository implements UserRepositoryInterface
     public function verifyOtp($user)
     {
         $user->email_verified_at = now();
-        $user->active = 1;
         $user->otp = null;
         $user->save();
     }

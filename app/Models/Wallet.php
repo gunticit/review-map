@@ -14,4 +14,12 @@ class Wallet extends Model
     protected $fillable = ['user_id', 'balance', 'currency'];
     // protected $guarded = [];
     public $timestamps = true;
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function transactionHistories() {
+        return $this->hasMany(TransactionHistory::class, 'wallet_id', 'id');
+    }
 }
