@@ -5070,7 +5070,6 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
   font-size: 22px;
 }
 .input-group.group-search{
-<<<<<<< HEAD
   display: flex;    
   flex-wrap: unset;
   gap: 20px;
@@ -5095,14 +5094,6 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
 }
 .setting-page .accordion-body .notice{
   font-size: 14px;
-=======
-  display: flex;
-  flex-wrap: unset;
-  gap: 20px;
-}
-.input-group.group-search > .btn-filter{
-  background: #FAFAFA;
->>>>>>> dev
 }
 @media (max-width: 768px) {
   .step-xac-thuc .step-images {
