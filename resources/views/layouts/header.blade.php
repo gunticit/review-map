@@ -35,7 +35,11 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
         <script src="{{ asset('./js/main.js') }}"></script>
+<<<<<<< HEAD
+        {{-- <script src="{{ asset('./js/password.js') }}"></script> --}}
+=======
         <script src="{{ asset('./js/auth/verifyOtp.js') }}?v={{ time() }}"></script>
+>>>>>>> dev
         <script src="{{ asset('./assets/js/map.js') }}"></script>
         <script src="{{ asset('./assets/js/verifyOtp.js') }}?v={{ time() }}"></script>
         @yield('js')

@@ -32,7 +32,7 @@
                     <div class="col-sm-4">
                         <select class="form-select form-control" id="codeSelect" name="codeSelect">
                             <option value="0" {{ $voucher->code == '0' ? 'selected' : '' }}>Nhập thủ công</option>
-                            <option value="1" {{ $voucher->code == '1' ? 'selected' : '' }}>Tự động tạo mã KH_...</option>
+                            <option value="1" {{ $voucher->code == '1' ? 'selected' : '' }}>Tự động tạo mã</option>
                         </select>
                     </div>
                     <div class="col-sm-8">

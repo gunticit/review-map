@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ManageCustomerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VoucherController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,6 @@ Route::group([
         Route::post('/project-wrong-image', [ProjectController::class, 'wrongImage'])->name('project.wrong.image');
         Route::post('/update-project-status/{id}', [ProjectController::class, 'updateStatus'])->name('update.project.status');
 
-        
+        Route::get('/setting', [SettingController::class, 'index'])->name('setting');
     });
 });

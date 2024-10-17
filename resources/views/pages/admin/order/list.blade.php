@@ -32,7 +32,7 @@
                             </button>
                             <input type="text" value="{{ request()->name }}" placeholder="Tìm kiếm" name="name" class="form-control" id="inputSearch">
                         </div>
-                        <button class="bttn-filter btn btn-default btn-filter" type="button" onclick="filter()">
+                        <button class="btn btn-default btn-filter" type="button" onclick="filter()">
                             <img src="{{ asset('./assets/img/filter.svg') }}" alt="filter"> <span>Tìm kiếm</span>
                         </button>
                     </div>

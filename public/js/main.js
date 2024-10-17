@@ -44,6 +44,36 @@ $(document).ready(function () {
     function showHideLoading() {
         $("#loading").fadeToggle(200);
     }
+<<<<<<< HEAD
+  
+});
+
+function generateCoupon(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let coupon = '';
+    
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        coupon += characters[randomIndex];
+    }
+    
+    return coupon;
+}  
+
+$(document).ready(function(){
+    $('#codeSelect').on('change', function () {
+        if($(this).val() == 1){
+            let code = generateCoupon(10);
+            $('#codeInput').val(code);
+            $('#codeInput').attr('readonly', 'readonly');
+            $('#codeInput').attr('disabled', 'disabled');
+        }else{
+            $('#codeInput').val('');
+            $('#codeInput').removeAttr('readonly');
+            $('#codeInput').removeAttr('disabled');
+        }
+    })
+=======
 
     function setupFileInput(inputFileSelector, fileListSelector, fileErrorSelector, maxSizeMB = 2) {
         let selectedFiles = []; // Array to store selected files
@@ -119,4 +149,5 @@ $(document).ready(function () {
         };
     }
     
+>>>>>>> dev
 });
