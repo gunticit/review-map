@@ -1,10 +1,10 @@
 build:
 	docker compose build
-up all-images:
+all-images:
 	docker compose up -d --build
 down:
 	docker compose down
-exec app:
+exec-app:
 	docker exec -it app bash
-exec pgsql:
+exec-pgsql:
 	docker exec -it pgsql bash
