@@ -43,12 +43,11 @@ class  UserRepository extends BaseRepository implements UserRepositoryInterface
         return $otp;
     }
 
-    public function verifyOtp($user, $otp)
+    public function verifyOtp($user)
     {
-        if ($user->otp === $otp && now()->lessThan($user->otp_expires_at)) {
-            return true;
-        }
-        return false;
+        $user->email_verified_at = now();
+        $user->otp = null;
+        $user->save();
     }
 
     public function resetPassword($user, $password)

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ApproveProjectController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ManagePartnerController;
 use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ManageCustomerController;
@@ -29,6 +30,9 @@ Route::group([
         Route::get('/categories-list', [CategoryController::class, 'categoriesList'])->name('categories.list');
         Route::post('/destroy-category-id/{id}', [CategoryController::class, 'destroyCategoryById'])->name('destroy.category.id');
         Route::resource('/manage-customer', ManageCustomerController::class);
+        Route::get('/manage-partner/info', [ManagePartnerController::class, 'info'])->name('admin.manage.partner.info');
+        Route::get('/manage-partner/wallet', [ManagePartnerController::class, 'wallet'])->name('admin.manage.partner.wallet');
+        Route::get('/manage-partner/project', [ManagePartnerController::class, 'project'])->name('admin.manage.partner.project');
         Route::post('/admin-company-update', [ManageCustomerController::class, 'adminCompanyUpdate'])->name('admin.company.update');
 
 

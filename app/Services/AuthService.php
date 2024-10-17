@@ -145,10 +145,12 @@ class AuthService {
     public function verifyOtp($email, $otp)
     {
         $user = User::where('email', $email)->first();
-        if (!$user || !$this->userRepository->verifyOtp($user, $otp)) {
-            return false;
+
+        if ($user && $user->otp === $otp && now()->lessThan($user->otp_expires_at)) {
+            $this->userRepository->verifyOtp($user);
+            return true;
         }
-        return true;
+        return false;
     }
 
     public function updatePassword($email, $password)
@@ -171,5 +173,15 @@ class AuthService {
         $userCheck = User::where($loginType, $username)->first();
         return $userCheck;
 
+    }
+
+    public function updateCurrentLocation($request)
+    {
+        $data = $request->validated();
+        $email = Auth::user()->email;
+        return User::where('email', $email)->update([
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
+        ]);
     }
 }

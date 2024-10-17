@@ -5070,6 +5070,7 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
   font-size: 22px;
 }
 .input-group.group-search{
+<<<<<<< HEAD
   display: flex;    
   flex-wrap: unset;
   gap: 20px;
@@ -5094,6 +5095,14 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
 }
 .setting-page .accordion-body .notice{
   font-size: 14px;
+=======
+  display: flex;
+  flex-wrap: unset;
+  gap: 20px;
+}
+.input-group.group-search > .btn-filter{
+  background: #FAFAFA;
+>>>>>>> dev
 }
 @media (max-width: 768px) {
   .step-xac-thuc .step-images {
@@ -5421,18 +5430,18 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
   .nav-fixed #layoutSidenav #layoutSidenav_content {
     padding-left: 310px;
   }
+  .sidenav-light .sidenav-menu{
+    padding: 15px;
+  }
   .topnav .navbar-brand-wrap,
   .nav-fixed #layoutSidenav #layoutSidenav_nav {
     min-width: 295px;
-  }
-  .sidenav-light .sidenav-menu {
-    padding: 15px 30px;
   }
   .sidenav-toggled #layoutSidenav #layoutSidenav_nav {
     transform: translateX(-20rem);
   }
   .topnav .navbar-brand {
-    padding-left: 40px !important;
+    padding-left: 20px !important;
     min-width: 279px;
   }
   .danh-sach-du-an .list-table-progree {

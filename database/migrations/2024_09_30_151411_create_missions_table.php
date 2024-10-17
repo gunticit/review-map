@@ -32,7 +32,7 @@ return new class extends Migration
             $table->double('price', 15, 0)->default(0); // Đơn vị mặc định VNĐ
             $table->integer('project_id');
             $table->integer('comment_id');
-            $table->integer('image_id')->nullable; // Có thể có hoặc không, có liên quan đến trạng thái
+            $table->integer('image_id')->nullable(); // Có thể có hoặc không, có liên quan đến trạng thái
             // Status chú ý comment phía trên
             $table->integer('status'); // 2: Đang thực hiện, 1: Đã hoàn thành, 3: Chờ hệ thống duyệt, 4: Chờ nhân viên duyệt, 5: Đã từ chối, 6: Đã hết hạn 
             $table->string('latitude')->nullable();
