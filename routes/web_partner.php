@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Partner\CartController;
 use App\Http\Controllers\Partner\ProductController;
 use App\Http\Controllers\Partner\MissionController;
 use App\Http\Controllers\Partner\OverviewController;
@@ -20,6 +21,12 @@ Route::group([
     Route::get('/wallet/verify/create',  [WalletController::class, 'createVerify'])->name('wallet.verify.create');
     Route::post('/wallet/verify',  [WalletController::class, 'storeVerify'])->name('wallet.verify.store');
     Route::get('/store-product',  [ProductController::class, 'index'])->name('store.product');
+    
+    Route::get('/cart',  [CartController::class, 'index'])->name('cart.index');
+    Route::patch('/cart/update-quantity',  [CartController::class, 'updateQuantity'])->name('cart.update.quantity');
+    Route::delete('/cart/delete-item',  [CartController::class, 'deleteItem'])->name('cart.delete.item');
+    Route::post('/cart/apply-voucher',  [CartController::class, 'applyVoucher'])->name('cart.apply.voucher');
+
     Route::post('/create-mission-ajax', [MissionController::class, 'createMissionAjax'])->name('create.mission.ajax');
     Route::get('/mission/confirm/{id}', [MissionController::class, 'missionConfirm'])->name('mission.confirm');
     Route::get('/mission-success', [MissionController::class, 'success'])->name('mission.success');
