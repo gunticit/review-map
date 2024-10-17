@@ -12,8 +12,13 @@ class TransactionHistory extends Model
     protected $guarded = [];
     public $timestamps = true;
 
-    public function user() {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+    // public function user() {
+    //     return $this->belongsTo(User::class, 'user_id', 'id');
+    // }
+
+    public function user()
+    {
+        return $this->hasOneThrough(User::class, Wallet::class, 'id', 'id', 'wallet_id', 'user_id');
     }
 
     public function wallet() {
