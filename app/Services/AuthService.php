@@ -108,7 +108,6 @@ class AuthService {
             'email' => $data['email'],
             'telephone' => $data['telephone'],
             'password' => Hash::make($data['password']),
-            'active' => 0,
         );
     }
 

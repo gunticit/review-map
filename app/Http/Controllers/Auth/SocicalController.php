@@ -30,7 +30,7 @@ class SocicalController extends Controller
         Config::set('services.google.redirect', Session::get('google_redirect_uri'));
         $user = $this->authSocialService->handleGoogleCallback();
         if (!empty($user)) {
-            $url = 'http://';
+            $url = request()->secure() ? 'https://' : 'http://';
             if ($user->hasRole(Role::ADMIN_ROLE) && request()->getHost() !== env('ADMIN_DOMAIN')) {
                 $url = $url . env('ADMIN_DOMAIN');
                 return redirect()->route('login')->with('wrong_path', $url);
