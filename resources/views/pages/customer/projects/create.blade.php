@@ -418,6 +418,12 @@
                             </div>
                             <div class="d-none" id="group-upload-image">
                                 <div id="fileUpload"></div>
+                                <p>
+                                    <small>Các hình ảnh bắt buộc phải được chụp bằng thiết bị thật, chúng tôi sẽ phân phối mỗi đánh giá kèm với 1 ảnh. Đánh giá có ảnh sẽ được phân phối ngẫu nhiên xen kẽ với đánh giá chỉ có chữ.</small>
+                                </p>
+                                <p>
+                                    <small>Số lượng ảnh không vượt quá 10% số lượng gói đánh giá. Định dạng ảnh là (*.jpeg, *.png). Giá của 1 tấm ảnh là 5k/tấm.</small>
+                                </p>
                             </div>
                         </div>
                     </div>
