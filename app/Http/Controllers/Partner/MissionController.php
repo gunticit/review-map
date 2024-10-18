@@ -50,14 +50,15 @@ class MissionController extends Controller
         $mission = [];
         $projectResult = [];
         $projects = Project::where('status', Project::WORKING_PROJECT)->get();
+        $projects = $projects->shuffle();
         foreach($projects as $project) {
             // Đếm nhiệm vụ của project đang thực hiện và đã hoàn thành
             $countMission = Mission::where('project_id', $project->id)->whereIn('status', [1, 2])->count();
             $conditionPackage = true;
-            $conditionSlow = 1;
+            $conditionSlow = true;
             // check tổng nhiệm vụ không được lớn hơn rãi chậm
-            if($project->is_slow && $countMission > $project->point_slow) {
-                $conditionSlow = 0;
+            if($project->is_slow === true && $countMission > $project->point_slow) {
+                $conditionSlow = false;
             }
             // check tổng nhiệm vụ không được lớn hơn gói dự án đăng ký
             switch($project->package){
