@@ -108,7 +108,6 @@ class AuthService {
             'email' => $data['email'],
             'telephone' => $data['telephone'],
             'password' => Hash::make($data['password']),
-            'active' => 0,
         );
     }
 
@@ -174,5 +173,15 @@ class AuthService {
         $userCheck = User::where($loginType, $username)->first();
         return $userCheck;
 
+    }
+
+    public function updateCurrentLocation($request)
+    {
+        $data = $request->validated();
+        $email = Auth::user()->email;
+        return User::where('email', $email)->update([
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
+        ]);
     }
 }

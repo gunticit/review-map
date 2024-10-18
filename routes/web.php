@@ -49,6 +49,7 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
     Route::get('/notification/{id}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notification.show');
     Route::post('/change-password', [App\Http\Controllers\Auth\AuthController::class, 'changePassword'])->name('profile.change.password');
+    Route::post('/update-location', [App\Http\Controllers\Auth\AuthController::class, 'updateCurrentLocation'])->name('profile.update.location');
 
     
     include 'web_customer.php';

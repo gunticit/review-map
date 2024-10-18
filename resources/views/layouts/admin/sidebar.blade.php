@@ -54,7 +54,7 @@
     </div> <span>Kiểm duyệt</span> 
     {{-- <span class="badge bg-danger rounded-pill ms-2">2</span> --}}
 </a>
-<a class="nav-link" href="{{ route('support') }}">
+<a class="nav-link" href="{{ route('admin.manage.partner.info') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             group

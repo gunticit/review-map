@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Bank\BankRepositoryRepository;
+use App\Repositories\Bank\BankRepositoryRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
@@ -31,6 +33,8 @@ use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\PaymentMethod\PaymentMethodRepository;
+use App\Repositories\PaymentMethod\PaymentMethodRepositoryInterface;
 use App\Repositories\ProductImage\ProductImageRepository;
 use App\Repositories\ProductImage\ProductImageRepositoryInterface;
 use App\Repositories\Profile\ProfileRepository;
@@ -68,6 +72,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MissionRepositoryInterface::class, MissionRepository::class);
         $this->app->bind(WalletRepositoryInterface::class, WalletRepository::class);
         $this->app->bind(TransactionHistoryRepositoryInterface::class, TransactionHistoryRepository::class);
+        $this->app->bind(PaymentMethodRepositoryInterface::class, PaymentMethodRepository::class);
+        $this->app->bind(BankRepositoryRepositoryInterface::class, BankRepositoryRepository::class);
     }
 
     /**

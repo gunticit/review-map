@@ -52,6 +52,7 @@ class AuthSocialService
                     'email' => $user->getEmail(),
                     'google_id' => $user->getId(),
                     'password' => Hash::make(Str::random(8)),
+                    'email_verified_at' => now(),
                 ];
                 $finduser = $this->userRepository->create($data); // Đổi tên $user thành $finduser
                 $this->setRole($finduser);
