@@ -15,7 +15,7 @@
     </section>
     <!-- tao-yeu-cau -->
     <section class="section tao-yeu-cau mb-5">
-        <form action="{{ route('support.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.support.store') }}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class="container">
                 <div class="col-inner">

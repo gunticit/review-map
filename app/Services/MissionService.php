@@ -2,8 +2,13 @@
 
 namespace App\Services;
 
+<<<<<<< HEAD
+use App\Http\Resources\MisionResource;
+use App\Repositories\Mission\MissionRepositoryInterface;
+=======
 use App\Repositories\Mission\MissionRepositoryInterface;
 use App\Http\Resources\MissionResource;
+>>>>>>> c2294c75717a8cfde6cbf65228150dd4bf8dbd3e
 use Illuminate\Validation\ValidationException;
 
 class MissionService {
@@ -24,7 +29,11 @@ class MissionService {
 
     public function list($request){
         $supports = $this->missionRepository->list($request);
+<<<<<<< HEAD
+        $data = MisionResource::collection($supports)->resource;
+=======
         $data = MissionResource::collection($supports)->resource;
+>>>>>>> c2294c75717a8cfde6cbf65228150dd4bf8dbd3e
         return $data;
     }
 
