@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\Admin\CheckoutController;
 use App\Http\Controllers\Customer\CustomerCheckoutController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\ProjectController;
-use App\Http\Controllers\Customer\SupportController;
 
 // Customer
 Route::group([
@@ -12,13 +10,6 @@ Route::group([
     'middleware' => ['customer.auth']
 ], function(){
     Route::get('/overview', [App\Http\Controllers\DashboardController::class, 'index'])->name('customer.overview');
-    Route::get('/support', [SupportController::class, 'index'])->name('support');
-    Route::post('/support-store', [SupportController::class, 'store'])->name('support.store');
-    Route::get('/support-edit/{id}', [SupportController::class, 'edit'])->name('support.edit');
-    Route::put('/support-update/{id}', [SupportController::class, 'update'])->name('support.update');
-    Route::delete('/support-delete/{id}', [SupportController::class, 'delete'])->name('support.delete');
-    Route::delete('/support-delete-by-ids/{ids}', [SupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
-    Route::get('/support-create', [SupportController::class, 'create'])->name('support.create');
     
     Route::get('/generate-comment', [ProjectController::class, 'generateComment'])->name('generate.comment');
     Route::post('/list-order-project', [ProjectController::class, 'listOrderProject'])->name('list.order.project');
