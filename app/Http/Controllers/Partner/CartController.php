@@ -30,7 +30,7 @@ class CartController extends Controller
 
                 $productDate = date('Y-m', strtotime($product->created_at));
                 $productCode = $product->product_code;
-                $productLinkImage = $product->images->first()->link_image;
+                $productLinkImage = $product->images->first()->link_image ?? '';
 
                 $product->price_formatted = $this->formatCurrencyVND($product->price);
                 $product->subtotal_formatted = $this->formatCurrencyVND($subtotal);
@@ -39,25 +39,6 @@ class CartController extends Controller
         }
         $cart->total = $total;
         $cart->total_formatted = $this->formatCurrencyVND($total);
-
-        $voucher_applied = session('voucher_applied');
-
-        if ($voucher_applied) {
-            $voucher = Voucher::find($voucher_applied);
-            if ($voucher) {
-                $discount = 0;
-                if ($voucher->discount_type == 'percent') {
-                    $discount = $total * $voucher->discount_value / 100;
-                }
-                if ($voucher->discount_type == 'fixed') {
-                    $discount = $voucher->discount_value;
-                }
-                $cart->discount = $discount;
-                $cart->total = $total - $discount;
-                $cart->discount_formatted = $this->formatCurrencyVND($discount);
-                $cart->total_formatted = $this->formatCurrencyVND($cart->total);
-            }
-        }
 
         $wallet = Wallet::where('user_id', $user->id)->first();
         $wallet->balance_formatted = $this->formatCurrencyVND($wallet->balance);
@@ -108,29 +89,83 @@ class CartController extends Controller
 
     public function applyVoucher(Request $request)
     {
-        $voucher = Voucher::where('code', $request->voucher)->first();
-        
+        $discount = 0;
+        $total = $request->total;
+        $totalOriginal = $request->total_original;
+
+        $totalFormatted = $this->formatCurrencyVND($total);
+        $totalOriginalFormatted = $this->formatCurrencyVND($totalOriginal);
+
+        $voucher = Voucher::where('code', $request->voucher_code)->first();
+
         if (!$voucher) {
-            return redirect()->back()->withErrors(['error_voucher' => "Mã giảm giá không hợp lệ"]);
+            return response()->json([
+                'success' => false, 
+                'message' => "Mã giảm giá không hợp lệ",
+                'total_formatted' => $totalFormatted,
+                'total_original_formatted' => $totalOriginalFormatted
+            ]);
         }
 
         if ($voucher->status != 'active') {
-            return redirect()->back()->withErrors(['error_voucher' => "Mã giảm giá không hợp lệ"]);
+            return response()->json([
+                'success' => false, 
+                'message' => "Mã giảm giá không hợp lệ", 
+                'total_formatted' => $totalFormatted,
+                'total_original_formatted' => $totalOriginalFormatted
+            ]);
         }
 
         if ($voucher->start_date > now() || $voucher->end_date < now()) {
-            return redirect()->back()->withErrors(['error_voucher' => "Mã giảm giá không hợp lệ"]);
+            return response()->json([
+                'success' => false, 
+                'message' => "Mã giảm giá đã hết hạn", 
+                'total_formatted' => $totalFormatted,
+                'total_original_formatted' => $totalOriginalFormatted
+            ]);
         }
 
         if ($voucher->uses_left >= $voucher->max_uses) {
-            return redirect()->back()->withErrors(['error_voucher' => "Mã giảm giá đã hết lượt sử dụng"]);
+            return response()->json([
+                'success' => false, 
+                'message' => "Mã giảm giá đã hết lượt sử dụng", 
+                'total_formatted' => $totalFormatted,
+                'total_original_formatted' => $totalOriginalFormatted
+            ]);
         }
 
         if ($voucher->min_order_value > $request->total) {
-            return redirect()->back()->withErrors(['error_voucher' => "Tổng giá trị đơn hàng phải lớn hơn {$this->formatCurrencyVND($voucher->min_order_value)}"]);
+            return response()->json([
+                'success' => false, 
+                'message' => "Tổng giá trị đơn hàng phải lớn hơn {$this->formatCurrencyVND($voucher->min_order_value)}", 
+                'total_formatted' => $totalFormatted,
+                'total_original_formatted' => $totalOriginalFormatted
+            ]);
         }
 
-        return redirect()->route('cart.index')->withInput()->with('voucher_applied', $voucher->id);
+        if ($voucher->discount_type == 'percent') {
+            $discount = $request->total * $voucher->discount_value / 100;
+        }
+
+        if ($voucher->discount_type == 'fixed') {
+            $discount = $voucher->discount_value;
+        }
+
+        $totalAfterDiscount = $request->total - $discount;
+
+        $discountFormatted = $this->formatCurrencyVND($discount);
+        $totalAfterDiscountFormatted = $this->formatCurrencyVND($totalAfterDiscount);
+
+        return response()->json([
+            'success' => true, 
+            'voucher_id' => $voucher->id,
+            'total' => $total,
+            'discount' => $discount,
+            'total_after_discount' => $totalAfterDiscount,
+            'total_formatted' => $totalFormatted, 
+            'discount_formatted' => $discountFormatted,
+            'total_after_discount_formatted' => $totalAfterDiscountFormatted
+        ]);
     }
 
     private function formatCurrencyVND($number)

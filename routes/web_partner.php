@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Partner\CartController;
 use App\Http\Controllers\Partner\ProductController;
 use App\Http\Controllers\Partner\MissionController;
+use App\Http\Controllers\Partner\OrderController;
 use App\Http\Controllers\Partner\OverviewController;
 use App\Http\Controllers\WalletController;
 
@@ -24,6 +25,7 @@ Route::group([
     Route::patch('/cart/update-quantity',  [CartController::class, 'updateQuantity'])->name('cart.update.quantity');
     Route::delete('/cart/delete-item',  [CartController::class, 'deleteItem'])->name('cart.delete.item');
     Route::post('/cart/apply-voucher',  [CartController::class, 'applyVoucher'])->name('cart.apply.voucher');
+    Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 
     Route::post('/create-mission-ajax', [MissionController::class, 'createMissionAjax'])->name('create.mission.ajax');
     Route::get('/mission/confirm/{id}', [MissionController::class, 'missionConfirm'])->name('mission.confirm');
