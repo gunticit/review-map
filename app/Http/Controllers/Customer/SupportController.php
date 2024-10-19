@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SupportRequest;
 use App\Http\Resources\SupportResource;
 use App\Models\Department;

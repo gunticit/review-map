@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('project_code')->nullable();
             $table->string('url_map')->nullable();
             $table->string('description')->nullable();
             $table->string('package')->nullable(); // 1: 10, 2: 50, 3: 100, 4: 200
@@ -30,7 +31,7 @@ return new class extends Migration
             $table->string('longitude')->nullable();
             $table->string('place_id')->nullable();
             $table->boolean('has_image')->default(false)->nullable();
-            $table->integer('status'); // 0: Huỷ, 1: Hoàn thành, 2: Đang thực hiện, 3: Hoàn lại, 4: Tạm ngưng, 5: Chưa thanh toán, 6: Đang chờ duyệt
+            $table->integer('status'); // 0: Huỷ, 1: Hoàn thành, 2: Đang thực hiện, 3: Hoàn lại, 4: Tạm ngưng, 5: Chưa thanh toán, 6: Đang chờ duyệt (khi hoàn thành nhiệm vụ)
             $table->integer('is_wrong_image')->default(0)->nullable();
             $table->date('update_wrong_image')->nullable(); // Ngày cập nhật lại hình
             $table->integer('is_wrong_rate')->default(0)->nullable();

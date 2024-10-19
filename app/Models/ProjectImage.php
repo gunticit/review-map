@@ -16,4 +16,8 @@ class ProjectImage extends Model
     public function project(){
         return $this->belongsTo(Project::class, 'project_id', 'id');
     }
+
+    public function mission(){
+        return $this->hasOne(Mission::class, 'image_id', 'id');
+    }
 }

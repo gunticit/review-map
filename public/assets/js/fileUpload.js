@@ -6,16 +6,14 @@
             var fileUploadDiv = $(this);
             var fileUploadId = `fileUpload-${++fileUploadCount}`;
 
-            // Biến lưu trữ các file đã được chọn
-            var selectedFiles = [];
-
+            // Creates HTML content for the file upload area.
             var fileDivContent = `
                 <label for="${fileUploadId}" class="file-upload">
                     <div>
                         <i class="material-symbols-outlined">image</i>
                         <p>Kéo thả hoặc <span class="text-primary">chọn hình ảnh</span> để tải lên</p>
                     </div>
-                    <input type="file" accept="image/png, image/gif, image/jpeg" id="${fileUploadId}" name="images[]" multiple hidden />
+                    <input type="file" accept="image/png, image/gif, image/jpeg" id="${fileUploadId}" name=[] multiple hidden />
                 </label>
             `;
 
@@ -23,7 +21,7 @@
 
             var table = null;
             var tableBody = null;
-
+            // Creates a table containing file information.
             function createTable() {
                 table = $(`
                     <table>
@@ -46,15 +44,15 @@
                 fileUploadDiv.append(table);
             }
 
+            // Adds the information of uploaded files to table.
             function handleFiles(files) {
                 if (!table) {
                     createTable();
                 }
 
-                $.each(files, function (index, file) {
-                    if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
-                        selectedFiles.push(file);
-
+                tableBody.empty();
+                if (files.length > 0) {
+                    $.each(files, function (index, file) {
                         var fileName = file.name;
                         var fileSize = (file.size / 1024).toFixed(2) + " KB";
                         var fileType = file.type;
@@ -64,7 +62,7 @@
 
                         tableBody.append(`
                             <tr>
-                                <td class="stt">${selectedFiles.length}</td>
+                                <td class="stt">${index + 1}</td>
                                 <td class="fileName">${fileName}</td>
                                 <td class="preview">${preview}</td>
                                 <td class="fileSize">${fileSize}</td>
@@ -72,30 +70,19 @@
                                 <td class="delete"><button type="button" class="deleteBtn"><i class="material-symbols-outlined">delete</i></button></td>
                             </tr>
                         `);
-                    }
-                });
-
-                tableBody.find(".deleteBtn").click(function () {
-                    var row = $(this).closest("tr");
-                    var fileName = row.find(".fileName").text();
-                    var fileSize = parseFloat(row.find(".fileSize").text());
-
-                    // Xóa file khỏi danh sách selectedFiles
-                    selectedFiles = selectedFiles.filter(f => !(f.name === fileName && (f.size / 1024).toFixed(2) == fileSize));
-
-                    row.remove();
-
-                    // Cập nhật lại STT sau khi xóa
-                    tableBody.find("tr").each(function (index) {
-                        $(this).find(".stt").text(index + 1);
                     });
 
-                    if (tableBody.find("tr").length === 0) {
-                        tableBody.append('<tr style="width: 100% !important"><td colspan="6" class="no-file">Không có file nào được chọn!</td></tr>');
-                    }
-                });
+                    tableBody.find(".deleteBtn").click(function () {
+                        $(this).closest("tr").remove();
+
+                        if (tableBody.find("tr").length === 0) {
+                            tableBody.append('<tr><td colspan="6" class="no-file">No files selected!</td></tr>');
+                        }
+                    });
+                }
             }
 
+            // Events triggered after dragging files.
             fileUploadDiv.on({
                 dragover: function (e) {
                     e.preventDefault();
@@ -108,31 +95,9 @@
                 },
             });
 
+            // Event triggered when file is selected.
             fileUploadDiv.find(`#${fileUploadId}`).change(function () {
-                let package = $('#inputReview').val();
-                let limit = 0;
-                if(package == 1){
-                    limit = 1;
-                }else if(package == 2){
-                    limit = 5;
-                }else if(package == 3){
-                    limit = 10;
-                }else if(package == 4){
-                    limit = 20;
-                }
-                let lenght = this.files.length;
-                if(lenght > limit){
-                    $('#fileUpload').append(`<small class="text-danger">Số lượng hình của gói tối đa là ${limit}</small>`);
-                    setTimeout(() => {
-                        $('#fileUpload small').remove();
-                    }, 5000);
-                    return;
-                }else{
-                    $('#text-danger .text-danger').remove();
-                }
-                if(package && this.files){
-                    handleFiles(this.files);
-                }
+                handleFiles(this.files);
             });
         });
     };

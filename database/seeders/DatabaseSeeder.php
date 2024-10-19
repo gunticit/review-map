@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UserTableSeeder;
 use Database\Seeders\RolePermissionSeeder;
 use Database\Seeders\NotificationSeeder;
+use Database\Seeders\FaqsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +22,8 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
             TagSeeder::class,
             NotificationSeeder::class,
-            DepartmentSeeder::class
+            DepartmentSeeder::class,
+            FaqsSeeder::class
         ]);
     }
 }

@@ -368,7 +368,7 @@
                             </div>
                             <div id="rating-desire-group">
                                 <input type="hidden" name="rating_google" id="rating-google" value="{{ $project->rating_google }}"/>
-                                <input type="number" onclick="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" value="{{ $project->rating_desire }}" name="rating_desire" id="rating-desire"/>
+                                <input type="text" onchange="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" value="{{ $project->rating_desire }}" name="rating_desire" id="rating-desire"/>
                             </div>
                         </div>
                         <div id="video-intro">
@@ -459,7 +459,7 @@
         });
     });
 </script> 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&callback=initMap&fields=id,displayName,rating,reviews,userRatingCount&libraries=places&v=weekly" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_API_KEY') }}&callback=initMap&fields=id,displayName,rating,reviews,userRatingCount&libraries=places&v=weekly" defer></script>
     <script>
         function addTag(tagText) {
             var exists = false;
@@ -531,16 +531,16 @@
                 $('#info-map-reviews .group-reviews-alert').remove();
             }, 3500);
         }
-        $('#inputReview').on('change', function(){
-            if($(this).val()){
-                $('#inputRaiCham').prop('readonly',false);
-                $('#inputRaiChamCheck').prop('checked', true);
-                $('#inputRaiCham').focus();
-            }else{
-                $('#inputRaiCham').prop('readonly',true);
-                $('#inputRaiChamCheck').prop('checked', false);
-            }
-        })
+        // $('#inputReview').on('change', function(){
+        //     if($(this).val()){
+        //         $('#inputRaiCham').prop('readonly',false);
+        //         $('#inputRaiChamCheck').prop('checked', true);
+        //         $('#inputRaiCham').focus();
+        //     }else{
+        //         $('#inputRaiCham').prop('readonly',true);
+        //         $('#inputRaiChamCheck').prop('checked', false);
+        //     }
+        // })
         $('#inputRaiChamCheck').on('change', function(){
             if($(this).is(':checked')){
                 $('#inputRaiCham').prop('readonly',false);

@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('content')
-<!-- Duyệt đơn -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    #list-project{
+        height: 500px;
+        overflow: auto;
+    }
+</style>
 <section class="approve-project">
     <div class="container">
         <div class="row">
@@ -8,12 +14,12 @@
                 <div class="panel mt-5">
                     <div class="panel-body">
                         <div id="list-project" class="list-group">
-                            <h3>Danh sách dự án</h3>
+                            <h3>Danh sách nhiệm vụ</h3>
                             @if(!empty($projects))
                                 <ul>
                                     @foreach($projects as $project)
                                         <li onclick="showProject({{ $project['id'] }})">
-                                            <div href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                                            <div href="#" class="project-id-{{ $project['id'] }} list-group-item list-group-item-action active {{ $project['status'] == 2 ? 'approve' : '' }}" aria-current="true">
                                                 <div class="d-flex w-100 justify-content-between">
                                                     <a href="{{ route('project.edit', ['id' => $project['id']]) }}" class="text-title">R{{ $project['id'] }}</a>
                                                     <h5 class="mb-1">{{ $project['name'] }}</h5>
@@ -87,11 +93,13 @@ function showProject(id) {
                             </li>`).join('') : ''}
                         </ul>
                     </div>
-                    <div class="group-actiion">
+                    <div class="group-actiion text-right">
                         <button onclick="handleViewRate('${data.data?.place_id}')" class="btn btn-info">Xem đánh giá</button>    
-                        <button onclick="handleWrongImage(${data.data?.id})" class="btn btn-danger">Không thấy ảnh, sai ảnh</button>  
-                        <button onclick="handleWrongRate(${data.data?.id})" class="btn btn-danger">Không thấy đánh giá</button>  
-                        <button class="btn btn-primary">Duyệt</button>
+                        ${data.data?.status !== {{$status_complete}} ?`
+                            <button onclick="handleWrongImage(${data.data?.id})" class="btn btn-danger">Không thấy ảnh, sai ảnh</button>  
+                            <button onclick="handleWrongRate(${data.data?.id})" class="btn btn-danger">Không thấy đánh giá</button>  
+                            <button class="btn btn-primary" onclick="handleApprove(${data.data?.id})">Duyệt</button>
+                        `:``}
                     </div>
                 </div>
             `);
@@ -124,6 +132,35 @@ function handleWrongImage(id){
 function handleWrongRate(id){
     console.log(id);
 }
+function handleApprove(id){
+    if(confirm('Bạn xác nhận duyệt dự án này?')){
+        $.ajax({
+            url: `{{ route('update.project.status', ['id' => 'ID_PLACEHOLDER']) }}`.replace('ID_PLACEHOLDER', id),
+            type: "POST",
+            data: {
+                '_token': '{{ csrf_token() }}',
+                'status': {{$status_complete}}
+            },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status){
+                    $('.project-id-'+data.data.id).addClass('approve');
+                    Swal.fire({
+                        title: "Thông báo",
+                        text: "Duyệt dự án thành công",
+                        icon: "success"
+                    });
+                }else{
+                    Swal.fire({
+                        title: "Thông báo",
+                        text: "Duyệt dự án không thành công",
+                        icon: "error"
+                    });
+                }
+            }
+        })
+    }
+}
 function handleWrongImage(id) {
     let url = `{{ route('project.wrong.image', ['id' => 'ID_PLACEHOLDER']) }}`.replace('ID_PLACEHOLDER', id);
     $.ajax({
@@ -134,7 +171,9 @@ function handleWrongImage(id) {
         },
         dataType: 'json',
         success: function(data) {
-            console.log(data);
+            if(data.id){
+                $('.project-id-'+data.id).class('approve');
+            }
         }
     });
 }
@@ -150,12 +189,22 @@ function handleWrongImage(id) {
     #list-project .list-group-item{
         background-color: #f1f1f1;
         color: #363d47;
+        margin-bottom: 10px;
+        padding: 20px 10px;
     }
     #list-project .list-group-item.active{
         background-color: #f1f1f1;
         color: #363d47;
         border-radius: 5px;
         border: #f1f1f1;
+    }
+
+    #list-project .list-group-item.approve{
+        background-color: #43c05e;
+        color: #fef279;
+    }
+    #list-project .list-group-item.approve h5{
+        color: #fef279;
     }
     .text-description, .text-keyword{
         overflow: hidden;

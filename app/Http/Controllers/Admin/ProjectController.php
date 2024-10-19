@@ -41,7 +41,8 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
+            // Xác thực dữ liệu
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'parent' => 'nullable|exists:projects,id',
@@ -52,12 +53,22 @@ class ProjectController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
+    
+            // Xử lý hình ảnh nếu có
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('projects', 'public'); // Lưu hình ảnh vào thư mục 'projects' trong storage
+                $request->merge(['image_path' => $imagePath]); // Thêm đường dẫn hình ảnh vào request
+            }
+    
+            // Tạo mới dự án
             $this->projectService->create($request);
-            return redirect()->route('project.index')->with('success', 'Thêm Danh mục thành công');
-        }catch(\Exception $e){
+    
+            return redirect()->route('project.index')->with('success', 'Thêm dự án thành công');
+        } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+    
 
     /**
      * Display the specified resource.
@@ -145,6 +156,31 @@ class ProjectController extends Controller
             return response()->json([
                 'status' => false,
                 'id' => $id,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function updateStatus(Request $request, $id){
+        try{
+            $validator = Validator::make($request->all(), [
+                'status' => 'required|in:1,2,3,4'
+            ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'messaage' => $validator->errors()->all()
+                ]);
+            }
+            $data = $this->projectService->updateStatus($request, $id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Cập nhật trạng thái thành công',
+                'data' => $data
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
                 'message' => $e->getMessage()
             ]);
         }

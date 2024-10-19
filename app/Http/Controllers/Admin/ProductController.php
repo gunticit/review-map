@@ -20,19 +20,19 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = $this->productService->list($request);
-        $products = ProductResource::collection($products)->resource;
-        return view('pages.admin.product.list', [
-            'products' => $products,
-        ]);
+        $data = array();
+        $data['products'] = $this->productService->list($request);
+        $data['categories'] = $this->productService->getCategories($request);
+        return view('pages.admin.product.list', $data);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $data = array();
+        $data['categories'] = $this->productService->getCategories($request);
         return view('pages.admin.product.create', $data);
     }
 
@@ -41,7 +41,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        // try{
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'category_id' => 'nullable|exists:categories,id',
@@ -52,11 +52,11 @@ class ProductController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            $this->productService->create($request);
-            return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
-        }catch(\Exception $e){
-            return redirect()->back()->with('error', $e->getMessage());
-        }
+            $check = $this->productService->create($request);
+            return redirect()->route('product.index')->with('success', 'Thêm Danh mục thành công');
+        // }catch(\Exception $e){
+        //     return redirect()->back()->with('error', $e->getMessage());
+        // }
     }
 
     /**

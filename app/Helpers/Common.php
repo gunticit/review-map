@@ -128,27 +128,27 @@
             $labelStatus = '';
             switch($status) {
                 case 0:
-                    $className = 'btn-danger';
+                    $className = 'text-danger';
                     $labelStatus = 'Huỷ';
                     break;
                 case 1:
-                    $className = 'btn-primary';
+                    $className = 'text-success';
                     $labelStatus = 'Đang thực hiện';
                     break;
                 case 2:
-                    $className = 'btn-success';
+                    $className = 'text-success';
                     $labelStatus = 'Hoàn thành';
                     break;
                 case 3:
-                    $className = 'btn-warning';
+                    $className = 'text-warning';
                     $labelStatus = 'Hoàn lại';
                     break;
                 case 4:
-                    $className = 'btn-danger';
+                    $className = 'text-warning';
                     $labelStatus = 'Tạm ngưng';
                     break;
                 case 5:
-                    $className = 'btn-warning';
+                    $className = 'text-warning';
                     $labelStatus = 'Chưa thanh toán';
                     break;
                 default:
@@ -190,3 +190,85 @@
             return asset($parentDir.'/'. getPortal() . "/" . $publicFolder);
         }
     }
+
+    if(!function_exists('slugify')){
+        function slugify($text, string $divider = '-')
+        {
+            $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
+            $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+            $text = preg_replace('~[^-\w]+~', '', $text);
+            $text = trim($text, $divider);
+            $text = preg_replace('~-+~', $divider, $text);
+            $text = strtolower($text);
+            if (empty($text)) {
+                return 'n-a';
+            }
+            return $text;
+        }
+    }
+
+    if (!function_exists('formatVND')) {
+        function formatVND($number) {
+            return number_format($number, 0, ',', '.') . ' ₫';
+        }
+    }
+
+    if(!function_exists('statusMission')){
+        function statusMission($status){
+            $status_label = match ($status) {
+                1 => 'Đã hoàn thành',
+                2 => 'Đang thực hiện',
+                3 => 'Chờ hệ thống duyệt',
+                4 => 'Chờ nhân viên duyệt',
+                5 => 'Đã từ chối',
+                6 => 'Đã hết hạn'
+            };
+            return $status_label;
+        }
+    }
+
+    if(!function_exists('formatCurrency')){
+        function formatCurrency($number, $currency = 'VND') {
+            $formattedNumber = number_format($number, 0, ',', '.');
+            return $formattedNumber . ' ' . $currency;
+        }
+    }
+
+    if(!function_exists('getDistanceBetweenPoints')) {
+        function getDistanceBetweenPoints($latitude1, $longitude1, $latitude2, $longitude2) {
+            $theta = $longitude1 - $longitude2;
+            $miles = (sin(deg2rad($latitude1)) * sin(deg2rad($latitude2))) + (cos(deg2rad($latitude1)) * cos(deg2rad($latitude2)) * cos(deg2rad($theta)));
+            $miles = acos($miles);
+            $miles = rad2deg($miles);
+            $miles = $miles * 60 * 1.1515;
+            $feet = $miles * 5280;
+            $yards = $feet / 3;
+            $kilometers = $miles * 1.609344;
+            $meters = $kilometers * 1000;
+            return compact('miles','feet','yards','kilometers','meters');
+        }        
+    }
+
+    if(!function_exists('getPriceFromPackage')) {
+        function getPriceFromPackage($package) {
+            $price = 0;
+            switch($package) {
+                case 1:
+                    $price = 45000;
+                    break;
+                case 2:
+                    $price = 35000;
+                    break;
+                case 3:
+                    $price = 30000;
+                    break;
+                case 4:
+                    $price = 25000;
+                    break;
+                default:
+                    break;
+            }
+            return $price;
+        }        
+    }
+

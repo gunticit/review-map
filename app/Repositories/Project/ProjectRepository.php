@@ -14,11 +14,19 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         $this->model = $project;
     }
 
-    public function list($request){
+    public function handleFilter($request){
         $query = $this->model->query();
         if(isset($request->user_id) && Auth::user()->getRoleNames()->first() != 'admin'){
             $query->where('created_by', $request->user_id);
         }
+        if(isset($request->name)){
+            $query->whereLike('name', '%'. $request->name . '%');
+        }
+        return $query;
+    }
+
+    public function list($request){
+        $query = $this->handleFilter($request);
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){
             foreach ($orderBy as $column => $direction) {
@@ -46,6 +54,13 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
     public function find($id)
     {
         return $this->model->with('images')->find($id);
+    }
+
+    public function findWithComments($project_id, $request){
+        $query = $this->model->query();
+        $query->with('comments');
+        $query->where('id', $project_id);
+        return $query->first();
     }
 
     public function countDataGroupMonth($filter = array()){

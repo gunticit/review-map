@@ -1,48 +1,37 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\SocicalController;
+use App\Http\Controllers\Partner\PartnerSupportController;
 
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index']);
 
 // Auth::routes(['login' => false,'register' => false,'logout' => false]);
 Route::group([
-    'namespace' => '\App\Http\Controllers\Auth'],  // Chỉ định namespace cho group
+    'namespace' => '\App\Http\Controllers\Auth'
+],  // Chỉ định namespace cho group
     function(){
-        Route::get('/login', 'AuthController@login')->name('login');
-        Route::get('/register', 'AuthController@register')->name('register');
-        Route::get('/logout', 'AuthController@logout')->name('logout');
-        Route::post('/authenticate', 'AuthController@authenticate')->name('auth.authenticate');
-        Route::post('/registerUser', 'AuthController@registerUser')->name('auth.registerUser');
+        Route::get('/login', [AuthController::class, 'login'])->name('login');
+        Route::get('/register', [AuthController::class, 'register'])->name('register');
+        Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('auth.authenticate');
+        Route::post('/registerUser', [AuthController::class, 'registerUser'])->name('auth.registerUser');
+        Route::post('/password/email', [AuthController::class, 'sendOtp'])->name('password.email');
+        Route::post('/password/otp', [AuthController::class, 'verifyOtp'])->name('password.otp');
+        Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update');
+        Route::get('auth/google', [SocicalController::class, 'redirectToGoogle'])->name('auth.google');
+        Route::get('auth/google/callback', [SocicalController::class, 'handleGoogleCallback']);    
+        Route::get('/support', [PartnerSupportController::class, 'index'])->name('support');
+        Route::post('/support-store', [PartnerSupportController::class, 'store'])->name('support.store');
+        Route::get('/support-edit/{id}', [PartnerSupportController::class, 'edit'])->name('support.edit');
+        Route::put('/support-update/{id}', [PartnerSupportController::class, 'update'])->name('support.update');
+        Route::delete('/support-delete/{id}', [PartnerSupportController::class, 'delete'])->name('support.delete');
+        Route::delete('/support-delete-by-ids/{ids}', [PartnerSupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
+        Route::get('/support-create', [PartnerSupportController::class, 'create'])->name('support.create');
     }
 );
-Route::group(['middleware' => 'locale'], function() {
-    Route::get('/home', [App\Http\Controllers\DashboardController::class, 'index'])->name('home');
-});
-// Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::group([
-    'prefix' => '/v1/admin',
-    'as' => 'admin.',
-    'namespace' => 'App\Http\Controllers\Admin',
-    'middleware' => ['auth']], function () {
-        Route::get('/test', function(){
-            return 'test';
-        });
-});
-
-Route::group([
-    'prefix' => '/v1/customer',
-    'as' => 'customer.',
-    'namespace' => 'App\Http\Controllers\Customer',
-    'middleware' => ['auth', 'customer']], function () {
-});
-
-Route::group([
-    'prefix' => '/v1/guest',
-    'as' => 'guest.',
-    'namespace' => 'App\Http\Controllers\Guest',
-    'middleware' => ['auth', 'customer']], function () {
-});
 
 Route::group(['middleware' => 'locale'], function() {
     Route::get('change-language/{language}', 'App\Http\Controllers\DashboardController@changeLanguage')
@@ -60,6 +49,7 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
     Route::get('/notification/{id}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notification.show');
     Route::post('/change-password', [App\Http\Controllers\Auth\AuthController::class, 'changePassword'])->name('profile.change.password');
+    Route::post('/update-location', [App\Http\Controllers\Auth\AuthController::class, 'updateCurrentLocation'])->name('profile.update.location');
 
     
     include 'web_customer.php';

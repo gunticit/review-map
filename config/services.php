@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'recaptcha_v3' => [
+        'siteKey' => env('RECAPTCHA_V3_SITE_KEY'),
+        'secretKey' => env('RECAPTCHA_V3_SECRET_KEY'),
+    ],
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => null,
+    ],
 ];

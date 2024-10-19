@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\User\UserRepositoryInterface;
@@ -30,7 +31,7 @@ class AuthService {
      */
 
     public function login($request)
-    {
+    {      
         $this->authenticate($request);
         $user        = Auth::user();
         $data = !empty($user) ? new UserResource($user) : null;
@@ -56,24 +57,6 @@ class AuthService {
     {
         $this->ensureIsNotRateLimited($request);
         $loginType = filter_var($request->input('username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'telephone';
-        $userCheck = User::where($loginType, $request->input('username'))->first();
-        if(!empty($userCheck)){
-            if($userCheck->hasRole(Role::ADMIN_ROLE) && $request->getHost() !== env('ADMIN_DOMAIN')){
-                return redirect()->to(env('ADMIN_DOMAIN'))->withErrors([
-                    'login' => __('Vui lòng đăng nhập đúng đường dẫn'),
-                ]);
-            }
-            if($userCheck->hasRole(Role::PARTNER_ROLE) && $request->getHost() !== env('PARTNER_DOMAIN')){
-                return redirect()->to(env('PARTNER_DOMAIN'))->withErrors([
-                    'login' => __('Vui lòng đăng nhập đúng đường dẫn'),
-                ]);
-            }
-            if($userCheck->hasRole(Role::CUSTOMER_ROLE) && $request->getHost() !== env('CUSTOMER_DOMAIN')){
-                return redirect()->to(env('CUSTOMER_DOMAIN'))->withErrors([
-                    'login' => __('Vui lòng đăng nhập đúng đường dẫn'),
-                ]);
-            }
-        }
         $credentials = [
             $loginType => $request->input('username'),
             'password' => $request->input('password'),
@@ -145,5 +128,60 @@ class AuthService {
         $user->password = Hash::make($request->new_password);
         $user->save();
         return true;
+    }
+
+    public function sendOtp($email)
+    {
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            throw new Exception("Email không tồn tại trong hệ thống");
+        }
+        if (!empty($user->otp_expires_at) && now()->lessThanOrEqualTo($user->otp_expires_at)) {
+            throw new Exception("Hãy thử lại sau vài phút");
+        }
+        return $this->userRepository->generateOtp($user);
+    }
+
+    public function verifyOtp($email, $otp)
+    {
+        $user = User::where('email', $email)->first();
+
+        if ($user && $user->otp === $otp && now()->lessThan($user->otp_expires_at)) {
+            $this->userRepository->verifyOtp($user);
+            return true;
+        }
+        return false;
+    }
+
+    public function updatePassword($email, $password)
+    {
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            $this->userRepository->resetPassword($user, $password);
+        }
+    }
+    public function clearOtp($email)
+    {
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            $this->userRepository->clearOtp($user);
+        }
+    }
+    public function checkUserDomain($username)
+    {
+        $loginType = filter_var($username, FILTER_VALIDATE_EMAIL) ? 'email' : 'telephone';
+        $userCheck = User::where($loginType, $username)->first();
+        return $userCheck;
+
+    }
+
+    public function updateCurrentLocation($request)
+    {
+        $data = $request->validated();
+        $email = Auth::user()->email;
+        return User::where('email', $email)->update([
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
+        ]);
     }
 }

@@ -27,7 +27,8 @@ class User extends Authenticatable
         'password',
         'avatar',
         'country_code',
-        'company_id'
+        'company_id',
+        'google_id'
     ];
 
     /**
@@ -57,5 +58,17 @@ class User extends Authenticatable
 
     public function company(){
         return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+
+    public function transactionHistories(){
+        return $this->hasMany(TransactionHistory::class);
+    }
+
+    public function certificationAccount() {
+        return $this->hasOne(CertificationAccount::class, 'user_id', 'id');
+    }
+
+    public function wallet() {
+        return $this->hasOne(Wallet::class, 'user_id', 'id');
     }
 }

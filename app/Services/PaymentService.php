@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Http\Resources\PaymentResource;
+use App\Models\Project;
 use Illuminate\Validation\ValidationException;
 use PayOS\PayOS;
 
@@ -31,10 +32,10 @@ class PaymentService {
         $working = 0;
         $stopped = 0;
         foreach($orders as $order){
-            if($order->status == 1){
+            if($order->status == Project::WORKING_PROJECT){
                 $working++;
             }
-            if($order->status == 4){
+            if($order->status == Project::STOPPED_PROJECT){
                 $stopped++;
             }
         }

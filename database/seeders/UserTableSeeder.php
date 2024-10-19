@@ -32,8 +32,8 @@ class UserTableSeeder extends Seeder
         $userCustomer->assignRole([Role::CUSTOMER_ROLE]);
 
         $guest = [
-            'name' => 'guest',
-            'email' => 'guest@gmail.com',
+            'name' => 'partner',
+            'email' => 'partner@gmail.com',
             'telephone' => '0909123125',
             'password' => bcrypt('123123123123'),
         ];

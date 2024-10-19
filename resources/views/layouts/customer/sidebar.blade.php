@@ -1,5 +1,5 @@
 <div class="sidenav-menu-heading">Menu</div>
-<a class="nav-link {!! request()->routeIs('home') ? 'active' : '' !!}" href="{{ route('home') }}">
+<a class="nav-link {!! request()->routeIs('customer.overview') ? 'active' : '' !!}" href="{{ route('customer.overview') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">home</span>
     </div> <?= __('menu.overview') ?>

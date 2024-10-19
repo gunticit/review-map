@@ -7,8 +7,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/5ad6bf3d69.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
-<script src="{{ asset('./assets/js/map.js') }}"></script>
 <script>
     let latitude = Number('<?= $latitude ?>');
     let longitude = Number('<?= $longitude ?>');
@@ -194,6 +192,10 @@
         cursor: pointer;
         transition: all ease .4s
     }
+    .btn-check-map.btn-success{
+        background: #00bb0e;
+        color: #ffffff;
+    }
     .btn-check-map:hover{
         background: #c1c1c1;
         color: #3c3b3b;
@@ -201,6 +203,55 @@
     .btn-check-map.border-error{
         border: 1px solid #f00;
         background: #f1f1f1;
+    }
+    .loader {
+        width: 48px;
+        height: 48px;
+        display: inline-block;
+        position: relative;
+    }
+    .loading-section{
+        display: none;
+        position: absolute;
+        z-index: 9;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: hsl(205.71deg 24.14% 17.06% / 32.16%);
+    }
+    .loading-section .loader{
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .loader::after,
+    .loader::before {
+        content: '';  
+        box-sizing: border-box;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid #FFF;
+        position: absolute;
+        left: 0;
+        top: 0;
+        animation: animloader 2s linear infinite;
+        }
+        .loader::after {
+        animation-delay: 1s;
+        }
+
+        @keyframes animloader {
+        0% {
+            transform: scale(0);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0;
+        }
     }
     @keyframes showBtnVideo{
         from{
@@ -213,6 +264,9 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
+    <div class="loading-section">
+        <span class="loader"></span>
+    </div>
     <form action="{{ route('project.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="container">
@@ -232,22 +286,53 @@
                             </div>
                         @endif
                         <div class="mb-4"><!-- class: invalid -->
-                            <label for="inputlist-table">{{ __('project.name') }} <span class="required">*</span>
-                            </label>
-                            <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="" required>
-                            @error('name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <small class="d-none">Tên dự án cho phép dưới 50 ký tự bao gồm các khoảng trắng.</small>
+                            <div class="row">
+                                <div class="col-sm-3 d-none">
+                                    <label for="inputlist-table">{{ __('Mã dự án') }} <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control require" id="project-code" readonly name="project_code" type="text" placeholder="RIVI" value="" required>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label for="inputlist-table">{{ __('project.name') }} <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control require" id="name-project" name="name" type="text" placeholder="RIVI" value="" required>
+                                    @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    <small class="d-none">Tên dự án cho phép dưới 50 ký tự bao gồm các khoảng trắng.</small>
+                                </div>
+                            </div>
                         </div>
+                        <script>
+                            function removeAccents(str) {
+                                str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Loại bỏ dấu
+                                str = str.replace(/đ/g, 'd').replace(/Đ/g, 'D'); // Thay thế đ và Đ
+                                return str;
+                            }
+                            function getFirstLettersFromInput(selector) {
+                                var text = $(selector).val();
+                                var words = removeAccents(text).split(' ');
+                                var initials = '';
+
+                                words.forEach(function(word) {
+                                    initials += word.charAt(0).toUpperCase();
+                                });
+
+                                return initials;
+                            }
+                            $('#name-project').keyup(function(){
+                                let project_code = getFirstLettersFromInput('#name-project');
+                                $('#project-code').val('RIVI_' + project_code + '_' + Math.floor((Math.random() * 100) + 1));
+                            });
+                        </script>
                         <!-- Form Group (UrlMap)-->
                         <div class="mb-4"><!-- class: active -->
                             <label>{{ __('project.choose_map') }}<span class="required">*</span>
                             </label>
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-12 group-check-map">
                                     <button type="button" class="btn btn-primary btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">{{ __('project.press_to_choose') }}</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
                                 </div>
                                 <input id="lat" type="hidden" name="latitude" />
@@ -313,7 +398,7 @@
                                 <span>Ưu đãi hấp dẫn</span>
                             </div>
                             <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
-                            <input class="form-control hidden" id="keyword_value" hidden type="text" name="keyword_value" readonly>
+                            <input class="form-control hidden" hidden id="keyword_value" type="text" name="keyword_value" readonly>
                             @error('keyword')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -427,16 +512,23 @@
             $('#CheckUrl').modal('hide');
             $('#video-intro').hide();
             $('#info-map-reviews').show();
+            let ratingGoogle = $('#rating-google').val();
+            if(ratingGoogle == 0){
+                alert('Vị trí đánh giá không hợp lệ!');
+            }
             
             if($('#place-id').val() == ''){
                 $('.btn-check-map').addClass('border-error');
+                $('.group-check-map').append('<p class="text-danger">Chọn địa điểm cần đánh giá.</p>');
             }else{
                 $('.btn-check-map').removeClass('border-error');
+                $('.btn-check-map').addClass('btn-success');
+                $('.group-check-map .text-danger').remove();
             }
         });
     });
 </script> 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&callback=initMap&fields=id,displayName,rating,reviews,userRatingCount&libraries=places&v=weekly" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_API_KEY') }}&callback=initMap&fields=id,displayName,rating,reviews,userRatingCount&libraries=places&v=weekly" defer></script>
     <script> 
         function addTag(tagText) {
             var exists = false;
@@ -451,6 +543,7 @@
                 let textValue = tagText.trim();
                 let keyword_value = $('#keyword_value').val();
                 let keywordArray = keyword_value.split(',');
+                keywordArray = keywordArray.filter(keyword => keyword !== null && keyword !== '');
                 let index = keywordArray.indexOf(textValue);
                 if (index === -1) {
                     keywordArray.push(textValue);
@@ -472,6 +565,14 @@
             var textCheck = $(this).parent().text().trim(); 
             textCheck = textCheck.replace("×", ""); 
 
+            let keyword_value = $('#keyword_value').val();
+            let keywordArray = keyword_value.split(',');
+            let index = keywordArray.indexOf(textCheck);
+            if (index > -1) {
+                keywordArray.splice(index, 1);
+            }
+            keyword_value = keywordArray.join(',');
+            $('#keyword_value').val(keyword_value);
             $('.Tagslist-wrap span').each(function() {
                 var tagText = $(this).text().trim(); 
                 if (tagText === textCheck) { 
@@ -519,16 +620,16 @@
                 $('#info-map-reviews .group-reviews-alert').remove();
             }, 3500);
         }
-        $('#inputReview').on('change', function(){
-            if($(this).val()){
-                $('#inputRaiCham').prop('readonly',false);
-                $('#inputRaiChamCheck').prop('checked', true);
-                $('#inputRaiCham').focus();
-            }else{
-                $('#inputRaiCham').prop('readonly',true);
-                $('#inputRaiChamCheck').prop('checked', false);
-            }
-        })
+        // $('#inputReview').on('change', function(){
+        //     if($(this).val()){
+        //         $('#inputRaiCham').prop('readonly',false);
+        //         $('#inputRaiChamCheck').prop('checked', true);
+        //         $('#inputRaiCham').focus();
+        //     }else{
+        //         $('#inputRaiCham').prop('readonly',true);
+        //         $('#inputRaiChamCheck').prop('checked', false);
+        //     }
+        // })
         $('#inputRaiChamCheck').on('change', function(){
             if($(this).is(':checked')){
                 $('#inputRaiCham').prop('readonly',false);
@@ -612,9 +713,12 @@
                 });
                 if($('#place-id').val() == ''){
                     $('.btn-check-map').addClass('border-error');
+                    $('.group-check-map').append('<p class="text-danger">Chọn địa điểm cần đánh giá.</p>');
                     return false;
                 }else{
                     $('.btn-check-map').removeClass('border-error');
+                    $('.group-check-map .text-danger').remove();
+
                 }
                 if($('.tags-input-wrapper .tag').length == 0){
                     $('.tags-input-wrapper').addClass('border-error');
@@ -658,7 +762,9 @@
                 let checkValidate = validateRequiredFields();
                 
                 if ($('.alert').length === 0 && checkValidate) {
+                    $(this).prop('disabled', true);
                     $('#form-create-project').submit();
+                    $('.loading-section').show();
                 }
             }); 
         });

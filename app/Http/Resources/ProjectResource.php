@@ -17,6 +17,7 @@ class ProjectResource extends JsonResource
         return [
             'id'         => $this->id,
             'name'     => $this->name,
+            'project_code' => $this->project_code,
             'description'   => $this->description,
             'package'  => $this->package,
             'is_slow'  => $this->is_slow,
@@ -27,6 +28,8 @@ class ProjectResource extends JsonResource
             'longitude' => $this->longitude,
             'place_id' => $this->place_id,
             'status'  => $this->status,
+            'comments' => CommentResource::collection($this->comments),
+            'images' => ProjectImageResource::collection($this->images),
         ];
     }
 }

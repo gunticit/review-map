@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Bank\BankRepositoryRepository;
+use App\Repositories\Bank\BankRepositoryRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
@@ -25,14 +27,24 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Company\CompanyRepository;
 use App\Repositories\Company\CompanyRepositoryInterface;
+use App\Repositories\Mission\MissionRepository;
+use App\Repositories\Mission\MissionRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\PaymentMethod\PaymentMethodRepository;
+use App\Repositories\PaymentMethod\PaymentMethodRepositoryInterface;
+use App\Repositories\ProductImage\ProductImageRepository;
+use App\Repositories\ProductImage\ProductImageRepositoryInterface;
 use App\Repositories\Profile\ProfileRepository;
 use App\Repositories\Profile\ProfileRepositoryInterface;
+use App\Repositories\TransactionHistory\TransactionHistoryRepositoryInterface;
+use App\Repositories\TransactionHistory\TransactionHistoryRepository;
 use App\Repositories\Voucher\VoucherRepository;
 use App\Repositories\Voucher\VoucherRepositoryInterface;
+use App\Repositories\Wallet\WalletRepository;
+use App\Repositories\Wallet\WalletRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -56,6 +68,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(VoucherRepositoryInterface::class, VoucherRepository::class);
         $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
+        $this->app->bind(ProductImageRepositoryInterface::class, ProductImageRepository::class);
+        $this->app->bind(MissionRepositoryInterface::class, MissionRepository::class);
+        $this->app->bind(WalletRepositoryInterface::class, WalletRepository::class);
+        $this->app->bind(TransactionHistoryRepositoryInterface::class, TransactionHistoryRepository::class);
+        $this->app->bind(PaymentMethodRepositoryInterface::class, PaymentMethodRepository::class);
+        $this->app->bind(BankRepositoryRepositoryInterface::class, BankRepositoryRepository::class);
     }
 
     /**

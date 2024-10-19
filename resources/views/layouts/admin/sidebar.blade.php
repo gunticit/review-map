@@ -8,8 +8,8 @@
 </a>
 <div class="collapse {!! request()->routeIs('home') || request()->routeIs('overview.customer') || request()->routeIs('overview.partner') ? 'show' : '' !!}" id="collapseHome" data-bs-parent="#accordionHome">
     <nav class="sidenav-menu-nested nav accordion" id="accordionHomeChild">
-        <a class="nav-link {!! request()->routeIs('overview.customer') ? 'active' : '' !!}" href="{{ route('overview.customer') }}"><?= __('menu.home_customer') ?></a>
-        <a class="nav-link {!! request()->routeIs('overview.partner') ? 'active' : '' !!}" href="{{ route('overview.partner') }}"><?= __('menu.home_partner') ?></a>
+        {{-- <a class="nav-link {!! request()->routeIs('overview.customer') ? 'active' : '' !!}" href="{{ route('overview.customer') }}"><?= __('menu.home_customer') ?></a> --}}
+        {{-- <a class="nav-link {!! request()->routeIs('overview.partner') ? 'active' : '' !!}" href="{{ route('overview.partner') }}"><?= __('menu.home_partner') ?></a> --}}
     </nav>
 </div>
 <a class="nav-link" href="{{ route('support') }}">
@@ -51,10 +51,10 @@
         <span class="material-symbols-outlined">
             fact_check
         </span>
-    </div> <span>Duyệt đơn</span> 
+    </div> <span>Kiểm duyệt</span> 
     {{-- <span class="badge bg-danger rounded-pill ms-2">2</span> --}}
 </a>
-<a class="nav-link" href="{{ route('support') }}">
+<a class="nav-link" href="{{ route('admin.manage.partner.info') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             group
@@ -94,7 +94,7 @@
         <a class="nav-link {!! request()->routeIs('order.index') ? 'active' : '' !!}" href="{{ route('order.index') }}">Quản lý đơn đặt hàng</a>
     </nav>
 </div>
-<a class="nav-link" href="{{ route('support') }}">
+<a class="nav-link" href="{{ route('voucher.index') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             barcode_scanner

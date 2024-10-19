@@ -28,7 +28,7 @@
 </script>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Navbar Brand-->
-    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="{{ route('home') }}">
+    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="{{ route('overview.customer') }}">
         <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="rivi logo">
     </a>
     <!-- Sidenav Toggle Button-->
@@ -112,7 +112,7 @@
                         <span class="material-symbols-outlined">manage_accounts</span>
                     </div> Tài khoản
                 </a>
-                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ChangePassoword">
+                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#change-password-form">
                     <div class="dropdown-item-icon">
                         <span class="material-symbols-outlined">key</span>
                     </div> Đổi mật khẩu

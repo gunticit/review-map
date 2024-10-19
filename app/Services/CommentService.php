@@ -2,19 +2,20 @@
 
 namespace App\Services;
 
+use App\Jobs\GenerateCommentJob;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Comment\CommentRepositoryInterface;
-use Illuminate\Validation\ValidationException;
 use Gemini\Laravel\Facades\Gemini;
+use Illuminate\Validation\ValidationException;
 
 class CommentService {
-    protected $projectRepository;
+    protected $commentRepository;
 
     public function __construct(
-        CommentRepositoryInterface $projectRepository,
+        CommentRepositoryInterface $commentRepository,
     )
     {
-        $this->projectRepository = $projectRepository;
+        $this->commentRepository = $commentRepository;
     }
 
     /**
@@ -26,66 +27,105 @@ class CommentService {
      */
 
     public function list($request){
-        return $this->projectRepository->list($request);
+        return $this->commentRepository->list($request);
     }
 
     public function fullList($request){
-        $projects = $this->projectRepository->list($request);
+        $projects = $this->commentRepository->list($request);
         return $projects;
     }
 
     public function create($request){
-        $data = $this->filterData($request);
-        $data_create = array();
-        foreach($data['comment'] as $comment){
-            $data_create[] = array(
-                'project_id' => $data['project_id'],
-                'comment' => $comment,
-                'keyword' => $data['keyword']
-            );
-        }
-        $data = $this->projectRepository->insert($data_create);
+        $data_create = $this->filterData($request);
+        $data = $this->commentRepository->insert($data_create);
         return $data;
     }
 
     public function show($id){
-        $data = $this->projectRepository->find($id);
+        $data = $this->commentRepository->find($id);
         return $data;
     }
 
     public function update($request, $id){
         $project = $this->filterData($request);
-        $data = $this->projectRepository->update($project, $id);
+        $data = $this->commentRepository->update($project, $id);
         return $data; 
     }
 
+    public function updateNewComment($request, $id){
+        $comment = $request->comment ?? '';
+        if($comment !== ''){
+            $data = $this->commentRepository->update(['comment' => $comment], $id);
+            return $data;
+        }
+        return [];
+    }
+
     public function generateComment($request){
+        // GenerateCommentJob::dispatch($request);
         $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
         $keyword_value = isset($request->keyword_value) ? explode(',', $request->keyword_value): array();
         $common = array_intersect($keyword, $keyword_value);
         $diff1 = array_diff($keyword, $keyword_value);
         $diff2 = array_diff($keyword_value, $keyword);
         $keywords = array_merge($diff1, $diff2, $common);
-
-        $comments = array();
-
+        $comments = '';
+        $sl_comment = 10;
+        if(isset($request->package)){
+            switch($request->package){
+                case '1':
+                    $sl_comment = 10;
+                    break;
+                case '2':
+                    $sl_comment = 50;
+                    break;
+                case '3':
+                    $sl_comment = 100;
+                    break;
+                default: 
+                    $sl_comment = 200;
+                    break;
+            }
+        }
         if(!empty($keywords)){
             $stream = Gemini::geminiPro()
-                ->streamGenerateContent('Tạo cho tôi 5 comments cuối mỗi comment cách nhau bởi dấu | cho chủ đề khen ngợi với các từ khóa sau dành cho cửa hàng: ', implode(', ', $keywords));
+                ->generateContent('Tạo cho tôi '.$sl_comment.' comments cuối mỗi comment cách nhau bởi dấu | cho mô tả sau "'.$request->description.'" và keyword chủ đề là: ', implode(', ', $keywords));
             if(!empty($stream)){
                 foreach ($stream as $response) {
-                    $comments[] = $response->text();
+                    if(
+                        !empty($response[0]) && 
+                        !empty($response[0]->content) && 
+                        !empty($response[0]->content->parts) &&
+                        !empty($response[0]->content->parts[0]->text)
+                    ){
+                        $comments =  $response[0]->content->parts[0]->text;
+                    }
                 }
             }
         }
-        $filteredComments = array_filter($comments, function($comment) {
-            return trim($comment) !== '' && str_replace('"', '', trim($comment));
-        });
-        if(!empty($filteredComments)){
-            $comments = explode('|', (implode('', $filteredComments)));
+        return $comments;
+    }
+    
+    public function generateCommentBySample($request){
+        $keyword = isset($request->keyword) ? $request->keyword: '';
+        $sample = isset($request->comment_sample) ? $request->comment_sample : '';
+        $comments = '';
+        if(!empty($keyword) && !empty($sample)){
+            $stream = Gemini::geminiPro()->generateContent('Tạo cho tôi comment tương tự như comment sau '.$sample.' và keyword chủ đề là: ', $keyword);
+            if(!empty($stream)){
+                foreach ($stream as $response) {
+                    if(
+                        !empty($response[0]) && 
+                        !empty($response[0]->content) && 
+                        !empty($response[0]->content->parts) &&
+                        !empty($response[0]->content->parts[0]->text)
+                    ){
+                        $comments =  $response[0]->content->parts[0]->text;
+                    }
+                }
+            }
         }
         return $comments;
-
     }
 
     private function filterData($request): array{
@@ -96,7 +136,8 @@ class CommentService {
         return array(
             'project_id' => $data['project_id'] ?? null,
             'comment' => $data['comment'] ?? null,
-            'keyword' => $keyword
+            'keyword' => $keyword,
+            'is_used' => $data['is_used'] ?? 0,
         );
     }
 }

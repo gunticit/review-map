@@ -35,6 +35,7 @@ class ApproveProjectController extends Controller
                 );
             }
         }
+        $data['status_complete'] = Project::COMPLETED_PROJECT;
         return view('pages.admin.approve-project.index', $data);
     }
 }

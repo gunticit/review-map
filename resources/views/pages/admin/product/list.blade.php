@@ -12,6 +12,25 @@
             </div>
             <div class="col-inner">
                 <h2 class="section-title mb-4">Danh sách dự án</h2>
+                <div id="group-alert">
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    @if(session('success') || session('error'))
+                        <script>
+                            $('.alert').setTimeout(() => {
+                                $('.alert').remove();
+                            }, 5000);
+                        </script>
+                    @endif
+                </div>
                 <form>
                     <div class="input-group group-search">
                         <div class="input-group">
@@ -20,7 +39,7 @@
                             </button>
                             <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
                         </div>
-                        <button class="bttn-filter btn btn-default btn-filter" type="button" onclick="filter()">
+                        <button class="btn btn-default btn-filter" type="button" onclick="filter()">
                             <img src="{{ asset('./assets/img/filter.svg') }}" alt="filter"> <span>Tìm kiếm</span>
                         </button>
                     </div>
@@ -43,9 +62,6 @@
                             <th class="list-table-price">
                                 Giá sản phẩm
                             </th>
-                            <th class="list-table-status">
-                                Trạng thái
-                            </th>
                             <th class="list-table-handle">
                                 Thao tác
                             </th>
@@ -54,24 +70,28 @@
                     <tbody>
                             @foreach($products as $product)
                             <tr>
-                                <th class="list-table-product-name" scope="col">Tên sản phẩm</th>
+                                <th class="list-table-product-name" scope="col">{{ $product->id }}</th>
                                 <th class="list-table-product-code" scope="col">
-                                    Mã sản phẩm
+                                   
+                                </th>
+                                <th class="list-table-product-code" scope="col">
+                                   {{ $product->name }}
+                                </th>
+                                <th class="list-table-product-code" scope="col">
+                                   {{ $product->product_code }}
                                 </th>
                                 <th class="list-table-image" scope="col">   
-                                    Hình đại diện
+                                    <img src="{{ asset($product->image) }}" alt="image" width="100px">
                                 </th>
                                 <th class="list-table-product">
-                                    Danh mục
+                                    
                                 </th>
                                 <th class="list-table-price">
-                                    Giá sản phẩm
-                                </th>
-                                <th class="list-table-status">
-                                    Trạng thái
+                                    {!! $product->price ? formatVND($product->price) : '' !!}
                                 </th>
                                 <th class="list-table-handle">
-                                    Thao tác
+                                    {{$product->id}}
+                                    
                                 </th>
                             </tr>
                             @endforeach

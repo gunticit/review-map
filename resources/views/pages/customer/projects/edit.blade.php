@@ -213,6 +213,14 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
+    <div class="loading-section">
+        <div class="loading-wave">
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+        </div>
+    </div>
     <form action="{{ route('project.update', ['id' => $project->id]) }}" id="form-create-project" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         @method('PUT')
@@ -427,7 +435,9 @@
                             <li>Đồ uống tại quán cà phê ngon và đa dạng , không gian sang trong và sạch sẽ</li>
                             <li>Quán cà phê ngon, đồ uống chất lượng, không gian yên tĩnh và thư giãn</li>
                         </ul>
-                        <input class="btn btn-primary btn-full" type="button" id="btn-submit" value="Đặt đơn" />
+                        @if($project->status == 5)
+                            <input class="btn btn-primary btn-full" type="button" id="btn-submit" value="Đặt đơn" />
+                        @endif
                     </div>
                 </div>
             </div>
@@ -487,7 +497,7 @@
         });
     });
 </script> 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsrw-1OJrRbffA0EZ6gcFPJLLgnw8aM6E&callback=initMap&fields=id,displayName,rating,reviews,userRatingCount&libraries=places&v=weekly" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_API_KEY') }}&callback=initMap&fields=id,displayName,rating,reviews,userRatingCount&libraries=places&v=weekly" defer></script>
     <script>
         function addTag(tagText) {
             var exists = false;
@@ -559,16 +569,16 @@
                 $('#info-map-reviews .group-reviews-alert').remove();
             }, 3500);
         }
-        $('#inputReview').on('change', function(){
-            if($(this).val()){
-                $('#inputRaiCham').prop('readonly',false);
-                $('#inputRaiChamCheck').prop('checked', true);
-                $('#inputRaiCham').focus();
-            }else{
-                $('#inputRaiCham').prop('readonly',true);
-                $('#inputRaiChamCheck').prop('checked', false);
-            }
-        })
+        // $('#inputReview').on('change', function(){
+        //     if($(this).val()){
+        //         $('#inputRaiCham').prop('readonly',false);
+        //         $('#inputRaiChamCheck').prop('checked', true);
+        //         $('#inputRaiCham').focus();
+        //     }else{
+        //         $('#inputRaiCham').prop('readonly',true);
+        //         $('#inputRaiChamCheck').prop('checked', false);
+        //     }
+        // })
         $('#inputRaiChamCheck').on('change', function(){
             if($(this).is(':checked')){
                 $('#inputRaiCham').prop('readonly',false);
