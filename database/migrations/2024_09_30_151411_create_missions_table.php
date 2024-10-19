@@ -29,6 +29,10 @@ return new class extends Migration
         Schema::create('missions', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+<<<<<<< HEAD
+            $table->integer('project_id');
+            $table->integer('status'); // 2: Đang thực hiện, 1: Đã hoàn thành
+=======
             $table->double('price', 15, 0)->default(0); // Đơn vị mặc định VNĐ
             $table->integer('project_id');
             $table->integer('comment_id');
@@ -39,6 +43,7 @@ return new class extends Migration
             $table->string('longitude')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->string('link_confirm')->nullable();
+>>>>>>> c2294c75717a8cfde6cbf65228150dd4bf8dbd3e
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
