@@ -4,6 +4,7 @@
     use Illuminate\Support\Facades\Log;
     use Illuminate\Http\UploadedFile;
     use App\Traits\FileManager;
+    use GuzzleHttp\Client;
     
     class Helper{
         use FileManager;
@@ -86,5 +87,16 @@
                 'size' => $file->getSize(),
                 'thumbnail_url' => $thumbnail,
             ];
+        }
+
+        function saveAvatarGoogle($avatarUrl, $user)
+        {
+            $client = new Client();
+            $response = $client->get($avatarUrl);
+            $avatarContent = $response->getBody()->getContents();
+            $userId = $user->id . $user->google_id;
+            $avatarFilename = 'avatars/' . $userId . '_avatar.jpg';
+            Storage::disk('public')->put($avatarFilename, $avatarContent);
+            return $avatarFilename;
         }
     }
