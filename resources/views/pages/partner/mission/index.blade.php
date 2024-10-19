@@ -42,7 +42,7 @@
                     <p>Bạn cần phải đánh giá 5 sao cho map</p>
                     <h2 class="text-primary mb-4">{{ $project->name }}</h2>
                     <p class="text-black-50">Vui lòng copy nội dung bên dưới</p>
-                    @if(!empty($mission))
+                    @if(!empty($mission->images))
                     <div class="mb-4 download-img-wrap position-relative">
                         <img src="{{$mission->images->image_url}}" alt="image download" class="download-img">
                         <a class="btn btn-outline-primary btn-download-img" href="#">
