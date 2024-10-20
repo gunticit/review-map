@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('CREATE EXTENSION IF NOT EXISTS unaccent');
+        // DB::statement('CREATE EXTENSION IF NOT EXISTS unaccent');
     }
 
     /**
@@ -20,6 +20,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('DROP EXTENSION IF EXISTS unaccent');
+        // DB::statement('DROP EXTENSION IF EXISTS unaccent');
     }
 };
