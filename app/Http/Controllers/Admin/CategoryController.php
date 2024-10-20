@@ -22,6 +22,7 @@ class CategoryController extends Controller
     {
         $data = array();
         $categories = $this->categoryService->list($request);
+        dd($categories);
         $categories = CategoryResource::collection($categories)->resource;
         return view('pages.admin.category.list', [
             'categories' => $categories,

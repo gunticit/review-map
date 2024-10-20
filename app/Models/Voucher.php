@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\UserStamp;
 
 class Voucher extends Model
 {
+    use HasFactory, UserStamp;
     protected $guarded = [];
 
     public function createdBy()

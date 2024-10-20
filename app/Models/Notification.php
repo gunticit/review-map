@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\UserStamp;
 
 class Notification extends Model
 {
-    use HasFactory;
+    use HasFactory, UserStamp;
 
     protected $table = 'notifications';
     protected $guarded = [];

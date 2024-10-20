@@ -4,9 +4,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\UserStamp;
 class TransactionHistory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, UserStamp;
 
     protected $table = 'transaction_histories';
     protected $guarded = [];

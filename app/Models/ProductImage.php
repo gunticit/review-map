@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\UserStamp;
 
 class ProductImage extends Model
 {
-    use HasFactory;
+    use HasFactory, UserStamp;
 
     protected $table="product_images";
     public $timestamps = true;
