@@ -159,6 +159,6 @@
     </div>
 </section>
 @endsection
-@section('script')
-<script src="{{ asset('js/admin/voucher.js') }}"></script>
+@section('js')
+<script src="{{ asset('./js/admin/voucher.js') }}"></script>
 @endsection

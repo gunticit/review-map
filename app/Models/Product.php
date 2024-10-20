@@ -8,10 +8,11 @@ use App\Models\ProductImage;
 use App\Models\Category;
 use App\Models\Promotion;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\UserStamp;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, UserStamp;
 
     protected $guarded = [];
 

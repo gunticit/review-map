@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ManagePartnerController;
 use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ManageCustomerController;
+use App\Http\Controllers\Admin\NotificateController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProjectController;
@@ -48,5 +49,18 @@ Route::group([
         Route::delete('/support-delete-by-ids/{ids}', [SupportController::class, 'deleteByIds'])->name('admin.support.delete.by.ids');
         Route::get('/support-create', [SupportController::class, 'create'])->name('admin.support.create');
         Route::get('/setting', [SettingController::class, 'index'])->name('setting');
+
+        //QL Thông báo đối tác
+        Route::get('/list-notificate-partner', [NotificateController::class, 'partner_list'])->name('list.notificate.partner');
+        Route::get('/detail-notificate-partner/{id}', [NotificateController::class, 'partner_detail'])->name('detail.notificate.partner');
+        Route::get('/create-notificate-partner', [NotificateController::class, 'partner_create'])->name('create.notificate.partner');
+        Route::put('/edit-notificate-partner/{id}', [NotificateController::class, 'partner_edit'])->name('edit.notificate.partner');
+        Route::delete('/delete-notificate-partner/{id}', [NotificateController::class, 'partner_delete'])->name('delete.notificate.partner');
+
+        Route::get('/list-notificate-customer', [NotificateController::class, 'customer_list'])->name('list.notificate.customer');
+        Route::get('/detail-notificate-customer/{id}', [NotificateController::class, 'customer_detail'])->name('detail.notificate.customer');
+        Route::get('/create-notificate-customer', [NotificateController::class, 'customer_create'])->name('create.notificate.customer');
+        Route::put('/list-notificate-customer/{id}', [NotificateController::class, 'customer_edit'])->name('edit.notificate.customer');
+        Route::delete('/delete-notificate-customer/{id}', [NotificateController::class, 'customer_delete'])->name('delete.notificate.customer');
     });
 });

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('image_projects', function (Blueprint $table) {
             $table->id();
-            $table->string('project_id');
+            $table->integer('project_id');
             $table->string('image_url');
             $table->timestamps();
             $table->softDeletes();

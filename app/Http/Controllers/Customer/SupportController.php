@@ -38,7 +38,6 @@ class SupportController extends Controller
         return view('pages.customer.support.edit');
     }
     public function create(Request $request){
-        dd(1);
         $request->merge(['user_id' => auth()->id()]);
         $projects = $this->projectService->fullList($request);
         $categories = $this->categoryService->fullList($request);

@@ -20,7 +20,6 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $data = array();
         $categories = $this->categoryService->list($request);
         $categories = CategoryResource::collection($categories)->resource;
         return view('pages.admin.category.list', [

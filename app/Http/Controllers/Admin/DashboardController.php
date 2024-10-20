@@ -47,8 +47,9 @@ class DashboardController extends Controller
         ));
     }
     public function partnerOverview(){
+        $total_partners = User::role('partner')->count();
         $data =  array(
-            'total_partner' => 0,
+            'total_partner' => $total_partners,
             'total_partner_verified' => 0,
             'total_partner_commission' => 0, // Hoa hồng
             'total_order' => 0,

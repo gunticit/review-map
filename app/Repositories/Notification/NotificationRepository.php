@@ -17,6 +17,11 @@ class  NotificationRepository extends BaseRepository implements NotificationRepo
     public function list($request){
         $query = $this->model->query();
 
+        $user_ids = $request->user_ids ?? [];
+        if(!empty($user_ids)){
+            $query->whereIn('user_id', $user_ids);
+        }
+
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){
             foreach ($orderBy as $column => $direction) {

@@ -56,4 +56,8 @@ class NotificationService {
         $this->triggerEvent('notify-channel', 'notify-event', $data);
         return response()->json(['status' => 'Notification sent!']);
     }
+
+    public function destroy($id){
+        $this->notificationRepository->delete($id);
+    }
 }

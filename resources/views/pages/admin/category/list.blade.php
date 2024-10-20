@@ -72,7 +72,7 @@
                                     {{ $category->name }}
                                 </td>
                                 <td class="list-table-name">
-                                    <img src="{{ url($category->image) }}" width="50" alt="">
+                                    <img src="{{ asset('storage/' . $category->image) }}" width="50" alt="">
                                 </td>
                                 <td class="list-table-name">
                                     {{ optional($category->parent)->name }}
@@ -83,13 +83,13 @@
                                     }}
                                 </td>
                                 <td class="list-table-progree" scope="col">
-                                    {{ $category->status }}
+                                    {{ $category->active }}
                                 </td>
                                 <td class="list-table-time" scope="col">
                                     {{ date('d/m/Y', strtotime($category->created_at)) }}
                                 </td>
-                                <td class="list-table-handle">
-                                    <button class="btn btn-default" type="button" onclick="handleDelete({{ $category->id }})">
+                                <td class="list-table-handle text-center">
+                                    <button class="btn btn-danger" type="button" onclick="handleDelete({{ $category->id }})">
                                         <span class="material-symbols-outlined">
                                             delete
                                         </span>
