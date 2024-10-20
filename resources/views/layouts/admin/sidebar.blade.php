@@ -54,7 +54,7 @@
     </div> <span>Kiểm duyệt</span> 
     {{-- <span class="badge bg-danger rounded-pill ms-2">2</span> --}}
 </a>
-<a class="nav-link" href="{{ route('admin.manage.partner.info') }}">
+<a class="nav-link {!! request()->routeIs('admin.manage.partner.info') ? 'active' : '' !!}" href="{{ route('admin.manage.partner.info') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             group
