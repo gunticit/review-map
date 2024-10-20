@@ -101,7 +101,7 @@
                             {{ date('d/m/Y', strtotime($support->created_at)) }} <span>{{ date('H:i', strtotime($support->created_at)) }}</span>
                         </td>
                         <td class="list-table-status">
-                            <span class="btn {{ $support->getStatusLabel() }}">
+                            <span class="btn">
                                 {!! __(config('constants.status_support')[$support->status]) !!}
                             </span>
                         </td>

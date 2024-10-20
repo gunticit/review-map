@@ -58,7 +58,7 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
             $query->whereIn('status', $filter['list_status']);
         }
         $query->where('created_at', 'like', $filter['year'] . '%');
-        $query = $query->groupBy('created_at')->selectRaw('count(*) as total, DATE_FORMAT(created_at, "%m") as month');
+        $query = $query->groupBy('created_at')->selectRaw('count(*) as total, TO_CHAR(created_at, \'MM\') as month');
         return $query->get();
     }
 }
