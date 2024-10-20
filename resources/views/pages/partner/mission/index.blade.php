@@ -76,7 +76,7 @@
                     <p>Hệ thống đang tiến hành xử lý nhiệm vụ của bạn, thao tác <br> này có thể sẽ tốn một ít thời gian.</p>
                     
                     <div class="text-center">
-                        <img src="{{ asset('assets/nhiem-vu-hoan-thanh.jpg') }}" alt="nhiem-vu" class="mb-4 hoan-thanh-img" >
+                        <img src="{{ asset('assets/img/nhiem-vu-hoan-thanh.jpg') }}" alt="nhiem-vu" class="mb-4 hoan-thanh-img" >
                         <a class="btn btn-primary mb-4" href="{{route('mission.index')}}" >Trở lại trang nhiệm vụ</a>
                     </div>
                 </section>
