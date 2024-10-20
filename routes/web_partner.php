@@ -25,7 +25,7 @@ Route::group([
     Route::patch('/cart/update-quantity',  [CartController::class, 'updateQuantity'])->name('cart.update.quantity');
     Route::delete('/cart/delete-item',  [CartController::class, 'deleteItem'])->name('cart.delete.item');
     Route::post('/cart/apply-voucher',  [CartController::class, 'applyVoucher'])->name('cart.apply.voucher');
-    Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+    Route::post('/order', [OrderController::class, 'store']);
 
     Route::post('/create-mission-ajax', [MissionController::class, 'createMissionAjax'])->name('create.mission.ajax');
     Route::get('/mission/confirm/{id}', [MissionController::class, 'missionConfirm'])->name('mission.confirm');

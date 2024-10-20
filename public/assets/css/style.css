@@ -3750,6 +3750,10 @@ h3.col-title {
   height: 68px;
   vertical-align: middle;
   padding: 5px;
+  min-width: 130px;
+}
+.list-table td:first-child, .list-table th:first-child{
+  min-width: 80px;
 }
 .list-table td[data-th=STT] {
   font-weight: 400;
@@ -3931,6 +3935,8 @@ h3.col-title {
   text-align: center;
   line-height: 40px;
   padding: 0;
+  color: #747787;
+  border: none;
 }
 .pagination .page-item.active > a {
   background-color: #E8EDFF;

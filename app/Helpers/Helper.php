@@ -89,7 +89,7 @@
             ];
         }
 
-        function saveAvatarGoogle($avatarUrl, $user)
+        public static function saveAvatarGoogle($avatarUrl, $user)
         {
             $client = new Client();
             $response = $client->get($avatarUrl);

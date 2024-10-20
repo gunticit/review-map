@@ -17,6 +17,9 @@ h2, .h2 {
 img {
   max-width: 100%;
 }
+.btn{
+  padding: 15px 10px;
+}
 
 @font-face {
   font-family: "Montserrat";

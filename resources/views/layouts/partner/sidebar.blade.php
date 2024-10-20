@@ -26,7 +26,7 @@
                 <!-- Sidenav Accordion (Nhiemvu)-->
                 <div class="collapse show" id="collapseNhiemvu" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavNhiemvuMenu">
-                        <a class="nav-link {!! request()->routeIs('mission.index') ? 'active' : '' !!}" href="{{ route('mission.index') }}" data-bs-target="#nhanNhiemVuModal">Nhận nhiệm vụ</a>
+                        <a class="nav-link {!! request()->routeIs('mission.index') ? 'active' : '' !!}" id="btn-get-mission" href="{{ route('mission.index') }}" data-bs-target="#nhanNhiemVuModal">Nhận nhiệm vụ</a>
                         <a class="nav-link {!! request()->routeIs('mission.histories') ? 'active' : '' !!}" href="{{ route('mission.histories') }}">Lịch sử nhiệm vụ</a>
                     </nav>
                 </div>

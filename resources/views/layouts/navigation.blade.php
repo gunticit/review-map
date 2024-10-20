@@ -82,7 +82,8 @@
                     <ul class="list-notifications">
                     </ul>
                     <div class="col-sm-12 text-center p-5">
-                        <span class="material-symbols-outlined">
+                        <span class="material-symbols-outlined" style="font-size: 45px">
+                            notifications_off
                         </span>
                         <h6>Không có thông báo mới </h6>
                     </div>

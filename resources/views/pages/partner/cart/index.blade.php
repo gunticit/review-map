@@ -40,6 +40,7 @@
                         @foreach ($cart->products as $product)
                             <tr>
                                 <td class="list-table-product-remove">
+                                    <input type="hidden" id="product_id" value="{{ $product->id }}">
                                     <form action="{{ route('cart.delete.item') }}" method="POST">
                                         @csrf
                                         @method('DELETE')
@@ -61,17 +62,12 @@
                                     </div>
                                 </td>
                                 <td class="list-table-quantity">
-                                    <form action="{{ route('cart.update.quantity') }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="id" value="{{ $product->id }}">
-                                        <input type="hidden" name="quantity" value="1">
-                                        <div class="quantity">
-                                            <button type="submit" name="action" value="decrease" class="sub">-</button>
-                                            <input type="number" class="quantity-number" value="{{ $product->pivot->quantity }}" min="1"/>
-                                            <button type="submit" name="action" value="increase" class="add">+</button>
-                                        </div>
-                                    </form>
+                                    <input type="hidden" name="quantity" value="1">
+                                    <div class="quantity">
+                                        <button type="button" id="cart-quantity-decrease">-</button>
+                                        <input type="number" class="quantity-number" id="product_quantity" value="{{ $product->pivot->quantity }}" min="1"/>
+                                        <button type="button" id="cart-quantity-increase">+</button>
+                                    </div>
                                 </td>
                                 <td class="list-table-subtotal">
                                     {{ $product->subtotal_formatted }}
@@ -192,6 +188,86 @@
         //     }
         // });
         
+        $('#cart-quantity-increase').click(function () {
+            const productId = $('#product_id').val();
+            const currentQuantity = $('#product_quantity').val();
+
+            $.ajax({
+                url: '{{ route("cart.update.quantity") }}',
+                method: 'PATCH',
+                data: {
+                    id: productId,
+                    quantity: 1,
+                    action: 'increase',
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                }
+            });
+        });
+
+        $('#cart-quantity-decrease').click(function () {
+            const productId = $('#product_id').val();
+            const currentQuantity = $('#product_quantity').val();
+
+            $.ajax({
+                url: '{{ route("cart.update.quantity") }}',
+                method: 'PATCH',
+                data: {
+                    id: productId,
+                    quantity: 1,
+                    action: 'decrease',
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                }
+            });
+        });
+
+        $('#product_quantity').on('change', function () {
+            const productId = $('#product_id').val();
+            let quantity = $(this).val();
+            
+            if (quantity < 1) quantity = 1;
+
+            $.ajax({
+                url: '{{ route("cart.update.quantity") }}',
+                method: 'PATCH',
+                data: {
+                    id: productId,
+                    quantity: quantity,
+                    action: 'change',
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                }
+            });
+        });
+
         $('#cart-apply-voucher-btn').click(function () {
             const voucherCode = $('#voucher_code');
             const cartTotal = $('#cart_total');

@@ -14,13 +14,10 @@ class DepartmentSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'Phòng kinh doanh',
+                'name' => 'Phòng chăm sóc đối tác',
             ],
             [
                 'name' => 'Phòng kế toán',
-            ],
-            [
-                'name' => 'Phòng kỹ thuật',
             ]
         ];
         DB::table('departments')->insert($data);

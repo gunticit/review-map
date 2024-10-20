@@ -51,24 +51,35 @@ class CartController extends Controller
             DB::beginTransaction();
             $cart = Cart::where('user_id', Auth::user()->id)->first();
             $product = Product::findOrFail($request->id);
-            if ($request->action == 'increase') {
-                $currentQuantity = $cart->products()->where('product_id', $product->id)->first()->pivot->quantity ?? 0;
-                $newQuantity = $currentQuantity + $request->quantity;
-                $cart->products()->updateExistingPivot($product->id, ['quantity' => $newQuantity]);
-            } else {
-                $currentQuantity = $cart->products()->where('product_id', $product->id)->first()->pivot->quantity ?? 0;
-                $newQuantity = $currentQuantity - $request->quantity;
-                if ($newQuantity < 1) {
-                    $cart->products()->detach($product);
-                } else {
+
+            switch ($request->action) {
+                case 'increase':
+                    $currentQuantity = $cart->products()->where('product_id', $product->id)->first()->pivot->quantity ?? 0;
+                    $newQuantity = $currentQuantity + $request->quantity;
                     $cart->products()->updateExistingPivot($product->id, ['quantity' => $newQuantity]);
-                }
+                    break;
+                case 'decrease':
+                    $currentQuantity = $cart->products()->where('product_id', $product->id)->first()->pivot->quantity ?? 0;
+                    $newQuantity = $currentQuantity - $request->quantity;
+                    if ($newQuantity < 1) {
+                        $cart->products()->detach($product);
+                    } else {
+                        $cart->products()->updateExistingPivot($product->id, ['quantity' => $newQuantity]);
+                    }
+                    break;
+                case 'change':
+                    $cart->products()->updateExistingPivot($product->id, ['quantity' => $request->quantity]);
+                    break;
             }
+
             DB::commit();
-            return redirect()->back();
+            return response()->json(['success' => true]);
         } catch (\Throwable $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra'
+            ]);
         }
     }
 

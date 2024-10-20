@@ -143,36 +143,6 @@
     </div>
 </div>
 <!-- end modal vi tri  -->
-
-<!-- Modal nhan Nhiem Vu -->
-<div class="modal fade missionModal" id="missionModal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center">
-            <div class="modal-header ">
-                <h2 class="modal-title" id="missionModalLabel">Nhận nhiệm vụ</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            @if ($errors->has('captcha'))
-                <div class="alert alert-danger">
-                    {{ $errors->first('captcha') }}
-                </div>
-            @endif
-            <form method="POST" id="recaptcha-form" action="{{ route('verify.recaptcha') }}">
-                {{ csrf_field() }}
-                <div class="modal-body">
-                    <h4 class="fw-500 text-primary">60 phút</h4>
-                    <p>Phần thưởng <span class="fw-500">10.000 VND</span> khi Review <span class="fw-500">RO1234</span></p>
-                    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_V2_SITE_KEY') }}"></div>
-                </div>
-                <div class="modal-footer">
-                    <a  class="btn btn-outline-primary btn-lg" data-bs-dismiss="modal" aria-label="Close" >Hủy</a>
-                    <a href="javascript:void(0)" id="submit-captcha" class="btn btn-primary btn-lg">Đồng ý</a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- end modal vi tri  -->
  
 <script>
     // Jquery
@@ -213,19 +183,6 @@
         } else {
             $('#message-location').remove();
         }
-
-        // Get mission
-        $('#btn-get-mission, #btn-get-mission2').on('click', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            let check_location = localStorage.getItem('current_location');
-            if(!check_location){
-                $('#warning-location-modal').modal('show');
-            } else {
-                var targetModal = $(this).attr('data-bs-target');
-                $(targetModal).modal('show');
-            }
-        })
     });
 </script>
 <!-- Recaptcha -->
