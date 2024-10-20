@@ -93,7 +93,7 @@
                         <input class="form-control" name="title" id="inputlist-table" type="text" placeholder="Nhập tiêu đề" value="{{ old('title') }}" required>
                     </div>
 
-                    <!-- Department Select -->
+                    <!-- Department Select 
                     <div class="mb-4">
                         <label for="inputPhongBan">{{ __('support.department') }} <span class="required">*</span></label>
                         <select class="form-control form-select" name="department_id" id="inputPhongBan" required>
@@ -103,7 +103,8 @@
                             @endforeach
                         </select>
                     </div>
-
+                    -->
+                    
                     <!-- Project Select -->
                     <div class="mb-4">
                         <label for="inputDuAn">{{ __('support.project') }} <small>(Nếu có)</small></label>
