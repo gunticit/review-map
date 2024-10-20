@@ -30,7 +30,7 @@
                                 <div class="col-sm-4">
                                     <select class="form-select form-control" id="codeSelect" name="codeSelect">
                                         <option value="0" {{ old('codeSelect') == '0' ? 'selected' : '' }}>Nhập thủ công</option>
-                                        <option value="1" {{ old('codeSelect') == '1' ? 'selected' : '' }}>Tự động tạo mã KH_...</option>
+                                        <option value="1" {{ old('codeSelect') == '1' ? 'selected' : '' }}>Tự động tạo mã</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-8">
@@ -159,7 +159,6 @@
     </div>
 </section>
 @endsection
-
 @section('script')
 <script src="{{ asset('js/admin/voucher.js') }}"></script>
 @endsection

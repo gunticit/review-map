@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Session;
+use App\Helpers\Helper;
 
 class AuthSocialService
 {
@@ -51,12 +52,14 @@ class AuthSocialService
                     'email' => $user->getEmail(),
                     'google_id' => $user->getId(),
                     'password' => Hash::make(Str::random(8)),
+                    'email_verified_at' => now(),
                 ];
                 $finduser = $this->userRepository->create($data); // Đổi tên $user thành $finduser
                 $this->setRole($finduser);
             }
-
-            // Đăng nhập người dùng (dù là mới tạo hay đã có)
+            if(!$finduser->avatar){
+                $avatarUrl = Helper::saveAvatarGoogle($user->getAvatar(), $finduser);
+            }
           return $finduser;
 
         } catch (Exception $e) {

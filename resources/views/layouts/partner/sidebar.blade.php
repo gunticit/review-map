@@ -26,7 +26,7 @@
                 <!-- Sidenav Accordion (Nhiemvu)-->
                 <div class="collapse show" id="collapseNhiemvu" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavNhiemvuMenu">
-                        <a class="nav-link {!! request()->routeIs('mission.index') ? 'active' : '' !!}" href="#" id="btn-get-mission" data-bs-target="#nhanNhiemVuModal">Nhận nhiệm vụ</a>
+                        <a class="nav-link {!! request()->routeIs('mission.index') ? 'active' : '' !!}" href="{{ route('mission.index') }}" data-bs-target="#nhanNhiemVuModal">Nhận nhiệm vụ</a>
                         <a class="nav-link {!! request()->routeIs('mission.histories') ? 'active' : '' !!}" href="{{ route('mission.histories') }}">Lịch sử nhiệm vụ</a>
                     </nav>
                 </div>
@@ -62,7 +62,7 @@
 
                 <!-- Sidenav Heading (Khac)-->
                 <div class="sidenav-menu-heading">Khác</div>
-                <a class="nav-link" href="8.0.yeu-cau-ho-tro.php">
+                <a class="nav-link" href="{{ route('support') }}/">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">support_agent</span>
                     </div> Yêu cầu hỗ trợ
@@ -81,3 +81,16 @@
         </div>
     </nav>
 </div>
+
+<!-- Check captcha -->
+@if(Auth::user()->getRoleNames()->first() == 'partner')
+<script>
+    $(document).ready(function(){
+        let checkCaptcha = localStorage.getItem('captchaChecked');
+        if(checkCaptcha){
+            $('#btn-get-mission, #btn-get-mission2').removeAttr('data-bs-target');
+            $('#btn-get-mission, #btn-get-mission2').attr('href','{{route("mission.index")}}');
+        }
+    })
+</script>
+@endif

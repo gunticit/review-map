@@ -30,4 +30,8 @@ class Project extends Model
     public function comments(){
         return $this->hasMany(Comment::class, 'project_id', 'id');
     }
+
+    public function missions(){
+        return $this->hasMany(Mission::class, 'project_id', 'id');
+    }
 }

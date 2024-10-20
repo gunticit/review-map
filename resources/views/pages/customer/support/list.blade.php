@@ -13,7 +13,7 @@
                 </nav>
             </div>
             <div class="col-xl-2 col-md-8 col-12 text-right">
-                <a href="{{ route('support.create') }}" class="btn btn-primary d-flex flex-wrap">
+                <a href="{{ route('admin.support.create') }}" class="btn btn-primary d-flex flex-wrap">
                     <span class="material-symbols-outlined">add</span>
                     <span>Tạo yêu cầu</span>
                 </a>

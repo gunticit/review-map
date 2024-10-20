@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="clear col-sm-12 text-right">
                     <button class="btn btn-primary my-3" type="button" onclick="window.location.href='{{ route('voucher.create') }}'">
-                        <i class="fas fa-plus"></i> Tạo danh mục
+                        <i class="fas fa-plus"></i> Tạo mã giảm giá
                     </button>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                             </button>
                             <input type="text" value="{{ request()->name }}" placeholder="Tìm kiếm" name="name" class="form-control" id="inputSearch">
                         </div>
-                        <button class="bttn-filter btn btn-default btn-filter" type="button" onclick="filter()">
+                        <button class="btn btn-default btn-filter" type="button" onclick="filter()">
                             <img src="{{ asset('./assets/img/filter.svg') }}" alt="filter"> <span>Tìm kiếm</span>
                         </button>
                     </div>

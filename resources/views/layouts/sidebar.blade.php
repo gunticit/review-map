@@ -26,6 +26,15 @@
                         <span class="material-symbols-outlined">quiz</span>
                     </div> FAQ
                 </a>
+                @if(Auth::user()->getRoleNames()->first() == 'admin')
+                <a class="nav-link" href="{{ route('setting') }}">
+                    <div class="nav-link-icon">
+                        <span class="material-symbols-outlined">
+                            settings
+                        </span>
+                    </div> Cài đặt
+                </a>
+                @endif
                 <a class="nav-link link-danger" href="{{ route('logout') }}">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">logout</span>

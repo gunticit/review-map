@@ -4333,7 +4333,21 @@ table.bt .list-table-title a {
 
 .accordion-item {
   border: none;
-  border-bottom: 1px solid #BFCDFF;
+  padding: 0 15px;
+  border-bottom: 1px solid #e0e5ec;
+}
+.setting-page .accordion-item{
+  border-bottom: 0;
+}
+.setting-page .accordion-button{
+  color: #212529;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  box-shadow: none;
+  padding: 15px;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 .accordion-item:last-of-type {
   border-radius: 0;
@@ -4353,6 +4367,9 @@ table.bt .list-table-title a {
 .accordion-body {
   padding: 0 0 20px 0;
   color: #718096;
+}
+.setting-page .accordion-body{
+  padding: 0 15px;
 }
 
 .single-post-title {
@@ -5052,6 +5069,32 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
 #btn-delete > span{
   font-size: 22px;
 }
+.input-group.group-search{
+  display: flex;    
+  flex-wrap: unset;
+  gap: 20px;
+}
+.btn-filter{
+  background: #FAFAFA;
+  border-radius: 10px;
+  font-size: 12px;
+  width: 12%;
+  min-width: 110px;
+  gap: 10px;
+}
+#codeInput{
+  font-weight: bold;
+}
+.select-setting{
+  width: 22%;
+  min-width: 180px;
+}
+.setting-page .accordion-body .title{
+  color: #343a40;
+}
+.setting-page .accordion-body .notice{
+  font-size: 14px;
+}
 @media (max-width: 768px) {
   .step-xac-thuc .step-images {
     flex-direction: column;
@@ -5378,18 +5421,18 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
   .nav-fixed #layoutSidenav #layoutSidenav_content {
     padding-left: 310px;
   }
+  .sidenav-light .sidenav-menu{
+    padding: 15px;
+  }
   .topnav .navbar-brand-wrap,
   .nav-fixed #layoutSidenav #layoutSidenav_nav {
     min-width: 295px;
-  }
-  .sidenav-light .sidenav-menu {
-    padding: 15px 30px;
   }
   .sidenav-toggled #layoutSidenav #layoutSidenav_nav {
     transform: translateX(-20rem);
   }
   .topnav .navbar-brand {
-    padding-left: 40px !important;
+    padding-left: 20px !important;
     min-width: 279px;
   }
   .danh-sach-du-an .list-table-progree {
