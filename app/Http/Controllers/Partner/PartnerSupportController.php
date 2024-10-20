@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SupportRequest;
 use App\Http\Resources\SupportResource;
 use App\Models\Department;
+use App\Models\Project;
 use App\Services\CategoryService;
 use App\Services\ProjectService;
 use App\Services\SupportService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Events\NotificationEvent;
 
 class PartnerSupportController extends Controller
 {
@@ -39,7 +41,7 @@ class PartnerSupportController extends Controller
     }
     public function create(Request $request){
         $request->merge(['user_id' => auth()->id()]);
-        $projects = $this->projectService->fullList($request);
+        $projects = Project::leftJoin('missions', 'projects.id', '=', 'missions.project_id')->where('missions.user_id', $request->user_id)->select('projects.*')->distinct('projects.id')->get();
         $categories = $this->categoryService->fullList($request);
         $departments = Department::all();
         return view('pages.partner.support.create',[
@@ -51,10 +53,12 @@ class PartnerSupportController extends Controller
     public function store(SupportRequest $request){
         try{
             $data = $this->supportService->create($request);
+            event(new NotificationEvent($data->toArray()));
             Session::flash('success', 'Khởi tạo yêu cầu hỗ trợ thành công');
             return redirect()->back()->withInput();
         }catch(Exception $e){
             Session::flash('error', 'Không thêm được yêu cầu hỗ trợ');
+            return redirect()->back()->withInput();
         }
     }
     public function update(SupportRequest $request){

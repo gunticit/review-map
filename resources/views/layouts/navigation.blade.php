@@ -1,22 +1,24 @@
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script src="//js.pusher.com/3.1/pusher.min.js"></script>
 <script>
     Pusher.logToConsole = true;
 
-    const pusher = new Pusher('{{ config('constants.pusher_app_key') }}', {
+    const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
       cluster: 'ap1'
     });
-
-    const channel = pusher.subscribe('NotificationEvent');
-    channel.bind('send-message', function(data) {
+    const role = '{{ Auth::user()->getRoleNames()->first() }}';
+    const channelName = 'send-' + role;
+    const channel = pusher.subscribe(channelName);
+    const eventName = 'event-notification-' + role;
+    channel.bind(eventName, function(data) {
         const newNotificationHtml = `
             <li>
                 <a class="dropdown-item dropdown-notifications-item active" href="#!">
                     <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-title">${data.title}</div>
-                        <div class="dropdown-notifications-item-content-text">${data.content}</div>
+                        <div class="dropdown-notifications-item-content-title">${data.data.title}</div>
+                        <div class="dropdown-notifications-item-content-text">${data.data.content}</div>
                         <div class="dropdown-notifications-item-content-details">
-                            ${new Date(data.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })} - 
-                            ${new Date(data.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                            ${new Date(data.data.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })} - 
+                            ${new Date(data.data.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
                         </div>
                     </div>
                 </a>
@@ -77,20 +79,10 @@
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </h6>
-                    {{-- <ul class="list-notifications">
-                            <li>
-                                <a class="dropdown-item dropdown-notifications-item active" href="#!">
-                                    <div class="dropdown-notifications-item-content">
-                                        <div class="dropdown-notifications-item-content-title">{{ $notification->title }}</div>
-                                        <div class="dropdown-notifications-item-content-text">{{ $notification->content }}</div>
-                                        <div class="dropdown-notifications-item-content-details">{{ date('d/m/Y', strtotime($notification->created_at)) }} - {{ date('H:i', strtotime($notification->created_at)) }}</div>
-                                    </div>
-                                </a>
-                            </li>
-                    </ul> --}}
+                    <ul class="list-notifications">
+                    </ul>
                     <div class="col-sm-12 text-center p-5">
                         <span class="material-symbols-outlined">
-                            notifications_off
                         </span>
                         <h6>Không có thông báo mới </h6>
                     </div>
