@@ -5,7 +5,8 @@
     use Illuminate\Http\UploadedFile;
     use App\Traits\FileManager;
     use GuzzleHttp\Client;
-    
+use Illuminate\Support\Facades\Storage;
+
     class Helper{
         use FileManager;
         # Lấy danh sách tất cả các module của hệ thống
