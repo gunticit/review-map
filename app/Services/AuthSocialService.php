@@ -43,7 +43,7 @@ class AuthSocialService
 
     public function handleGoogleCallback()
     {
-        try {
+        // try {
             $user = Socialite::driver('google')->user();
             $finduser = User::where('google_id', $user->id)->first();
             if (empty($finduser)) { // Nếu lần đầu tiên đăng nhập, tạo người dùng mới
@@ -62,9 +62,9 @@ class AuthSocialService
             }
           return $finduser;
 
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     dd($e->getMessage());
+        // }
     }
 
     private function setRole($user)
