@@ -57,14 +57,14 @@
     <div class="container">
         <div class="col-inner">
             <h2 class="section-title mb-4 text-center">Các câu hỏi phổ biến</h2>
-            <div class="accordion" id="accordionExample">
+            <div class="accordion" id="accordion">
                 @if(!empty($faqs))
                     @foreach($faqs as $key => $faq)
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button {!! $key != 0 ? 'collapsed' : '' !!}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">{{ $faq->title }}</button>
+                                <button class="accordion-button {!! $key != 0 ? 'collapsed' : '' !!}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{$key}}" aria-expanded="true" aria-controls="collapse-{{$key}}">{{ $faq->title }}</button>
                             </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse {!! $key == 0 ? 'show' : '' !!}" data-bs-parent="#accordionExample">
+                            <div id="collapse-{{$key}}" class="accordion-collapse collapse {!! $key == 0 ? 'show' : '' !!}" data-bs-parent="#accordion">
                                 <div class="accordion-body">
                                     {{ $faq->content }}
                                 </div>

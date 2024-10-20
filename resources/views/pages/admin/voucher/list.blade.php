@@ -65,7 +65,7 @@
                                     <td class="list-table-code">{{ $voucher->code }}</td>
                                     <td class="list-table-name">{{ $voucher->name }}</td>
                                     <td class="list-table-description">{{ $voucher->description }}</td>
-                                    <td class="list-table-money">{{ number_format($voucher->discount_value) }} %</td>
+                                    <td class="list-table-money">{{ number_format($voucher->discount_value) }} {{ $voucher->discount_type == 'fixed' ? 'VNĐ' : '%' }}</td>
                                     <td class="list-table-money">{{ number_format($voucher->max_uses) }}</td>
                                     <td class="list-table-date">{{ date('d/m/Y', strtotime($voucher->start_date)) }}</td>
                                     <td class="list-table-actions">

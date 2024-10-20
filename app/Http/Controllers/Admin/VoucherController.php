@@ -33,20 +33,20 @@ class VoucherController extends Controller
     }
     public function store(VoucherRequest $request)
     {
-        try {
-            $data = $request->except('_token');
+        // try {
+            $data = $this->getData($request);
             Voucher::create($data);
             return redirect()->route('voucher.index')->with('success', 'Thêm voucher thành công!');
-        } catch (\Exception $e) {
-            $logs = array(
-                'module' => 'Voucher',
-                'action' => 'Create',
-                'msg_log' => $e->getMessage(),
-            );
-            Helper::trackingError($logs);
+        // } catch (\Exception $e) {
+        //     $logs = array(
+        //         'module' => 'Voucher',
+        //         'action' => 'Create',
+        //         'msg_log' => $e->getMessage(),
+        //     );
+        //     Helper::trackingError($logs);
 
-            return redirect()->back()->with(key: 'resp_error', value: 'An error occurred during the operation.');
-        }
+        //     return redirect()->back()->with(key: 'resp_error', value: 'An error occurred during the operation.');
+        // }
     }
     public function edit($id)
     {
@@ -90,5 +90,20 @@ class VoucherController extends Controller
             'title' => 'Load data Danh mục',
             'data' => $data
         ]);
+    }
+    public function getData($request){
+        return array(
+            'code' => $request->code ?? null,
+            'name' => $request->name ?? null,
+            'description' => $request->description ?? null,
+            'discount_type' => $request->discount_type ?? null,
+            'discount_value' => $request->discount_value ?? null,
+            'start_date' => $request->start_date ?? null,
+            'end_date' => $request->end_date ?? null,
+            'max_uses' => $request->max_uses ?? null,
+            'uses_left' => $request->uses_left ?? 0,
+            'status' => $request->status ?? 'active',
+            'min_order_value' => $request->min_order_value ?? 0
+        );
     }
 }
