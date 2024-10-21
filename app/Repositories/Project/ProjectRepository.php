@@ -4,6 +4,7 @@ namespace App\Repositories\Project;
 use App\Repositories\BaseRepository;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class  ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -63,17 +64,35 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         return $query->first();
     }
 
-    public function countDataGroupMonth($filter = array()){
+    public function countDataGroupMonth($filter = array()) {
         $query = $this->model->query();
         $filter['year'] = $filter['year'] ?? date('Y');
-        if(isset($filter['status'])){
+    
+        // Apply filters
+        if (isset($filter['status'])) {
             $query->where('status', $filter['status']);
         }
-        if(isset($filter['list_status'])){
+        if (isset($filter['list_status'])) {
             $query->whereIn('status', $filter['list_status']);
         }
-        $query->where('created_at', 'like', $filter['year'] . '%');
-        $query = $query->groupBy('created_at')->selectRaw('count(*) as total, TO_CHAR(created_at, \'MM\') as month');
+    
+        // Filter by year
+        $query->whereYear('created_at', $filter['year']);
+    
+        // Detect current database driver (MySQL or PostgreSQL)
+        $driver = DB::getDriverName();
+    
+        if ($driver === 'pgsql') {
+            // PostgreSQL: Use TO_CHAR to format the month
+            $query->groupBy(DB::raw("TO_CHAR(created_at, 'MM')"))
+                  ->selectRaw("count(*) as total, TO_CHAR(created_at, 'MM') as month");
+        } else {
+            // MySQL: Use DATE_FORMAT to format the month
+            $query->groupBy(DB::raw("DATE_FORMAT(created_at, '%m')"))
+                  ->selectRaw("count(*) as total, DATE_FORMAT(created_at, '%m') as month");
+        }
+    
         return $query->get();
     }
+    
 }
