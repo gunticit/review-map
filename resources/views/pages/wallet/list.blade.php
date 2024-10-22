@@ -55,7 +55,7 @@
                                             </td>
                                             <td class="list-table-so-tien {{ $text_color }}">
                                                 <a href="javascript:void(0)">{!! $transaction_history->type == 'deposit' ? '+' : '-' !!}
-                                                    {{ formatCurrency($transaction_history->amount) }} VND</a>
+                                                    {{ formatCurrency($transaction_history->amount) }}</a>
                                             </td>
                                             <td class="list-table-content-3 {{ $text_color }}">
                                                 <a href="javascript:void(0)">

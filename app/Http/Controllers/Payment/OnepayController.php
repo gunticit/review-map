@@ -28,6 +28,7 @@ class OnepayController extends Controller
     {
         // kiểm tra dữ liệu hợp lệ
         $validator = $this->validateResultRequest($request);
+        $amount = $request->input('vpc_Amount') / 100;
         if (!$validator['success']) {
             return view('pages.wallet.list', [
                 'error' => $validator['message'],
@@ -35,7 +36,6 @@ class OnepayController extends Controller
         }
         $responseCode = $request->get('vpc_TxnResponseCode');
         $reference_id = $request->input('vpc_MerchTxnRef');
-        $amount = $request->input('vpc_Amount') / 100;
         if ($responseCode == '0') {
             $this->walletService->updateWalletandTransactinon($amount, $reference_id);
             return redirect()->route('wallet')->with('success', 'Giao dịch thành công - Approved');
@@ -45,8 +45,8 @@ class OnepayController extends Controller
 
     public function onepay_ipn(Request $request)
     {
-        $merchTxnRef = $request->get('vpc_MerchTxnRef');
-
+        $reference_id = $request->get('vpc_MerchTxnRef');
+        $amount = $request->input('vpc_Amount') / 100;
         $validator = $this->validateIpnRequest($request);
         if (!$validator['success']) {
             return view('pages.wallet.list', [
@@ -54,9 +54,8 @@ class OnepayController extends Controller
             ]);
         }
         $responseCode = $request->get('vpc_TxnResponseCode');
-        $reference_id = $merchTxnRef;
         if ($responseCode == '0') {
-            // $this->walletService->updateWalletandTransactinon($reference_id);
+            // $this->walletService->updateWalletandTransactinon($amount, $reference_id);
             $response['success'] = true;
         } else {
             $response['success'] = false;
