@@ -3,7 +3,7 @@
 @section('content')
 <!-- tai khoan -->
 <section class="accout mb-5 mt-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <!-- cot 1 -->
             <div class="col-xl-6 col-md-12 col-12 mb-4 mb-xl-0">

@@ -2,7 +2,7 @@
 
 @section('content')
 <section class="section setting-page mb-5 mt-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-xl-12 col-md-12 col-12 mb-4 mb-xl-0">
                 <div class="accordion" id="accordionExample">

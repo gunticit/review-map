@@ -3,7 +3,7 @@
 
 <!-- thong ke -->
 <section class="thong-ke">
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-xl-2 col-md-4 col-6 mb-4 mb-xl-0">
         <div class="thong-ke-item text-center">
@@ -77,7 +77,7 @@
 <!-- end thong ke  -->
 <!-- du-an-cua-ban -->
 <section class="du-an-cua-ban">
-  <div class="container">
+  <div class="container-fluid">
     <div class="col-inner">
       <div class="row">
         <div class="col-md-10 col-12">

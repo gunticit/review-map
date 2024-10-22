@@ -2,7 +2,7 @@
 @section('content')
 
 <section class="section nhan-nhiem-vu-step mb-5 mt-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-inner text-center">
             <div class="section-step">
                 <h3>step 1</h3>

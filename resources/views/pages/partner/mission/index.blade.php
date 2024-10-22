@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <section class="section nhan-nhiem-vu-step mb-5 mt-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-inner text-center">
             <div class="col-xl-10 col-md-9 col-12 mb-4 mb-md-0 ">
                 <!-- class: bg-warning, bg-success, bg-danger  -->

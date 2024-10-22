@@ -38,6 +38,7 @@
         {{-- <script src="{{ asset('./js/password.js') }}"></script> --}}
         <script src="{{ asset('./assets/js/map.js') }}"></script>
         <script src="{{ asset('./assets/js/verifyOtp.js') }}?v={{ time() }}"></script>
+        <script src="{{ asset('./js/payment/dynamicDepositAmount.js') }}?v={{ time() }}"></script>
         @yield('js')
     </body>
 </html>

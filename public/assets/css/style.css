@@ -5101,6 +5101,19 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
 .setting-page .accordion-body .notice{
   font-size: 14px;
 }
+#info-project,#no-result{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  max-height: 550px;
+}
+#info-project, #list-project{
+  min-height: 465px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 @media (max-width: 768px) {
   .step-xac-thuc .step-images {
     flex-direction: column;
@@ -5425,7 +5438,7 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
     margin-left: -15px;
   }
   .nav-fixed #layoutSidenav #layoutSidenav_content {
-    padding-left: 310px;
+    padding-left: 300px;
   }
   .sidenav-light .sidenav-menu{
     padding: 15px;

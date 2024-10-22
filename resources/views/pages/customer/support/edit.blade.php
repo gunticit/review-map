@@ -2,7 +2,7 @@
 @section('content')
     <!-- Breadcrumb -->
     <section class="breadcrumb-wrap">
-        <div class="container">
+        <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -16,7 +16,7 @@
     <!-- tao-yeu-cau -->
     <section class="section tao-yeu-cau mb-5">
         <form action="">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="col-inner">
                     <h2 class="section-title mb-4">Tạo yêu cầu</h2>
                     <!-- Form Group (list-table)-->

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <section class="section thong-bao mb-5 mt-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-inner">
             <h2 class="section-title mb-4">Danh sách thông báo</h2>
             <form>

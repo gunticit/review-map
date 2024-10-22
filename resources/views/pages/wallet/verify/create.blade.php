@@ -130,7 +130,7 @@
         @endif
         <form action="{{ route('wallet.verify.store') }}" id="form-store-verify" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <div class="col-inner">

@@ -2,7 +2,7 @@
 @section('content')
 <script src="https://www.google.com/recaptcha/api.js"></script>
 <section class="section nhan-nhiem-vu mb-5 mt-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-xl-2 col-md-3 col-12 mb-4 mb-md-0">
                 <a class="btn btn-primary btn-full" href="#" id="btn-get-mission2" data-bs-target="#missionModal">Nhận nhiệm vụ</a>
@@ -20,7 +20,7 @@
 </section>
 <!-- nhiem vu -->
 <section class="section nhiem-vu mb-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-inner">
             <h2 class="section-title mb-4">Lịch sử nhiệm vụ</h2>
             @if(session()->has('message'))

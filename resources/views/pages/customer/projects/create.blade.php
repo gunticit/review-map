@@ -269,7 +269,7 @@
     </div>
     <form action="{{ route('project.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <!-- cot 1 -->
                 <div class="col-xl-8 col-md-12 col-12 mb-4 mb-xl-0">
