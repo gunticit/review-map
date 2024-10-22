@@ -11,36 +11,64 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Classes\Onepay;
 
 class WalletController extends Controller
-{   
-    protected $walletService, $paymentMethodService;
+{
+    protected $walletService, $paymentMethodService, $onepay;
     public function __construct(
         WalletService $walletService,
-        PaymentMethodService $paymentMethodService
-    ){
+        PaymentMethodService $paymentMethodService,
+        Onepay $onepay
+    ) {
         $this->walletService = $walletService;
         $this->paymentMethodService = $paymentMethodService;
+        $this->onepay = $onepay;
     }
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $data['balance'] = $this->walletService->getBalance();
         $data['transaction_histories'] = $this->walletService->getTransactionHistories();
         $data['payment_methods'] = $this->paymentMethodService->list($request);
         return view('pages.wallet.list', $data);
     }
-    public function withdraw() {
+
+    public function withdraw()
+    {
         $user = Auth::user();
         $certificationAccount = $user->certificationAccount;
         return view('pages.wallet.withdraw', compact('certificationAccount'));
     }
+    public function setupWalletAndDeposit(Request $request)
+    {
+        if ($request->input('method_payment') == 'onepay') {
+            $amount = $request->input('depositAmountCustom') ? $request->input('depositAmountCustom') : $request->input('depositAmount');
+            $ticketNo = $request->ip();
+            $reference_id = 'ONEPAY_' . round(microtime(true));
+            $data = [
+                'amount' => $amount,
+                'ticketNo' => $ticketNo,
+                'reference_id' => $reference_id,
+            ];
+            if ($request->input('method_payment') == 'onepay') {
+                $response = $this->onepay->payment($data);
+                if ($response['errorCode'] == 0) {
+                    return redirect()->away($response['url']);
+                }
+            }
+        }
+        return redirect()->back()->with(['error' => 'Phương thức thanh toán chưa hỗ trợ']);
 
-    public function createVerify() {
+    }
+    public function createVerify()
+    {
         return view('pages.wallet.verify.create', [
             'heading_title' => 'Xác thực tài khoản'
         ]);
     }
 
-    public function storeVerify(Request $request) {
+    public function storeVerify(Request $request)
+    {
         try {
             $validator = Validator::make($request->all(), [
                 'contract' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -72,7 +100,8 @@ class WalletController extends Controller
         }
     }
 
-    public function storeTransactionHistory(Request $request) {
+    public function storeTransactionHistory(Request $request)
+    {
         try {
             $validator = Validator::make($request->all(), [
                 'amount' => 'required|numeric',
@@ -84,10 +113,9 @@ class WalletController extends Controller
             }
 
             $data = $validator->validated();
-            
+
             DB::beginTransaction();
             $wallet = Wallet::where('user_id', Auth::user()->id)->first();
-            
             if ($wallet->balance < $data['amount']) {
                 return redirect()->back()->with('error', 'Số dư không đủ');
             }

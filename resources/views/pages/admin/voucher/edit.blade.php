@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <section class="section edit-voucher mb-5">
-    <div class="container">
+    <div class="container-fluid">
         <h2 class="section-title">Sửa mã giảm giá</h2>
         <div id="group-alert">
             @if(session('success'))

@@ -2,7 +2,7 @@
 @section('content')
     <!-- danh-sach-du-an -->
     <section class="section danh-sach-du-an mb-5">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="clear col-sm-12 text-right">
                     <button class="btn btn-primary my-3" type="button" onclick="window.location.href='{{ route('voucher.create') }}'">

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('country_code')->nullable();
             $table->integer('company_id')->nullable();
+            $table->integer('department_id')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

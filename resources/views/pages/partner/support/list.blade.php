@@ -43,7 +43,7 @@
 @section('content')
 <!-- Breadcrumb -->
 <section class="breadcrumb-wrap">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-xl-10 col-md-8 col-12">
                 <nav aria-label="breadcrumb">
@@ -65,7 +65,7 @@
 
 <!-- Support Requests List -->
 <section class="section danh-sach-du-an mb-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-inner">
             <h2 class="support__title--sub mb-4">Yêu cầu hỗ trợ</h2>
             <form>
@@ -95,8 +95,8 @@
                         <td class="list-table-title">
                             <a href="#">{{ $support->title }}</a>
                         </td>
-                        <td class="list-table-department">{{ $support->department }}</td>
-                        <td class="list-table-code">{{ $support->request_code }}</td>
+                        <td class="list-table-department">{{ $support->department->name }}</td>
+                        <td class="list-table-code">{{ $support->support_code }}</td>
                         <td class="list-table-time">
                             {{ date('d/m/Y', strtotime($support->created_at)) }} <span>{{ date('H:i', strtotime($support->created_at)) }}</span>
                         </td>

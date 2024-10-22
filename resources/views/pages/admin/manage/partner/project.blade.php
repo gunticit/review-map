@@ -86,7 +86,7 @@
         }
     </style>
     <div class="list-manage-customer">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row mt-5">
                 <div class="col-3">
                     <form action="{{ route('admin.manage.partner.wallet') }}" method="GET">

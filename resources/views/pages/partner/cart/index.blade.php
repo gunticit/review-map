@@ -2,7 +2,7 @@
 @section('content')
 <!-- danh-sach-du-an -->
 <section class="section section-cart mt-5 mb-5">
-  <div class="container">
+  <div class="container-fluid">
     @if (($errors->any() && !$errors->has('error_voucher')) || session('error'))
         <div class="alert alert-danger">
             <ul>

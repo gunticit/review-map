@@ -23,8 +23,8 @@ class SupportRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            // 'department_id' => 'required | exists:departments,id',
-            'project_id' => 'required | exists:projects,id',
+            'department_id' => 'required | exists:departments,id',
+            // 'project_id' => 'required | exists:projects,id',
             'content' => 'required'
         ];
     }

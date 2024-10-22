@@ -2,7 +2,7 @@
 @section('content')
 <!-- thong ke -->
 <section class="thong-ke">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-xl-3 col-md-4 col-6 mb-4 mb-xl-0">
                 <div class="thong-ke-item text-center">
@@ -54,7 +54,7 @@
 <!-- end thong ke  -->
 <!-- cau-hoi-thuong-gap -->
 <section class="section cau-hoi-thuong-gap mb-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-inner">
             <h2 class="section-title mb-4 text-center">Các câu hỏi phổ biến</h2>
             <div class="accordion" id="accordion">

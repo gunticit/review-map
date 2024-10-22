@@ -20,8 +20,4 @@ yarn-error.log
 /.vscode
 /docker/nginx/logs/*
 /docker/apache/logs/*
-/docker/postgres/*
-/docker/mysql/*
 /docker/*
-docker/*
-docker/postgres/db/data/

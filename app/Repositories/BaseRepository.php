@@ -245,4 +245,9 @@ class BaseRepository implements RepositoryInterface
         }
         return $query->first();
     }
+
+    public function findAllByKey($column, $value, $orderBy = 'asc')
+    {
+        return $this->model->where($column, $value)->orderBy('id', $orderBy); 
+    }
 }

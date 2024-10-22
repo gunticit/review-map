@@ -50,7 +50,7 @@
 @section('content')
     <!-- Breadcrumb -->
     <section class="breadcrumb-wrap">
-        <div class="container">
+        <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -66,7 +66,7 @@
     <section class="section tao-yeu-cau mb-5">
         <form action="{{ route('support.store') }}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
-            <div class="container">
+            <div class="container-fluid">
                 <div class="col-inner">
                     <h2 class="section-title mb-4">Tạo yêu cầu</h2>
 
@@ -93,25 +93,14 @@
                         <input class="form-control" name="title" id="inputlist-table" type="text" placeholder="Nhập tiêu đề" value="{{ old('title') }}" required>
                     </div>
 
-                    <!-- Department Select 
+                    <!-- Department Select                     -->
+
                     <div class="mb-4">
                         <label for="inputPhongBan">{{ __('support.department') }} <span class="required">*</span></label>
                         <select class="form-control form-select" name="department_id" id="inputPhongBan" required>
                             <option value="" disabled selected>Chọn phòng ban</option>
                             @foreach($departments as $department)
                                 <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>{{ $department->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    -->
-                    
-                    <!-- Project Select -->
-                    <div class="mb-4">
-                        <label for="inputDuAn">{{ __('support.project') }} <small>(Nếu có)</small></label>
-                        <select class="form-control form-select" name="project_id" id="inputDuAn">
-                            <option value="" disabled selected>{{ __('support.select_project') }}</option>
-                            @foreach($projects as $project)
-                                <option value="{{ $project['id'] }}" {{ old('project_id') == $project['id'] ? 'selected' : '' }}>{{ $project['name'] }}</option>
                             @endforeach
                         </select>
                     </div>

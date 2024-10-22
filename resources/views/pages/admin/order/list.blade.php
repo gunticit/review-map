@@ -2,7 +2,7 @@
 @section('content')
     <!-- danh-sach-du-an -->
     <section class="section danh-sach-du-an mb-5">
-        <div class="container">
+        <div class="container-fluid">
             <div class="col-inner">
                 <h2 class="section-title mb-4">Thông tin đơn hàng</h2>
                 <div id="group-alert">
