@@ -33,10 +33,13 @@ class WalletService{
     public function getTransactionHistories()
     {
         $user = Auth::user();
-        dd($user);
         $wallet = $this->walletRepository->findByKey('user_id', $user->id);
         if(empty($wallet)){
-            return null;
+            $wallet = $this->walletRepository->create([
+                'user_id' => $user->id,
+                'balance' => 0,
+                'unit_currency' => 'vnd'
+            ]);
         }
         $transactionHistoriesQuery = $this->transactionHistoryRepository->findAllByKey('wallet_id', $wallet->id, 'desc');
         return $this->transactionHistoryRepository->pagination($transactionHistoriesQuery);
