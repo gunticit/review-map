@@ -95,8 +95,8 @@
                         <td class="list-table-title">
                             <a href="#">{{ $support->title }}</a>
                         </td>
-                        <td class="list-table-department">{{ $support->department }}</td>
-                        <td class="list-table-code">{{ $support->request_code }}</td>
+                        <td class="list-table-department">{{ $support->department->name }}</td>
+                        <td class="list-table-code">{{ $support->support_code }}</td>
                         <td class="list-table-time">
                             {{ date('d/m/Y', strtotime($support->created_at)) }} <span>{{ date('H:i', strtotime($support->created_at)) }}</span>
                         </td>

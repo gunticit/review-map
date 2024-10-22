@@ -1,15 +1,65 @@
 <script src="//js.pusher.com/3.1/pusher.min.js"></script>
 <script>
+    function getNotification() {
+        $.ajax({
+            url: "{{ route('notification.user') }}",
+            method: 'GET',
+            data: {
+                user_id: '{{ Auth::user()->id }}'
+            },
+            success: function(data) {
+            if(data.data.length > 0) {
+                $('#no-notification').css('display', 'none');
+                var newNotificationHtml = '';
+                data.data.forEach(function(item) {
+                    const active = !item.read_at ? 'active' : '';
+                    newNotificationHtml += `
+                        <li>
+                            <a class="dropdown-item dropdown-notifications-item ${active}" href="#!">
+                                <div class="dropdown-notifications-item-content">
+                                    <div class="dropdown-notifications-item-content-title">${item.title}</div>
+                                    <div class="dropdown-notifications-item-content-text">${item.content}</div>
+                                    <div class="dropdown-notifications-item-content-details">
+                                        ${new Date(item.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })} - 
+                                        ${new Date(item.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    `;
+                })
+            } else {
+                $('#no-notification').css('display', 'block');
+            }
+            // Nếu là số lượng thông báo chưa đọc > 0 thì hiện số thông báo
+            if (data.countUnread > 0) {
+                $('.dropdown-notifications-count').text(data.countUnread);
+                $('.dropdown-notifications-count').css('display', 'block');
+            }
+
+            $('.list-notifications').prepend(newNotificationHtml);
+            }
+        });
+    }
+
+    getNotification();
+
     Pusher.logToConsole = true;
 
     const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
       cluster: 'ap1'
     });
     const role = '{{ Auth::user()->getRoleNames()->first() }}';
-    const channelName = 'send-' + role;
+    const channelName = 'send-message';
+    const departmentId = '{{ Auth::user()->department_id }}';
+    const userId = '{{ Auth::user()->id }}';
+    const typeEvent = role === 'admin' ? 'department-' + departmentId : role + '-' + userId;
     const channel = pusher.subscribe(channelName);
-    const eventName = 'event-notification-' + role;
+    const eventName = 'event-notification-' + typeEvent;
     channel.bind(eventName, function(data) {
+        if(data) {
+            $('#no-notification').css('display', 'none');
+        }
         const newNotificationHtml = `
             <li>
                 <a class="dropdown-item dropdown-notifications-item active" href="#!">
@@ -24,9 +74,17 @@
                 </a>
             </li>
         `;
-
+        let notificationCount = $('.dropdown-notifications-count').text();
+        // Nếu chưa có thông báo nào thì sô thông báo chưa đọc = 0
+        if (notificationCount === '') {
+            notificationCount = 0;
+        }
         $('.list-notifications').prepend(newNotificationHtml);
+        $('.dropdown-notifications-count').text(parseInt(notificationCount) + 1);
+        $('.dropdown-notifications-count').css('display', 'block');
     });
+
+
 </script>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Navbar Brand-->
@@ -72,7 +130,7 @@
         <li class="nav-item dropdown no-caret  me-3 dropdown-notifications">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="material-symbols-outlined">notifications_active</span>
-                {{-- <span class="dropdown-notifications-count">9</span> --}}
+                <span class="dropdown-notifications-count" style="display: none"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
                 <h6 class="dropdown-notifications-header"> Thông báo <button class="btn btn-icon">
@@ -81,7 +139,7 @@
                 </h6>
                     <ul class="list-notifications">
                     </ul>
-                    <div class="col-sm-12 text-center p-5">
+                    <div class="col-sm-12 text-center p-5" id ="no-notification">
                         <span class="material-symbols-outlined" style="font-size: 45px">
                             notifications_off
                         </span>
@@ -98,7 +156,7 @@
                 <a class="dropdown-item text-primary" href="#">
                     <div class="dropdown-item-icon">
                         <span class="material-symbols-outlined">id_card</span>
-                    </div> {{ auth()->user()->name }}
+                    </div> {{ Auth::user()->name }}
                 </a>
                 <a class="dropdown-item" href="{{ route('profile.edit') }}">
                     <div class="dropdown-item-icon">

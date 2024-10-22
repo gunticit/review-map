@@ -37,9 +37,7 @@ class WalletService
         $wallet = $this->walletRepository->findByKey('user_id', $user->id);
         if(empty($wallet)){
             $wallet = $this->walletRepository->create([
-                'user_id' => $user->id,
-                'balance' => 0,
-                'unit_currency' => 'vnd'
+                'user_id' => $user->id
             ]);
         }
         $transactionHistoriesQuery = $this->transactionHistoryRepository->findAllByKey('wallet_id', $wallet->id, 'desc');
@@ -49,38 +47,37 @@ class WalletService
 
     public function createWalletAndDeposit($amount, $reference_id)
     {
-        DB::beginTransaction();
         try {
-            $wallet = $this->checkWalletUser();
-            $payload = [
-                'wallet_id' => $wallet->id,
-                'amount' => $amount ?? 0,
-                'type' => TypeTransaction::DEPOSIT,
-                'status' => Status::COMPLETED,
-                'reference_id' => $reference_id,
-            ];
-            $transactionHistorie = $this->transactionHistoryRepository->create($payload);
+            DB::beginTransaction();
+                $wallet = $this->checkWalletUser();
+                $payload = [
+                    'wallet_id' => $wallet->id,
+                    'amount' => $amount ?? 0,
+                    'type' => TypeTransaction::DEPOSIT,
+                    'status' => Status::COMPLETED,
+                    'reference_id' => $reference_id,
+                ];
+                $transactionHistorie = $this->transactionHistoryRepository->create($payload);
             DB::commit();
             return $transactionHistorie;
         } catch (\Exception $e) {
-            echo $e->getMessage() . $e->getCode();
-            die();
-            return false;
+            throw $e;
         }
     }
 
     public function updateWalletandTransactinon($amount, $reference_id)
     {
-        DB::beginTransaction();
         try {
-            $transactionHistorie = $this->createWalletAndDeposit($amount, $reference_id);
-            if ($transactionHistorie->status == 'completed') {
-                $wallet = $this->walletRepository->find($transactionHistorie->wallet_id);
-                $wallet->balance = $wallet->balance + $transactionHistorie->amount;
-                $wallet->save();
-                DB::commit();
-                return true;
-            }
+            DB::beginTransaction();
+                $transactionHistorie = $this->createWalletAndDeposit($amount, $reference_id);
+                if ($transactionHistorie->status == 'completed') {
+                        $wallet = $this->walletRepository->find($transactionHistorie->wallet_id);
+                        $wallet->balance = $wallet->balance + $transactionHistorie->amount;
+                        $wallet->save();
+                    DB::commit();
+                    return true;
+                }
+            DB::rollBack();
             return false;
         } catch (\Exception $e) {
             echo $e->getMessage() . $e->getCode();
@@ -90,20 +87,14 @@ class WalletService
     }
     private function checkWalletUser()
     {
-        DB::beginTransaction();
-        try {
-            $user_id = Auth::user()->id;
-            $wallet = $this->walletRepository->findByKey('user_id', $user_id);
-            if (!$wallet) {
-                $wallet = $this->walletRepository->create(['user_id' => $user_id]);
-            }
-            DB::commit();
-            return $wallet;
-        } catch (\Exception $e) {
-            echo $e->getMessage() . $e->getCode();
-            die();
-            return false;
+        $user_id = Auth::user()->id;
+        $wallet = $this->walletRepository->findByKey('user_id', $user_id);
+        if (!$wallet) {
+            $wallet = $this->walletRepository->create([
+                'user_id' => $user_id
+            ]);
         }
+        return $wallet;
     }
 
 }

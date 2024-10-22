@@ -13,7 +13,10 @@ use App\Services\SupportService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use App\Events\NotificationEvent;
+use App\Events\NotificationAdminEvent;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Notification;
 
 class PartnerSupportController extends Controller
 {
@@ -30,9 +33,8 @@ class PartnerSupportController extends Controller
     public function index(Request $request){
         $supports =  $this->supportService->list($request);
         $projects = $this->projectService->list($request);
-        $data = SupportResource::collection($supports)->resource;
         return view('pages.partner.support.list', [
-            'supports' => $data,
+            'supports' => $supports,
             'projects' => $projects,
         ]);
     }
@@ -50,18 +52,32 @@ class PartnerSupportController extends Controller
         $categories = $this->categoryService->fullList($request);
         $departments = Department::all();
         return view('pages.partner.support.create',[
-            'projects' => $projects,
             'departments' => $departments,
             'heading_title' => 'Tạo yêu cầu hỗ trợ'
         ]);
     }
     public function store(SupportRequest $request){
         try{
+            \DB::beginTransaction();
             $data = $this->supportService->create($request);
-            event(new NotificationEvent($data->toArray()));
+            event(new NotificationAdminEvent($data->toArray(), Role::ADMIN_ROLE));
+            $userIds = User::where('department_id', $request->department_id)->get()->pluck('id')->toArray();
+            $dataNotification = [];
+            foreach($userIds as $userId) {
+                $dataNotification[] = [
+                    'user_id' => $userId,
+                    'title' => $data->title,
+                    'content' => $data->content,
+                    'support_id' => $data->id,
+                    'created_at' => $data->created_at
+                ];
+            }
+            Notification::insert($dataNotification);
+            \DB::commit();
             Session::flash('success', 'Khởi tạo yêu cầu hỗ trợ thành công');
             return redirect()->back()->withInput();
         }catch(Exception $e){
+            \DB::rollBack();
             Session::flash('error', 'Không thêm được yêu cầu hỗ trợ');
             return redirect()->back()->withInput();
         }

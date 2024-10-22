@@ -55,7 +55,7 @@
                                             </td>
                                             <td class="list-table-so-tien {{ $text_color }}">
                                                 <a href="javascript:void(0)">{!! $transaction_history->type == 'deposit' ? '+' : '-' !!}
-                                                    {{ formatCurrency($transaction_history->amount) }} VND</a>
+                                                    {{ formatCurrency($transaction_history->amount) }}</a>
                                             </td>
                                             <td class="list-table-content-3 {{ $text_color }}">
                                                 <a href="javascript:void(0)">
@@ -93,7 +93,7 @@
                                         class="material-symbols-outlined">restart_alt</span> Làm mới </a>
                             </div>
                         </div>
-                        <form action="{{ route('wallet.setup') }}" method="post">
+                        <form action="{{ route('wallet.setup') }}" id="form-setup-wallet" method="post">
                             @csrf
                             <div class="mb-4 payment">
                                 <label for="payment" class="form-label">Phương thức thanh toán</label>
@@ -137,7 +137,8 @@
                                     </div>
                                 </div>
                                 <input type="text" class="form-control mt-3" name="depositAmountCustom"
-                                    id="depositAmountCustom" placeholder="Số tiền khác" style="display:none;">
+                                    id="depositAmountCustom" value="0" placeholder="Số tiền khác" style="display:none;">
+                                <p id="alert-amount-check" class="text-danger mt-2"></p>
                             </div>
                             <div class="mb-4 ">
                                 <label for="payment-info">Thông tin thanh toán</label>
@@ -149,16 +150,36 @@
                                 <h4 id="totalAmount">0 VND</h4>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-full"> Thanh toán </button>
+                            <button type="submit" id="btn-deposit" class="btn btn-primary btn-full"> Thanh toán </button>
                         </form>
-
-
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
-
+    <script>
+        $(document).ready(function() {
+            $('#btn-deposit').on('click', function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                let depositAmount = $('input[name="depositAmount"]:checked').val();
+                if(depositAmount == 'other'){
+                    let depositAmountCustom = $('input[name="depositAmountCustom"]').val();
+                    if(parseInt(depositAmountCustom) == 0){
+                        $('#depositAmountCustom').focus();
+                        $('#depositAmountCustom').css('border', '1px solid red');
+                        return;
+                    }
+                    if(parseInt(depositAmountCustom) < 50000){
+                        $('#depositAmountCustom').focus();
+                        $('#depositAmountCustom').css('border', '1px solid red');
+                        $('#alert-amount-check').text('Số tiền tối thiểu là 50.000 VND');
+                        return;
+                    }
+                }
+                $('#form-setup-wallet').submit();
+            });
+        });
+    </script>
     <!-- end danh-sach-du-an -->
 @endsection

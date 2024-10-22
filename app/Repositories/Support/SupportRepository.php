@@ -26,6 +26,7 @@ class  SupportRepository extends BaseRepository implements SupportRepositoryInte
         
         $page = $request->page ?? 1;
         $perPage = $request->per_page ?? 15;
+        $query = $query->with(['department']);
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
 }

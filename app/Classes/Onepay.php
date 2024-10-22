@@ -15,8 +15,12 @@ class Onepay
         $configOnepay = config('onepay');
 
         $vpc_MerchTxnRef = $data['reference_id'];
-        $vpc_OrderInfo = "THANHTOANTEST01";
-        $vpc_Amount = $data['amount'] * $configOnepay['amount_exchange'];
+        $vpc_OrderInfo = "THANHTOAN_KHACHHANG_RIVI";
+        $amount = 0;
+        if(isset($data['amount']) && $data['amount'] > 0 && $data['amount'] != 'other') {
+            $amount = $data['amount'];
+        }
+        $vpc_Amount = $amount * $configOnepay['amount_exchange'];
 
         $inputData = array(
             'vpc_AccessCode' => config('onepay.access_code'),

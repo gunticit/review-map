@@ -21,4 +21,8 @@ class Support extends Model
     static public function generateSupportCode(){
         return 'SPC_'.time().rand(1000,9999);
     }
+
+    public function department(){
+        return $this->belongsTo(Department::class, 'department_id');
+    }
 }
