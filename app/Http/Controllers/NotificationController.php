@@ -14,4 +14,12 @@ class NotificationController extends Controller
 
         return view('pages.notification', compact('notifications')); 
     }
+
+    public function ajaxNotification(Request $request) 
+    {
+        $data = Notification::where('user_id', $request->user_id)->orderBy('created_at', 'desc')->paginate(10)->toArray();
+        $countUnread = Notification::where('user_id', $request->user_id)->whereNull('read_at')->count();
+        $data['countUnread'] = $countUnread;
+        return response()->json($data);
+    }
 }

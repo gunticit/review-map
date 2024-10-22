@@ -11,18 +11,22 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NotificationEvent implements ShouldBroadcastNow
+class NotificationAdminEvent implements ShouldBroadcastNow
 {
     public $data;
+    public $role;
+    public $userId;
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($data)
+    public function __construct($data, $role, $userId = null)
     {
         $this->data = $data;
+        $this->role = $role;
+        $this->userId = $userId;
     }
 
     /**
@@ -33,13 +37,13 @@ class NotificationEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            'send-admin',
+            'send-message',
         ];
     }
 
     public function broadcastAs() {
-
-        return 'event-notification-admin';
+        $typeEvent = $this->role === 'admin' ? 'department-' . $this->data['department_id'] : $this->role . '-'  . $this->userId;
+        return "event-notification-{$typeEvent}";
     }
        
 }

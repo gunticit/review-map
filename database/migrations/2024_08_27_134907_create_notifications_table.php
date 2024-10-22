@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->integer('status'); // 1: Đã đọc, 2: Chưa đọc
+            $table->integer('status')->default(2); // 1: Đã đọc, 2: Chưa đọc
             $table->integer('user_id')->nullable();
-            $table->integer('role_id')->nullable(); 
+            $table->integer('role_id')->nullable();
+            $table->integer('support_id')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

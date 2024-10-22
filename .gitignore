@@ -20,8 +20,4 @@ yarn-error.log
 /.vscode
 /docker/nginx/logs/*
 /docker/apache/logs/*
-<<<<<<< HEAD
 /docker/*
-=======
-/docker/*
->>>>>>> a2edf222f5ff52eb41c017f096986021b06a33a1
