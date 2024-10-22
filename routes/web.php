@@ -43,6 +43,7 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/faq', [App\Http\Controllers\FaqController::class, 'index'])->name('faq');
     Route::get('/history', [App\Http\Controllers\HistoryController::class, 'index'])->name('history');
     Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
+    Route::post('/wallet/setup', [App\Http\Controllers\WalletController::class, 'setupWalletAndDeposit'])->name('wallet.setup');
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/update-profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/update-profile-company', [App\Http\Controllers\ProfileController::class, 'updateProfileCompany'])->name('profile.update.company');
@@ -51,12 +52,15 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::post('/change-password', [App\Http\Controllers\Auth\AuthController::class, 'changePassword'])->name('profile.change.password');
     Route::post('/update-location', [App\Http\Controllers\Auth\AuthController::class, 'updateCurrentLocation'])->name('profile.update.location');
 
-    
+
     include 'web_customer.php';
     include 'web_admin.php';
     include 'web_partner.php';
 });
 
+// payment 
+Route::get('return/onepay', [App\Http\Controllers\Payment\OnepayController::class, 'onepay_return'])->name('onepay.onepay_return');
+Route::get('return/onepay_ipn', [App\Http\Controllers\Payment\OnepayController::class, 'onepay_ipn'])->name('onepay.onepay_ipn');
 
 
 Route::get('/get-long-url', [App\Http\Controllers\DashboardController::class, 'getLongUrl'])->name('get.long.url');
