@@ -42,11 +42,11 @@
                            @if(!empty($transaction_histories))
     @foreach ($transaction_histories as $transaction_history)
            @php
-                $text_color = '';
+                $text_color = 'text-danger';
+                $text_status = 'Thất bại';
                 if($transaction_history->status == 'completed'){
                     $text_color = 'text-success';
-                }else{
-                    $text_color = 'text-danger';
+                    $text_status = 'Thành công';
                 }
            @endphp
         <tr class="recharge">
@@ -62,7 +62,7 @@
                 <a href="javascript:void(0)">{!! $transaction_history->type == 'deposit'?'Nạp tiền':($transaction_history->type == 'payment'?'Thanh toán':'Rút tiền'); !!}</a>
             </td>
             <td class="list-table-so-du {{$text_color}}">
-                <a href="javascript:void(0)">{{ $transaction_history->status }}</a>
+                <a href="javascript:void(0)">{{ $text_status }}</a>
             </td>
         </tr>
     @endforeach

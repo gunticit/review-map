@@ -51,8 +51,8 @@ class WalletService{
                 'status' => Status::FAILED,
                 'reference_id' => $reference_id,
             ];
-            DB::commit();
             $transactionHistories = $this->transactionHistoryRepository->create($payload);
+            DB::commit();
             return true;
         } catch (\Exception $e) {
             echo $e->getMessage() . $e->getCode();
