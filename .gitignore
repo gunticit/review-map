@@ -25,4 +25,3 @@ yarn-error.log
 /docker/*
 docker/*
 docker/postgres/db/data/
-Dockerfile
