@@ -42,12 +42,8 @@
                            @if(!empty($transaction_histories))
     @foreach ($transaction_histories as $transaction_history)
            @php
-                $text_color = 'text-danger';
-                $text_status = 'Thất bại';
-                if($transaction_history->status == 'completed'){
-                    $text_color = 'text-success';
-                    $text_status = 'Thành công';
-                }
+                $text_color = ($transaction_history->status) ? 'text-success' :'text-danger';
+                $text_status = ($transaction_history->status) ? 'Thành công ': 'Thất bại';
            @endphp
         <tr class="recharge">
             <td>{{$transaction_history->reference_id}}</td>
@@ -69,7 +65,9 @@
 @endif
                         </tbody>
                     </table>
+                    @if($transaction_histories)
                     {{ $transaction_histories->links('vendor.pagination.custom') }}
+                    @endif
                 </div>
             </div>
 

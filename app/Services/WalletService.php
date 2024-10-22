@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Repositories\Wallet\WalletRepositoryInterface;
 use App\Repositories\TransactionHistory\TransactionHistoryRepositoryInterface as TransactionHistoryRepository;
 
-class WalletService{
+class WalletService
+{
     protected $walletRepository;
     protected $transactionHistoryRepository;
 
@@ -34,6 +35,8 @@ class WalletService{
     {
         $user = Auth::user();
         $wallet = $this->walletRepository->findByKey('user_id', $user->id);
+        if (!$wallet)
+            return null;
         $transactionHistoriesQuery = $this->transactionHistoryRepository->findAllByKey('wallet_id', $wallet->id, 'desc');
         return $this->transactionHistoryRepository->pagination($transactionHistoriesQuery);
     }
@@ -48,12 +51,12 @@ class WalletService{
                 'wallet_id' => $wallet->id,
                 'amount' => $amount ?? 0,
                 'type' => TypeTransaction::DEPOSIT,
-                'status' => Status::FAILED,
+                'status' => Status::COMPLETED,
                 'reference_id' => $reference_id,
             ];
-            $transactionHistories = $this->transactionHistoryRepository->create($payload);
+            $transactionHistorie = $this->transactionHistoryRepository->create($payload);
             DB::commit();
-            return true;
+            return $transactionHistorie;
         } catch (\Exception $e) {
             echo $e->getMessage() . $e->getCode();
             die();
@@ -61,16 +64,12 @@ class WalletService{
         }
     }
 
-    public function updateWalletandTransactinon($reference_id)
+    public function updateWalletandTransactinon($amount, $reference_id)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-            $transactionHistorie = $this->transactionHistoryRepository->findByKey('reference_id', $reference_id);
-            $data = [
-                'status' => Status::COMPLETED,
-            ];
-            $transactionHistorie = $this->transactionHistoryRepository->update($data, $transactionHistorie->id);
-            if ($transactionHistorie->status == Status::COMPLETED) {
+            $transactionHistorie = $this->createWalletAndDeposit($amount, $reference_id);
+            if ($transactionHistorie->status == 'completed') {
                 $wallet = $this->walletRepository->find($transactionHistorie->wallet_id);
                 $wallet->balance = $wallet->balance + $transactionHistorie->amount;
                 $wallet->save();

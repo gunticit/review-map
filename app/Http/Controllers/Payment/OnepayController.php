@@ -35,13 +35,12 @@ class OnepayController extends Controller
         }
         $responseCode = $request->get('vpc_TxnResponseCode');
         $reference_id = $request->input('vpc_MerchTxnRef');
+        $amount = $request->input('vpc_Amount') / 100;
         if ($responseCode == '0') {
-            $this->walletService->updateWalletandTransactinon($reference_id);
+            $this->walletService->updateWalletandTransactinon($amount, $reference_id);
             return redirect()->route('wallet')->with('success', 'Giao dịch thành công - Approved');
         }
-        return view('pages.wallet.list', [
-            'error' => $this->getResponseDescription($responseCode),
-        ]);
+        return redirect()->route('wallet')->with('error', $this->getResponseDescription($responseCode));
     }
 
     public function onepay_ipn(Request $request)
@@ -57,7 +56,7 @@ class OnepayController extends Controller
         $responseCode = $request->get('vpc_TxnResponseCode');
         $reference_id = $merchTxnRef;
         if ($responseCode == '0') {
-            $this->walletService->updateWalletandTransactinon($reference_id);
+            // $this->walletService->updateWalletandTransactinon($reference_id);
             $response['success'] = true;
         } else {
             $response['success'] = false;

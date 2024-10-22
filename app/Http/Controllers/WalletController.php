@@ -45,8 +45,6 @@ class WalletController extends Controller
             $amount = $request->input('depositAmountCustom') ? $request->input('depositAmountCustom') : $request->input('depositAmount');
             $ticketNo = $request->ip();
             $reference_id = 'ONEPAY_' . round(microtime(true));
-            $this->walletService->createWalletAndDeposit($amount, $reference_id);
-
             $data = [
                 'amount' => $amount,
                 'ticketNo' => $ticketNo,
@@ -116,7 +114,7 @@ class WalletController extends Controller
 
             $data = $validator->validated();
 
-                DB::beginTransaction();
+            DB::beginTransaction();
             $wallet = Wallet::where('user_id', Auth::user()->id)->first();
             if ($wallet->balance < $data['amount']) {
                 return redirect()->back()->with('error', 'Số dư không đủ');
