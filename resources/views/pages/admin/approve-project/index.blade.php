@@ -8,8 +8,10 @@
     }
 </style>
 <section class="approve-project">
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid pt-4">
+        <div class="card">
+            <div class="card-body">
+            <div class="row">
             <div class="col-sm-4">
                 <div class="panel mt-5">
                     <div class="panel-body">
@@ -60,6 +62,8 @@
                 </div>
             </div>
         </div>
+            </div>
+        </div>
     </div>
 </section>
 <script>
@@ -93,8 +97,8 @@ function showProject(id) {
                             </li>`).join('') : ''}
                         </ul>
                     </div>
-                    <div class="group-actiion text-right">
-                        <button onclick="handleViewRate('${data.data?.place_id}')" class="btn btn-info">Xem đánh giá</button>    
+                    <div class="d-flex gap-3 group-actiion text-right">
+                        <button onclick="handleViewRate('${data.data?.place_id}')" class="btn btn-outline-primary">Xem đánh giá</button>    
                         ${data.data?.status !== {{$status_complete}} ?`
                             <button onclick="handleWrongImage(${data.data?.id})" class="btn btn-danger">Không thấy ảnh, sai ảnh</button>  
                             <button onclick="handleWrongRate(${data.data?.id})" class="btn btn-danger">Không thấy đánh giá</button>  
@@ -214,6 +218,15 @@ function handleWrongImage(id) {
         -webkit-line-clamp: 1;
         line-height: 1.5; 
         max-height: 1.5; 
+    }
+    button{
+        width: 16rem;
+        font-family: Montserrat;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 25.6px;
+        text-align: center;
+        font-weight: 500 !important;
     }
 </style>
 @endsection
