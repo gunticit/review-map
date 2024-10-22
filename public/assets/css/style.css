@@ -5102,17 +5102,7 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
   font-size: 14px;
 }
 #info-project,#no-result{
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100%;
-  max-height: 550px;
-}
-#info-project, #list-project{
-  min-height: 465px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 @media (max-width: 768px) {
   .step-xac-thuc .step-images {
