@@ -50,7 +50,7 @@
 @section('content')
     <!-- Breadcrumb -->
     <section class="breadcrumb-wrap">
-        <div class="container">
+        <div class="container-fluid">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -66,7 +66,7 @@
     <section class="section tao-yeu-cau mb-5">
         <form action="{{ route('support.store') }}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
-            <div class="container">
+            <div class="container-fluid">
                 <div class="col-inner">
                     <h2 class="section-title mb-4">Tạo thông báo</h2>
 

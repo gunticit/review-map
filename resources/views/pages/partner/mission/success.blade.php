@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <section class="section nhan-nhiem-vu-step mb-5 mt-5">
-        <div class="container">
+        <div class="container-fluid">
             <div class="col-inner text-center">
                 <section class="col-inner p-5 text-center">
                     <h2 class="mb-3">Cám ơn bạn đã thực hiện nhiệm vụ</h2>

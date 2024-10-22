@@ -2,7 +2,7 @@
 @section('content')
     <!-- danh-sach-du-an -->
     <section class="section section-wallet mb-5 mt-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
              @if (Session::has('success'))
                 <div class="alert alert-success">

@@ -16,7 +16,7 @@
 </style>
     <!-- danh-sach-du-an -->
     <section class="section danh-sach-du-an mb-5 mt-5">
-        <div class="container">
+        <div class="container-fluid">
             <div id="step2" class="col-inner p-5 text-center">
                 <h5 class="card-title mb-2">Nhận nhiệm vụ</h5>
                 <h4 class="d-flex my-3 justify-content-center text-primary">{{ $mission->project->name }}</h4>

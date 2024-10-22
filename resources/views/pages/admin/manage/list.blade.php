@@ -36,7 +36,7 @@
         }
     </style>
     <div class="list-manage-customer">
-        <div class="container">
+        <div class="container-fluid">
             <nav class="nav nav-pills flex-column flex-sm-row mt-5">
                 <a class="flex-sm-fill text-sm-center nav-link active" id="information-tab" data-bs-toggle="tab" data-bs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="true" aria-current="page">
                     Thông tin cơ bản

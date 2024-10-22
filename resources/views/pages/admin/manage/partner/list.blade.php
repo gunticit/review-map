@@ -2,7 +2,7 @@
 @section('content')
     <!-- danh-sach-du-an -->
     <section class="section danh-sach-du-an mb-5">
-        <div class="container">
+        <div class="container-fluid pt-4">
             <div class="col-inner">
                 <div class="row">
                     <div class="col-sm-8">
@@ -17,7 +17,7 @@
                         <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
                     </div>
                 </form>
-                <div id="list-project">
+                <div id="list-project" class="mt-4">
                     @if(!empty($partners))
                     <table class="table list-table">
                         <thead>

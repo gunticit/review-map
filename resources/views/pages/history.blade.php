@@ -2,7 +2,7 @@
 @section('content')
 <!-- lich-su-hoat-dong -->
 <section class="section lich-su-hoat-dong mb-5 mt-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-inner">
             <h2 class="section-title mb-4">Lịch sử hoạt động</h2>
             <form>

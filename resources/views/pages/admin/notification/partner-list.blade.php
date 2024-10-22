@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <section class="section notificate-partner mb-5 mt-5">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="clear col-sm-12 text-right">
                     <button class="btn btn-primary my-3" type="button" onclick="window.location.href='{{ route('create.notificate.partner') }}'">
