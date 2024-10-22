@@ -29,6 +29,7 @@ Route::group([
         Route::delete('/support-delete/{id}', [PartnerSupportController::class, 'delete'])->name('support.delete');
         Route::delete('/support-delete-by-ids/{ids}', [PartnerSupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
         Route::get('/support-create', [PartnerSupportController::class, 'create'])->name('support.create');
+        Route::get('/support-detail', [PartnerSupportController::class, 'detail'])->name('support.detail');
     }
 );
 

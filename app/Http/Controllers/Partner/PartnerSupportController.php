@@ -39,6 +39,11 @@ class PartnerSupportController extends Controller
     public function edit(){
         return view('pages.partner.support.edit');
     }
+
+    public function detail(){
+        return view('pages.partner.support.detail');
+    }
+
     public function create(Request $request){
         $request->merge(['user_id' => auth()->id()]);
         $projects = Project::leftJoin('missions', 'projects.id', '=', 'missions.project_id')->where('missions.user_id', $request->user_id)->select('projects.*')->distinct('projects.id')->get();
