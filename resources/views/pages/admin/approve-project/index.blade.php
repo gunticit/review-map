@@ -15,8 +15,8 @@
                         <div class="card-body">
                             <div class="panel">
                                 <div class="panel-body">
+                                    <h3>Danh sách nhiệm vụ</h3>
                                     <div id="list-project" class="list-group">
-                                        <h3>Danh sách nhiệm vụ</h3>
                                         @if (!empty($projects))
                                             <ul>
                                                 @foreach ($projects as $project)
