@@ -32,9 +32,10 @@ Route::group([
         Route::get('/categories-list', [CategoryController::class, 'categoriesList'])->name('categories.list');
         Route::post('/destroy-category-id/{id}', [CategoryController::class, 'destroyCategoryById'])->name('destroy.category.id');
         Route::resource('/manage-customer', ManageCustomerController::class);
-        Route::get('/manage-partner/info', [ManagePartnerController::class, 'info'])->name('admin.manage.partner.info');
-        Route::get('/manage-partner/wallet', [ManagePartnerController::class, 'wallet'])->name('admin.manage.partner.wallet');
-        Route::get('/manage-partner/project', [ManagePartnerController::class, 'project'])->name('admin.manage.partner.project');
+        Route::get('/manage-partner/list', [ManagePartnerController::class, 'list'])->name('admin.manage.partner.list');
+        Route::get('/manage-partner/info/{id}', [ManagePartnerController::class, 'info'])->name('admin.manage.partner.info');
+        Route::get('/manage-partner/wallet/{id}', [ManagePartnerController::class, 'wallet'])->name('admin.manage.partner.wallet');
+        Route::get('/manage-partner/project/{id}', [ManagePartnerController::class, 'project'])->name('admin.manage.partner.project');
         Route::post('/admin-company-update', [ManageCustomerController::class, 'adminCompanyUpdate'])->name('admin.company.update');
         Route::post('/show-project-json/{id}', [ProjectController::class, 'showJson'])->name('show.project.json');
         Route::post('/project-wrong-image', [ProjectController::class, 'wrongImage'])->name('project.wrong.image');
