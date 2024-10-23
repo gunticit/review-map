@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('wallet_id'); // Id ví
             $table->enum('type', ['deposit', 'withdraw', 'payment']); // nạp | rút | thanh toán
+            $table->string('transaction_code')->nullable();
             $table->decimal('amount', 15, 0); // Số tiền
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
             $table->integer('payment_method_id')->nullable(); // Id phương thức thanh toán

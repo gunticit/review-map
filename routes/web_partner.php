@@ -16,7 +16,7 @@ Route::group([
     Route::resource('/mission',  MissionController::class);
     Route::get('/mission-histories', [MissionController::class, 'histories'])->name('mission.histories');
     Route::get('/wallet-withdraw',  [WalletController::class, 'withdraw'])->name('wallet.withdraw');
-    Route::post('/wallet/transaction-histories',  [WalletController::class, 'storeTransactionHistory'])->name('wallet.transaction-histories.store');
+    Route::post('/wallet/transaction-histories',  [WalletController::class, 'storeTransactionHistory'])->name('withdraw.wallet.store');
     Route::get('/wallet/verify/create',  [WalletController::class, 'createVerify'])->name('wallet.verify.create');
     Route::post('/wallet/verify',  [WalletController::class, 'storeVerify'])->name('wallet.verify.store');
     Route::get('/store-product',  [ProductController::class, 'index'])->name('store.product');

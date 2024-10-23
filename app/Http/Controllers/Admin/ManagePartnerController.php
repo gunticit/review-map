@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\TransactionHistory;
 use App\Models\User;
+use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +15,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 class ManagePartnerController extends Controller
 {
+    protected $userService;
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     public function list(Request $request){
-        $users = User::role('partner')->get();
-        return view('pages.admin.manage.partner.list', compact('users'));
+        $request = $request->merge([
+            'type' => 'partner'
+        ]);
+        $partners = $this->userService->list($request);
+        dd($partners);
+        return view('pages.admin.manage.partner.list', [
+            'partners' => $partners
+        ]);
     }
 
     public function info(Request $request)

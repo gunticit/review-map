@@ -21,6 +21,7 @@ class TransactionHistoryRepository extends BaseRepository implements Transaction
 
     public function list($request){
         $query = $this->handleFilter();
+        $query->with(['created_by','paymentMethod']);
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){
             foreach ($orderBy as $column => $direction) {

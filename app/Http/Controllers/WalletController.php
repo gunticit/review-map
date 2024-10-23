@@ -35,9 +35,16 @@ class WalletController extends Controller
 
     public function withdraw()
     {
-        $user = Auth::user();
-        $certificationAccount = $user->certificationAccount;
-        return view('pages.wallet.withdraw', compact('certificationAccount'));
+        $user_info = Auth::user();
+        $certificationAccount = $user_info->certificationAccount;
+        if(Auth::user()->getRoleNames()->first() == 'partner'){
+            $balance = $this->walletService->getBalance();
+        }
+        return view('pages.wallet.withdraw', [
+            'certificationAccount' => $certificationAccount,
+            'user_info' => $user_info,
+            'balance' => $balance
+        ]);
     }
     public function setupWalletAndDeposit(Request $request)
     {

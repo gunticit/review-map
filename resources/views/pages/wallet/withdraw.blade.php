@@ -36,85 +36,57 @@
                                 <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
                             </div>
                         </form>
-
-                        <table class="table list-table">
-                            <thead>
-                                <tr>
-                                    <th class="list-table-stt" scope="col">STT</th>
-                                    <th class="list-table-time" scope="col">Thời gian</th>
-                                    <th class="list-table-so-tien" scope="col">Mã giao dịch</th>
-                                    <th class="list-table-phuong-thuc" scope="col">Phương thức rút</th>
-                                    <th class="list-table-tai-khoan-nhan" scope="col">Tài khoản nhận</th>
-                                    <th class="list-table-so-tien-rut" scope="col">Số tiền rút</th>
-                                    <th class="list-table-trang-thai" scope="col">Trạng thái</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (!empty($withdraws))
+                        @if(!empty($withdraws))
+                            <table class="table list-table">
+                                <thead>
+                                    <tr>
+                                        <th class="list-table-stt" scope="col">STT</th>
+                                        <th class="list-table-time" scope="col">Thời gian</th>
+                                        <th class="list-table-so-tien" scope="col">Mã giao dịch</th>
+                                        <th class="list-table-phuong-thuc" scope="col">Phương thức rút</th>
+                                        <th class="list-table-tai-khoan-nhan" scope="col">Tài khoản nhận</th>
+                                        <th class="list-table-so-tien-rut" scope="col">Số tiền rút</th>
+                                        <th class="list-table-trang-thai" scope="col">Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     @foreach ($withdraws as $key => $withdraw)
                                         <tr class="recharge">
-                                            <td class="list-table-stt" scope="col">1</td>
-                                            <td class="list-table-time" scope="col">24/05/2022 09:09</td>
-                                            <td class="list-table-so-tien" scope="col">RIVI_RT_NV1_01</td>
-                                            <td class="list-table-phuong-thuc" scope="col">MOMO</td>
-                                            <td class="list-table-tai-khoan-nhan" scope="col">0123123123</td>
-                                            <td class="list-table-so-tien-rut" scope="col">10.000.000 VND</td>
-                                            <td class="list-table-trang-thai" scope="col"><span
-                                                    class="text-success">Thành công</span></td>
+                                            <td class="list-table-stt" scope="col">{{ $withdraw->id }}</td>
+                                            <td class="list-table-time" scope="col">{{ date('d/m/Y H:i', strtotime($withdraw->created_at)) }}</td>
+                                            <td class="list-table-so-tien" scope="col">{{ $withdraw->transaction_code ?? '' }}</td>
+                                            <td class="list-table-phuong-thuc" scope="col">{{ $withdraw->payment_method->name ?? '' }}</td>
+                                            <td class="list-table-tai-khoan-nhan" scope="col">{{ $withdraw->bank_number ?? '' }}</td>
+                                            <td class="list-table-so-tien-rut" scope="col">{{ $withdraw->amount }} VND</td>
+                                            <td class="list-table-trang-thai" scope="col">
+                                                <span class="text-success">{{ $withdraw->status == 'pending' ? 'Đang xử lý' : ($withdraw->status == 'completed' ? 'Thành công' : 'Thất bại') }}</span>
+                                            </td>
                                         </tr>
                                     @endforeach
-                                @else
-                                    <tr>
-                                        <td colspan="7" class="text-center">Chưa có lịch sử rút tiền</td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
 
-                        <div class="list-table-footer d-flex justify-content-between align-items-center">
-                            <div class="list-table-per-page">
-                                <span class="form-label">Hiển thị kết quả</span>
-                                <select class="form-select d-inline-block" name="" id="">
-                                    <option selected>10</option>
-                                    <option value="">20</option>
-                                    <option value="">30</option>
-                                    <option value="">40</option>
-                                </select>
+                            <div class="list-table-footer d-flex justify-content-between align-items-center">
+                                {{ $withdraws->links('vendor.pagination.custom') }}
                             </div>
-
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" aria-label="Previous">
-                                            <span class="material-symbols-outlined">chevron_left</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item active" aria-current="page"><a class="page-link"
-                                            href="#">1</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Next">
-                                            <span class="material-symbols-outlined">chevron_right</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-
-
-
+                        @else
+                            <div class="col-sm-12 mt-4">
+                                <p class="text-center">Chưa có lịch sử rút tiền</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
                 <!-- cot 2 -->
                 <div class="col-xl-4 col-md-12 col-12 ">
                     <div class="col-inner wallet-col">
-                        <form action="{{ route('wallet.transaction-histories.store') }}" method="POST">
+                        <form action="{{ route('withdraw.wallet.store') }}" method="POST" id="form-withdraw">
                             @csrf
                             <h2 class="section-title mb-4">Ví của tôi</h2>
                             <div class="wallet-card">
                                 <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="logo">
                                 <p>Số dư của tôi</p>
-                                <h3 class="wallet-number text-primary">0 VND</h3>
+                                <h3 class="wallet-number text-primary">{{ moneyFormat($balance) }} VND</h3>
                                 <div class="wallet-btn d-flex justify-content-around align-items-center  ">
                                     <a class="btn btn-warning" href="#"><span
                                             class="material-symbols-outlined">add_card</span> Rút thêm </a>
@@ -129,6 +101,7 @@
                                     <option value="{{ \App\Enums\PaymentMethod::MOMO->value }}" selected>Thanh toán qua ví điện tử Momo</option>
                                     <option value="{{ \App\Enums\PaymentMethod::VNPAY->value }}">Quét mã VNPAY-QR</option>
                                     <option value="{{ \App\Enums\PaymentMethod::ATM->value }}">Thẻ ngân hàng ATM</option>
+                                    <option value="{{ \App\Enums\PaymentMethod::VISA->value }}">Thẻ thanh toán quốc tế</option>
                                     <option value="{{ \App\Enums\PaymentMethod::VISA->value }}">Thẻ thanh toán quốc tế</option>
                                 </select>
                             </div>

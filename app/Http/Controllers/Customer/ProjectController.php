@@ -10,6 +10,7 @@ use App\Http\Resources\ProjectResource;
 use App\Services\CommentService;
 use App\Services\HistoryService;
 use App\Services\ProjectService;
+use App\Services\UserService;
 use App\Services\ProjectImageService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -17,17 +18,19 @@ use Illuminate\Support\Facades\Session;
 
 class ProjectController extends Controller
 {
-    protected $projectService, $projectImageService, $historyService, $commentService;
+    protected $projectService, $projectImageService, $historyService, $commentService, $userService;
     public function __construct(
         ProjectService $projectService, 
         ProjectImageService $projectImageService, 
         CommentService $commentService, 
-        HistoryService $historyService
+        HistoryService $historyService,
+        UserService $userService
     ){
         $this->projectService = $projectService;
         $this->projectImageService = $projectImageService;
         $this->historyService = $historyService;
         $this->commentService = $commentService;
+        $this->userService = $userService;
     }
     public function index(Request $request){
         $data = $this->projectService->list($request);
@@ -198,10 +201,13 @@ class ProjectController extends Controller
                 default => 0
             };
         }
+        $user_id = Auth::user()->id;
+        $user_info = $this->userService->wallet($user_id);
         return view('pages.customer.projects.order', [
             'projects' => $paginatedComments,
             'project_info' => $project_comments,
-            'price_order' => $price_order
+            'price_order' => $price_order,
+            'user_info' => $user_info
         ]);
     }
 
