@@ -55,8 +55,9 @@ class OnepayController extends Controller
         }
         $responseCode = $request->get('vpc_TxnResponseCode');
         $reference_id = $merchTxnRef;
+        $amount = $request->input('vpc_Amount') / 100;
         if ($responseCode == '0') {
-            // $this->walletService->updateWalletandTransactinon($reference_id);
+            // $this->walletService->updateWalletandTransactinon($amount, $reference_id);
             $response['success'] = true;
         } else {
             $response['success'] = false;
