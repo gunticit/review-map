@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ManageCustomerController extends Controller
@@ -12,12 +13,14 @@ class ManageCustomerController extends Controller
      */
     public function index()
     {
-        $data = array(
+        $customers = User::role('customer')->get();
+        return view('pages.admin.manage.list', [
+            'customers' => $customers,
+            'heading_title' => 'Quản lý khách hàng',
             'profile' => array(
                 'country_code' => 'vi'
             )
-        );
-        return view('pages.admin.manage.list', $data);
+        ]);
     }
 
     /**

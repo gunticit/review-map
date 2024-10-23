@@ -18,7 +18,12 @@ class  UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function list($request){
         $query = $this->model->query();
-
+        if(isset($request->type)){
+            if($request->type == 'partner'){
+                $query = $query->with('missions');
+            }
+            $query = $query->role($request->type);
+        }
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){
             foreach ($orderBy as $column => $direction) {

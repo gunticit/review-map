@@ -96,7 +96,7 @@
         <span class="material-symbols-outlined">chevron_left</span>
     </button>
     <!-- Navbar title-->
-    <h1 class="topnav-title">{{ $heading_title ?? 'Quản lý dự án' }}</h1>
+    <h1 class="topnav-title">{{ $heading_title ?? 'Rivi' }}</h1>
     <!-- Navbar Items-->
     <ul class="navbar-nav align-items-center ms-auto">
         <!-- Documentation Dropdown-->

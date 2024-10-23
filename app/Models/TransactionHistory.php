@@ -25,4 +25,8 @@ class TransactionHistory extends Model
     public function wallet() {
         return $this->belongsTo(Wallet::class, 'wallet_id', 'id');
     }
+
+    public function paymentMethod() {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id', 'id');
+    }
 }

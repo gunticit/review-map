@@ -37,14 +37,14 @@
     </style>
     <div class="list-manage-customer">
         <div class="container-fluid">
-            <nav class="nav nav-pills flex-column flex-sm-row mt-5">
+            <nav class="nav nav-pills flex-column flex-sm-row mt-5 gap-4">
                 <a class="flex-sm-fill text-sm-center nav-link active" id="information-tab" data-bs-toggle="tab" data-bs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="true" aria-current="page">
                     Thông tin cơ bản
                 </a>
-                <a class="flex-sm-fill text-sm-center nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">
+                <a class="flex-sm-fill text-sm-center nav-link border" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">
                     Lịch sử số dư
                 </a>
-                <a class="flex-sm-fill text-sm-center nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
+                <a class="flex-sm-fill text-sm-center nav-link border" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
                     Quản lý dự án
                 </a>
             </nav>
@@ -149,7 +149,7 @@
                     <section class="du-an-cua-ban">
                         <div class="col-12">
                             <div class="row">
-                                <div class="col-sm-6 col-xs-12 mt-4">
+                                <div id="info-customer" class="col-sm-6 col-xs-12 mt-4">
                                     <div class="col-inner">
                                         <div class="col-md-12 col-12">
                                             <div class="section-title">
@@ -274,6 +274,7 @@ zxc2
             $('#btn-save-edit').hide();
             $('#btn-save-info').show();
             let formData = new FormData();
+            $('#info-customer .form-control').removeAttr('disabled');
             formData.append('_token', "{{ csrf_token() }}");
             formData.append('company_name', $('#company_name').val());
             formData.append('company_email', $('#company_email').val());

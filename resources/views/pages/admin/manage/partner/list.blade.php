@@ -17,15 +17,19 @@
                         <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
                     </div>
                 </form>
-                <div id="list-project" class="mt-4">
+                <div id="list-partners" class="mt-4">
                     @if(!empty($partners))
                     <table class="table list-table">
                         <thead>
                             <tr>
                                 <th width="15"></th>
-                                <th width="35" class="list-table-stt" scope="col">STT</th>
-                                <th class="list-table-title" scope="col">Tên dự án</th>
-                                <th class="list-table-link-map" scope="col">URL Google Map</th>
+                                <th width="35" class="list-table-stt" scope="col"><a href="#" class="sort">STT</a></th>
+                                <th width="135" class="list-table-title" scope="col"><a href="#" class="sort">Mã đối tác</a></th>
+                                <th width="200" class="list-table-link-map" scope="col"><a href="#" class="sort">Tên đối tác</a></th>
+                                <th width="200"><a href="#" class="sort">Email</a></th>
+                                <th width="200"><a href="#" class="sort">Số điện thoại</a></th>
+                                <th width="200"><a href="#" class="sort">Nhiệm vụ hoàn thành</a></th>
+                                <th width="180"><a href="#" class="sort">Số tiền đã rút</a></th>
                                 <th class="list-table-progree" scope="col">
                                     <a href="#" class="sort">Trạng thái</a>
                                 </th>
@@ -38,34 +42,20 @@
                             @foreach($partners as $partner)
                             <tr>
                                 <td width="15" style="padding: 5px">
-                                    <input type="checkbox" class="form-check-input" id="check_{{ $project->id }}">
+                                    <input type="checkbox" class="form-check-input" id="check_{{ $partner->id }}">
                                 </td>
-                                <td width="35">{{ $project->id }}</td>
+                                <td width="35">{{ $partner->id }}</td>
                                 <td class="list-table-title">
-                                    <a href="{{ route('project.edit', ['id' => $project->id]) }}">{{ $project->name }}</a>
+                                    <a href="{{ route('project.edit', ['id' => $partner->id]) }}">{{ $partner->name }}</a>
                                 </td>
-                                <td class="list-table-link-map">
-                                    <a class="btn" target="_blank" href="https://www.google.com/maps/place/?q=place_id:{{$project->place_id}}" role="button">
-                                        <span class="material-symbols-outlined">link</span>
-                                    </a>
+                                <td>
+                                    {{ $partner->name }}
                                 </td>
-                                <td class="list-table-progree">
-                                    <a class="{{ checkStatus($project->status)['className'] }}">{{ checkStatus($project->status)['labelStatus'] }}</a>
+                                <td>
+                                    <a href="mailto:{{ $partner->email }}">{{ $partner->email }}</a>
                                 </td>
-                                <td class="list-table-status">
-                                    @if($project->status == 1)
-                                        <a href="javascript:void(0)" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-warning btn-change-status" role="button">
-                                            <span class="material-symbols-outlined">motion_photos_paused</span> <span>Tạm dừng</span>
-                                        </a>
-                                    @elseif($project->status == 4)
-                                        <a href="javascript:void(0)" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-success btn-change-status" role="button">
-                                            <span class="material-symbols-outlined"> play_arrow </span> <span>Tiếp tục</span> 
-                                        </a>
-                                    @elseif($project->status == 5)
-                                        <a href="{{ route('page.order.project', ['id' => $project->id]) }}" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-primary" role="button">
-                                            <span class="material-symbols-outlined"> payments </span> <span>Thanh toán</span>
-                                        </a>
-                                    @endif
+                                <td>
+                                    <a href="tel:{{ $partner->telephone }}">{{ $partner->telephone }}</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -95,7 +85,7 @@
                     name: rs_search
                 },
                 success: function(res) {
-                    $('#list-project tbody').html(res);
+                    $('#list-partners tbody').html(res);
                 }
             })
         })
