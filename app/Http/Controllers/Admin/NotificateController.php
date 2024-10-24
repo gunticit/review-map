@@ -8,6 +8,10 @@ use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\NotificationService;
+use App\Events\NotificationEvent;
+use App\Models\Role;
+use App\Models\Notification;
+use Illuminate\Support\Facades\Session;
 
 class NotificateController extends Controller
 {
@@ -54,5 +58,74 @@ class NotificateController extends Controller
     public function partner_delete($id){
         $this->notificationService->destroy($id);
         return redirect()->back();
+    }
+
+    public function partner_store(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $data['filepath'] = implode('|', $this->uploadImage($request));
+            event(new NotificationEvent($data, Role::PARTNER_ROLE));
+            $partner_ids = User::role('partner')->get()->pluck('id')->toArray();
+            $dataNotification = [];
+            foreach($partner_ids as $partner_id) {
+                $dataNotification[] = [
+                    'user_id' => $partner_id,
+                    'title' => $data['title'],
+                    'content' => $data['content'],
+                    'created_at' => now(),
+                    'created_by' => auth()->user()->id
+                ];
+            }
+            if (!empty($dataNotification)) {
+                Notification::insert($dataNotification);
+            }
+            Session::flash('success', 'Tạo thông báo tới đối tác thành công');
+            return redirect()->back()->withInput();
+        } catch (\Exception $e) {
+            Session::flash('success', 'Tạo thông báo tới đối tác không thành công');
+            return redirect()->back()->withInput(); 
+        }
+    }
+
+    public function customer_store(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $data['filepath'] = implode('|', $this->uploadImage($request));
+            $data['created_at'] = now();
+            event(new NotificationEvent($data, Role::CUSTOMER_ROLE));
+            $customer_ids = User::role('customer')->get()->pluck('id')->toArray();
+            $dataNotification = [];
+            foreach($customer_ids as $customer_id) {
+                $dataNotification[] = [
+                    'user_id' => $customer_id,
+                    'title' => $data['title'],
+                    'content' => $data['content'],
+                    'created_at' => $data['created_at'],
+                    'created_by' => auth()->user()->id
+                ];
+            }
+            if (!empty($dataNotification)) {
+                Notification::insert($dataNotification);
+            }
+            Session::flash('success', 'Tạo thông báo tới đối tác thành công');
+            return redirect()->back()->withInput();
+        } catch (\Exception $e) {
+            Session::flash('success', 'Tạo thông báo tới đối tác không thành công');
+            return redirect()->back()->withInput(); 
+        }   
+    }
+
+    public function uploadImage($request){
+        $data = array();
+        if ($request->hasFile('files')) {
+            $folder = 'uploads' . '/notifications/' . date('Y-m') . '/' . date('d') . '/';
+            foreach ($request->file('files') as $image) {
+                $path = $image->store($folder, 'public');
+                $data[] = $path;
+            }
+        }
+        return $data;
     }
 }
