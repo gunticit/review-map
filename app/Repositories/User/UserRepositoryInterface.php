@@ -8,4 +8,5 @@ interface UserRepositoryInterface
     public function verifyOtp($user);
     public function resetPassword($user, $password);
     public function clearOtp($user);
+    public function totalWithdraw($id);
 }

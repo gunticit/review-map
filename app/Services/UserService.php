@@ -39,4 +39,8 @@ class UserService {
     public function wallet($id){
         return $this->userRepository->wallet($id);
     }
+
+    public function totalWidthdraw($id){
+        return $this->userRepository->totalWithdraw($id);
+    }
 }

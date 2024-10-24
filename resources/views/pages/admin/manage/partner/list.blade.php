@@ -57,6 +57,9 @@
                                 <td>
                                     <a href="tel:{{ $partner->telephone }}">{{ $partner->telephone }}</a>
                                 </td>
+                                <td>
+                                    {{ $partner->mission->success_count ?? 0 }} / {{ $partner->mission->count ?? 0 }}
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
