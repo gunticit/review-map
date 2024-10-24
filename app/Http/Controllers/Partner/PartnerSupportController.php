@@ -31,7 +31,7 @@ class PartnerSupportController extends Controller
         $this->categoryService = $categoryService;
     }
     public function index(Request $request){
-        $supports =  $this->supportService->list($request);
+        $supports =  $this->supportService->listCreateByUser($request);
         $projects = $this->projectService->list($request);
         return view('pages.partner.support.list', [
             'supports' => $supports,
@@ -42,9 +42,6 @@ class PartnerSupportController extends Controller
         return view('pages.partner.support.edit');
     }
     public function create(Request $request){
-        $request->merge(['user_id' => auth()->id()]);
-        $projects = Project::leftJoin('missions', 'projects.id', '=', 'missions.project_id')->where('missions.user_id', $request->user_id)->select('projects.*')->distinct('projects.id')->get();
-        $categories = $this->categoryService->fullList($request);
         $departments = Department::all();
         return view('pages.partner.support.create',[
             'departments' => $departments,

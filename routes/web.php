@@ -22,13 +22,6 @@ Route::group([
         Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update');
         Route::get('auth/google', [SocicalController::class, 'redirectToGoogle'])->name('auth.google');
         Route::get('auth/google/callback', [SocicalController::class, 'handleGoogleCallback']);    
-        Route::get('/support', [PartnerSupportController::class, 'index'])->name('support');
-        Route::post('/support-store', [PartnerSupportController::class, 'store'])->name('support.store');
-        Route::get('/support-edit/{id}', [PartnerSupportController::class, 'edit'])->name('support.edit');
-        Route::put('/support-update/{id}', [PartnerSupportController::class, 'update'])->name('support.update');
-        Route::delete('/support-delete/{id}', [PartnerSupportController::class, 'delete'])->name('support.delete');
-        Route::delete('/support-delete-by-ids/{ids}', [PartnerSupportController::class, 'deleteByIds'])->name('support.delete.by.ids');
-        Route::get('/support-create', [PartnerSupportController::class, 'create'])->name('support.create');
     }
 );
 
@@ -51,6 +44,7 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::post('/change-password', [App\Http\Controllers\Auth\AuthController::class, 'changePassword'])->name('profile.change.password');
     Route::post('/update-location', [App\Http\Controllers\Auth\AuthController::class, 'updateCurrentLocation'])->name('profile.update.location');
     Route::get('/notification-user', [App\Http\Controllers\NotificationController::class, 'ajaxNotification'])->name('notification.user');
+    Route::put('/notification-user', [App\Http\Controllers\NotificationController::class, 'ajaxNotification'])->name('notification.user.read');
     
     include 'web_customer.php';
     include 'web_admin.php';

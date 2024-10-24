@@ -55,7 +55,7 @@
                 </nav>
             </div>
             <div class="col-xl-2 col-md-8 col-12 text-right support__btn">
-                <a href="{{ route('support.create') }}" class="btn btn-primary d-flex flex-wrap support__crate">
+                <a href="{{ route('partner.support.create') }}" class="btn btn-primary d-flex flex-wrap support__crate">
                     <span class="support__crate">+ Tạo yêu cầu</span>
                 </a>
             </div>

@@ -28,8 +28,8 @@
 </a>
 <div class="collapse {!! request()->routeIs('home') || request()->routeIs('list.notificate.partner') || request()->routeIs('list.notificate.customer') ? 'show' : '' !!}" id="collapseNotification" data-bs-parent="#accordionNotification">
     <nav class="sidenav-menu-nested nav accordion" id="accordionNotificationChild">
-        <a class="nav-link {!! request()->routeIs('list.notificate.partner') ? 'active' : '' !!}" href="{{ route('list.notificate.partner') }}">Thông báo khách hàng</a>
-        <a class="nav-link {!! request()->routeIs('list.notificate.customer') ? 'active' : '' !!}" href="{{ route('list.notificate.customer') }}">Thông báo đối tác</a>
+        <a class="nav-link {!! request()->routeIs('list.notificate.customer') ? 'active' : '' !!}" href="{{ route('list.notificate.customer') }}">Thông báo khách hàng</a>
+        <a class="nav-link {!! request()->routeIs('list.notificate.partner') ? 'active' : '' !!}" href="{{ route('list.notificate.partner') }}">Thông báo đối tác</a>
     </nav>
 </div>
 <a class="nav-link" href="{{ route('manage-customer.index') }}">

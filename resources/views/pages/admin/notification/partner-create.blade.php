@@ -64,7 +64,7 @@
 
     <!-- Create Support Request -->
     <section class="section tao-yeu-cau mb-5">
-        <form action="{{ route('support.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('store.notificate.partner') }}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class="container">
                 <div class="col-inner">
@@ -105,17 +105,6 @@
                     </div>
                     -->
                     
-                    <!-- Project Select -->
-                    <div class="mb-4">
-                        <label for="inputDuAn">{{ __('support.project') }} <small>(Nếu có)</small></label>
-                        <select class="form-control form-select" name="project_id" id="inputDuAn">
-                            <option value="" disabled selected>{{ __('support.select_project') }}</option>
-                            @foreach($projects as $project)
-                                <option value="{{ $project['id'] }}" {{ old('project_id') == $project['id'] ? 'selected' : '' }}>{{ $project['name'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     <!-- Content Input -->
                     <div class="mb-4">
                         <label for="inputDescription">{{ __('support.content') }} <span class="required">*</span></label>
@@ -128,7 +117,7 @@
                         <label for="inputFile" class="custom-file-upload">
                             <span class="material-symbols-outlined">link</span> Tải lên tệp
                         </label>
-                        <input type="file" class="form-control" name="files[]" multiple id="inputFile">
+                        <input type="file" class="form-control" name="files[]" id="inputFile">
                         <div id="previewFiles"></div>
                     </div>
 
