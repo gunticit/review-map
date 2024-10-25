@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\ProjectController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Partner\CartController;
 use App\Http\Controllers\Partner\ProductController;
 use App\Http\Controllers\Partner\MissionController;
 use App\Http\Controllers\Partner\OrderController;
 use App\Http\Controllers\Partner\OverviewController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\Partner\PartnerSupportController;
 
 Route::group([
         'prefix' => '/partner',
@@ -31,4 +32,13 @@ Route::group([
     Route::get('/mission/confirm/{id}', [MissionController::class, 'missionConfirm'])->name('mission.confirm');
     Route::get('/mission-success', [MissionController::class, 'success'])->name('mission.success');
     Route::post('/verify-recaptcha', [MissionController::class, 'verifyRecaptcha'])->name('verify.recaptcha');
+
+    //Support
+    Route::get('/support', [PartnerSupportController::class, 'index'])->name('partner.support');
+    Route::post('/support-store', [PartnerSupportController::class, 'store'])->name('partner.support.store');
+    Route::get('/support-edit/{id}', [PartnerSupportController::class, 'edit'])->name('partner.support.edit');
+    Route::put('/support-update/{id}', [PartnerSupportController::class, 'update'])->name('partner.support.update');
+    Route::delete('/support-delete/{id}', [PartnerSupportController::class, 'delete'])->name('partner.support.delete');
+    Route::delete('/support-delete-by-ids/{ids}', [PartnerSupportController::class, 'deleteByIds'])->name('partner.support.delete.by.ids');
+    Route::get('/support-create', [PartnerSupportController::class, 'create'])->name('partner.support.create');
 });

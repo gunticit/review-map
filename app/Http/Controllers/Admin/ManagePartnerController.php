@@ -25,7 +25,6 @@ class ManagePartnerController extends Controller
             'type' => 'partner'
         ]);
         $partners = $this->userService->list($request);
-        dd($partners);
         return view('pages.admin.manage.partner.list', [
             'partners' => $partners
         ]);

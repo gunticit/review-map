@@ -54,9 +54,9 @@
                     </thead>
                     <tbody>
                         @if(!empty($notifications))
-                            @foreach($notifications as $notificate)
+                            @foreach($notifications as $key => $notificate)
                                 <tr class="notificate-{{ $notificate->id }}">
-                                    <td>{{ $notificate->id }}</td>
+                                    <td>{{ $key + 1 }}</td>
                                     <td class="list-table-stt">{!! date('d/m/Y H:i:s', strtotime($notificate->created_at)) !!}</td>
                                     <td class="list-table-code">
                                         <a href="{{ route('edit.notificate.customer', $notificate->id) }}" class="text-primary">{{ $notificate->title }}</a>

@@ -56,7 +56,7 @@
                         <label for="inputPhongBan">{{ __('support.department') }} <span class="required">*</span>
                         </label>
                         <select class="form-control form-select" name="department_id" id="inputPhongBan" required>
-                            <option>Chọn phòng ban</option>
+                            <option value="">Chọn phòng ban</option>
                             @foreach($departments as $department)
                             <option value="{{ $department->id }}">{{ $department->name }}</option>
                             @endforeach
@@ -84,9 +84,12 @@
                     </label>
                     <div class="mb-4">
                         <label for="inputFile" class="custom-file-upload"><span class="material-symbols-outlined">link</span> Tải lên tệp</label>
-                        <input type="file" class="form-control" name="images[]" multiple id="inputFile">
+                        <input type="file" class="form-control" name="files[]" multiple id="inputFile">
                         <div id="previewImages"></div>
                     </div>
+                    <div id="fileError" class="alert alert-danger" style="display: none;">Tệp quá lớn hoặc không được hỗ trợ.</div>
+                    <!-- Khu vực hiển thị tên tệp -->
+                    <div id="fileList" class="mb-4 col-6"></div>
                     <!-- Form Group (inputFile)-->
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Gửi yêu cầu</button>
@@ -97,28 +100,14 @@
     
 @endsection
 
-@section('script')
+@section('js')
 <script>
     $(document).ready(function () {
+        const getSelectedFiles = setupFileInput('#inputFile', '#fileList', '#fileError', 2);
+        
         $('#inputFile').on('change', function () {
-            $('#previewImages').html('');
-            var files = this.files;
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                if (file.type.match('image.*')) {
-                    var reader = new FileReader();
-                    reader.onload = (function (f) {
-                        return function (e) {
-                            var img = $('<img>').attr('src', e.target.result).attr('class', 'img-thumbnail').css({
-                                'width': '150px', 
-                                'margin': '10px'
-                            });
-                            $('#previewImages').append(img);
-                        };
-                    })(file);
-                    reader.readAsDataURL(file);
-                }
-            }
+            const selectedFiles = getSelectedFiles(); // Get the array of selected files
+            console.log('Currently selected files:', selectedFiles); // Log the files
         });
     });
 </script>

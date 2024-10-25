@@ -15,7 +15,7 @@
                     const active = !item.read_at ? 'active' : '';
                     newNotificationHtml += `
                         <li>
-                            <a class="dropdown-item dropdown-notifications-item ${active}" href="#!">
+                            <a class="dropdown-item dropdown-notifications-item ${active}" href="#!" data-id="${item.id}" oclick="readNotification(${item.id}, $(event))">
                                 <div class="dropdown-notifications-item-content">
                                     <div class="dropdown-notifications-item-content-title">${item.title}</div>
                                     <div class="dropdown-notifications-item-content-text">${item.content}</div>
@@ -43,6 +43,23 @@
     }
 
     getNotification();
+
+    readNotification = function(id, event) {
+        event.removeClass('active');
+        console.log(id);
+        if (id) {
+            $.ajax({
+            url: "{{ route('notification.user.read') }}",
+            method: 'PUT',
+            data: {
+                id: id
+            },
+            success: function(data) {
+                getNotification();
+            }
+        });  
+        }
+    }
 
     Pusher.logToConsole = true;
 
@@ -83,6 +100,42 @@
         $('.dropdown-notifications-count').text(parseInt(notificationCount) + 1);
         $('.dropdown-notifications-count').css('display', 'block');
     });
+
+
+    const channelName1 = 'send-notification';
+    const channel1 = pusher.subscribe(channelName1);
+    const eventName1 = 'event-notification-' + role;
+    channel1.bind(eventName1, function(data) {
+        if(data) {
+            $('#no-notification').css('display', 'none');
+        }
+        const newNotificationHtml = `
+            <li>
+                <a class="dropdown-item dropdown-notifications-item active" href="#!">
+                    <div class="dropdown-notifications-item-content">
+                        <div class="dropdown-notifications-item-content-title">${data.data.title}</div>
+                        <div class="dropdown-notifications-item-content-text">${data.data.content}</div>
+                        <div class="dropdown-notifications-item-content-details">
+                            ${new Date(data.data.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })} - 
+                            ${new Date(data.data.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                    </div>
+                </a>
+            </li>
+        `;
+        let notificationCount = $('.dropdown-notifications-count').text();
+        // Nếu chưa có thông báo nào thì sô thông báo chưa đọc = 0
+        if (notificationCount === '') {
+            notificationCount = 0;
+        }
+        $('.list-notifications').prepend(newNotificationHtml);
+        $('.dropdown-notifications-count').text(parseInt(notificationCount) + 1);
+        $('.dropdown-notifications-count').css('display', 'block');
+    });
+
+
+
+
 
 
 </script>

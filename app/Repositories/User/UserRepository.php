@@ -68,4 +68,9 @@ class  UserRepository extends BaseRepository implements UserRepositoryInterface
         $user->otp = null;
         $user->save();
     }
+    public function totalWithdraw($id){
+        $query = $this->model->query();
+        $query = $query->with('transactionHistories')->get();
+        return $query;
+    }
 }

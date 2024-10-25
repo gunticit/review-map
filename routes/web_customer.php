@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Admin\CheckoutController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CustomerCheckoutController;
 use App\Http\Controllers\Customer\ProjectController;
+use App\Http\Controllers\Customer\SupportController;
 
 // Customer
 Route::group([
@@ -30,4 +31,14 @@ Route::group([
 
     Route::post('/confirm-checkout', [CustomerCheckoutController::class, 'confirmCheckout'])->name('confirm.checkout');
     Route::get('/project-search', [ProjectController::class, 'search'])->name('project.search'); 
+
+
+    //Support
+    Route::get('/support', [SupportController::class, 'index'])->name('customer.support');
+    Route::post('/support-store', [SupportController::class, 'store'])->name('customer.support.store');
+    Route::get('/support-edit/{id}', [SupportController::class, 'edit'])->name('customer.upport.edit');
+    Route::put('/support-update/{id}', [SupportController::class, 'update'])->name('customer.support.update');
+    Route::delete('/support-delete/{id}', [SupportController::class, 'delete'])->name('customer.support.delete');
+    Route::delete('/support-delete-by-ids/{ids}', [SupportController::class, 'deleteByIds'])->name('customer.support.delete.by.ids');
+    Route::get('/support-create', [SupportController::class, 'create'])->name('customer.support.create');
 });
