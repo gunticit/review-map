@@ -157,7 +157,7 @@
             <div class="row mt-4">
                 <div class="col-12">
                     <form action="" method="POST" enctype="multipart/form-data">
-                        @csrf
+                        {{ csrf_field() }}
                         <div class="mb-3">
                             <label for="reply-content" class="form-label">Nội dung</label>
                             <textarea id="reply-content" class="form-control" rows="4" placeholder="Nhập nội dung"></textarea>
