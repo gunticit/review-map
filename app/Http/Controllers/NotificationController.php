@@ -4,21 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
-use App\Events\NotificationAdminEvent;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-    public function indexCustomer(Request $request)
+    public function index(Request $request)
     {
         $perPage = $request->query('perPage', 10); // Lấy số lượng mục trên mỗi trang từ request, mặc định là 10
-        $notifications = Notification::where('role', 'customer')->with('user')->orderBy('created_at', 'desc')->paginate($perPage); 
-        return view('pages.notification', compact('notifications')); 
-    }
-
-    public function indexPartner(Request $request)
-    {
-        $perPage = $request->query('perPage', 10); // Lấy số lượng mục trên mỗi trang từ request, mặc định là 10
-        $notifications = Notification::where('role', 'customer')->with('user')->orderBy('created_at', 'desc')->paginate($perPage); 
+        $notifications = Notification::where('user_id', Auth::user()->id)->with('user')->orderBy('created_at', 'desc')->paginate($perPage); 
         return view('pages.notification', compact('notifications')); 
     }
 
