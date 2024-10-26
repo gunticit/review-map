@@ -12,25 +12,28 @@ use App\Services\HistoryService;
 use App\Services\ProjectService;
 use App\Services\UserService;
 use App\Services\ProjectImageService;
+use App\Services\WalletService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class ProjectController extends Controller
 {
-    protected $projectService, $projectImageService, $historyService, $commentService, $userService;
+    protected $projectService, $projectImageService, $historyService, $commentService, $userService, $walletService;
     public function __construct(
         ProjectService $projectService, 
         ProjectImageService $projectImageService, 
         CommentService $commentService, 
         HistoryService $historyService,
-        UserService $userService
+        UserService $userService,
+        WalletService $walletService
     ){
         $this->projectService = $projectService;
         $this->projectImageService = $projectImageService;
         $this->historyService = $historyService;
         $this->commentService = $commentService;
         $this->userService = $userService;
+        $this->walletService = $walletService;
     }
     public function index(Request $request){
         $data = $this->projectService->list($request);
@@ -201,13 +204,20 @@ class ProjectController extends Controller
                 default => 0
             };
         }
-        $user_id = Auth::user()->id;
-        $user_info = $this->userService->wallet($user_id);
+        $wallet_info = $this->walletService->checkWalletUser();
+        $balance = $wallet_info->balance ?? 0;
+        $provisional_deduction = $wallet_info->provisional_deduction ?? 0; // Số nợ trước đó
+        $available_balance = $balance - $provisional_deduction; // Số dư khả dụng
+        $surplus = $available_balance - $price_order; // Số dư tạm tính khi thanh toán
         return view('pages.customer.projects.order', [
             'projects' => $paginatedComments,
             'project_info' => $project_comments,
             'price_order' => $price_order,
-            'user_info' => $user_info
+            'balance' => $balance,
+            'provisional_deduction' => $provisional_deduction,
+            'available_balance' => $available_balance,
+            'surplus' => $surplus,
+            'project_id' => $project_id
         ]);
     }
 

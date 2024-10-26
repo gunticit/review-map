@@ -140,7 +140,7 @@
                         <p>Vui lòng chọn phương thức nhận liên kết thay đổi mật khẩu.</p>
                         <div class="mb-3">
                             <form id="emailForm" action="{{ route('password.email') }}" method="POST">
-                                @csrf
+                                {{ csrf_field() }}
                                 <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="" required />
                             </form>
@@ -152,7 +152,7 @@
                     <div class="tab">
                         <h2>Nhập mã xác thực</h2>
                         <form id="otpForm" action="{{ route('password.otp') }}" method="POST">
-                            @csrf
+                            {{ csrf_field() }}
                             <p id="otpMessage"></p>
                             <input type="hidden" class="form-control" id="emailOtp" name="email" placeholder="Email" value="" required />
                             <input type="hidden" class="form-control" id="otpAttempts" name="otp_attempts" value="0"/>    
@@ -179,7 +179,7 @@
                         <h2>Tạo mật khẩu mới</h2>
                         
                         <form id="passwordForm" action="{{ route('password.update') }}" method="POST">
-                            @csrf
+                            {{ csrf_field() }}
                             <input type="hidden" class="form-control" id="emailResetPass" name="email" placeholder="Email" value="" required />
                             <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
                             <div class="input-group mb-3 input-group-password">

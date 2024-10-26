@@ -85,7 +85,7 @@ class WalletService
             return false;
         }
     }
-    private function checkWalletUser()
+    public function checkWalletUser()
     {
         $user_id = Auth::user()->id;
         $wallet = $this->walletRepository->findByKey('user_id', $user_id);

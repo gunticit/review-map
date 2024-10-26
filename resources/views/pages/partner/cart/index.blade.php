@@ -42,7 +42,7 @@
                                 <td class="list-table-product-remove">
                                     <input type="hidden" id="product_id" value="{{ $product->id }}">
                                     <form action="{{ route('cart.delete.item') }}" method="POST">
-                                        @csrf
+                                        {{ csrf_field() }}
                                         @method('DELETE')
                                         <input type="hidden" name="id" value="{{ $product->id }}">
                                         <button type="submit" class="btn btn-outline"><span class="material-symbols-outlined">cancel</span></button>

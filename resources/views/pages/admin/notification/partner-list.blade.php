@@ -63,7 +63,7 @@
                                     </td>
                                     <td class="list-table-actions">
                                         <form action="{{ route('delete.notificate.partner', $notificate->id) }}" method="POST" style="display:inline-block;">
-                                            @csrf
+                                            {{ csrf_field() }}
                                             @method('DELETE')
                                             <button type="submit" class="btn text-default" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
                                                 <span class="material-symbols-outlined">

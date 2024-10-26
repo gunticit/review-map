@@ -23,7 +23,7 @@
             @endif
         </div>
         <form action="{{ route('voucher.update', $voucher->id) }}" method="POST">
-            @csrf
+            {{ csrf_field() }}
             @method('PUT')
             
             <div class="mb-4">

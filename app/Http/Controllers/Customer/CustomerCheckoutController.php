@@ -9,8 +9,12 @@ use Illuminate\Http\Request;
 
 class CustomerCheckoutController extends Controller
 {
+    
+    public function __construct(Surve)
+    {
+        
+    }
     public function confirmCheckout(Request $request){
-        // Làm tạm chứ chưa có api
         $project = Project::find($request->project_id);
         if ($project) {
             $data = $project->update([

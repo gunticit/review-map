@@ -154,7 +154,7 @@
                 <div id="regForm">
                     <div class="tab">
                         <form id="emailForm" action="{{ route('password.email') }}" method="POST">
-                                @csrf
+                                {{ csrf_field() }}
                                 <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
                         <h2>Xác thực danh tính</h2>
                         <p>Vui lòng chọn phương thức nhận liên kết thay đổi mật khẩu.</p>
@@ -179,7 +179,7 @@
                     <div class="tab">
                         <h2>Nhập mã xác thực</h2>
                         <form id="otpForm" action="{{ route('password.otp') }}" method="POST">
-                            @csrf
+                            {{ csrf_field() }}
                             <p id="otpMessage"></p>
                             <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
                             <input type="hidden" class="form-control" id="emailOtp2" name="email" placeholder="Email" value="" required />

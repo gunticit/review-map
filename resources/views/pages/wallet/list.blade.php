@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <form action="{{ route('wallet.setup') }}" id="form-setup-wallet" method="post">
-                            @csrf
+                            {{ csrf_field() }}
                             <div class="mb-4 payment">
                                 <label for="payment" class="form-label">Phương thức thanh toán</label>
                                 <select class="form-select form-select-js" name="method_payment" id="payment">
