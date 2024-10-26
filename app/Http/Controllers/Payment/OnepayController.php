@@ -4,25 +4,25 @@ namespace App\Http\Controllers\Payment;
 
 use App\Classes\Onepay;
 use App\Http\Controllers\Controller;
+use App\Services\HistoryService;
 use App\Services\WalletService;
-use App\Services\PaymentMethodService;
-use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use \App\Traits\OnepayTrait;
 
 
 class OnepayController extends Controller
 {
     use OnepayTrait;
-    protected $onepay, $walletService;
+    protected $onepay, $walletService, $historyService;
 
     public function __construct(
         WalletService $walletService,
-        Onepay $onepay
+        Onepay $onepay,
+        HistoryService $historyService
     ) {
         $this->walletService = $walletService;
         $this->onepay = $onepay;
+        $this->historyService = $historyService;
     }
     public function onepay_return(Request $request)
     {
@@ -38,6 +38,14 @@ class OnepayController extends Controller
         $reference_id = $request->input('vpc_MerchTxnRef');
         if ($responseCode == '0') {
             $this->walletService->updateWalletandTransactinon($amount, $reference_id);
+            $this->historyService->create([
+                'user_id' => auth()->user()->id,
+                'content' => json_encode([
+                    'title' => 'Nạp tiền tài khoản',
+                    'status' => 'success',
+                    'content' => 'Nạp '.formatCurrency($amount).'  thành công vào lúc '.date('d-m-Y H:i:s'),
+                ]),
+            ]);
             return redirect()->route('wallet')->with('success', 'Giao dịch thành công - Approved');
         }
         return redirect()->route('wallet')->with('error', $this->getResponseDescription($responseCode));

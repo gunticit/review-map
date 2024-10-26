@@ -35,8 +35,13 @@
                         @foreach($histories as $history)
                         <tr>
                             <td>{{ $stt }}</td>
-                            <td class="list-table-time">{!! $history[0]['created_at']->format('d/m/Y') !!} <span>{!! $history[0]['created_at']->format('H:i') !!}</span></td>
-                            <td class="list-table-title"> {{ $history[0]['content'] }}</td>
+                            <td class="list-table-time">{!! $history['created_at']->format('d/m/Y') !!} <span>{!! $history['created_at']->format('H:i') !!}</span></td>
+                            <td class="list-table-title"> 
+                                @php
+                                    $history_content = !empty($history['content'])?json_decode($history['content'], true):[];   
+                                @endphp
+                                {!! $history_content['title'] ?? '' !!} {!! $history_content['content'] ? ' - '.$history_content['content'] : '' !!}
+                            </td>
                         </tr>
                         @php $stt++; @endphp
                         @endforeach
