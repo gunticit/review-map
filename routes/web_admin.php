@@ -36,6 +36,7 @@ Route::group([
         Route::get('/manage-partner/info/{id}', [ManagePartnerController::class, 'info'])->name('admin.manage.partner.info');
         Route::get('/manage-partner/wallet/{id}', [ManagePartnerController::class, 'wallet'])->name('admin.manage.partner.wallet');
         Route::get('/manage-partner/project/{id}', [ManagePartnerController::class, 'project'])->name('admin.manage.partner.project');
+        Route::get('/manage-partner/edit/{id}', [ManagePartnerController::class, 'edit'])->name('admin.manage.partner.edit');
         Route::post('/admin-company-update', [ManageCustomerController::class, 'adminCompanyUpdate'])->name('admin.company.update');
         Route::post('/show-project-json/{id}', [ProjectController::class, 'showJson'])->name('show.project.json');
         Route::post('/project-wrong-image', [ProjectController::class, 'wrongImage'])->name('project.wrong.image');
