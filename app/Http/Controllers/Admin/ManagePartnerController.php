@@ -30,12 +30,14 @@ class ManagePartnerController extends Controller
         ]);
     }
 
-    public function info(Request $request)
+    public function info(Request $request, $id)
     {
-        return view('pages.admin.manage.partner.info');
+        return view('pages.admin.manage.partner.info',[
+            'partner_id' => $id
+        ]);
     }
 
-    public function wallet(Request $request)
+    public function wallet(Request $request, $id)
     {
         $orderBy = $request->order_by ?? 'id';
         $sort = $request->sort ?? 'desc';
@@ -70,14 +72,17 @@ class ManagePartnerController extends Controller
 
         foreach ($transactionHistories as $transactionHistory) {
             $transactionHistory->formatted_created_at = $transactionHistory->created_at->format('d/m/Y H:i');
-            $transactionHistory->payment_method = PaymentMethod::getLabel($transactionHistory->payment_method_id);
+            $transactionHistory->payment_method = $transactionHistory->payment_method_id ? PaymentMethod::getLabel($transactionHistory->payment_method_id) : '';
             $transactionHistory->amount = number_format($transactionHistory->amount, 0, ',', '.') . ' VND';
         }
 
-        return view('pages.admin.manage.partner.wallet', compact('transactionHistories'));
+        return view('pages.admin.manage.partner.wallet', [
+            'transactionHistories' => $transactionHistories,
+            'partner_id' => $id
+        ]);
     }
 
-    public function project(Request $request)
+    public function project(Request $request, $id)
     {
         $orderBy = $request->order_by ?? 'id';
         $sort = $request->sort ?? 'desc';
@@ -103,7 +108,10 @@ class ManagePartnerController extends Controller
             $project->profit = number_format(10000, 0, ',', '.') . ' VND';
         }
 
-        return view('pages.admin.manage.partner.project', compact('projects'));
+        return view('pages.admin.manage.partner.project', [
+            'projects' => $projects,
+            'partner_id' => $id
+        ]);
     }
 
     public function create()
@@ -120,6 +128,7 @@ class ManagePartnerController extends Controller
 
     public function edit(string $id)
     {
+        return view('pages.admin.manage.partner.edit');
     }
 
     public function update(Request $request, string $id)

@@ -31,6 +31,11 @@ class TransactionHistoryService {
         $projects = $this->transactionhistoryRepository->list($request);
         return $projects;
     }
+
+    public function create($request){
+        $transactions = $this->transactionhistoryRepository->create($request);
+        return $transactions;
+    }
     
     public function find($id){
         return $this->transactionhistoryRepository->find($id);

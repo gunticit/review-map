@@ -46,17 +46,17 @@
         <div class="container-fluid">
             <div class="row mt-5">
                 <div class="col-3">
-                    <form action="{{ route('admin.manage.partner.info') }}" method="GET">
+                    <form action="{{ route('admin.manage.partner.info', ['id' => $partner_id]) }}" method="GET">
                         <button type="submit" class="button-tab btn btn-muted active">Thông tin cơ bản</button>
                     </form>
                 </div>
                 <div class="col-3">
-                    <form action="{{ route('admin.manage.partner.wallet') }}" method="GET">
+                    <form action="{{ route('admin.manage.partner.wallet', ['id' => $partner_id]) }}" method="GET">
                         <button type="submit" class="button-tab btn btn-muted">Ví đối tác</button>
                     </form>
                 </div>
                 <div class="col-3">
-                    <form action="{{ route('admin.manage.partner.project') }}" method="GET">
+                    <form action="{{ route('admin.manage.partner.project', ['id' => $partner_id]) }}" method="GET">
                         <button type="submit" class="button-tab btn btn-muted">Lịch sử nhiệm vụ</button>
                     </form>
                 </div>

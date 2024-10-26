@@ -89,17 +89,17 @@
         <div class="container-fluid">
             <div class="row mt-5">
                 <div class="col-3">
-                    <form action="{{ route('admin.manage.partner.wallet') }}" method="GET">
+                    <form action="{{ route('admin.manage.partner.wallet', ['id' => $partner_id]) }}" method="GET">
                         <button type="submit" class="button-tab btn btn-muted">Thông tin cơ bản</button>
                     </form>
                 </div>
                 <div class="col-3">
-                    <form action="{{ route('admin.manage.partner.wallet') }}" method="GET">
+                    <form action="{{ route('admin.manage.partner.wallet', ['id' => $partner_id]) }}" method="GET">
                         <button type="submit" class="button-tab btn btn-muted">Ví đối tác</button>
                     </form>
                 </div>
                 <div class="col-3">
-                    <form action="{{ route('admin.manage.partner.project') }}" method="GET">
+                    <form action="{{ route('admin.manage.partner.project', ['id' => $partner_id]) }}" method="GET">
                         <button type="submit" class="button-tab btn btn-muted active">Lịch sử nhiệm vụ</button>
                     </form>
                 </div>
@@ -121,7 +121,7 @@
             <section class="section thong-bao mb-5 mt-5">
                 <div class="col-inner">
                     <h3 class="section-title mb-4">Lịch sử nhiệm vụ</h3>
-                    <form action="{{ route('admin.manage.partner.project') }}" method="GET">
+                    <form action="{{ route('admin.manage.partner.project', ['id' => $partner_id]) }}" method="GET">
                         <div class="input-group">
                             <button class="input-group-text" type="submit">
                                 <span class="material-symbols-outlined">search</span>
@@ -209,7 +209,7 @@
                     <div class="list-table-footer d-flex justify-content-between align-items-center">
                         <div class="list-table-per-page">
                             <span class="form-label">Hiển thị kết quả</span>
-                            <form action="{{ route('admin.manage.partner.project') }}" method="GET">
+                            <form action="{{ route('admin.manage.partner.project', ['id' => $partner_id]) }}" method="GET">
                                 @php
                                     $perPages = [10, 20, 30, 40];
                                 @endphp

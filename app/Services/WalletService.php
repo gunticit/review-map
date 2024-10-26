@@ -4,10 +4,10 @@ namespace App\Services;
 
 use App\Enums\Status;
 use App\Enums\TypeTransaction;
-use DB;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Wallet\WalletRepositoryInterface;
 use App\Repositories\TransactionHistory\TransactionHistoryRepositoryInterface as TransactionHistoryRepository;
+use Illuminate\Support\Facades\DB;
 
 class WalletService
 {
@@ -65,6 +65,20 @@ class WalletService
         }
     }
 
+    public function update($request, $id){
+        try{
+            DB::beginTransaction();
+                $request = $request->merge(['wallet_id' => $id]);
+                $data = $this->filterData($request);
+                $data = $this->walletRepository->update($data, $id);
+            DB::commit();
+            return $data;
+        }catch(\Exception $e){
+            DB::rollback();
+            throw $e;
+        }
+    }
+
     public function updateWalletandTransactinon($amount, $reference_id)
     {
         try {
@@ -97,4 +111,11 @@ class WalletService
         return $wallet;
     }
 
+    public function filterData($request){
+        $data = array(
+            'wallet_id' => $request->wallet_id ?? null,
+            'amount' => $request->amount ?? null
+        );
+        return $data;
+    }
 }
