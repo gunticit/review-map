@@ -41,7 +41,9 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            <tr class="no-file"><td colspan="6">No files selected!</td></tr>
+                        </tbody>
                     </table>
                 `);
 
@@ -55,15 +57,28 @@
                     createTable();
                 }
 
-                // Kiểm tra tổng số tệp đã tải lên
-                var currentFileCount = tableBody.children().length;
+                // Remove "No files selected!" message if present
+                tableBody.find('.no-file').remove();
 
                 // Lấy số lượng tệp tối đa cho phép từ dropdown
                 var maxFileCount = settings.maxFileCount();
 
+                // Check if maxFileCount is not set or is zero
+                if (!maxFileCount || maxFileCount === 0) {
+                    var message = "Bạn cần phải chọn gói review. Số lượng ảnh phù hợp gói số lượng gói đánh giá.";
+                    $('#modalMessage').text(message);
+                    $('#modalAlert').modal('show');
+                    return; // Dừng lại nếu maxFileCount không có hoặc bằng 0
+                }
+
+                // Kiểm tra tổng số tệp đã tải lên
+                var currentFileCount = tableBody.children('tr').not('.no-file').length;
+
                 // Nếu số lượng tệp hiện tại cộng với số tệp mới vượt quá giới hạn
                 if (currentFileCount + files.length > maxFileCount) {
-                    alert(`Số lượng ảnh không vượt quá ${maxFileCount}% số lượng gói đánh giá. Định dạng ảnh là (*.jpeg, *.png). Giá của 1 tấm ảnh là 5k/tấm.`);
+                    var message = `Số lượng ảnh không vượt quá ${maxFileCount}% số lượng gói đánh giá. Định dạng ảnh là (*.jpeg, *.png). Giá của 1 tấm ảnh là 5k/tấm.`;
+                    $('#modalMessage').text(message);
+                    $('#modalAlert').modal('show');
                     return; // Dừng lại nếu vượt quá giới hạn
                 }
 
@@ -82,7 +97,7 @@
                     if (!fileExists) {
                         tableBody.append(`
                             <tr>
-                                <td class="stt">${tableBody.children().length + 1}</td>
+                                <td class="stt">${tableBody.children('tr').not('.no-file').length + 1}</td>
                                 <td class="fileName">${fileName}</td>
                                 <td class="preview">${preview}</td>
                                 <td class="fileSize">${fileSize}</td>
@@ -93,14 +108,22 @@
                     }
                 });
 
+                // Clear the file input value to allow re-selection of the same file
+                fileUploadDiv.find(`#${fileUploadId}`).val('');
+
                 // Tái khởi tạo các sự kiện nút xóa sau khi thêm tệp mới
                 tableBody.find(".deleteBtn").off('click').on('click', function () {
                     $(this).closest("tr").remove();
 
-                    if (tableBody.find("tr").length === 0) {
-                        tableBody.append('<tr><td colspan="6" class="no-file">No files selected!</td></tr>');
+                    if (tableBody.find("tr").not('.no-file').length === 0) {
+                        tableBody.append('<tr class="no-file"><td colspan="6">No files selected!</td></tr>');
                     }
                 });
+
+                // Check if the number of uploaded files is less than the maxFileCount
+                if (tableBody.children('tr').not('.no-file').length < maxFileCount) {
+                    $('#modalMessage').text(message);
+                }
             }
             
             // Sự kiện khi kéo thả tệp
@@ -124,3 +147,22 @@
         });
     };
 })(jQuery);
+
+// Modal HTML
+$('body').append(`
+    <div class="modal fade" tabindex="-1" id="modalAlert">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header mt-4 pb-1">
+                    <h5 class="modal-title text-center">Cảnh báo</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="mb-0"><small class="color-grey" id="modalMessage"></small></p>
+                </div>
+                <div class="modal-footer mb-4">
+                    <button type="button" class="btn btn-primary fw-500" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+`);
