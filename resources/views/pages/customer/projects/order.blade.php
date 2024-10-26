@@ -271,15 +271,23 @@
                         project_id: "{{ $project_info->id }}"
                     },
                     success: function(response) {
-                        Swal.fire({
-                            title: "Thông báo",
-                            text: "Thanh toán thành công",
-                            icon: "success"
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = "{{ route('project.list') }}";
-                            }
-                        });
+                        if(response.status == 'error') {
+                            Swal.fire({
+                                title: "Thông báo",
+                                text: response.message,
+                                icon: "error"
+                            })
+                        }else{
+                            Swal.fire({
+                                title: "Thông báo",
+                                text: "Thanh toán thành công",
+                                icon: "success"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ route('project.list') }}";
+                                }
+                            });
+                        }
                     }
                 })
             });
