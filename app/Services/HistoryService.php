@@ -15,6 +15,11 @@ class HistoryService {
 
 
     public function list($request){
+        $request = $request->merge([
+            'order_by' => array(
+                'id' => 'desc'
+            )
+        ]);
         $data = $this->historyRepository->list($request);
         return $data;
     }

@@ -21,4 +21,8 @@ class WalletRepository extends BaseRepository implements WalletRepositoryInterfa
             return $balance;
         }
     }
+
+    public function update($data, $id){
+        return $this->model->where('id', $id)->where('user_id', $data['user_id'])->update($data);
+    }
 }

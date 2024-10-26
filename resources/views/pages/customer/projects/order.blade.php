@@ -107,56 +107,17 @@
                         <h2 class="section-title mb-4">Ví của tôi</h2>
                         <div class="wallet-card">
                             <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="logo">
-                            <p>Số dư của tôi</p>
-                            <h3 class="wallet-number text-primary">1.000.000 VND</h3>
+                            <p class="fw-700 {!! $available_balance == $balance ? '':'mb-0'!!}">Số dư của tôi</p>
+                            <h3 class="wallet-number text-primary {!! $available_balance < $balance ? '':'mb-0'!!}">{{ number_format($balance, 0, ',', '.')}} VND</h3>
+                            @if($available_balance < $balance)
+                            <p class="fw-700 text-success {!! $available_balance == $balance ? '':'mb-0'!!}">Khả dụng: {{ number_format($available_balance, 0, ',', '.') }} VND</p>
+                            @endif
                             <div class="wallet-btn d-flex justify-content-around align-items-center  ">
                                 <a class="btn btn-warning" href="#"><span class="material-symbols-outlined">add_card</span> Nạp thêm </a>
                                 <a class="btn btn-light" href="#"><span class="material-symbols-outlined">restart_alt</span> Làm mới </a>
                             </div>
                         </div>
-
-                        <div class="mb-4 payment">
-                            <label for="payment" class="form-label">Phương thức thanh toán</label>
-                            <select class="form-select form-select-js" name="" id="payment" >
-                                <option value="momo" selected>Thanh toán qua ví điện tử Momo</option>
-                                <option value="vnpay">Quét mã VNPAY-QR</option>
-                                <option value="atm">Thẻ ngân hàng ATM</option>
-                                <option value="visa">Thẻ thanh toán quốc tế</option>
-                            </select>
-                        </div>
-
-                        <!-- Form Group (Deposit Amount)-->
-                        <div class="depositAmount mb-4">
-                            <label class="d-block" for="depositAmount">Số tiền nạp</span></label>
-
-                            <div class="depositAmount-Row">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="depositAmount" id="depositAmount1" value="100000" checked>
-                                    <label class="form-check-label" for="depositAmount1"> 100.000 VND </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="depositAmount" id="depositAmount2" value="200000" >
-                                    <label class="form-check-label" for="depositAmount2"> 200.000 VND </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="depositAmount" id="depositAmount3" value="500000" >
-                                    <label class="form-check-label" for="depositAmount3"> 500.000 VND </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="depositAmount" id="depositAmount4" value="1000000" >
-                                    <label class="form-check-label" for="depositAmount4"> 1.000.000 VND </label>
-                                </div>
-                            </div>
-                            
-                            <input type="text" class="form-control" name="depositAmount" id="depositAmount5" placeholder="Số tiền khác" />
-                            
-                        </div>
-
-
-                        <div class="mb-4 ">
-                            <label for="payment-info">Thông tin thanh toán</label>
-                        </div>
-                        
+                        <label for="payment-info">Thông tin thanh toán</label>
                         <div class="mb-4 total d-flex justify-content-between align-items-center">
                             <label for="total" class="fw-700">Tổng cộng</label>
                             <h4>{!! number_format($price_order, 0, ',', '.') . ' VND'; !!}</h4>
@@ -174,7 +135,7 @@
                             <h2 class="modal-title d-block" id="depositModalLabel">Thanh toán</h2>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <p class="text-center"><i style="color: #f00">(Tính năng đang phát triển)</i></p>
+                        <p class="text-center"><i style="color: #f00">(Tiền sẽ được hoàn nếu không thành công)</i></p>
                         <div class="modal-body">
                             {{-- <div class="depositAmount mb-4">
                                 <label class="d-block" for="depositAmount">Số tiền nạp</span></label>
@@ -183,11 +144,24 @@
                             <div class="mb-4">
                                 <label for="payment-info">Thông tin thanh toán</label>
                             </div>
-                            <div class="mb-4 total d-flex justify-content-between align-items-center">
-                                <label for="total" class="fw-700">Tổng cộng</label>
-                                <h4>{!! number_format($price_order, 0, ',', '.') . ' VND'; !!}</h4>
+                            <div class="total d-flex justify-content-between align-items-center">
+                                <label for="total" class="fw-500">Số dư</label>
+                                <h6 style="font-style: italic; font-size: 14px; color: #5e5e5e">{!! number_format($balance, 0, ',', '.') . ' VND'; !!}</h6>
                             </div>
-                            <button type="button" id="btn-confirm-deposit" class="btn btn-primary btn-full" > Xác nhận </button>
+                            <div class="total d-flex justify-content-between align-items-center">
+                                <label for="total" class="mb-0 fw-700">Thanh toán</label>
+                                <h4 class="mb-0" style="color: #f00">{!! number_format($price_order, 0, ',', '.') . ' VND'; !!}</h4>
+                            </div>
+                            <hr>
+                            <div class="total d-flex justify-content-between align-items-center">
+                                <label for="total" class="fw-700">Số dư</label>
+                                <h4 style="{!! $surplus < 0 ? 'color: #f00;text-decoration: line-through;' : '' !!}">{!! number_format($surplus, 0, ',', '.') . ' VND'; !!}</h4>
+                            </div>
+                            @if($surplus > 0)
+                            <button type="button" id="btn-confirm-deposit" class="btn btn-primary btn-full mt-4" > Xác nhận </button>
+                            @else
+                            <button type="button" id="btn-deposit-wallet" class="btn btn-primary btn-full mt-4" > Nạp tiền </button>
+                            @endif
                         </div>
                     </div>
                 </div>      
@@ -297,18 +271,29 @@
                         project_id: "{{ $project_info->id }}"
                     },
                     success: function(response) {
-                        Swal.fire({
-                            title: "Thông báo",
-                            text: "Thanh toán thành công",
-                            icon: "success"
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = "{{ route('project.list') }}";
-                            }
-                        });
+                        if(response.status == 'error') {
+                            Swal.fire({
+                                title: "Thông báo",
+                                text: response.message,
+                                icon: "error"
+                            })
+                        }else{
+                            Swal.fire({
+                                title: "Thông báo",
+                                text: "Thanh toán thành công",
+                                icon: "success"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ route('project.list') }}";
+                                }
+                            });
+                        }
                     }
                 })
             });
+            $('body #btn-deposit-wallet').on('click', function(){
+                window.location.href="{{ route('wallet',['order_id' => $project_id]) }}"
+            })
         });
     </script>
 @endsection

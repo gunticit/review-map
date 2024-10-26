@@ -31,11 +31,11 @@
                         <table class="table list-table">
                             <thead>
                                 <tr>
-                                    <th class="list-table-stt" scope="col">Code</th>
-                                    <th class="list-table-time" scope="col">Thời gian</th>
-                                    <th class="list-table-so-tien" scope="col">Số tiền</th>
-                                    <th class="list-table-content-3" scope="col">Nội dung</th>
-                                    <th class="list-table-so-du" scope="col">Trạng thái</th>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Thời gian</th>
+                                    <th scope="col">Số tiền</th>
+                                    <th scope="col">Nội dung</th>
+                                    <th scope="col">Trạng thái</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,11 +58,13 @@
                                                     {{ formatCurrency($transaction_history->amount) }}</a>
                                             </td>
                                             <td class="list-table-content-3 {{ $text_color }}">
-                                                <a href="javascript:void(0)">
-                                                    {!! 
-                                                        $transaction_history->type == 'deposit' ? 'Nạp tiền': ($transaction_history->type == 'payment' ? 'Thanh toán': 'Rút tiền') 
-                                                    !!}
-                                                </a>
+                                                @if($transaction_history->type == 'deposit')
+                                                    <span class="text-success">Nạp tiền</span>
+                                                @elseif($transaction_history->type == 'payment')
+                                                    <span class="text-warning">Thanh toán</span>
+                                                @elseif($transaction_history->type == 'withdraw')
+                                                    <span class="text-danger">Rút tiền</span>
+                                                @endif
                                             </td>
                                             <td class="list-table-so-du {{ $text_color }}">
                                                 <a href="javascript:void(0)">{{ $text_status }}</a>
@@ -94,7 +96,7 @@
                             </div>
                         </div>
                         <form action="{{ route('wallet.setup') }}" id="form-setup-wallet" method="post">
-                            @csrf
+                            {{ csrf_field() }}
                             <div class="mb-4 payment">
                                 <label for="payment" class="form-label">Phương thức thanh toán</label>
                                 <select class="form-select form-select-js" name="method_payment" id="payment">

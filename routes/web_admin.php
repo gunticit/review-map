@@ -36,6 +36,7 @@ Route::group([
         Route::get('/manage-partner/info/{id}', [ManagePartnerController::class, 'info'])->name('admin.manage.partner.info');
         Route::get('/manage-partner/wallet/{id}', [ManagePartnerController::class, 'wallet'])->name('admin.manage.partner.wallet');
         Route::get('/manage-partner/project/{id}', [ManagePartnerController::class, 'project'])->name('admin.manage.partner.project');
+        Route::get('/manage-partner/edit/{id}', [ManagePartnerController::class, 'edit'])->name('admin.manage.partner.edit');
         Route::post('/admin-company-update', [ManageCustomerController::class, 'adminCompanyUpdate'])->name('admin.company.update');
         Route::post('/show-project-json/{id}', [ProjectController::class, 'showJson'])->name('show.project.json');
         Route::post('/project-wrong-image', [ProjectController::class, 'wrongImage'])->name('project.wrong.image');
@@ -55,12 +56,14 @@ Route::group([
         Route::get('/list-notificate-partner', [NotificateController::class, 'partner_list'])->name('list.notificate.partner');
         Route::get('/detail-notificate-partner/{id}', [NotificateController::class, 'partner_detail'])->name('detail.notificate.partner');
         Route::get('/create-notificate-partner', [NotificateController::class, 'partner_create'])->name('create.notificate.partner');
+        Route::post('/store-notificate-partner', [NotificateController::class, 'partner_store'])->name('store.notificate.partner');
         Route::put('/edit-notificate-partner/{id}', [NotificateController::class, 'partner_edit'])->name('edit.notificate.partner');
         Route::delete('/delete-notificate-partner/{id}', [NotificateController::class, 'partner_delete'])->name('delete.notificate.partner');
 
         Route::get('/list-notificate-customer', [NotificateController::class, 'customer_list'])->name('list.notificate.customer');
         Route::get('/detail-notificate-customer/{id}', [NotificateController::class, 'customer_detail'])->name('detail.notificate.customer');
         Route::get('/create-notificate-customer', [NotificateController::class, 'customer_create'])->name('create.notificate.customer');
+        Route::post('/store-notificate-customer', [NotificateController::class, 'customer_store'])->name('store.notificate.customer');
         Route::put('/list-notificate-customer/{id}', [NotificateController::class, 'customer_edit'])->name('edit.notificate.customer');
         Route::delete('/delete-notificate-customer/{id}', [NotificateController::class, 'customer_delete'])->name('delete.notificate.customer');
     });

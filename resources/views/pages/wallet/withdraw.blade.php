@@ -81,7 +81,7 @@
                 <div class="col-xl-4 col-md-12 col-12 ">
                     <div class="col-inner wallet-col">
                         <form action="{{ route('withdraw.wallet.store') }}" method="POST" id="form-withdraw">
-                            @csrf
+                            {{ csrf_field() }}
                             <h2 class="section-title mb-4">Ví của tôi</h2>
                             <div class="wallet-card">
                                 <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="logo">

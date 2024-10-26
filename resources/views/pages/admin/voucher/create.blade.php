@@ -22,7 +22,7 @@
                     <!-- Form tạo mã giảm giá -->
                     <form action="{{ route('voucher.store') }}" id="form-create-voucher" method="POST"
                         enctype="multipart/form-data">
-                        @csrf
+                        {{ csrf_field() }}
 
                         <div class="mb-4">
                             <label for="code">Mã giảm giá <span class="required">*</span></label>

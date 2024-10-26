@@ -28,8 +28,9 @@ class SupportService {
      * @throws ValidationException
      */
 
-    public function list($request){
-        $supports = $this->supportRepository->list($request);
+    public function listCreateByUser($request){
+        $request = $request->merge(['user_id' => Auth::user()->id]);
+        $supports = $this->supportRepository->listCreateByUser($request);
         $data = SupportResource::collection($supports)->resource;
         return $data;
     }
@@ -62,9 +63,9 @@ class SupportService {
     public function uploadImage($request){
         $data = array();
         $project_id = $request->project_id ?? 'undefined'; 
-        if ($request->hasFile('images')) {
+        if ($request->hasFile('files')) {
             $folder = 'uploads' . '/supports/' . date('Y-m') . '/' . date('d') . '/' . $project_id;
-            foreach ($request->file('images') as $image) {
+            foreach ($request->file('files') as $image) {
                 $path = $image->store($folder, 'public');
                 $data[] = $path;
             }

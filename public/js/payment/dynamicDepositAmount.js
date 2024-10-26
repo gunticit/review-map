@@ -15,25 +15,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         totalAmountElement.textContent = totalAmount.toLocaleString('vi-VN') + ' VND';
     }
-
-    otherRadio.addEventListener('change', function () {
-        if (this.checked) {
-            customAmountInput.style.display = 'block';
-        }
-    });
-
-    customAmountInput.addEventListener('input', updateTotalAmount);
-
-    const radioButtons = document.querySelectorAll('input[name="depositAmount"]');
-    radioButtons.forEach(radio => {
-        radio.addEventListener('change', function () {
-            if (!otherRadio.checked) {
-                customAmountInput.style.display = 'none';
-                customAmountInput.value = '';
+    
+    if(otherRadio){
+        otherRadio.addEventListener('change', function () {
+            if (this.checked) {
+                customAmountInput.style.display = 'block';
             }
-            updateTotalAmount();
         });
-    });
 
-    updateTotalAmount(); // Initial call to set the total amount based on default selection
+        customAmountInput.addEventListener('input', updateTotalAmount);
+
+        const radioButtons = document.querySelectorAll('input[name="depositAmount"]');
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (!otherRadio.checked) {
+                    customAmountInput.style.display = 'none';
+                    customAmountInput.value = '';
+                }
+                updateTotalAmount();
+            });
+        });
+
+        updateTotalAmount(); // Initial call to set the total amount based on default selection
+
+    }
 });

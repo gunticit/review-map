@@ -71,7 +71,7 @@
                                     <td class="list-table-actions">
                                         <a href="{{ route('voucher.edit', $voucher->id) }}" class="btn btn-warning">Sửa</a>
                                         <form action="{{ route('voucher.destroy', $voucher->id) }}" method="POST" style="display:inline-block;">
-                                            @csrf
+                                            {{ csrf_field() }}
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
                                         </form>
