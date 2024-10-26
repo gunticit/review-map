@@ -68,7 +68,6 @@ class WalletService
     public function update($request, $id){
         try{
             DB::beginTransaction();
-                $request = $request->merge(['wallet_id' => $id]);
                 $data = $this->filterData($request);
                 $data = $this->walletRepository->update($data, $id);
             DB::commit();
@@ -113,8 +112,8 @@ class WalletService
 
     public function filterData($request){
         $data = array(
-            'wallet_id' => $request->wallet_id ?? null,
-            'amount' => $request->amount ?? null
+            'balance' => $request->balance ?? null,
+            'user_id' => $request->user_id ?? null
         );
         return $data;
     }

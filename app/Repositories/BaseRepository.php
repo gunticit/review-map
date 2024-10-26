@@ -75,7 +75,6 @@ class BaseRepository implements RepositoryInterface
     {
         $perPage = request()->input('per_page') ?? config('constants.per_page');
         $page = request()->input('page') ?? config('constants.page');
- 
         return $query->paginate($perPage, $columns, 'page', $page);
     }
  
