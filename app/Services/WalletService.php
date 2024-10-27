@@ -37,7 +37,8 @@ class WalletService
         $wallet = $this->walletRepository->findByKey('user_id', $user->id);
         if(empty($wallet)){
             $wallet = $this->walletRepository->create([
-                'user_id' => $user->id
+                'user_id' => $user->id,
+                'provisional_deduction' => 0
             ]);
         }
         $transactionHistoriesQuery = $this->transactionHistoryRepository->findAllByKey('wallet_id', $wallet->id, 'desc');
