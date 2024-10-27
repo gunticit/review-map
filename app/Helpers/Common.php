@@ -104,6 +104,19 @@
         }
     }
 
+    if (!function_exists('isSSL')) {
+        function isSSL()
+        {
+            if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+                return true;
+            }
+            if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+                return true;
+            }
+            return false;
+        }
+    }
+
     if (!function_exists('dayNow')) {
         function dayNow()
         {

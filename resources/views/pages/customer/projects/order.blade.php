@@ -146,8 +146,8 @@
                             <p class="fw-700 text-success {!! $available_balance == $balance ? '':'mb-0'!!}">Khả dụng: {{ number_format($available_balance, 0, ',', '.') }} VND</p>
                             @endif
                             <div class="wallet-btn d-flex justify-content-around align-items-center  ">
-                                <a class="btn btn-warning" href="#"><span class="material-symbols-outlined">add_card</span> Nạp thêm </a>
-                                <a class="btn btn-light" href="#"><span class="material-symbols-outlined">restart_alt</span> Làm mới </a>
+                                <a class="btn btn-warning" href="{{ route('wallet')}}"><span class="material-symbols-outlined">add_card</span> Nạp thêm </a>
+                                <a class="btn btn-light" href="javascript:void(0);" onclick="window.location.reload();"><span class="material-symbols-outlined">restart_alt</span> Làm mới </a>
                             </div>
                         </div>
                         <div class="total d-flex justify-content-between align-items-center">

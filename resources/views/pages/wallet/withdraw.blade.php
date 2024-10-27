@@ -87,12 +87,12 @@
                                 <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="logo">
                                 <p>Số dư của tôi</p>
                                 <h3 class="wallet-number text-primary">{{ moneyFormat($balance) }} VND</h3>
-                                <div class="wallet-btn d-flex justify-content-around align-items-center  ">
+                                {{-- <div class="wallet-btn d-flex justify-content-around align-items-center  ">
                                     <a class="btn btn-warning" href="#"><span
                                             class="material-symbols-outlined">add_card</span> Rút thêm </a>
                                     <a class="btn btn-light" href="#"><span
                                             class="material-symbols-outlined">restart_alt</span> Làm mới </a>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="mb-4 payment">
