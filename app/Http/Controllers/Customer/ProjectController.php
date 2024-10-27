@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Services\CommentService;
+use App\Services\ExpenditureStatisticService;
 use App\Services\HistoryService;
 use App\Services\ProjectService;
 use App\Services\UserService;
@@ -19,14 +20,15 @@ use Illuminate\Support\Facades\Session;
 
 class ProjectController extends Controller
 {
-    protected $projectService, $projectImageService, $historyService, $commentService, $userService, $walletService;
+    protected $projectService, $projectImageService, $historyService, $commentService, $userService, $walletService, $expenditureStatisticService;
     public function __construct(
         ProjectService $projectService, 
         ProjectImageService $projectImageService, 
         CommentService $commentService, 
         HistoryService $historyService,
         UserService $userService,
-        WalletService $walletService
+        WalletService $walletService,
+        ExpenditureStatisticService $expenditureStatisticService
     ){
         $this->projectService = $projectService;
         $this->projectImageService = $projectImageService;
@@ -34,14 +36,17 @@ class ProjectController extends Controller
         $this->commentService = $commentService;
         $this->userService = $userService;
         $this->walletService = $walletService;
+        $this->expenditureStatisticService = $expenditureStatisticService;
     }
     public function index(Request $request){
         $data = $this->projectService->list($request);
+        $expenditure = $this->expenditureStatisticService->getAllExpenditureByUser(Auth::user()->id);
         return view('pages.customer.projects.list',[
             'projects' => $data['projects'] ?? [],
             'total' => $data['total'] ?? 0,
             'working' => $data['working'] ?? 0,
             'stopped' => $data['stopped'] ?? 0,
+            'money_spent' => $expenditure ?? 0
         ]);
     }
 

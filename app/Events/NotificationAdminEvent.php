@@ -14,7 +14,6 @@ use Illuminate\Queue\SerializesModels;
 class NotificationAdminEvent implements ShouldBroadcastNow
 {
     public $data;
-    public $role;
     public $userId;
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -22,10 +21,9 @@ class NotificationAdminEvent implements ShouldBroadcastNow
     /**
      * Create a new event instance.
      */
-    public function __construct($data, $role, $userId = null)
+    public function __construct($data, $userId = null)
     {
         $this->data = $data;
-        $this->role = $role;
         $this->userId = $userId;
     }
 
@@ -42,8 +40,7 @@ class NotificationAdminEvent implements ShouldBroadcastNow
     }
 
     public function broadcastAs() {
-        $typeEvent = $this->role === 'admin' ? 'department-' . $this->data['department_id'] : $this->role . '-'  . $this->userId;
-        return "event-notification-{$typeEvent}";
+        return "event-notification-user-{$this->userId}";
     }
        
 }

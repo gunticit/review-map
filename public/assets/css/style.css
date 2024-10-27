@@ -3177,7 +3177,17 @@ iframe {
 .topnav .dropdown-menu .dropdown-item.link-danger .dropdown-item-icon {
   color: currentColor;
 }
-
+.list-notifications{
+  list-style: none;
+  padding: 0 10px;
+}
+#content-notifications .dropdown-notifications-header{
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  left: 0;
+  background-color: #fff;
+}
 .dropdown-notifications-count {
   background-color: var(--bs-red);
   font-size: 12px;
@@ -4323,7 +4333,6 @@ table.bt .list-table-title a {
   border: 1px solid var(--bs-primary);
   padding: 11px 12px;
   cursor: pointer;
-  font-weight: 700;
   color: var(--bs-primary);
   border-radius: 8px;
   width: 600px;
@@ -5106,6 +5115,50 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
 }
 #list-partners{
   overflow: auto;
+}
+#fileList{
+  max-width: 550px;
+}
+#fileList .file-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  background: #f2f2f2;
+  border-radius: 5px;
+}
+#fileList .file-item .file-name{
+  width: 40%;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-height: 1.5;
+  max-height: 1.6;
+}
+#fileList .file-item .file-size{
+  color: #026c96;
+  font-size: 13px;
+}
+#fileList .file-item .file-success{
+  background: #fff;
+  border-radius: 50%;
+  color: #14a701;
+  font-size: 18px;
+}
+#fileList .file-item .file-remove{
+  border-radius: 50%;
+  background: #fff;
+  color: #f00;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px #ccc;
+  transition: all 0.2s ease-in-out;
+}
+#fileList .file-item .file-remove:hover{
+  box-shadow: 0 0 0 #ccc;
 }
 @media (max-width: 768px) {
   .step-xac-thuc .step-images {

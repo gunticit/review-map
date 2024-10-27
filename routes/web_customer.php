@@ -33,8 +33,8 @@ Route::group([
     Route::post('/confirm-checkout', [CustomerCheckoutController::class, 'confirmCheckout'])->name('confirm.checkout');
     Route::get('/project-search', [ProjectController::class, 'search'])->name('project.search'); 
 
-    // Voucher apply Customer
-    Route::post('/check-apply-voucher/{voucher_code}', [CustomerVoucherController::class, 'checkAjaxApplyVoucher'])->name('check.apply.voucher');
+    // Voucher apply Customer /{voucher_code}
+    Route::post('/check-apply-voucher', [CustomerVoucherController::class, 'checkAjaxApplyVoucher'])->name('check.apply.voucher');
 
     //Support
     Route::get('/support', [SupportController::class, 'index'])->name('customer.support');

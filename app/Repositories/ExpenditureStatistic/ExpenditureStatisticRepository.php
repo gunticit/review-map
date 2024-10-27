@@ -47,4 +47,12 @@ class  ExpenditureStatisticRepository extends BaseRepository implements Expendit
     public function findByUser($filter = array()){
         return $this->model->where('user_id', $filter['user_id'])->where('month', $filter['month'])->first();
     }
+
+    public function getAllExpenditureByUser($user_id){
+        return $this->model->where('user_id', $user_id)->sum('money');
+    }
+    
+    public function getMonthExpenditureByUser($user_id){
+        return $this->model->where('user_id', $user_id)->select('month','money')->get()->pluck('money','money')->toArray();
+    }
 }

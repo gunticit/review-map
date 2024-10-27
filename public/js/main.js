@@ -28,16 +28,17 @@ $(document).ready(function () {
         });
     }
 
-    function showAlert(type_icon = "info", msg_text = "No messages", reload = true) {
+    function showAlert(type_icon = "info", msg_text = "No messages", redirect = '') {
         Swal.fire({
-            title: msg_text,
+            title: 'Thông báo',
+            text: msg_text,
             icon: type_icon, // info, warning, error, success
             showCloseButton: true,
             showConfirmButton: true,
             allowOutsideClick: false,
             confirmButtonText: "OK",
         }).then(() => {
-            if (reload) window.location.reload();
+            if (redirect) window.location.href=redirect;
         });
     }
 

@@ -44,7 +44,7 @@
             <h5>Đã chi tiêu</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-danger">{{ $money['spent'] }} VND</h6>
+            <h6 class="text-danger">{{ formatCurrency($money['spent']) }} VND</h6>
           </div>
         </div>
       </div>

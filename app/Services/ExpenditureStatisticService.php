@@ -36,4 +36,16 @@ class ExpenditureStatisticService
         $data = $this->expenditureStatisticRepository->updateOrCreate($params,$data);
         return $data;
     }
+    
+    // Tổng số chi tiêu của người dung
+    public function getAllExpenditureByUser($user_id){
+        $data = $this->expenditureStatisticRepository->getAllExpenditureByUser($user_id);
+        return $data;
+    }
+
+    // Tổng số chi tiêu theo từng tháng của người dùng
+    public function getMonthExpenditureByUser($user_id){
+        $data = $this->expenditureStatisticRepository->getMonthExpenditureByUser($user_id);
+        return $data;
+    }
 }

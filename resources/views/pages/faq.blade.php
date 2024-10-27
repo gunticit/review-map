@@ -11,7 +11,7 @@
                         <h5>Tổng dự án</h5>
                     </div>
                     <div class="thong-ke-content">
-                        <h6 class="text-primary">{!! $projects['total'] ?? 0 !!}</h6>
+                        <h6 class="text-primary">{!! $total ?? 0 !!}</h6>
                     </div>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                         <h5>Đang thực hiện</h5>
                     </div>
                     <div class="thong-ke-content">
-                        <h6 class="text-primary">{!! $projects['total_working'] ?? 0 !!}</h6>
+                        <h6 class="text-primary">{!! $working ?? 0 !!}</h6>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                         <h5>Đã tạm dừng</h5>
                     </div>
                     <div class="thong-ke-content">
-                        <h6 class="text-primary">{!! $projects['total_stopped'] ?? 0 !!}</h6>
+                        <h6 class="text-primary">{!! $stopped ?? 0 !!}</h6>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                         <h5>Đã chi tiêu</h5>
                     </div>
                     <div class="thong-ke-content">
-                        <h6 class="text-danger">{{ $money['spent'] }} VND</h6>
+                        <h6 class="text-danger">{!! formatCurrency($money['spent']) !!}</h6>
                     </div>
                 </div>
             </div>

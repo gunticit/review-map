@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\NotificationAdminEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PartnerCreateRequest;
 use App\Models\Department;
@@ -65,20 +66,18 @@ class NotificateController extends Controller
         try {
             $data = $request->all();
             $data['filepath'] = implode('|', $this->uploadImage($request));
-            event(new NotificationEvent($data, Role::PARTNER_ROLE));
             $partner_ids = User::role('partner')->get()->pluck('id')->toArray();
             $dataNotification = [];
             foreach($partner_ids as $partner_id) {
-                $dataNotification[] = [
+                $dataNotification = [
                     'user_id' => $partner_id,
                     'title' => $data['title'],
                     'content' => $data['content'],
                     'created_at' => now(),
                     'created_by' => auth()->user()->id
                 ];
-            }
-            if (!empty($dataNotification)) {
-                Notification::insert($dataNotification);
+                $noti = Notification::create($dataNotification);
+                event(new NotificationAdminEvent($noti->toArray(), $partner_id));
             }
             Session::flash('success', 'Tạo thông báo tới đối tác thành công');
             return redirect()->back()->withInput();
@@ -94,20 +93,18 @@ class NotificateController extends Controller
             $data = $request->all();
             $data['filepath'] = implode('|', $this->uploadImage($request));
             $data['created_at'] = now();
-            event(new NotificationEvent($data, Role::CUSTOMER_ROLE));
             $customer_ids = User::role('customer')->get()->pluck('id')->toArray();
             $dataNotification = [];
             foreach($customer_ids as $customer_id) {
-                $dataNotification[] = [
+                $dataNotification = [
                     'user_id' => $customer_id,
                     'title' => $data['title'],
                     'content' => $data['content'],
                     'created_at' => $data['created_at'],
                     'created_by' => auth()->user()->id
                 ];
-            }
-            if (!empty($dataNotification)) {
-                Notification::insert($dataNotification);
+                $noti = Notification::create($dataNotification);
+                event(new NotificationAdminEvent($noti->toArray(), $customer_id));
             }
             Session::flash('success', 'Tạo thông báo tới đối tác thành công');
             return redirect()->back()->withInput();

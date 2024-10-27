@@ -15,7 +15,7 @@
                     const active = !item.read_at ? 'active' : '';
                     newNotificationHtml += `
                         <li>
-                            <a class="dropdown-item dropdown-notifications-item ${active}" href="#!" data-id="${item.id}" oclick="readNotification(${item.id}, $(event))">
+                            <a class="dropdown-item dropdown-notifications-item ${active}" href="{{ URL('/notification/${item.id}') }}" data-id="${item.id}">
                                 <div class="dropdown-notifications-item-content">
                                     <div class="dropdown-notifications-item-content-title">${item.title}</div>
                                     <div class="dropdown-notifications-item-content-text">${item.content}</div>
@@ -28,6 +28,9 @@
                         </li>
                     `;
                 })
+                newNotificationHtml += `
+                    <button class="btn btn-info w-100 my-2" onclick="window.location.href='{{ route('notification') }}'">Xem tất cả thông báo</button>
+                `;
             } else {
                 $('#no-notification').css('display', 'block');
             }
@@ -72,14 +75,14 @@
     const userId = '{{ Auth::user()->id }}';
     const typeEvent = role === 'admin' ? 'department-' + departmentId : role + '-' + userId;
     const channel = pusher.subscribe(channelName);
-    const eventName = 'event-notification-' + typeEvent;
+    const eventName = 'event-notification-user-' + userId;
     channel.bind(eventName, function(data) {
         if(data) {
             $('#no-notification').css('display', 'none');
         }
         const newNotificationHtml = `
             <li>
-                <a class="dropdown-item dropdown-notifications-item active" href="#!">
+                <a class="dropdown-item dropdown-notifications-item ${data.data.read_at ? '' : 'active'}" href="{{ URL('/notification/${data.data.id}') }}" data-id="${data.data.id}">
                     <div class="dropdown-notifications-item-content">
                         <div class="dropdown-notifications-item-content-title">${data.data.title}</div>
                         <div class="dropdown-notifications-item-content-text">${data.data.content}</div>
@@ -111,7 +114,7 @@
         }
         const newNotificationHtml = `
             <li>
-                <a class="dropdown-item dropdown-notifications-item active" href="#!">
+                <a class="dropdown-item dropdown-notifications-item ${data.data.read_at ? '' : 'active'}" href="javascript:void(0);">
                     <div class="dropdown-notifications-item-content">
                         <div class="dropdown-notifications-item-content-title">${data.data.title}</div>
                         <div class="dropdown-notifications-item-content-text">${data.data.content}</div>
@@ -132,12 +135,6 @@
         $('.dropdown-notifications-count').text(parseInt(notificationCount) + 1);
         $('.dropdown-notifications-count').css('display', 'block');
     });
-
-
-
-
-
-
 </script>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Navbar Brand-->
@@ -149,7 +146,7 @@
         <span class="material-symbols-outlined">chevron_left</span>
     </button>
     <!-- Navbar title-->
-    <h1 class="topnav-title">{{ $heading_title ?? 'Rivi' }}</h1>
+    <h1 class="topnav-title">{{ $heading_title ?? '' }}</h1>
     <!-- Navbar Items-->
     <ul class="navbar-nav align-items-center ms-auto">
         <!-- Documentation Dropdown-->
@@ -185,7 +182,7 @@
                 <span class="material-symbols-outlined">notifications_active</span>
                 <span class="dropdown-notifications-count" style="display: none"></span>
             </a>
-            <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
+            <div id="content-notifications" class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
                 <h6 class="dropdown-notifications-header"> Thông báo <button class="btn btn-icon">
                         <span class="material-symbols-outlined">close</span>
                     </button>

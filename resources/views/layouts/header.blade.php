@@ -39,6 +39,13 @@
         <script src="{{ asset('./assets/js/map.js') }}"></script>
         <script src="{{ asset('./assets/js/verifyOtp.js') }}?v={{ time() }}"></script>
         <script src="{{ asset('./js/payment/dynamicDepositAmount.js') }}?v={{ time() }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link href="
+        https://cdn.jsdelivr.net/npm/jquery-datetime-picker@2.5.11/jquery.datetimepicker.min.css
+        " rel="stylesheet">
+        <script src="
+        https://cdn.jsdelivr.net/npm/jquery-datetime-picker@2.5.11/build/jquery.datetimepicker.full.min.js
+        "></script>
         @yield('js')
     </body>
 </html>

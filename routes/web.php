@@ -50,10 +50,11 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::post('/update-profile-company', [App\Http\Controllers\ProfileController::class, 'updateProfileCompany'])->name('profile.update.company');
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
     Route::get('/notification/{id}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notification.show');
+    Route::delete('/notification-delete/{id}', [App\Http\Controllers\NotificationController::class, 'ajaxDeleteNotification'])->name('notification.delete');
     Route::post('/change-password', [App\Http\Controllers\Auth\AuthController::class, 'changePassword'])->name('profile.change.password');
     Route::post('/update-location', [App\Http\Controllers\Auth\AuthController::class, 'updateCurrentLocation'])->name('profile.update.location');
     Route::get('/notification-user', [App\Http\Controllers\NotificationController::class, 'ajaxNotification'])->name('notification.user');
-    Route::put('/notification-user', [App\Http\Controllers\NotificationController::class, 'ajaxNotification'])->name('notification.user.read');
+    Route::put('/notification-user-read', [App\Http\Controllers\NotificationController::class, 'ajaxMakeRead'])->name('notification.user.read');
     
     include 'web_customer.php';
     include 'web_admin.php';

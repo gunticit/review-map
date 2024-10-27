@@ -15,7 +15,7 @@
     </section>
     <!-- tao-yeu-cau -->
     <section class="section tao-yeu-cau mb-5">
-        <form action="{{ route('admin.support.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('customer.support.store') }}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class="container-fluid">
                 <div class="col-inner">
@@ -57,9 +57,11 @@
                         </label>
                         <select class="form-control form-select" name="department_id" id="inputPhongBan" required>
                             <option value="">Chọn phòng ban</option>
-                            @foreach($departments as $department)
-                            <option value="{{ $department->id }}">{{ $department->name }}</option>
-                            @endforeach
+                            @if(!empty($departments))
+                                @foreach($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <!-- Form Group (DuAn)-->
@@ -68,9 +70,11 @@
                         </label>
                         <select class="form-control form-select" name="project_id" id="inputDuAn" required>
                             <option>{{ __('support.select_project') }}</option>
-                            @foreach($projects as $project)
-                                <option value="{{ $project['id'] }}">{{ $project['name'] }}</option>
-                            @endforeach
+                            @if(!empty($projects))
+                                @foreach($projects as $project)
+                                    <option value="{{ $project['id'] }}">{{ $project['name'] }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <!-- Form Group (Description)-->

@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <ul class="pagination">
+    {{-- <ul class="pagination">
         @if ($paginator->onFirstPage())
             <li class="page-item disabled">
                 <a class="page-link" href="javascript:void(0)" aria-label="Previous">
@@ -9,7 +9,7 @@
         @else
             <li><a href="{{ $paginator->previousPageUrl() }}" rel="prev"><span class="material-symbols-outlined">chevron_left</span></a></li>
         @endif
-    </ul>
+    </ul> --}}
     <div class="list-table-footer d-flex justify-content-between align-items-center">
         <div class="list-table-per-page">
             <span class="form-label">Hiển thị kết quả</span>

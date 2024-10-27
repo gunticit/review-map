@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('user_id')->nullable();
             $table->integer('role_id')->nullable();
             $table->integer('support_id')->nullable();
-            $table->integer('file_path')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

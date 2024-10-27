@@ -17,6 +17,7 @@ use App\Events\NotificationAdminEvent;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Notification;
+use Illuminate\Support\Facades\DB;
 
 class PartnerSupportController extends Controller
 {
@@ -36,6 +37,7 @@ class PartnerSupportController extends Controller
         return view('pages.partner.support.list', [
             'supports' => $supports,
             'projects' => $projects,
+            'heading_title' => 'Yêu cầu hỗ trợ'
         ]);
     }
     public function edit(){
@@ -55,26 +57,26 @@ class PartnerSupportController extends Controller
     }
     public function store(SupportRequest $request){
         try{
-            \DB::beginTransaction();
+            DB::beginTransaction();
             $data = $this->supportService->create($request);
-            event(new NotificationAdminEvent($data->toArray(), Role::ADMIN_ROLE));
             $userIds = User::where('department_id', $request->department_id)->get()->pluck('id')->toArray();
             $dataNotification = [];
             foreach($userIds as $userId) {
-                $dataNotification[] = [
+                $dataNotification = [
                     'user_id' => $userId,
                     'title' => $data->title,
                     'content' => $data->content,
                     'support_id' => $data->id,
                     'created_at' => $data->created_at
                 ];
+                $noti = Notification::create($dataNotification);
+                event(new NotificationAdminEvent($noti->toArray(), $userId));
             }
-            Notification::insert($dataNotification);
-            \DB::commit();
+            DB::commit();
             Session::flash('success', 'Khởi tạo yêu cầu hỗ trợ thành công');
             return redirect()->back()->withInput();
         }catch(Exception $e){
-            \DB::rollBack();
+            DB::rollBack();
             Session::flash('error', 'Không thêm được yêu cầu hỗ trợ');
             return redirect()->back()->withInput();
         }

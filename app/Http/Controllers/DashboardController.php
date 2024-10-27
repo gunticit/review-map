@@ -3,17 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Services\DashboardService;
+use App\Services\ExpenditureStatisticService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
-    protected $dashboardService;
-    public function __construct(DashboardService $dashboardService){
+    protected $dashboardService, $expenditureStatisticService;
+    public function __construct(
+        DashboardService $dashboardService,
+        ExpenditureStatisticService $expenditureStatisticService
+    ){
         $this->middleware('auth');
         $this->dashboardService = $dashboardService;
+        $this->expenditureStatisticService = $expenditureStatisticService;
     }
     public function changeLanguage($language){
         Session::put('language', $language);
@@ -40,6 +45,10 @@ class DashboardController extends Controller
                 "label" => "Tháng $i",
                 "y" => 0 
             ];
+            $data_expenditure[$i] = [
+                "label" => "Tháng $i",
+                "y" => 0
+            ];
         }
         $completed = $this->dashboardService->getProjectsCompleted();
         foreach ($completed as $value) {
@@ -58,6 +67,9 @@ class DashboardController extends Controller
             }
         }
         $data_distributed = array_values($data_distributed);
+        $expenditure = $this->expenditureStatisticService->getAllExpenditureByUser(Auth::user()->id);
+        $expenditure_month = $this->expenditureStatisticService->getMonthExpenditureByUser(Auth::user()->id);
+        // dd($expenditure_month);
 
         $data_chars = array(
             'completed' =>  $data_completed,
@@ -67,7 +79,7 @@ class DashboardController extends Controller
         return view('pages.dashboard', [
             'projects' => $data['projects'] ?? array(),
             'money' => array(
-                'spent' => 0
+                'spent' => $expenditure
             ),
             'filters' => $filters,
             'data_chars' => $data_chars

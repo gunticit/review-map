@@ -15,6 +15,7 @@ class HistoryController extends Controller
     public function index(Request $request){
         $histories = $this->historyService->list($request);
         $data['histories'] = $histories;
+        $data['filter'] = $request->all();
         return view('pages.history', $data);
     }
 
