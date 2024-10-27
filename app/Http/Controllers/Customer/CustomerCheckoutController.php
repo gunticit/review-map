@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Services\ExpenditureStatisticService;
 use App\Services\ProjectService;
 use App\Services\TransactionHistoryService;
 use App\Services\WalletService;
@@ -14,18 +15,24 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerCheckoutController extends Controller
 {
-    protected $projectService, $transactionHistoryService, $walletService;
-    public function __construct(ProjectService $projectService, TransactionHistoryService $transactionHistoryService, WalletService $walletService)
+    protected $projectService, $transactionHistoryService, $walletService, $expenditureStatisticService;
+    public function __construct(
+        ProjectService $projectService, 
+        TransactionHistoryService $transactionHistoryService, 
+        WalletService $walletService,
+        ExpenditureStatisticService $expenditureStatisticService
+    )
     {
         $this->projectService = $projectService;
         $this->transactionHistoryService = $transactionHistoryService;
         $this->walletService = $walletService;
+        $this->expenditureStatisticService = $expenditureStatisticService;
     }
     public function confirmCheckout(Request $request){
         try{
             DB::beginTransaction();
             $project = $this->projectService->show($request->project_id);
-            $project_comments = $this->projectService->findWithComments($project->id, $request);
+            $project_comments = $this->projectService->findWithComments($request->project_id, $request);
             $price_order = 0;
             if($project_comments->package){
                 $price_order = match ($project_comments->package) {
@@ -36,6 +43,11 @@ class CustomerCheckoutController extends Controller
                     default => 0
                 };
             }
+            if($project_comments->is_slow){
+                $price_order = $price_order + 10000;
+            }
+            $temp_price_order = $price_order;
+            $price_order = $temp_price_order + $price_order * 0.1; // Cộng VAT
             $wallet_info = $this->walletService->checkWalletUser();
             $balance = $wallet_info->balance ?? 0; // Số tiền
             $provisional_deduction = $wallet_info->provisional_deduction ?? 0; // Đã dùng tạm thời
@@ -49,6 +61,12 @@ class CustomerCheckoutController extends Controller
                 'reference_id' => 'PAYMENT_'.time(),
             );
             $transaction = $this->transactionHistoryService->create($data_transaction);
+            $data_expenditure = array(
+                'user_id' => Auth::user()->id,
+                'month' => Carbon::now()->format('Y-m'),
+                'money' => $price_order
+            );
+            $this->updateExpenditureStatistic($data_expenditure);
             if ($transaction && $surplus > 0) {
                 $request = $request->merge([
                     'balance' => $balance - $price_order,
@@ -79,5 +97,9 @@ class CustomerCheckoutController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    public function updateExpenditureStatistic($data){
+        return $this->expenditureStatisticService->updateExpenditureStatistic($data);
     }
 }

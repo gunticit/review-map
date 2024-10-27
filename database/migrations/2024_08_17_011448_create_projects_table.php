@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Dự án mỗi chỉ sử dụng 1 lần nếu muốn chạy tiếp thì tạo dự án mới
      */
     public function up(): void
     {
@@ -37,6 +37,8 @@ return new class extends Migration
             $table->integer('is_wrong_rate')->default(0)->nullable();
             $table->date('update_wrong_rate')->nullable(); // Ngày cập nhật lại rate
             $table->enum('is_payment', [1,2])->nullable(); // 1: Đã thanh toán, 2: Chưa thanh toán
+            $table->string('voucher_code')->nullable(); // Mã voucher áp dụng cho dự án
+            $table->decimal('price', 15, 0)->nullable(); // Lưu lại khi đã thanh toán
             // Dành cho admin
             $table->integer('id_confirm')->nullable();
             $table->timestamp('id_confirm_at')->nullable();

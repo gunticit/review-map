@@ -41,6 +41,13 @@ class  VoucherRepository extends BaseRepository implements VoucherRepositoryInte
         return $query->count();
     }
 
+    public function checkAjaxApplyVoucher($voucher_code){
+        $query = $this->model->query();
+        $query->where('code', $voucher_code);
+        $query->where('status', 'active');
+        return $query->first();
+    }
+
     public function countDataGroupMonth($filter = array()){
         $query = $this->model->query();
         $filter['year'] = $filter['year'] ?? date('Y');

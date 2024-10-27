@@ -196,19 +196,42 @@ class ProjectController extends Controller
         }
         $price_order = 0;
         if($project_comments->package){
-            $price_order = match ($project_comments->package) {
-                1, "1" => 45000 * 10,
-                2, "2" => 35000 * 50,
-                3, "3" => 30000 * 100,
-                4, "4" => 25000 * 200,
-                default => 0
-            };
+            switch ($project_comments->package) {
+                case 1:
+                    $price_order = 45000 * 10;
+                    $quantity = 10;
+                    break;
+                case 2:
+                    $price_order = 35000 * 50;
+                    $quantity = 50;
+                    break;
+                case 3:
+                    $price_order = 30000 * 100;
+                    $quantity = 100;
+                    break;
+                case 4:
+                    $price_order = 25000 * 200;
+                    $quantity = 200;
+                    break;
+                default:
+                    $price_order = 0;
+                    $quantity = 0;
+                    break;
+            }
+        }
+        $point_slow = 0;
+        $money_slow = 0;
+        if($project_comments->is_slow){
+            $point_slow = $project_comments->point_slow;
+            $money_slow = 10000;
         }
         $wallet_info = $this->walletService->checkWalletUser();
         $balance = $wallet_info->balance ?? 0;
         $provisional_deduction = $wallet_info->provisional_deduction ?? 0; // Số nợ trước đó
         $available_balance = $balance - $provisional_deduction; // Số dư khả dụng
-        $surplus = $available_balance - $price_order; // Số dư tạm tính khi thanh toán
+        $surplus = $available_balance - ($price_order + $money_slow + ($price_order + $money_slow) * 0.1); // Số dư tạm tính khi thanh toán
+        $tmp_price = $price_order + ($point_slow > 0 ? 10000 : 0);
+        $total_price = $tmp_price + ($tmp_price * 10 / 100);
         return view('pages.customer.projects.order', [
             'projects' => $paginatedComments,
             'project_info' => $project_comments,
@@ -217,7 +240,11 @@ class ProjectController extends Controller
             'provisional_deduction' => $provisional_deduction,
             'available_balance' => $available_balance,
             'surplus' => $surplus,
-            'project_id' => $project_id
+            'quantity' => $quantity,
+            'project_id' => $project_id,
+            'point_slow' => $point_slow,
+            'tmp_price' => $tmp_price,
+            'total_price' => $total_price
         ]);
     }
 

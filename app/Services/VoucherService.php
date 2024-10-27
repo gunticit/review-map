@@ -61,6 +61,33 @@ class VoucherService {
         return $data;
     }
 
+    public function checkAjaxApplyVoucher($request){
+        $voucher_code = $request->voucher_code;
+        $voucher = $this->voucherRepository->checkAjaxApplyVoucher($voucher_code);
+        $data = array();
+        $status = 'active';
+        $date_now = date('Y-m-d');
+        if($voucher){
+            if($voucher->max_uses == ($voucher->used_uses + 1)){
+                $status = 'used';
+            }
+            if($voucher->start_date > $date_now){
+                return null; // Thời gian chưa bắt đầu sử dụng
+            }
+            if($voucher->end_date < $date_now){
+                $status = 'expired'; // Hết hạn sử dụng
+            }
+            $data = array(
+                'status' => $status,
+                'voucher' => $voucher
+            );
+        }
+        if(!empty($request->project_id)){
+            $project_id = $request->project_id;
+        }
+        return $data;
+    }
+
     private function filterData($request): array{
         return array(
             'name' => $request->name ?? '',

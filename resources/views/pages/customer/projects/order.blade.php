@@ -25,7 +25,40 @@
         height: 20px;
         animation: spin 1s linear infinite;
     }
+    
+    #discount-info{
+        position: relative;
+    }
 
+    #discount-info .btn{
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        z-index: 9;
+        font-weight: normal
+    }
+    #checkout-info ul{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 0;
+        margin-bottom: 0;
+    }
+    #checkout-info li {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+    #checkout-info span {
+        width: 33.33%;
+    }
+    #checkout-info span:last-child {
+        text-align: right;
+    }
+    #checkout-info li#discount-voucher{
+        display: none;
+    }
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -117,10 +150,56 @@
                                 <a class="btn btn-light" href="#"><span class="material-symbols-outlined">restart_alt</span> Làm mới </a>
                             </div>
                         </div>
-                        <label for="payment-info">Thông tin thanh toán</label>
+                        <div class="total d-flex justify-content-between align-items-center">
+                            <div class="col-sm-12">
+                                <label for="payment-info" class="fw-700">Mã giảm giá</label>
+                                <div id="discount-info">
+                                    <input class="form-control" id="voucher_code" placeholder="Mã giảm giá" value="">
+                                    <button class="btn btn-outline-primary" id="btn-apply-discount" type="button">Áp dụng</button>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="mb-4 total d-flex justify-content-between align-items-center">
+                            <div class="col-sm-12">
+                                <label for="payment-info" class="fw-700">Thông tin thanh toán</label>
+                                <div id="checkout-info">
+                                    <ul>
+                                        <li>
+                                            <span>Số lượng</span>
+                                            <span>{{ $quantity }}</span>
+                                            <span>{!! number_format($price_order, 0, ',', '.') . ' VND'; !!}</span>
+                                        </li>
+                                        @if($point_slow > 0)
+                                        <li>
+                                            <span>Số lượng</span>
+                                            <span>{{ $point_slow }} ngày</span>
+                                            <span>{!! number_format(10000, 0, ',', '.') . ' VND'; !!}</span>
+                                        </li>
+                                        @endif
+                                        <li>
+                                            <span>Tạm tính</span>
+                                            <span></span>
+                                            <span>{!! number_format($tmp_price, 0, ',', '.') . ' VND'; !!}</span>
+                                        </li>
+                                        <li>
+                                            <span>VAT</span>
+                                            <span>10%</span>
+                                            <span>{!! number_format(($tmp_price * 10)/100, 0, ',', '.') . ' VND'; !!}</span>
+                                        </li>
+                                        <li id="discount-voucher" class="text-warning">
+                                            <span>Giảm giá</span>
+                                            <span></span>
+                                            <span id="value-voucher"></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
                         <div class="mb-4 total d-flex justify-content-between align-items-center">
                             <label for="total" class="fw-700">Tổng cộng</label>
-                            <h4>{!! number_format($price_order, 0, ',', '.') . ' VND'; !!}</h4>
+                            <h4>{!! number_format($total_price, 0, ',', '.') . ' VND'; !!}</h4>
                         </div>
 
                         <button type="button" id="btn-deposit" class="btn btn-primary btn-full" > Thanh toán </button>
@@ -150,7 +229,7 @@
                             </div>
                             <div class="total d-flex justify-content-between align-items-center">
                                 <label for="total" class="mb-0 fw-700">Thanh toán</label>
-                                <h4 class="mb-0" style="color: #f00">{!! number_format($price_order, 0, ',', '.') . ' VND'; !!}</h4>
+                                <h4 class="mb-0" style="color: #f00">{!! number_format($total_price, 0, ',', '.') . ' VND'; !!}</h4>
                             </div>
                             <hr>
                             <div class="total d-flex justify-content-between align-items-center">
@@ -293,7 +372,34 @@
             });
             $('body #btn-deposit-wallet').on('click', function(){
                 window.location.href="{{ route('wallet',['order_id' => $project_id]) }}"
-            })
+            });
+            $('#btn-apply-discount').on('click', function(){
+                let voucher_code = $('#voucher_code').val();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('check.apply.voucher') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        project_id: "{{ $project_info->id }}",
+                        voucher_code: voucher_code
+                    },
+                    success: function(response) {
+                        if(response.status == 'error') {
+
+                        }else{
+                            Swal.fire({
+                                title: " 😀",
+                                text: "Thành công",
+                                icon: "success"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ route('project.list') }}";
+                                }
+                            });
+                        }
+                    }
+                })
+            });
         });
     </script>
 @endsection

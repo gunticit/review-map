@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CustomerCheckoutController;
 use App\Http\Controllers\Customer\ProjectController;
 use App\Http\Controllers\Customer\SupportController;
+use App\Http\Controllers\Customer\VoucherController as CustomerVoucherController;
 
 // Customer
 Route::group([
@@ -32,6 +33,8 @@ Route::group([
     Route::post('/confirm-checkout', [CustomerCheckoutController::class, 'confirmCheckout'])->name('confirm.checkout');
     Route::get('/project-search', [ProjectController::class, 'search'])->name('project.search'); 
 
+    // Voucher apply Customer
+    Route::post('/check-apply-voucher/{voucher_code}', [CustomerVoucherController::class, 'checkAjaxApplyVoucher'])->name('check.apply.voucher');
 
     //Support
     Route::get('/support', [SupportController::class, 'index'])->name('customer.support');

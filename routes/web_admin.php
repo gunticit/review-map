@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\SupportController;
 
@@ -28,7 +28,7 @@ Route::group([
         Route::resource('/category', CategoryController::class);
         Route::resource('/product', ProductController::class);
         Route::resource('/order', OrderController::class);
-        Route::resource('/voucher', VoucherController::class);
+        Route::resource('/voucher', AdminVoucherController::class);
         Route::get('/categories-list', [CategoryController::class, 'categoriesList'])->name('categories.list');
         Route::post('/destroy-category-id/{id}', [CategoryController::class, 'destroyCategoryById'])->name('destroy.category.id');
         Route::resource('/manage-customer', ManageCustomerController::class);

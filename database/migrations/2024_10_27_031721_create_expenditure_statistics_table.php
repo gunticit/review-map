@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wallets', function (Blueprint $table) {
+        Schema::create('expenditure_statistics', function (Blueprint $table) {
             $table->id();
+            $table->decimal('money', 15, 0)->default(0); // Số tiền đã chi tiêu
             $table->integer('user_id');
-            $table->decimal('balance', 15, 0)->default(0); // Số dư của ví
-            $table->string('unit_currency', 10)->default('VND'); // Loại tiền tệ
-            $table->decimal('provisional_deduction', 15, 0)->default(0); // Số tiền trừ tạm thời
+            $table->string('month');
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wallets');
+        Schema::dropIfExists('expenditure_statistics');
     }
 };
