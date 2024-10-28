@@ -30,7 +30,7 @@ class CheckMissionDailyJob implements ShouldQueue
         //Cập nhật trạng thái nhiệm đã duyệt tự động
         $project = Project::where('status', Project::WORKING_PROJECT)->get()->toArray();
         foreach ($project as $item) {
-            $data = app(apiGoogleService::class)->getPlaceDetails('ChIJQURU3HqtNTERh7oU9xzeDI8');
+            $data = app(apiGoogleService::class)->getPlaceDetails($item['place_id']);
             $dataMission = Mission::where('status', 2)->with('comments')->get()->toArray();
             foreach ($data['reviews'] as $review) {
                 \Log::info('review: '.json_encode($review));
