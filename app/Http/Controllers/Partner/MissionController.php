@@ -95,7 +95,7 @@ class MissionController extends Controller
                 'project_id' => $project->id,
                 'status' => 2,
                 'comment_id' => $comment->id,
-                'price' => getPriceFromPackage($project->package),
+                'price' => 10000,
                 'latitude' => $project->latitude,
                 'longitude' => $project->longitude,
                 'image_id' => $project->has_images ? $this->randomImage($project->id) : null
