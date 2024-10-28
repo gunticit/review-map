@@ -88,9 +88,9 @@
                                 <p>Số dư của tôi</p>
                                 <h3 class="wallet-number text-primary">{{ moneyFormat($balance) }} VND</h3>
                                 {{-- <div class="wallet-btn d-flex justify-content-around align-items-center  ">
-                                    <a class="btn btn-warning" href="#"><span
+                                    <a class="btn btn-warning" href="javascript:void(0);"><span
                                             class="material-symbols-outlined">add_card</span> Rút thêm </a>
-                                    <a class="btn btn-light" href="#"><span
+                                    <a class="btn btn-light" href="javascript:void(0);"><span
                                             class="material-symbols-outlined">restart_alt</span> Làm mới </a>
                                 </div> --}}
                             </div>
@@ -102,7 +102,7 @@
                                     <option value="{{ \App\Enums\PaymentMethod::VNPAY->value }}">Quét mã VNPAY-QR</option>
                                     <option value="{{ \App\Enums\PaymentMethod::ATM->value }}">Thẻ ngân hàng ATM</option>
                                     <option value="{{ \App\Enums\PaymentMethod::VISA->value }}">Thẻ thanh toán quốc tế</option>
-                                    <option value="{{ \App\Enums\PaymentMethod::VISA->value }}">Thẻ thanh toán quốc tế</option>
+                                    <option value="onepay">Thanh toán qua Onepay</option>
                                 </select>
                             </div>
 
@@ -110,6 +110,7 @@
                             <div class="depositAmount mb-4">
                                 <label class="d-block" for="amount">Số tiền rút</span></label>
                                 <input type="text" class="form-control" name="amount" id="amount" placeholder="Số tiền khác" />
+                                <p id="alert-amount-check" class="text-danger"></p>
                                 <div class="mt-3 form-check-inline">
                                     <input class="form-check-input" type="radio" name="all_amount" id="all_amount">
                                     <label class="form-check-label" for="all_amount"> Rút toàn bộ </label>
@@ -121,7 +122,7 @@
 
                             <div class="mb-4 total d-flex justify-content-between align-items-center">
                                 <label for="total" class="fw-700">Tổng cộng</label>
-                                <h4>0 VND</h4>
+                                <h4 id="totalAmount">0 VND</h4>
                             </div>
                             <button type="submit" class="btn btn-primary btn-full" id="button-submit"> Rút tiền </button>
                         </form>
@@ -162,6 +163,27 @@
                 $('#form-withdraw').submit();
             });
 
+        });
+        $('#amount').on('change', function(){
+            let amount = $(this).val();
+            if(parseInt(amount) > 0){
+                $('#all_amount').removeAttr('checked');
+                $('#all_amount').prop('checked', false);
+            }
+            if(parseInt(amount) < 50000){
+                $('#amount').focus();
+                $('#amount').css('border', '1px solid red');
+                $('#button-submit').attr('disabled', 'disabled');
+                $('#alert-amount-check').text('Số tiền tối thiểu là 50.000 VND');
+                return;
+            }else{
+                $('#amount').css('border', '1px solid transparent');
+                $('#button-submit').removeAttr('disabled');
+                $('#alert-amount-check').text('');
+            }
+        });
+        $('#all_amount').on('click', function(){
+            $('#amount').val(0);
         });
     </script>
 @endsection

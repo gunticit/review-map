@@ -10,7 +10,9 @@ use App\Models\Mission;
 use App\Models\Project;
 use App\Models\ProjectImage;
 use App\Services\MissionService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MissionController extends Controller
 {
@@ -26,21 +28,26 @@ class MissionController extends Controller
     public function index(Request $request)
     {
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
             $user_id = auth()->user()->id;
-            $project = Project::join('missions', 'projects.id', '=', 'missions.project_id')->where('missions.user_id', $user_id)->where('missions.status', 2)->select('projects.*')->first();
+            $project = Project::join('missions', 'projects.id', '=', 'missions.project_id')
+            ->leftJoin('comments', 'comments.id', '=', 'missions.comment_id')
+            ->where('missions.user_id', $user_id)->where('missions.status', 2)->select(
+                'projects.*',
+                'comments.comment'
+            )->first();
             $mission = [];
             if(empty($project)) {
-                [$project, $mission] = $this->getProjectConditions($user_id);
+                list($project, $mission) = $this->getProjectConditions($user_id);
             }
-            \DB::commit();
+            DB::commit();
             $data = array();
             $data['project'] = $project;
             $data['user_id'] = $user_id;
             $data['mission'] = $mission;
             return view('pages.partner.mission.index', $data);
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
             throw $e;
         }
 
@@ -51,13 +58,16 @@ class MissionController extends Controller
         $projectResult = [];
         $projects = Project::where('status', Project::WORKING_PROJECT)->get();
         $projects = $projects->shuffle();
+        // Đếm số lần tạo mission
+        $countMissionCreated = 0;
         foreach($projects as $project) {
-            // Đếm nhiệm vụ của project đang thực hiện và đã hoàn thành
+            // Đếm nhiệm vụ của project đang thực hiện và đã hoàn thành trong ngày
+            $countMissionToDay = Mission::where('project_id', $project->id)->whereDate('created_at', Carbon::today())->whereIn('status', [1, 2])->count();
             $countMission = Mission::where('project_id', $project->id)->whereIn('status', [1, 2])->count();
             $conditionPackage = true;
             $conditionSlow = true;
-            // check tổng nhiệm vụ không được lớn hơn rãi chậm
-            if($project->is_slow === true && $countMission > $project->point_slow) {
+            // check tổng nhiệm vụ không được lớn hơn rãi chậm trong ngày
+            if($project->is_slow === true && $countMissionToDay > $project->point_slow) {
                 $conditionSlow = false;
             }
             // check tổng nhiệm vụ không được lớn hơn gói dự án đăng ký
@@ -90,19 +100,22 @@ class MissionController extends Controller
             } 
             // create mission
             $comment = $this->randomComment($project->id);
-            $mission = Mission::create([
-                'user_id' => $user_id,
-                'project_id' => $project->id,
-                'status' => 2,
-                'comment_id' => $comment->id,
-                'price' => getPriceFromPackage($project->package),
-                'latitude' => $project->latitude,
-                'longitude' => $project->longitude,
-                'image_id' => $project->has_images ? $this->randomImage($project->id) : null
-            ]);
-            // Cập nhật comment đã sử dụng
-            Comment::where('id', $comment->id)->update(['is_used' => 1]);
-            $projectResult = $project;
+            if($countMissionCreated == 0) {
+                $mission = Mission::create([
+                    'user_id' => $user_id,
+                    'project_id' => $project->id,
+                    'status' => 2,
+                    'comment_id' => $comment->id,
+                    'price' => getPriceFromPackage($project->package),
+                    'latitude' => $project->latitude,
+                    'longitude' => $project->longitude,
+                    'image_id' => $project->has_images ? $this->randomImage($project->id) : null
+                ]);
+                Comment::where('id', $comment->id)->update(['is_used' => 1]);
+                // Cập nhật comment đã sử dụng
+                $countMissionCreated = 1;
+                $projectResult = $project;
+            }
         }
         return [$projectResult, $mission];
     }

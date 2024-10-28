@@ -9,7 +9,7 @@
                     <div class="col-xl-6 col-md-12 col-12">
                         <div class="login-wrap">
                             <div class="logo">
-                                <a href="#">
+                                <a href="javascript:void(0);">
                                     <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="login">
                                 </a>
                             </div>
@@ -61,7 +61,7 @@
                                 <div class="login-other">
                                     <span>{{ __('auth.login_with') }}</span>
                                 </div>
-                                <a href="#" class="btn btn-outline-secondary login-with-google">
+                                <a href="javascript:void(0);" class="btn btn-outline-secondary login-with-google">
                                     <img src="{{ asset('./assets/img/google-logo.svg') }}" alt="google"> Google </a>
                                 <div class="login-link-acount">
                                     <span>{{ __('auth.already_have_account') }} </span>
@@ -73,16 +73,16 @@
                                 <nav class="navbar navbar-expand">
                                     <ul class="navbar-nav">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#">Điều khoản & Điều kiện</a>
+                                            <a class="nav-link" href="javascript:void(0);">Điều khoản & Điều kiện</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#">Chính sách bảo mật</a>
+                                            <a class="nav-link" href="javascript:void(0);">Chính sách bảo mật</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#">Trợ giúp</a>
+                                            <a class="nav-link" href="javascript:void(0);">Trợ giúp</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> English </a>
+                                            <a class="nav-link dropdown-toggle" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-expanded="false"> English </a>
                                             <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item" href="{!! route('user.language', ['en']) !!}">English</a>

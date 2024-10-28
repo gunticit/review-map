@@ -54,7 +54,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="#">Thông báo đối tác</a>
+                        <a href="javascript:void(0);">Thông báo đối tác</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">Tạo thông báo</li>
                 </ol>

@@ -85,10 +85,10 @@
                                 <th class="list-table-title" scope="col">Tên dự án</th>
                                 <th class="list-table-link-map" scope="col">URL Google Map</th>
                                 <th class="list-table-progree" scope="col">
-                                    <a href="#" class="sort">Trạng thái</a>
+                                    <a href="javascript:void(0);" class="sort">Trạng thái</a>
                                 </th>
                                 <th class="list-table-status" scope="col">
-                                    <a href="#" class="sort">Thao tác </a>
+                                    <a href="javascript:void(0);" class="sort">Thao tác </a>
                                 </th>
                             </tr>
                         </thead>

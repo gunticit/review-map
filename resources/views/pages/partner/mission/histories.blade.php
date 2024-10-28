@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-2 col-md-3 col-12 mb-4 mb-md-0">
-                <a class="btn btn-primary btn-full" href="#" id="btn-get-mission2" data-bs-target="#missionModal">Nhận nhiệm vụ</a>
+                <a class="btn btn-primary btn-full" href="javascript:void(0);" id="btn-get-mission2" data-bs-target="#missionModal">Nhận nhiệm vụ</a>
             </div>
             <div class="col-xl-10 col-md-9 col-12 mb-4 mb-md-0 ">
                 <!-- class: bg-warning, bg-success, bg-danger  -->
@@ -87,7 +87,7 @@
                                     <span class="btn btn-primary">{{ statusMission($mission->status) }}</span>
                                 </td>
                                 <td class="list-table-profit">
-                                    <span class="text-warning">{{ $mission->price }} VND</span>
+                                    <span class="text-warning">{{ formatCurrency($mission->price) }}</span>
                                 </td>
                                 <td class="list-table-note">
                                     @if(in_array($mission->status,$status_alert))
@@ -186,7 +186,6 @@
     });
 </script>
 <!-- Recaptcha -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script type="text/javascript">
     var onloadCallback = function() {
       alert("grecaptcha is ready!");

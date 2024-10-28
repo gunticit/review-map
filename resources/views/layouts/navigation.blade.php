@@ -203,7 +203,7 @@
                 <img class="img-fluid" src="{{ asset('./assets/img/profile-1.png') }}" />
             </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
-                <a class="dropdown-item text-primary" href="#">
+                <a class="dropdown-item text-primary" href="javascript:void(0);">
                     <div class="dropdown-item-icon">
                         <span class="material-symbols-outlined">id_card</span>
                     </div> {{ Auth::user()->name }}
@@ -213,7 +213,7 @@
                         <span class="material-symbols-outlined">manage_accounts</span>
                     </div> Tài khoản
                 </a>
-                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#change-password-form">
+                <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change-password-form">
                     <div class="dropdown-item-icon">
                         <span class="material-symbols-outlined">key</span>
                     </div> Đổi mật khẩu

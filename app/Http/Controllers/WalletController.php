@@ -110,6 +110,7 @@ class WalletController extends Controller
     public function storeTransactionHistory(Request $request)
     {
         try {
+            DB::beginTransaction();
             $validator = Validator::make($request->all(), [
                 'amount' => 'required|numeric',
                 'payment_method_id' => 'required',
@@ -121,22 +122,27 @@ class WalletController extends Controller
 
             $data = $validator->validated();
 
-            DB::beginTransaction();
-            $wallet = Wallet::where('user_id', Auth::user()->id)->first();
+            $wallet = $this->walletService->checkWalletUser();
             if ($wallet->balance < $data['amount']) {
                 return redirect()->back()->with('error', 'Số dư không đủ');
             }
-
-            $wallet->balance -= $data['amount'];
+            if($data['amount'] < 0){
+                return redirect()->back()->with('error', 'Vui lòng nhập số tiền >= 50.000 VND');
+            }
+            if(!empty($request->all_amount)){
+                $wallet->balance = 0;
+            }else{
+                $wallet->balance -= $data['amount'];
+            }
             $wallet->save();
 
             $transactionHistory = TransactionHistory::create([
                 'wallet_id' => $wallet->id,
                 'type' => 'withdraw',
                 'amount' => $data['amount'],
-                'status' => 'completed',
+                'status' => 'pending',
                 'payment_method_id' => $data['payment_method_id'],
-                'reference_id' => uniqid('TRX-'),
+                'reference_id' => uniqid('WITHDRAW_'),
                 'created_by' => Auth::user()->id,
             ]);
 
@@ -149,15 +155,6 @@ class WalletController extends Controller
             return redirect()->back()->with('error', 'Rút tiền thất bại');
         } catch (\Throwable $th) {
             DB::rollBack();
-            TransactionHistory::create([
-                'wallet_id' => $wallet->id,
-                'type' => 'withdraw',
-                'amount' => $data['amount'],
-                'status' => 'failed',
-                'payment_method_id' => $data['payment_method_id'],
-                'reference_id' => uniqid('TRX-'),
-                'created_by' => Auth::user()->id,
-            ]);
             return redirect()->back()->with('error', $th->getMessage());
         }
 

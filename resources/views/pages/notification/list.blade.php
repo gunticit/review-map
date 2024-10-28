@@ -40,7 +40,7 @@
                             </a>
                         </td>
                         <td class="list-table-time">
-                            <a href="#">{{ $notification->created_at->format('d/m/Y') }} <span>{{
+                            <a href="javascript:void(0);">{{ $notification->created_at->format('d/m/Y') }} <span>{{
                                     $notification->created_at->format('H:i') }}</span></a>
                         </td>
                     </tr>

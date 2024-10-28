@@ -93,7 +93,7 @@
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td class="list-table-title">
-                            <a href="#">{{ $support->title }}</a>
+                            <a href="javascript:void(0);">{{ $support->title }}</a>
                         </td>
                         <td class="list-table-department">{{ $support->department->name }}</td>
                         <td class="list-table-code">{{ $support->support_code }}</td>

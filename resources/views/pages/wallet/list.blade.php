@@ -89,12 +89,21 @@
                             <p>Số dư của tôi</p>
                             <h3 class="wallet-number text-primary">{{ formatCurrency($balance) }}</h3>
                             {{-- <div class="wallet-btn d-flex justify-content-around align-items-center  ">
-                                <a class="btn btn-warning" href="#"><span
+                                <a class="btn btn-warning" href="javascript:void(0);"><span
                                         class="material-symbols-outlined">add_card</span> Nạp thêm </a>
-                                <a class="btn btn-light" href="#"><span
+                                <a class="btn btn-light" href="javascript:void(0);"><span
                                         class="material-symbols-outlined">restart_alt</span> Làm mới </a>
                             </div> --}}
                         </div>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form action="{{ route('wallet.setup') }}" id="form-setup-wallet" method="post">
                             {{ csrf_field() }}
                             <div class="mb-4 payment">
@@ -167,16 +176,14 @@
                 let depositAmount = $('input[name="depositAmount"]:checked').val();
                 if(depositAmount == 'other'){
                     let depositAmountCustom = $('input[name="depositAmountCustom"]').val();
-                    if(parseInt(depositAmountCustom) == 0){
-                        $('#depositAmountCustom').focus();
-                        $('#depositAmountCustom').css('border', '1px solid red');
-                        return;
-                    }
                     if(parseInt(depositAmountCustom) < 50000){
                         $('#depositAmountCustom').focus();
                         $('#depositAmountCustom').css('border', '1px solid red');
                         $('#alert-amount-check').text('Số tiền tối thiểu là 50.000 VND');
                         return;
+                    }else{
+                        $('#depositAmountCustom').css('border', '1px solid transparent');
+                        $('#alert-amount-check').text('');
                     }
                 }
                 $('#form-setup-wallet').submit();

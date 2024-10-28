@@ -70,29 +70,28 @@
                     <tbody>
                             @foreach($products as $product)
                             <tr>
-                                <th class="list-table-product-name" scope="col">{{ $product->id }}</th>
-                                <th class="list-table-product-code" scope="col">
+                                <td class="list-table-product-name" scope="col">{{ $product->id }}</td>
+                                <td class="list-table-product-code" scope="col">
                                    
-                                </th>
-                                <th class="list-table-product-code" scope="col">
+                                </td>
+                                <td class="list-table-product-code" scope="col">
                                    {{ $product->name }}
-                                </th>
-                                <th class="list-table-product-code" scope="col">
+                                </td>
+                                <td class="list-table-product-code" scope="col">
                                    {{ $product->product_code }}
-                                </th>
-                                <th class="list-table-image" scope="col">   
+                                </td>
+                                <td class="list-table-image" scope="col">   
                                     <img src="{{ asset($product->image) }}" alt="image" width="100px">
-                                </th>
-                                <th class="list-table-product">
+                                </td>
+                                <td class="list-table-product">
                                     
-                                </th>
-                                <th class="list-table-price">
+                                </td>
+                                <td class="list-table-price">
                                     {!! $product->price ? formatVND($product->price) : '' !!}
-                                </th>
-                                <th class="list-table-handle">
+                                </td>
+                                <td class="list-table-handle">
                                     {{$product->id}}
-                                    
-                                </th>
+                                </td>
                             </tr>
                             @endforeach
                     </tbody>

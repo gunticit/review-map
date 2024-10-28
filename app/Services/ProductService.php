@@ -47,12 +47,12 @@ class ProductService {
         $product = $this->filterData($request);
         $data = $this->productRepository->create($product);
         if($data) {
+            $imagePath = null;
             if ($request->hasFile('image')) {
-                $photo = Helper::uploadFile($request->file('image'), 'uploads/products/'.date('Y-m').'/'.$request->product_code);
-                $photo = $photo['hash_name'];
+                $imagePath = $request->file('image')->store('images/product', 'public');
                 $this->productImageRepository->create([
                     'product_id' => $data->id,
-                    'link_image' => $photo
+                    'link_image' => $imagePath
                 ]);
             }
             return $data;
@@ -82,11 +82,11 @@ class ProductService {
             'name' => $data['name'] ?? null,
             'category_id' => $data['category_id'] ?? null,
             'slug' => slugify($data['name']) ?? null,
-            'price' => $data['price'] ?? null,
+            'price' => $data['price'] ?? 0,
             'description' => $data['description'] ?? null,
             'product_code' => $data['product_code'] ?? null,
             'sku' => $data['sku'] ?? null,
-            'stock' => $data['stock'] ?? null,
+            'stock' => $data['stock'] ?? 0,
             'keyword' => $data['keyword'] ?? $data['name']
         );
     }

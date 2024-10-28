@@ -127,7 +127,7 @@ class OrderController extends Controller
                 'type' => 'withdraw',
                 'payment_method_id' => 1,
                 'status' => 'completed',
-                'reference_id' => uniqid('TRX-'),
+                'reference_id' => uniqid('WITHDRAW_'),
             ]);
 
             DB::commit();

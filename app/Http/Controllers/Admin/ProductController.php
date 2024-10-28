@@ -41,7 +41,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // try{
+        try{
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'category_id' => 'nullable|exists:categories,id',
@@ -54,9 +54,9 @@ class ProductController extends Controller
             }
             $check = $this->productService->create($request);
             return redirect()->route('product.index')->with('success', 'Thêm Danh mục thành công');
-        // }catch(\Exception $e){
-        //     return redirect()->back()->with('error', $e->getMessage());
-        // }
+        }catch(\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**

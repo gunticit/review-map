@@ -79,11 +79,11 @@
                                 </td>
                                 <td class="list-table-creater" scope="col">
                                     {{
-                                        optional($category->created_by)->name
+                                        $category->created_by
                                     }}
                                 </td>
                                 <td class="list-table-progree" scope="col">
-                                    {{ $category->active }}
+                                    {{ $category->active ? 'Hoạt động' : 'Không hoạt động' }}
                                 </td>
                                 <td class="list-table-time" scope="col">
                                     {{ date('d/m/Y', strtotime($category->created_at)) }}

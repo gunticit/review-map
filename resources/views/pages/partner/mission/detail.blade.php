@@ -1,6 +1,28 @@
 @extends('layouts.app')
 @section('content')
+<script>
 
+$(document).ready(function(){
+    $('body .btn-copy').click(function(){
+        var textareaContent = $(this).closest('section').find('.textarea-copy').val();
+        var tempTextarea = $('<textarea>');
+        $('body').append(tempTextarea);
+        tempTextarea.val(textareaContent).select();
+        document.execCommand('copy');
+        tempTextarea.remove();
+        showAlert('success','Đã sao chép nội dung!');
+    });
+    $('body .btn-download-img').click(function(){
+        var imageUrl = $('.download-img').attr('src');
+        var a = $('<a>')
+            .attr('href', imageUrl)
+            .attr('download', 'downloaded_image.png'); 
+        $('body').append(a);
+        a[0].click();
+        a.remove();
+    });
+})
+</script>
 <section class="section nhan-nhiem-vu-step mb-5 mt-5">
     <div class="container-fluid">
         <div class="col-inner text-center">
@@ -16,7 +38,7 @@
                         @if(isset($mission->images->image_url))
                         <img src="{{ url($mission->images->image_url) }}" alt="{{ $mission->project->name }}" class="download-img">
                         @endif
-                        <a class="btn btn-outline-primary btn-download-img" href="#">
+                        <a class="btn btn-outline-primary btn-download-img" href="javascript:void(0);">
                             <span class="material-symbols-outlined">download</span>
                             Tải hình ảnh
                         </a>
@@ -25,12 +47,12 @@
                         {{ $mission->comments->comment }}
                     </textarea>
                     <div class="text-right ">
-                        <a class="btn btn-outline-primary btn-copy" href="#">
+                        <a class="btn btn-outline-primary btn-copy" href="javascript:void(0);">
                             <span class="material-symbols-outlined">content_copy</span>
                             Copy nội dung
                         </a>
                         @if(isset($mission->images->image_url))
-                        <a class="btn btn-outline-primary ms-3 btn-download-img" href="#">
+                        <a class="btn btn-outline-primary ms-3 btn-download-img" href="javascript:void(0);">
                             <span class="material-symbols-outlined">download</span>
                             Tải hình ảnh
                         </a>
@@ -50,7 +72,7 @@
 <script src="{{ asset('assets/js/jquery.steps.min.js') }}"></script>
 <script>
     // Jquery
-    jQuery(document).ready(function($){
+    $(document).ready(function($){
         $(".section-step").steps({
             headerTag: "h3",
             bodyTag: "section",
@@ -70,50 +92,7 @@
                 window.location.href = "{{ route('mission.confirm', ['id' => ':id']) }}".replace(':id', {{$mission->id}});
             }
         });
-
-
-        $('.btn-copy').click(function(){
-            var textareaContent = $(this).parents('section').find('.textarea-copy').val();
-            var tempTextarea = $('<textarea>');
-            $('body').append(tempTextarea);
-            tempTextarea.val(textareaContent).select();
-            document.execCommand('copy');
-            tempTextarea.remove();
-        });
-        $('.btn-download-img').click(function(){
-            var imageUrl = $('.download-img').attr('src');
-            var a = $('<a>')
-                .attr('href', imageUrl)
-                .attr('download', 'downloaded_image.png'); 
-            $('body').append(a);
-            a[0].click();
-            a.remove();
-        });
     });
-</script>
-<script>
-    $(document).ready(function($){
-        $('.btn-copy').click(function(){
-            var textareaContent = $(this).parents('section').find('.textarea-copy').val();
-            var tempTextarea = $('<textarea>');
-            $('body').append(tempTextarea);
-            tempTextarea.val(textareaContent).select();
-            document.execCommand('copy');
-            tempTextarea.remove();
-        });
-
-        $('.btn-download-img').click(function(){
-            var imageUrl = $('.download-img').attr('src');
-            var a = $('<a>')
-                .attr('href', imageUrl)
-                .attr('download', 'downloaded_image.png');
-            $('body').append(a);
-            a[0].click();
-            a.remove();
-        });
-
-    });
-
 </script>
 
 <style>

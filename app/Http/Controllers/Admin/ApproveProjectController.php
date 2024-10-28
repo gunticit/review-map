@@ -12,7 +12,9 @@ class ApproveProjectController extends Controller
 {
     public function index(){
         $data = array();
-        $projects = Project::all();
+        $projects = Project::leftJoin('comments', 'projects.id', '=', 'comments.project_id')
+        ->leftjoin('missions', 'comments.id', '=', 'missions.comment_id')
+        ->get();
         $now = Carbon::now();
         if(!empty($projects)){
             foreach($projects as $project){

@@ -55,10 +55,10 @@
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td class="list-table-title">
-                            <a href="#">{{ $support->title }}</a>
+                            <a href="javascript:void(0);">{{ $support->title }}</a>
                         </td>
                         <td class="list-table-sku">
-                            <a href="#">{{ $support->title }}</a>
+                            <a href="javascript:void(0);">{{ $support->title }}</a>
                         </td>
                         <td class="list-table-time">
                             {!! date('d/m/Y', strtotime($support->created_at)) !!} <span>{!! date('hh:mm', strtotime($support->created_at)) !!}</span>

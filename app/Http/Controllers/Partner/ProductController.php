@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -10,9 +12,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.partner.store.product');
+        $categories = Category::all();
+        $products = Product::where('active', 1);
+        if(isset($request->category_id)){
+            $products = $products->where('category_id', $request->category_id);
+        }
+        $products = $products->get();
+        return view('pages.partner.store.product',[
+            'categories' => $categories,
+            'products' => $products
+        ]);
     }
 
     /**

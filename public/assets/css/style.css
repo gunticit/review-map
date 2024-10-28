@@ -4572,7 +4572,7 @@ table.bt .list-table-title a {
   display: none;
 }
 .nhan-nhiem-vu-step .hoan-thanh-img {
-  max-width: 922px;
+  max-width: 80%;
 }
 .nhan-nhiem-vu-step .content #hoan-thanh {
   max-width: 500px;

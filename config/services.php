@@ -36,8 +36,12 @@ return [
     ],
 
     'recaptcha_v3' => [
-        'siteKey' => env('RECAPTCHA_V3_SITE_KEY'),
-        'secretKey' => env('RECAPTCHA_V3_SECRET_KEY'),
+        'siteKey' => env('RECAPTCHA_SITE_KEY'),
+        'secretKey' => env('RECAPTCHA_SECRET'),
+    ],
+    'recaptcha_v2' => [
+        'siteKey' => env('RECAPTCHA_SITE_KEY'),
+        'secretKey' => env('RECAPTCHA_SECRET'),
     ],
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),

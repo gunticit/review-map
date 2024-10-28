@@ -22,18 +22,18 @@
                     <table class="table list-table">
                         <thead>
                             <tr>
-                                <th style="min-width:55px" scope="col"><a href="#" class="sort">STT</a></th>
-                                <th style="min-width:135px" cope="col"><a href="#" class="sort">Mã đối tác</a></th>
-                                <th style="min-width:200px" scope="col"><a href="#" class="sort">Tên đối tác</a></th>
-                                <th style="min-width:200px"><a href="#" class="sort">Email</a></th>
-                                <th style="min-width:200px"><a href="#" class="sort">Số điện thoại</a></th>
-                                <th style="min-width:250px"><a href="#" class="sort">Nhiệm vụ hoàn thành</a></th>
-                                <th style="min-width:180px"><a href="#" class="sort">Số tiền đã rút</a></th>
+                                <th style="min-width:55px" scope="col"><a href="javascript:void(0);" class="sort">STT</a></th>
+                                <th style="min-width:135px" cope="col"><a href="javascript:void(0);" class="sort">Mã đối tác</a></th>
+                                <th style="min-width:200px" scope="col"><a href="javascript:void(0);" class="sort">Tên đối tác</a></th>
+                                <th style="min-width:200px"><a href="javascript:void(0);" class="sort">Email</a></th>
+                                <th style="min-width:200px"><a href="javascript:void(0);" class="sort">Số điện thoại</a></th>
+                                <th style="min-width:250px"><a href="javascript:void(0);" class="sort">Nhiệm vụ hoàn thành</a></th>
+                                <th style="min-width:180px"><a href="javascript:void(0);" class="sort">Số tiền đã rút</a></th>
                                 <th style="min-width:180px" scope="col">
-                                    <a href="#" class="sort">Trạng thái</a>
+                                    <a href="javascript:void(0);" class="sort">Trạng thái</a>
                                 </th>
                                 <th class="list-table-status" scope="col">
-                                    <a href="#" class="sort">Thao tác </a>
+                                    <a href="javascript:void(0);" class="sort">Thao tác </a>
                                 </th>
                             </tr>
                         </thead>
