@@ -59,7 +59,7 @@ class MissionController extends Controller
         $projects = Project::where('status', Project::WORKING_PROJECT)->get();
         $projects = $projects->shuffle();
         // Đếm số lần tạo mission
-        $countMissionCreated = 0;
+        $projects = $projects->take(1)->all();
         foreach($projects as $project) {
             // Đếm nhiệm vụ của project đang thực hiện và đã hoàn thành trong ngày
             $countMissionToDay = Mission::where('project_id', $project->id)->whereDate('created_at', Carbon::today())->whereIn('status', [1, 2])->count();
@@ -100,22 +100,19 @@ class MissionController extends Controller
             } 
             // create mission
             $comment = $this->randomComment($project->id);
-            if($countMissionCreated == 0) {
-                $mission = Mission::create([
-                    'user_id' => $user_id,
-                    'project_id' => $project->id,
-                    'status' => 2,
-                    'comment_id' => $comment->id,
-                    'price' => getPriceFromPackage($project->package),
-                    'latitude' => $project->latitude,
-                    'longitude' => $project->longitude,
-                    'image_id' => $project->has_images ? $this->randomImage($project->id) : null
-                ]);
-                Comment::where('id', $comment->id)->update(['is_used' => 1]);
-                // Cập nhật comment đã sử dụng
-                $countMissionCreated = 1;
-                $projectResult = $project;
-            }
+            $mission = Mission::create([
+                'user_id' => $user_id,
+                'project_id' => $project->id,
+                'status' => 2,
+                'comment_id' => $comment->id,
+                'price' => getPriceFromPackage($project->package),
+                'latitude' => $project->latitude,
+                'longitude' => $project->longitude,
+                'image_id' => $project->has_images ? $this->randomImage($project->id) : null
+            ]);
+            Comment::where('id', $comment->id)->update(['is_used' => 1]);
+            // Cập nhật comment đã sử dụng
+            $projectResult = $project;
         }
         return [$projectResult, $mission];
     }

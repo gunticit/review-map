@@ -17,6 +17,7 @@ class UserTableSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'telephone' => '0909123123',
             'password' => bcrypt('123123123123'),
+            'department_id' => 1
         ];
         $userAdmin = User::create($admin);
         $userAdmin->assignRole([Role::ADMIN_ROLE]);

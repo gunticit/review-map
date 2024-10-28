@@ -69,11 +69,8 @@
     const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
       cluster: 'ap1'
     });
-    const role = '{{ Auth::user()->getRoleNames()->first() }}';
     const channelName = 'send-message';
-    const departmentId = '{{ Auth::user()->department_id }}';
     const userId = '{{ Auth::user()->id }}';
-    const typeEvent = role === 'admin' ? 'department-' + departmentId : role + '-' + userId;
     const channel = pusher.subscribe(channelName);
     const eventName = 'event-notification-user-' + userId;
     channel.bind(eventName, function(data) {
@@ -104,37 +101,6 @@
         $('.dropdown-notifications-count').css('display', 'block');
     });
 
-
-    const channelName1 = 'send-notification';
-    const channel1 = pusher.subscribe(channelName1);
-    const eventName1 = 'event-notification-' + role;
-    channel1.bind(eventName1, function(data) {
-        if(data) {
-            $('#no-notification').css('display', 'none');
-        }
-        const newNotificationHtml = `
-            <li>
-                <a class="dropdown-item dropdown-notifications-item ${data.data.read_at ? '' : 'active'}" href="javascript:void(0);">
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-title">${data.data.title}</div>
-                        <div class="dropdown-notifications-item-content-text">${data.data.content}</div>
-                        <div class="dropdown-notifications-item-content-details">
-                            ${new Date(data.data.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })} - 
-                            ${new Date(data.data.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
-                        </div>
-                    </div>
-                </a>
-            </li>
-        `;
-        let notificationCount = $('.dropdown-notifications-count').text();
-        // Nếu chưa có thông báo nào thì sô thông báo chưa đọc = 0
-        if (notificationCount === '') {
-            notificationCount = 0;
-        }
-        $('.list-notifications').prepend(newNotificationHtml);
-        $('.dropdown-notifications-count').text(parseInt(notificationCount) + 1);
-        $('.dropdown-notifications-count').css('display', 'block');
-    });
 </script>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Navbar Brand-->

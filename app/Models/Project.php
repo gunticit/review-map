@@ -34,4 +34,8 @@ class Project extends Model
     public function missions(){
         return $this->hasMany(Mission::class, 'project_id', 'id');
     }
+
+    public function missionsCompleted(){
+        return $this->hasMany(Mission::class, 'project_id', 'id')->where('missions.status', 1);
+    }
 }
