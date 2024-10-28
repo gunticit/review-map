@@ -20,12 +20,10 @@
                                             <ul>
                                                 @foreach ($projects as $project)
                                                     <li onclick="showProject({{ $project['id'] }})">
-                                                        <div href="#"
+                                                        <div href="javascript:void(0);"
                                                             class="project-id-{{ $project['id'] }} list-group-item list-group-item-action active {{ $project['status'] == 2 ? 'approve' : '' }}"
                                                             aria-current="true">
                                                             <div class="d-flex w-100 justify-content-between">
-                                                                <a href="{{ route('project.edit', ['id' => $project['id']]) }}"
-                                                                    class="text-title">R{{ $project['id'] }}</a>
                                                                 <h5 class="mb-1">{{ $project['name'] }}</h5>
                                                                 <small>{{ $project['created_at'] }}</small>
                                                             </div>
@@ -125,12 +123,12 @@
             $('body').append(`
         <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                <button style="background: transparent; border: none; outline: none; color: #fff; position: absolute; top: 10px; right: 10px" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span class="material-symbols-outlined">
-                        close
-                    </span>
-                </button>
                 <div class="modal-content">
+                    <button style="background: transparent; z-index: 10; border: none; outline: none; color: #6f6e6e; position: absolute; top: 10px; right: 10px;width: 35px;padding: 0;border-radius: 50%;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="material-symbols-outlined">
+                            close
+                        </span>
+                    </button>
                     <div class="modal-body">
                         <iframe src="https://www.google.com/maps/place/?q=place_id:${place_id}" width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                     </div>
@@ -223,14 +221,17 @@
         }
 
         #list-project .list-group-item.approve {
-            background-color: #43c05e;
-            color: #fef279;
+            color: #3e3e3e;
+            font-weight: normal;
+            font-size: 16px;
         }
 
         #list-project .list-group-item.approve h5 {
-            color: #fef279;
+            color: #3e3e3e;
         }
-
+        #list-project.text-description{
+            font-size: 14px;
+        }
         .text-description,
         .text-keyword {
             overflow: hidden;
