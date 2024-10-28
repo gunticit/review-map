@@ -51,6 +51,7 @@ class MissionController extends Controller
         $projectResult = [];
         $projects = Project::where('status', Project::WORKING_PROJECT)->get();
         $projects = $projects->shuffle();
+        $projects = $projects->take(1)->all();
         foreach($projects as $project) {
             // Đếm nhiệm vụ của project đang thực hiện và đã hoàn thành
             $countMission = Mission::where('project_id', $project->id)->whereIn('status', [1, 2])->count();
