@@ -39,8 +39,8 @@ Route::group([
     //Support
     Route::get('/support', [SupportController::class, 'index'])->name('customer.support');
     Route::post('/support-store', [SupportController::class, 'store'])->name('customer.support.store');
-    Route::get('/support-edit/{id}', [SupportController::class, 'edit'])->name('customer.upport.edit');
-    Route::put('/support-update/{id}', [SupportController::class, 'update'])->name('customer.support.update');
+    Route::post('/support-reply/{id}', [SupportController::class, 'reply'])->name('customer.support.reply');
+    Route::get('/support-detail/{id}', [SupportController::class, 'edit'])->name('customer.support.edit');
     Route::delete('/support-delete/{id}', [SupportController::class, 'delete'])->name('customer.support.delete');
     Route::delete('/support-delete-by-ids/{ids}', [SupportController::class, 'deleteByIds'])->name('customer.support.delete.by.ids');
     Route::get('/support-create', [SupportController::class, 'create'])->name('customer.support.create');

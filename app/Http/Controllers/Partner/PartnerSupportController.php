@@ -18,6 +18,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
+use App\Models\Support;
 
 class PartnerSupportController extends Controller
 {
@@ -40,8 +41,13 @@ class PartnerSupportController extends Controller
             'heading_title' => 'Yêu cầu hỗ trợ'
         ]);
     }
-    public function edit(){
-        return view('pages.partner.support.edit');
+    public function edit($id){
+        $data = Support::where('id', $id)->with('user')->firstOrFail();
+        $reply = Support::where('reply_id', $id)->with('user')->orderBy('created_at', 'asc')->get();
+        return view('pages.partner.support.detail', [
+            'support' => $data,
+            'replies' => $reply
+        ]);
     }
 
     public function detail(){
@@ -91,4 +97,40 @@ class PartnerSupportController extends Controller
             return redirect()->back()->withInput();
         }
     }
+
+    public function reply(Request $request, $id)
+    {
+        try{
+            DB::beginTransaction();
+            $support = Support::find($id);
+            $request = $request->merge(
+                [
+                    'reply_id' => $id,
+                    'title' => $support->title,
+                    'support_code' => $support->support_code
+            ]);
+            $data = $this->supportService->create($request);
+            $userIds = User::where('department_id', $support->department_id)->get()->pluck('id')->toArray();
+            $dataNotification = [];
+            foreach($userIds as $userId) {
+                $dataNotification = [
+                    'user_id' => $userId,
+                    'title' => $data->title,
+                    'content' => $data->content,
+                    'support_id' => $data->id,
+                    'created_at' => $data->created_at
+                ];
+                $noti = Notification::create($dataNotification);
+                event(new NotificationAdminEvent($noti->toArray(), $userId));
+            }
+            DB::commit();
+            Session::flash('success', 'Khởi tạo yêu cầu hỗ trợ thành công');
+            return redirect()->back()->withInput();
+        }catch(Exception $e){
+            DB::rollBack();
+            Session::flash('error', 'Không thêm được yêu cầu hỗ trợ');
+            return redirect()->back()->withInput();
+        } 
+    }
 }
+

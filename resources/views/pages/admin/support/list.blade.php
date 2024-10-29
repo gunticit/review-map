@@ -54,11 +54,11 @@
                     </ol>
                 </nav>
             </div>
-            <div class="col-xl-2 col-md-8 col-12 text-right support__btn">
+            <!-- <div class="col-xl-2 col-md-8 col-12 text-right support__btn">
                 <a href="{{ route('partner.support.create') }}" class="btn btn-primary d-flex flex-wrap support__crate">
                     <span class="support__crate">+ Tạo yêu cầu</span>
                 </a>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>
@@ -93,7 +93,7 @@
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td class="list-table-title">
-                            <a href="{{URL::to('/')}}/partner/support-detail/{{ $support->id }}">{{ $support->title }}</a>
+                            <a href="{{URL::to('/')}}/admin/support-detail/{{ $support->id }}">{{ $support->title }}</a>
                         </td>
                         <td class="list-table-department">{{ $support->department->name }}</td>
                         <td class="list-table-code">{{ $support->support_code }}</td>

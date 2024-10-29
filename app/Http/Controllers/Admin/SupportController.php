@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Customer;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CustomerSupportRequest;
 use App\Http\Resources\SupportResource;
 use App\Models\Department;
 use App\Services\CategoryService;
@@ -14,12 +13,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Events\NotificationAdminEvent;
 use App\Models\Project;
-use App\Models\Role;
 use App\Models\User;
 use App\Models\Notification;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Support;
+use App\Http\Requests\AdminSupportRequest;
+
 
 class SupportController extends Controller
 {
@@ -34,18 +33,17 @@ class SupportController extends Controller
         $this->categoryService = $categoryService;
     }
     public function index(Request $request){
-        $supports =  $this->supportService->listCreateByUser($request);
+        $supports =  $this->supportService->listOfDepartment($request);
         $projects = $this->projectService->list($request);
         $data = SupportResource::collection($supports)->resource;
-        return view('pages.customer.support.list', [
+        return view('pages.admin.support.list', [
             'supports' => $data,
-            'projects' => $projects,
         ]);
     }
     public function edit($id){
         $data = Support::where('id', $id)->with('user')->firstOrFail();
         $reply = Support::where('reply_id', $id)->with('user')->orderBy('created_at', 'asc')->get();
-        return view('pages.customer.support.detail', [
+        return view('pages.admin.support.detail', [
             'support' => $data,
             'replies' => $reply
         ]);
@@ -62,47 +60,11 @@ class SupportController extends Controller
             'heading_title' => 'Tạo yêu cầu hỗ trợ'
         ]);
     }
-    public function store(CustomerSupportRequest $request){
-        try{
-            DB::beginTransaction();
-            $data = $this->supportService->create($request);
-            $userIds = User::where('department_id', $request->department_id)->get()->pluck('id')->toArray();
-            foreach($userIds as $userId) {
-                $dataNotification = [
-                    'user_id' => $userId,
-                    'title' => $data->title,
-                    'content' => $data->content,
-                    'support_id' => $data->id,
-                    'created_at' => $data->created_at
-                ];
-                $noti = Notification::create($dataNotification);
-                event(new NotificationAdminEvent($noti->toArray(), $userId));
-            }
-            DB::commit();
-            Session::flash('success', 'Khởi tạo yêu cầu hỗ trợ thành công');
-            return redirect()->back()->withInput();
-        }catch(Exception $e){
-            DB::rollBack();
-            Session::flash('error', 'Không thêm được yêu cầu hỗ trợ');
-            return redirect()->back()->withInput();
-        }
-    }
-    public function update(CustomerSupportRequest $request){
-        try{
-
-            Session::flash('success', 'Khởi tạo dự án thành công');
-            return redirect()->route('project.list');
-        }catch(Exception $e){
-            Session::flash('error', 'Không thêm được yêu cầu hỗ trợ');
-            return redirect()->back()->withInput();
-        }
-    }
-
-    public function reply(Request $request, $id)
-    {
+    public function store(AdminSupportRequest $request, $id){
         try{
             DB::beginTransaction();
             $support = Support::find($id);
+            $support->update(['status' => 3]);
             $request = $request->merge(
                 [
                     'reply_id' => $id,
@@ -110,19 +72,15 @@ class SupportController extends Controller
                     'support_code' => $support->support_code
             ]);
             $data = $this->supportService->create($request);
-            $userIds = User::where('department_id', $support->department_id)->get()->pluck('id')->toArray();
-            $dataNotification = [];
-            foreach($userIds as $userId) {
-                $dataNotification = [
-                    'user_id' => $userId,
-                    'title' => $data->title,
-                    'content' => $data->content,
-                    'support_id' => $data->id,
-                    'created_at' => $data->created_at
-                ];
-                $noti = Notification::create($dataNotification);
-                event(new NotificationAdminEvent($noti->toArray(), $userId));
-            }
+            $dataNotification = [
+                'user_id' => $support->created_by,
+                'title' => $data->title,
+                'content' => $data->content,
+                'support_id' => $data->id,
+                'created_at' => $data->created_at
+            ];
+            $noti = Notification::create($dataNotification);
+            event(new NotificationAdminEvent($noti->toArray(), $support->created_by));
             DB::commit();
             Session::flash('success', 'Khởi tạo yêu cầu hỗ trợ thành công');
             return redirect()->back()->withInput();
@@ -130,6 +88,6 @@ class SupportController extends Controller
             DB::rollBack();
             Session::flash('error', 'Không thêm được yêu cầu hỗ trợ');
             return redirect()->back()->withInput();
-        } 
+        }
     }
 }

@@ -36,7 +36,8 @@ Route::group([
     //Support
     Route::get('/support', [PartnerSupportController::class, 'index'])->name('partner.support');
     Route::post('/support-store', [PartnerSupportController::class, 'store'])->name('partner.support.store');
-    Route::get('/support-edit/{id}', [PartnerSupportController::class, 'edit'])->name('partner.support.edit');
+    Route::post('/support-reply/{id}', [PartnerSupportController::class, 'reply'])->name('partner.support.reply');
+    Route::get('/support-detail/{id}', [PartnerSupportController::class, 'edit'])->name('partner.support.edit');
     Route::put('/support-update/{id}', [PartnerSupportController::class, 'update'])->name('partner.support.update');
     Route::delete('/support-delete/{id}', [PartnerSupportController::class, 'delete'])->name('partner.support.delete');
     Route::delete('/support-delete-by-ids/{ids}', [PartnerSupportController::class, 'deleteByIds'])->name('partner.support.delete.by.ids');

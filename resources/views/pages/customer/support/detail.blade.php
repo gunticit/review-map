@@ -79,7 +79,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{{route('partner.support')}}">Yêu cầu hỗ trợ</a>
+                            <a href="{{route('customer.support')}}">Yêu cầu hỗ trợ</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Chi tiết hỗ trợ</li>
                     </ol>
@@ -136,7 +136,7 @@
             <!-- Reply Form -->
             <div class="row mt-4">
                 <div class="col-12">
-                    <form action="{{route('partner.support.reply', $support->id)}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{route('customer.support.reply', $support->id)}}" method="POST" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="mb-3">
                             <label for="reply-content" class="form-label">Nội dung</label>

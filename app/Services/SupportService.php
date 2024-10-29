@@ -35,13 +35,20 @@ class SupportService {
         return $data;
     }
 
+    public function listOfDepartment($request){
+        $request = $request->merge(['department_id' => Auth::user()->department_id]);
+        $supports = $this->supportRepository->listOfDepartment($request);
+        $data = SupportResource::collection($supports)->resource;
+        return $data;
+    }
+
     public function create($request){
         try{
             $data = $this->filterData($request);
             $file_path = $this->uploadImage($request);
             $data['filepath'] = implode('|', $file_path);
             $data['status'] = Support::INCOMPLETE_SUPPORT; // Đang xử lý
-            $data['support_code'] = Support::generateSupportCode();
+            $data['support_code'] = $data['support_code'] ?? Support::generateSupportCode();
             $data = $this->supportRepository->create($data);
             return $data;
         } catch (\Exception $e) {
@@ -80,7 +87,9 @@ class SupportService {
             'department_id' => $data['department_id'] ?? null,
             'project_id' => $data['project_id'] ?? null,
             'content' => $data['content'] ?? null,
-            'status' => $data['status'] ?? null
+            'reply_id' => $data['reply_id'] ?? null,
+            'status' => $data['status'] ?? null,
+            'support_code' => $data['support_code'] ?? null
         );
     }
 }

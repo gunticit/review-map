@@ -25,4 +25,11 @@ class Support extends Model
     public function department(){
         return $this->belongsTo(Department::class, 'department_id');
     }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function reply(){
+        return $this->hasMany(self::class, 'reply_id', 'id');
+    }
 }

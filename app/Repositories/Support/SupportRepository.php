@@ -46,4 +46,19 @@ class  SupportRepository extends BaseRepository implements SupportRepositoryInte
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
+    public function listOfDepartment($request) {
+        $query = $this->model->query();
+        $query = $query->where('department_id', $request->department_id);
+        $orderBy = $request->order_by ?? [];
+        if(!empty($orderBy)){
+            foreach ($orderBy as $column => $direction) {
+                $query->orderBy($column, $direction);
+            }
+        }
+        
+        $page = $request->page ?? 1;
+        $perPage = $request->per_page ?? 15;
+        $query = $query->with(['department', 'user']);
+        return $query->paginate($perPage, ['*'], 'page', $page);
+    }
 }

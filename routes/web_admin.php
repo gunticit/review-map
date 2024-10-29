@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Customer\SupportController;
+use App\Http\Controllers\Admin\SupportController;
 
 Route::group([
         'prefix' => '/admin',
@@ -66,5 +66,14 @@ Route::group([
         Route::post('/store-notificate-customer', [NotificateController::class, 'customer_store'])->name('store.notificate.customer');
         Route::put('/list-notificate-customer/{id}', [NotificateController::class, 'customer_edit'])->name('edit.notificate.customer');
         Route::delete('/delete-notificate-customer/{id}', [NotificateController::class, 'customer_delete'])->name('delete.notificate.customer');
+
+        //Support
+        Route::get('/support', [SupportController::class, 'index'])->name('admin.support');
+        Route::post('/support-store/{id}', [SupportController::class, 'store'])->name('admin.support.store');
+        Route::get('/support-detail/{id}', [SupportController::class, 'edit'])->name('admin.support.edit');
+        Route::put('/support-update/{id}', [SupportController::class, 'update'])->name('admin.support.update');
+        Route::delete('/support-delete/{id}', [SupportController::class, 'delete'])->name('admin.support.delete');
+        Route::delete('/support-delete-by-ids/{ids}', [SupportController::class, 'deleteByIds'])->name('admin.support.delete.by.ids');
+        Route::get('/support-create', [SupportController::class, 'create'])->name('admin.support.create');
     });
 });

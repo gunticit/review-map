@@ -5,4 +5,5 @@ interface SupportRepositoryInterface
 {
     public function list($request);
     public function listCreateByUser($request);
+    public function listOfDepartment($request);
 }
