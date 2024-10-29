@@ -46,8 +46,10 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
     Route::post('/wallet/setup', [App\Http\Controllers\WalletController::class, 'setupWalletAndDeposit'])->name('wallet.setup');
     Route::get('/edit-profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/edit-profile-partner', [App\Http\Controllers\ProfileController::class, 'editPartner'])->name('profile.partner.edit');
     Route::post('/update-profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/update-profile-company', [App\Http\Controllers\ProfileController::class, 'updateProfileCompany'])->name('profile.update.company');
+    Route::post('/update-profile-payment/{idPayment}', [App\Http\Controllers\ProfileController::class, 'updateAccountPayment'])->name('profile.partner.update.payment');
     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
     Route::get('/notification/{id}', [App\Http\Controllers\NotificationController::class, 'show'])->name('notification.show');
     Route::delete('/notification-delete/{id}', [App\Http\Controllers\NotificationController::class, 'ajaxDeleteNotification'])->name('notification.delete');
