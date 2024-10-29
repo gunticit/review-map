@@ -234,7 +234,8 @@
                 3 => 'Chờ hệ thống duyệt',
                 4 => 'Chờ nhân viên duyệt',
                 5 => 'Đã từ chối',
-                6 => 'Đã hết hạn'
+                6 => 'Đã hết hạn',
+                7 => 'Đã duyệt tự động'
             };
             return $status_label;
         }
