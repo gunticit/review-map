@@ -59,6 +59,10 @@
     #checkout-info li#discount-voucher{
         display: none;
     }
+    #keyword-comment{
+        font-weight: 500;
+        color: #ff3232;
+    }
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -106,19 +110,19 @@
                                 @if(!empty($projects))
                                     @foreach($projects as $key => $project)
                                         <tr>
-                                            <td class="list-table-stt" scope="col">{{ $key + 1 }}<input type="hidden" class="comment-id" value="{{ $project->id }}"></td>
+                                            <td class="list-table-stt" scope="col">{{ $project->id }}<input type="hidden" class="comment-id" value="{{ $project->id }}"></td>
                                             <td class="list-table-time" scope="col">RO-{{ $project->id }}</td>
                                             <td class="list-table-content" scope="col">
-                                                <div class="content-comment-{{ $project->id }}">{{ $project->comment }}
+                                                <div class="content-comment-{{ $project->id }}">{{ $project->comment ?? '' }}
                                                     <button type="button" class="btn btn-default render-comment-again p-0 bg-white ms-2">
                                                         <span class="material-symbols-outlined">
                                                             border_color
                                                         </span>
                                                     </button>
                                                 </div> 
-                                                <input type="text" class="text-comment d-none ip-comment-id-{{ $project->id }}" value="{{ $project->comment }}">
+                                                <input type="text" class="text-comment d-none ip-comment-id-{{ $project->id }}" value="{{ $project->comment ?? '' }}">
                                             </td>
-                                            <td class="list-table-content-3" scope="col">{{ $project_info->point_slow }}</td>
+                                            <td class="list-table-content-3" scope="col">{{ $project_info->point_slow ?? 0 }}</td>
                                             <td class="list-table-so-du" scope="col">
                                                 {!! $project_info->has_image?'Có':'Không' !!}
                                             </td>
@@ -254,7 +258,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <p class="text-center text-black">Nội dung được RIVI AI tự sinh ra dựa theo từ khóa: <span id="keyword-comment">"{{ $project->keyword_value ?? '' }}"</span></p>
+              <p class="text-center text-black">Nội dung được RIVI AI tự sinh ra dựa theo từ khóa: <span id="keyword-comment">"{{ $project->keyword ?? '' }}"</span></p>
               <div class="textarea-wrapper group-comment-text">
                 <textarea readonly id="comment-textarea" class="form-control" rows="5"></textarea>
                 <div class="loading-spinner"></div>
@@ -300,7 +304,8 @@
                     url: "{{ route('generate.comment.sample') }}",
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        keyword: "{{ $project->keyword_value ?? '' }}",
+                        keyword: "{{ $project->keyword ?? '' }}",
+                        description: "{{ $project->description ?? '' }}",
                         comment_sample: comment_val
                     },
                     success: function(response) {

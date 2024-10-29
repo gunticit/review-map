@@ -76,7 +76,7 @@
                                     {{ $mission->project->name }}
                                 </td>
                                 <td class="list-table-link-map">
-                                    <a class="btn " href="https://www.google.com/maps/place/?q=place_id:{{ $mission->project->place_id }}" target="_blank" role="button">
+                                    <a class="btn " href="https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:{{ $mission->project->place_id }}" target="_blank" role="button">
                                         <span class="material-symbols-outlined">link</span>
                                     </a>
                                 </td>

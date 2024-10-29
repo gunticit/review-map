@@ -6,7 +6,9 @@ use GuzzleHttp\Client;
 
 class ApiGoogleService
 {
-    public function getPlaceDetails($placeId)
+    public function getPlaceDetails($placeId, $filters=[
+        'id','displayName','rating','reviews','userRatingCount','location'
+    ])
     {
         $client = new Client();
         $url = 'https://places.googleapis.com/v1/places/'. $placeId;
@@ -14,7 +16,7 @@ class ApiGoogleService
         try {
             $response = $client->request('GET', $url, [
                 'query' => [
-                    'fields' => 'id,displayName,rating,reviews,userRatingCount,location',
+                    'fields' => implode(',', $filters),
                     'key' => env('GOOGLE_MAP_API_KEY')
                 ]
             ]);

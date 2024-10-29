@@ -62,7 +62,7 @@ $(document).ready(function(){
                 <h3>step 4</h3>
                 <section>
                     <h2 class="mb-3">Nhận nhiệm vụ</h2>
-                    <iframe width="560" height="315" src="https://www.google.com/maps/place/?q=place_id:{{$mission->place_id}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:{{$mission->place_id}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </section>
             </div> 
             <!-- end step  -->

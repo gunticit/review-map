@@ -121,21 +121,21 @@
 
         function handleViewRate(place_id) {
             $('body').append(`
-        <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <button style="background: transparent; z-index: 10; border: none; outline: none; color: #6f6e6e; position: absolute; top: 10px; right: 10px;width: 35px;padding: 0;border-radius: 50%;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="material-symbols-outlined">
-                            close
-                        </span>
-                    </button>
-                    <div class="modal-body">
-                        <iframe src="https://www.google.com/maps/place/?q=place_id:${place_id}" width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <button style="background: transparent; z-index: 10; border: none; outline: none; color: #6f6e6e; position: absolute; top: 10px; right: 10px;width: 35px;padding: 0;border-radius: 50%;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span class="material-symbols-outlined">
+                                    close
+                                </span>
+                            </button>
+                            <div class="modal-body">
+                                <iframe src="https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:${place_id}" width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    `);
+            `);
 
             $('#myModal').modal('show');
         }

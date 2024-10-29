@@ -14,7 +14,7 @@ class ManageCustomerController extends Controller
     public function index()
     {
         $customers = User::role('customer')->get();
-        return view('pages.admin.manage.list', [
+        return view('pages.admin.manage.customer.list', [
             'customers' => $customers,
             'heading_title' => 'Quản lý khách hàng',
             'profile' => array(

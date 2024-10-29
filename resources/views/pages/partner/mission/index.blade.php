@@ -57,7 +57,7 @@
                 <h3>step 3</h3>
                 <section>
                     <h2 class="mb-3">Nhận nhiệm vụ</h2>
-                    <iframe width="560" height="315" src="https://www.google.com/maps/place/?q=place_id:{{$project->place_id}}"></iframe>
+                    <iframe width="560" height="315" src="https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:{{$project->place_id}}"></iframe>
                 </section>
                 <h3>step 4</h3>
                 <section>

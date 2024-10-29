@@ -28,7 +28,8 @@ class User extends Authenticatable
         'avatar',
         'country_code',
         'company_id',
-        'google_id'
+        'google_id',
+        'usercode'
     ];
 
     /**

@@ -76,6 +76,10 @@ class ProjectController extends Controller
             $keyword_data = array_filter($unique_keyword_array, function($value) {
                 return $value !== null && $value !== "";
             });
+            $request = $request->merge([
+                'keyword' => implode(',', $keyword_data)
+            ]);
+            $this->projectService->update($request, $project_id);
             if($data && $project_id){
                 $request->request->add(['project_id' => $project_id]);
                 $request->request->add(['noJson' => true]);

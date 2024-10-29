@@ -64,6 +64,7 @@ class CommentService {
     public function generateComment($request){
         // GenerateCommentJob::dispatch($request);
         $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
+        $description = isset($request->description) ? $request->description : '';
         $keyword_value = isset($request->keyword_value) ? explode(',', $request->keyword_value): array();
         $common = array_intersect($keyword, $keyword_value);
         $diff1 = array_diff($keyword, $keyword_value);
@@ -89,7 +90,7 @@ class CommentService {
         }
         if(!empty($keywords)){
             $stream = Gemini::geminiPro()
-                ->generateContent('Tạo cho tôi '.$sl_comment.' comments cuối mỗi comment cách nhau bởi dấu "|" cho mô tả sau "'.$request->description.'" và keyword chủ đề là: ', implode(', ', $keywords));
+                ->generateContent('Tạo cho tôi '.$sl_comment.' bình luận không đánh số thứ tự mỗi ở mỗi bình luận, cuối mỗi bình luận cách nhau bởi dấu | cho mô tả sau "'.$description.'" và keyword chủ đề là: ', implode(', ', $keywords) . ', và mỗi bình luận không quá 120 ký tự.');
             if(!empty($stream->text())){
                 $comments = $stream->text();
             }
@@ -100,20 +101,12 @@ class CommentService {
     public function generateCommentBySample($request){
         $keyword = isset($request->keyword) ? $request->keyword: '';
         $sample = isset($request->comment_sample) ? $request->comment_sample : '';
+        $description = isset($request->description) ? $request->description : '';
         $comments = '';
-        if(!empty($keyword) && !empty($sample)){
-            $stream = Gemini::geminiPro()->generateContent('Tạo cho tôi comment tương tự như comment sau '.$sample.' và keyword chủ đề là: ', $keyword);
-            if(!empty($stream)){
-                foreach ($stream as $response) {
-                    if(
-                        !empty($response[0]) && 
-                        !empty($response[0]->content) && 
-                        !empty($response[0]->content->parts) &&
-                        !empty($response[0]->content->parts[0]->text)
-                    ){
-                        $comments =  $response[0]->content->parts[0]->text;
-                    }
-                }
+        if(!empty($keyword) || !empty($sample)){
+            $stream = Gemini::geminiPro()->generateContent('Tạo cho tôi 1 bình luận tương tự '.$sample.' và nội dung liên quan đến mô tả "'.$description.'" và keyword chủ đề là: ', $keyword . ', và bình luận không quá 120 ký tự.');
+            if(!empty($stream->text())){
+                $comments = $stream->text();
             }
         }
         return $comments;

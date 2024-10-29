@@ -28,6 +28,7 @@ class GenerateCommentJob implements ShouldQueue
     {
         $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
         $keyword_value = isset($request->keyword_value) ? explode(',', $request->keyword_value): array();
+        $description = isset($request->description) ? $request->description : '';
         $common = array_intersect($keyword, $keyword_value);
         $diff1 = array_diff($keyword, $keyword_value);
         $diff2 = array_diff($keyword_value, $keyword);
@@ -52,7 +53,7 @@ class GenerateCommentJob implements ShouldQueue
         }
         if(!empty($keywords)){
             $stream = Gemini::geminiPro()
-                ->generateContent('Tạo cho tôi '.$sl_comment.' comments cuối mỗi comment cách nhau bởi dấu | cho mô tả sau "'.$request->description.'" và keyword chủ đề là: ', implode(', ', $keywords));
+                ->generateContent('Tạo cho tôi '.$sl_comment.' bình luận không đánh số thứ tự mỗi ở mỗi bình luận, cuối mỗi bình luận cách nhau bởi dấu | cho mô tả sau "'.$description.'" và keyword chủ đề là: ', implode(', ', $keywords) . ', và mỗi bình luận không quá 120 ký tự.');
             if(!empty($stream)){
                 foreach ($stream as $response) {
                     $comments[] = $response->text();

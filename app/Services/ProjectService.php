@@ -29,7 +29,7 @@ class ProjectService {
      */
 
     public function list($request){
-        $request = $request->merge(['user_id' => Auth::user()->id]);
+        $request = $request->merge(['user_id' => isset($request->user_id) ? $request->user_id : Auth::user()->id]);
         $total_projects = $this->projectRepository->countData($request);
         $projects = $this->projectRepository->list($request);
         $projects = ProjectResource::collection($projects)->resource;

@@ -172,33 +172,33 @@
                                         <div class="mb-4">
                                             <label for="usercode">Mã đối tác <span class="required">*</span>
                                             </label>
-                                            <input class="form-control" id="usercode" type="text" value="admin" disabled>
+                                            <input class="form-control" id="usercode" type="text" value="{{ $partner_info->usercode ?? 'NO_CODE'}}" disabled>
                                         </div>
                                         <!-- Form Group (fullname)-->
                                         <div class="mb-4">
                                             <label for="name">Họ và tên <span class="required">*</span>
                                             </label>
-                                            <input class="form-control" id="name" type="text" value="" >
+                                            <input class="form-control" id="name" type="text" value="{{ $partner_info->name ?? ''}}" >
                                         </div>
                                         <!-- Form Group (email address)-->
                                         <div class="mb-4">
                                             <label for="email">Email <span class="required">*</span>
                                             </label>
-                                            <input class="form-control form-control-lg" id="email" type="email" value="admin@gmail.com">
+                                            <input class="form-control form-control-lg" id="email" type="email" value="{{ $partner_info->email ?? ''}}">
                                         </div>
                                         <!-- Form Group (phone)-->
                                         <div class="mb-4">
                                             <label for="inputPhone">Số điện thoại <span class="required">*</span>
                                             </label>
-                                            <input type="tel" class="form-control form-control-lg" id="telephone" name="telephone" placeholder="Số điện thoại" value="0909123123" disabled="">
+                                            <input type="tel" class="form-control form-control-lg" id="telephone" name="telephone" placeholder="Số điện thoại" value="{{ $partner_info->telephone ?? ''}}">
                                         </div>
                                         <!-- Form Group (country)-->
                                         <div class="mb-4">
                                             <label for="inputcountry">Quốc gia <span class="required">*</span>
                                             </label>
-                                            <select class="form-control form-select form-select-lg" name="country_id" id="countryCode" disabled="">
+                                            <select class="form-control form-select form-select-lg" name="country_id" id="countryCode">
                                                 <option value="">--- Chọn ---</option>
-                                                <option value="vi">Việt Nam</option>
+                                                <option selected value="vi">Việt Nam</option>
                                             </select>
                                         </div>
                                     </div>
@@ -212,8 +212,10 @@
                     <div class="card mb-4">
                         <div class="card-header d-xl-flex justify-content-between align-items-center">
                             <h2 class="card-title">Thông tin công ty</h2>
-                            <button class="btn btn-primary" type="button">Chỉnh sửa</button>
-                            <button class="btn btn-outline-primary" id="btn-company" type="button">Lưu thông tin</button>
+                            <div class="d-flex align-items-center gap-3">
+                                <button class="btn btn-primary" type="button">Chỉnh sửa</button>
+                                <button class="btn btn-outline-primary" id="btn-company" type="button">Lưu thông tin</button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="mb-4">

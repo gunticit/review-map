@@ -13,6 +13,7 @@ class UserTableSeeder extends Seeder
     public function run(): void
     {
         $admin =  [
+            'usercode' => 'RV_ADMIN',
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'telephone' => '0909123123',
@@ -24,6 +25,7 @@ class UserTableSeeder extends Seeder
 
 
         $customer = [
+            'usercode' => 'RV_CUSTOMER',
             'name' => 'customer',
             'email' => 'customer@gmail.com',
             'telephone' => '0909123124',
@@ -33,6 +35,7 @@ class UserTableSeeder extends Seeder
         $userCustomer->assignRole([Role::CUSTOMER_ROLE]);
 
         $guest = [
+            'usercode' => 'RV_PARTNER',
             'name' => 'partner',
             'email' => 'partner@gmail.com',
             'telephone' => '0909123125',
