@@ -76,4 +76,8 @@ class User extends Authenticatable
     public function missions(){
         return $this->hasMany(Mission::class, 'user_id', 'id');
     }
+
+    public function accountPayment() {
+        return $this->hasOne(AccountPayment::class, 'user_id', 'id');
+    }
 }

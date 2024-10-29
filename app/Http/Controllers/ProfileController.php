@@ -10,6 +10,7 @@ use App\Traits\UploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -44,6 +45,32 @@ class ProfileController extends Controller
                 'country_code' => $profile->country_code ?? null
             ),
             'company' => $company
+        ]);
+    }
+
+    public function editPartner(Request $request){
+        $profile = User::where('id',(auth()->user()->id))->with('accountPayment')->first();
+        return view('auth.profile.partner.edit', [
+            'profile' => array(
+                'id'         => $profile->id ?? null,
+                'name'   => $profile->name ?? null,
+                'username' => $profile->username ?? null,
+                'avatar' => $profile->avatar ? getAssetStorageLocal("avatars/{$profile->avatar}") : null,
+                'email'     => $profile->email ?? null,
+                'telephone'   => $profile->telephone ?? null,
+                'language'   => $profile->language ?? null,
+                'dark_mode'  => $profile->dark_mode ?? null,
+                'country_code' => $profile->country_code ?? null
+            ),
+            'accountPayment' => $profile->accountPayment
+        ]);
+    }
+
+    public function updateAccountPayment(Request $request, $id){
+        Auth::user()->accountPayment()->updateOrCreate(['user_id' => $id], $request->all());
+        return response()->json([
+           'status' => true,
+           'message' => __('message.success')
         ]);
     }
     public function update(Request $request){
