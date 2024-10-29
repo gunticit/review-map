@@ -208,7 +208,7 @@
                         <span class="material-symbols-outlined">id_card</span>
                     </div> {{ Auth::user()->name }}
                 </a>
-                <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                <a class="dropdown-item" href="{{Auth::user()->getRoleNames()->first() === 'partner' ? route('profile.partner.edit') : route('profile.edit') }}">
                     <div class="dropdown-item-icon">
                         <span class="material-symbols-outlined">manage_accounts</span>
                     </div> Tài khoản
