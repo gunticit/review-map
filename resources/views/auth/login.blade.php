@@ -5,6 +5,14 @@
         padding-left: 0 !important;
         top: 0 !important;
     }
+    @media(max-width: 992px){
+        #layoutSidenav #layoutSidenav_content{
+            margin-left: 0 !important;
+        }
+        #remember-group{
+            padding-left: 0;
+        }
+    }
 </style>
 <section class="login">
     <div class="row g-0">
@@ -52,7 +60,7 @@
                     @enderror
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <div class="form-check">
+                    <div class="form-check" id="remember-group">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                             <label class="form-check-label" for="remember">

@@ -138,72 +138,73 @@
                             @endforeach
                         </div>
                     </form>
-                    <table class="table list-table">
-                        <thead>
-                            <tr>
-                                @foreach ($cols as $index => $col)
-                                    <th scope="col">
-                                        <div class="table-th">
-                                            <form action="{{ route('admin.manage.partner.wallet', ['id' => $partner_id]) }}" method="GET">
-                                                @php
-                                                    $sort = '';
-                                                    if (request()->order_by == $col['value']) {
-                                                        $sort = request()->sort == 'asc' ? 'asc' : 'desc';
-                                                    }
-
-                                                    if (!request()->order_by && $index == 0) {
-                                                        $sort = 'desc';
-                                                    }
-                                                @endphp
-                                                <button type="submit" class="table-th-col {{ $sort }}">
-                                                    {{ $col['label'] }}
-                                                </button>
-                                                @if (!request()->order_by)
-                                                    <input type="hidden" name="order_by" value="{{ $col['value'] }}">
-                                                @endif
-                                                @if (!request()->sort)
-                                                    <input type="hidden" name="sort" value="{{ $sort == 'asc' ? 'desc' : 'asc' }}">
-                                                @endif
-                                                @foreach ($queries as $query)
-                                                    @if (request($query))
-                                                        @if ($query == 'sort')
-                                                            <input type="hidden" name="{{ $query }}" value="{{ $sort == 'asc' ? 'desc' : 'asc' }}">
-                                                        @elseif ($query == 'order_by')
-                                                            <input type="hidden" name="{{ $query }}" value="{{ $col['value'] }}">
-                                                        @else
-                                                            <input type="hidden" name="{{ $query }}" value="{{ request($query) }}">
-                                                        @endif
-                                                    @endif
-                                                @endforeach
-                                            </form>
-                                        </div>
-                                    </th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($transactionHistories as $transactionHistory)
+                    <div class="group-table-list">
+                        <table class="table list-table">
+                            <thead>
                                 <tr>
-                                    <td class="text-center">{{ $transactionHistory->id }}</td>
-                                    <td>{{ $transactionHistory->formatted_created_at }}</td>
-                                    <td>{{ $transactionHistory->reference_id }}</td>
-                                    <td class="text-center">{{ $transactionHistory->payment_method }}</td>
-                                    <td>{{ $transactionHistory->user->name }}</td>
-                                    <td class="color-black fw-500">{{ $transactionHistory->amount }}</td>
-                                    <td>
-                                        @if ($transactionHistory->status == 'completed')
-                                            <div class="text-center fw-500 color-success">Thành công</div>
-                                        @elseif ($transactionHistory->status == 'failed')
-                                            <div class="text-center fw-500 color-danger">Thất bại</div>
-                                        @else
-                                            <div class="text-center fw-500 color-warning">Chờ xử lý</div>
-                                        @endif
-                                    </td>
+                                    @foreach ($cols as $index => $col)
+                                        <th scope="col">
+                                            <div class="table-th">
+                                                <form action="{{ route('admin.manage.partner.wallet', ['id' => $partner_id]) }}" method="GET">
+                                                    @php
+                                                        $sort = '';
+                                                        if (request()->order_by == $col['value']) {
+                                                            $sort = request()->sort == 'asc' ? 'asc' : 'desc';
+                                                        }
+
+                                                        if (!request()->order_by && $index == 0) {
+                                                            $sort = 'desc';
+                                                        }
+                                                    @endphp
+                                                    <button type="submit" class="table-th-col {{ $sort }}">
+                                                        {{ $col['label'] }}
+                                                    </button>
+                                                    @if (!request()->order_by)
+                                                        <input type="hidden" name="order_by" value="{{ $col['value'] }}">
+                                                    @endif
+                                                    @if (!request()->sort)
+                                                        <input type="hidden" name="sort" value="{{ $sort == 'asc' ? 'desc' : 'asc' }}">
+                                                    @endif
+                                                    @foreach ($queries as $query)
+                                                        @if (request($query))
+                                                            @if ($query == 'sort')
+                                                                <input type="hidden" name="{{ $query }}" value="{{ $sort == 'asc' ? 'desc' : 'asc' }}">
+                                                            @elseif ($query == 'order_by')
+                                                                <input type="hidden" name="{{ $query }}" value="{{ $col['value'] }}">
+                                                            @else
+                                                                <input type="hidden" name="{{ $query }}" value="{{ request($query) }}">
+                                                            @endif
+                                                        @endif
+                                                    @endforeach
+                                                </form>
+                                            </div>
+                                        </th>
+                                    @endforeach
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-        
+                            </thead>
+                            <tbody>
+                                @foreach ($transactionHistories as $transactionHistory)
+                                    <tr>
+                                        <td class="text-center">{{ $transactionHistory->id }}</td>
+                                        <td>{{ $transactionHistory->formatted_created_at }}</td>
+                                        <td>{{ $transactionHistory->reference_id }}</td>
+                                        <td class="text-center">{{ $transactionHistory->payment_method }}</td>
+                                        <td>{{ $transactionHistory->user->name }}</td>
+                                        <td class="color-black fw-500">{{ $transactionHistory->amount }}</td>
+                                        <td>
+                                            @if ($transactionHistory->status == 'completed')
+                                                <div class="text-center fw-500 color-success">Thành công</div>
+                                            @elseif ($transactionHistory->status == 'failed')
+                                                <div class="text-center fw-500 color-danger">Thất bại</div>
+                                            @else
+                                                <div class="text-center fw-500 color-warning">Chờ xử lý</div>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="list-table-footer d-flex justify-content-between align-items-center">
                         <div class="list-table-per-page">
                             <span class="form-label">Hiển thị kết quả</span>

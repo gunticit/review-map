@@ -3406,7 +3406,7 @@ iframe {
   font-size: 32px;
 }
 .login-form {
-  max-width: 100%;
+  max-width: 90%;
   width: 600px;
   margin: auto;
 }
@@ -3736,7 +3736,7 @@ h3.col-title {
   top: 4px;
 }
 .table thead, .table tbody, .table tfoot, .table tr, .table td, .table th {
-  border-color: #BFCDFF;
+  border-color: #9f9f9f;
 }
 
 .list-table {
@@ -3763,7 +3763,7 @@ h3.col-title {
   min-width: 130px;
 }
 .list-table td:first-child, .list-table th:first-child{
-  min-width: 80px;
+  width: 150px;
 }
 .list-table td[data-th=STT] {
   font-weight: 400;
@@ -5160,6 +5160,18 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
 #fileList .file-item .file-remove:hover{
   box-shadow: 0 0 0 #ccc;
 }
+.group-table-list{
+  overflow: auto;
+  max-width: 100%;
+}
+#detail-video{
+  display: flex;
+  position: relative;
+  justify-content: center;
+}
+#detail-video video{
+  width: 100% !important;
+}
 @media (max-width: 768px) {
   .step-xac-thuc .step-images {
     flex-direction: column;
@@ -5332,6 +5344,7 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
   .topnav.navbar-light .navbar-brand {
     padding-left: 0.75rem !important;
     min-width: unset;
+    width: auto;
   }
   .col-inner {
     padding: 20px 10px;
@@ -5449,6 +5462,11 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
     right: 10px;
     width: 25px;
     height: 25px;
+  }
+  #btn-add{
+    max-width: 35%;
+    padding: 10px 15px;
+    float: right;
   }
 }
 @media (min-width: 992px) {

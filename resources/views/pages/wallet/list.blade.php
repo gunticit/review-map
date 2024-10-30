@@ -27,53 +27,54 @@
                                 <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
                             </div>
                         </form>
-
-                        <table class="table list-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Code</th>
-                                    <th scope="col">Thời gian</th>
-                                    <th scope="col">Số tiền</th>
-                                    <th scope="col">Nội dung</th>
-                                    <th scope="col">Trạng thái</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (!empty($transaction_histories))
-                                    @foreach ($transaction_histories as $transaction_history)
-                                        @php
-                                            $text_color = $transaction_history->status ? 'text-success' : 'text-danger';
-                                            $text_status = $transaction_history->status ? 'Thành công ' : 'Thất bại';
-                                        @endphp
-                                        <tr class="recharge">
-                                            <td>{{ $transaction_history->reference_id }}</td>
-                                            <td class="list-table-time">
-                                                <a
-                                                    href="javascript:void(0);">{{ date('d/m/Y', strtotime($transaction_history->created_at)) }}</a>
-                                                <a
-                                                    href="javascript:void(0);"><span>{{ date('H:i', strtotime($transaction_history->created_at)) }}</span></a>
-                                            </td>
-                                            <td class="list-table-so-tien {{ $text_color }}">
-                                                <a href="javascript:void(0)">{!! $transaction_history->type == 'deposit' ? '+' : '-' !!}
-                                                    {{ formatCurrency($transaction_history->amount) }}</a>
-                                            </td>
-                                            <td class="list-table-content-3 {{ $text_color }}">
-                                                @if($transaction_history->type == 'deposit')
-                                                    <span class="text-success">Nạp tiền</span>
-                                                @elseif($transaction_history->type == 'payment')
-                                                    <span class="text-warning">Thanh toán</span>
-                                                @elseif($transaction_history->type == 'withdraw')
-                                                    <span class="text-danger">Rút tiền</span>
-                                                @endif
-                                            </td>
-                                            <td class="list-table-so-du {{ $text_color }}">
-                                                <a href="javascript:void(0)">{{ $text_status }}</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+                        <div class="group-table-list">
+                            <table class="table list-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Code</th>
+                                        <th scope="col">Thời gian</th>
+                                        <th scope="col">Số tiền</th>
+                                        <th scope="col">Nội dung</th>
+                                        <th scope="col">Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (!empty($transaction_histories))
+                                        @foreach ($transaction_histories as $transaction_history)
+                                            @php
+                                                $text_color = $transaction_history->status ? 'text-success' : 'text-danger';
+                                                $text_status = $transaction_history->status ? 'Thành công ' : 'Thất bại';
+                                            @endphp
+                                            <tr class="recharge">
+                                                <td>{{ $transaction_history->reference_id }}</td>
+                                                <td class="list-table-time">
+                                                    <a
+                                                        href="javascript:void(0);">{{ date('d/m/Y', strtotime($transaction_history->created_at)) }}</a>
+                                                    <a
+                                                        href="javascript:void(0);"><span>{{ date('H:i', strtotime($transaction_history->created_at)) }}</span></a>
+                                                </td>
+                                                <td class="list-table-so-tien {{ $text_color }}">
+                                                    <a href="javascript:void(0)">{!! $transaction_history->type == 'deposit' ? '+' : '-' !!}
+                                                        {{ formatCurrency($transaction_history->amount) }}</a>
+                                                </td>
+                                                <td class="list-table-content-3 {{ $text_color }}">
+                                                    @if($transaction_history->type == 'deposit')
+                                                        <span class="text-success">Nạp tiền</span>
+                                                    @elseif($transaction_history->type == 'payment')
+                                                        <span class="text-warning">Thanh toán</span>
+                                                    @elseif($transaction_history->type == 'withdraw')
+                                                        <span class="text-danger">Rút tiền</span>
+                                                    @endif
+                                                </td>
+                                                <td class="list-table-so-du {{ $text_color }}">
+                                                    <a href="javascript:void(0)">{{ $text_status }}</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
                         @if ($transaction_histories)
                             {{ $transaction_histories->links('vendor.pagination.custom') }}
                         @endif

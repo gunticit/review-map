@@ -12,41 +12,43 @@
                     <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
                 </div>
             </form>
-            <table class="table list-table">
-                <thead>
-                    <tr>
-                        <th class="list-table-stt" scope="col">STT</th>
-                        <th class="list-table-title" scope="col">Tiêu đề</th>
-                        <th class="list-table-creator" scope="col">Người tạo</th>
-                        <th class="list-table-progree" scope="col">Trạng thái</th>
-                        <th class="list-table-time" scope="col">Thời gian</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($notifications as $index => $notification)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td class="list-table-title">
-                            <a href="{{ route('notification.show', ['id' => $notification->id]) }}">{{ $notification->title }}</a>
-                        </td>
-                        <td class="list-table-creator">
-                            {{ $notification->user->name }}
-                        </td>
-                        <td class="list-table-progree">
-                            <a class="btn btn-{{ $notification->status == 1 ? 'success' : 'danger' }}">
-                                {{
-                                __(config('constants.status_notification')[$notification->status]) 
-                                }}
-                            </a>
-                        </td>
-                        <td class="list-table-time">
-                            <a href="javascript:void(0);">{{ $notification->created_at->format('d/m/Y') }} <span>{{
-                                    $notification->created_at->format('H:i') }}</span></a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="group-table-list">
+                <table class="table list-table">
+                    <thead>
+                        <tr>
+                            <th class="list-table-stt" scope="col">STT</th>
+                            <th class="list-table-title" scope="col">Tiêu đề</th>
+                            <th class="list-table-creator" scope="col">Người tạo</th>
+                            <th class="list-table-progree" scope="col">Trạng thái</th>
+                            <th class="list-table-time" scope="col">Thời gian</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($notifications as $index => $notification)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td class="list-table-title">
+                                <a href="{{ route('notification.show', ['id' => $notification->id]) }}">{{ $notification->title }}</a>
+                            </td>
+                            <td class="list-table-creator">
+                                {{ $notification->user->name }}
+                            </td>
+                            <td class="list-table-progree">
+                                <a class="btn btn-{{ $notification->status == 1 ? 'success' : 'danger' }}">
+                                    {{
+                                    __(config('constants.status_notification')[$notification->status]) 
+                                    }}
+                                </a>
+                            </td>
+                            <td class="list-table-time">
+                                <a href="javascript:void(0);">{{ $notification->created_at->format('d/m/Y') }} <span>{{
+                                        $notification->created_at->format('H:i') }}</span></a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             {{ $notifications->links('vendor.pagination.custom') }}
         </div>

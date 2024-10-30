@@ -48,7 +48,7 @@
             <div class="col-xl-10 col-md-8 col-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">
+                        <li class="breadcrumb-item fw-700 active" aria-current="page">
                             <span class="support__title">Yêu cầu hỗ trợ</span>
                         </li>
                     </ol>
@@ -76,40 +76,42 @@
                     <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
                 </div>
             </form>
-            <table class="table list-table">
-                <thead>
-                    <tr>
-                        <th class="list-table-stt" scope="col">STT</th>
-                        <th class="list-table-title" scope="col">Tiêu đề</th>
-                        <th class="list-table-department" scope="col">Phòng ban</th> <!-- Added column for Phòng ban -->
-                        <th class="list-table-code" scope="col">Mã yêu cầu</th> <!-- Updated to mã yêu cầu -->
-                        <th class="list-table-time" scope="col">Thời gian</th>
-                        <th class="list-table-status" scope="col">Trạng thái</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if(!empty($supports))
-                    @foreach ($supports as $key => $support)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td class="list-table-title">
-                            <a href="javascript:void(0);">{{ $support->title }}</a>
-                        </td>
-                        <td class="list-table-department">{{ $support->department->name }}</td>
-                        <td class="list-table-code">{{ $support->support_code }}</td>
-                        <td class="list-table-time">
-                            {{ date('d/m/Y', strtotime($support->created_at)) }} <span>{{ date('H:i', strtotime($support->created_at)) }}</span>
-                        </td>
-                        <td class="list-table-status">
-                            <span class="btn">
-                                {!! __(config('constants.status_support')[$support->status]) !!}
-                            </span>
-                        </td>
-                    </tr>
-                    @endforeach
-                    @endif
-                </tbody>
-            </table>
+            <div class="group-table-list">
+                <table class="table list-table">
+                    <thead>
+                        <tr>
+                            <th class="list-table-stt" scope="col">STT</th>
+                            <th class="list-table-title" scope="col">Tiêu đề</th>
+                            <th class="list-table-department" scope="col">Phòng ban</th> <!-- Added column for Phòng ban -->
+                            <th class="list-table-code" scope="col">Mã yêu cầu</th> <!-- Updated to mã yêu cầu -->
+                            <th class="list-table-time" scope="col">Thời gian</th>
+                            <th class="list-table-status" scope="col">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(!empty($supports))
+                        @foreach ($supports as $key => $support)
+                        <tr>
+                            <td>{{ $key + 1 }}</td>
+                            <td class="list-table-title">
+                                <a href="javascript:void(0);">{{ $support->title }}</a>
+                            </td>
+                            <td class="list-table-department">{{ $support->department->name }}</td>
+                            <td class="list-table-code">{{ $support->support_code }}</td>
+                            <td class="list-table-time">
+                                {{ date('d/m/Y', strtotime($support->created_at)) }} <span>{{ date('H:i', strtotime($support->created_at)) }}</span>
+                            </td>
+                            <td class="list-table-status">
+                                <span class="btn">
+                                    {!! __(config('constants.status_support')[$support->status]) !!}
+                                </span>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
+                </table>
+            </div>
             {{ $supports->links('vendor.pagination.custom') }}
         </div>
     </div>
