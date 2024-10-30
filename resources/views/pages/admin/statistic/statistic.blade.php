@@ -4,21 +4,25 @@
 <section class="thong-ke">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xl-3 col-md-4 col-6 mb-4 mb-xl-0">
+      <div class="col-xl-4 col-md-4 col-6 mb-4 mb-xl-0">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
-            <span class="material-symbols-outlined">contract</span>
+            <span class="material-symbols-outlined">
+              monitoring
+            </span>
             <h5>Thống kê doanh thu</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{!! $projects['total'] ?? 0 !!}</h6>
+            <h6 class="text-primary">{!! moneyFormat($all_price_projects) ?? 0 !!} VND</h6>
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-md-4 col-6 mb-4 mb-xl-0">
+      <div class="col-xl-4 col-md-4 col-6 mb-4 mb-xl-0">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
-            <span class="material-symbols-outlined">task</span>
+            <span class="material-symbols-outlined">
+              paid
+            </span>
             <h5>Tổng chi phí</h5>
           </div>
           <div class="thong-ke-content">
@@ -26,11 +30,13 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-md-4 col-6 mb-4 mb-xl-0">
+      <div class="col-xl-4 col-md-4 col-6 mb-4 mb-xl-0">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
-            <span class="material-symbols-outlined">scan_delete</span>
-            <h5>Tổng chi phí</h5>
+            <span class="material-symbols-outlined">
+              query_stats
+            </span>
+            <h5>Tổng lợi nhuận</h5>
           </div>
           <div class="thong-ke-content">
             <h6 class="text-primary">{!! $projects['total_stopped'] ?? 0 !!}</h6>
@@ -80,33 +86,31 @@
             },
             dataPointWidth: 16,
             data: [
-              // set data Đánh giá đã hoàn thành
+              // set data Tổng chi phí
               {
                 type: "column",
-                name: "Đánh giá đã hoàn thành",
+                name: "Tổng chi phí",
                 showInLegend: true,
                 color: "#436CFF",
-                dataPoints: @json($data_chars['revenue'] ?? [])
+                dataPoints: @json($data_chars['total_cost'])
               },
-
-              // set data Đánh giá đã phân phối
+              // set data Chi phí hoa hồng
               {
                 type: "column",
-                name: "Đánh giá đã phân phối",
+                name: "Chi phí hoa hồng",
                 axisYType: "secondary",
                 showInLegend: true,
                 color: "#95ADFF",
-                dataPoints: @json($data_chars['commission'] ?? [])
+                dataPoints: @json($data_chars['total_commission'])
               },
-
-              // set data Tổng lợi nhuận
+              // set data Chi phí bảo hành
               {
                 type: "column",
                 name: "Chi phí bảo hành",
                 axisYType: "thirdary",
                 showInLegend: true,
                 color: "#E8EDFF",
-                dataPoints: @json($data_chars['profits'] ?? [])
+                dataPoints: @json($data_chars['total_warranty'])
               }
             ]
           });

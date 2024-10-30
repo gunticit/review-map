@@ -46,4 +46,8 @@ class MissionService {
         $data = $this->missionRepository->getRandomMission($request);
         return $data;
     }
+
+    public function getPrice($request){
+        return 0;
+    }
 }

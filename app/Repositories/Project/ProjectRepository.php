@@ -101,4 +101,10 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         return $query->get();
     }
     
+    public function totalPrice($filter = array()) {
+        $query = $this->model->query();
+        $filter['year'] = $filter['year'] ?? date('Y');
+        $query->whereYear('created_at', $filter['year']);
+        return $query->sum('price');
+    }
 }

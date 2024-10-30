@@ -3,14 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\MissionService;
+use App\Services\ProjectService;
 use Illuminate\Http\Request;
 
 class StatisticController extends Controller
 {
+    protected $projectService, $missionService;
+    public function __construct(ProjectService $projectService, MissionService $missionService)
+    {
+        $this->projectService = $projectService;
+        $this->missionService = $missionService;
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $filters =  array(
             'years' => array(
@@ -19,7 +27,8 @@ class StatisticController extends Controller
                 date('Y') + 1
             ) 
         );
-
+        $project_info = $this->projectService->list($request);
+        $mission_price = $this->missionService->getPrice($request);
         $data_chars = array(
             'total_cost' => 0,
             'total_commission' => 0,
@@ -30,6 +39,7 @@ class StatisticController extends Controller
             'revenue' =>  0, // Doanh thu
             'commission' =>  0, // Hoa hồng
             'profits' =>  0, // Lợi nhuận
+            'all_price_projects' => $project_info['all_price_projects'] ?? 0,
             'data_chars' => $data_chars
         ]);
     }

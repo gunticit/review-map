@@ -33,6 +33,7 @@ class ProjectService {
         $total_projects = $this->projectRepository->countData($request);
         $projects = $this->projectRepository->list($request);
         $projects = ProjectResource::collection($projects)->resource;
+        $all_price_projects = $this->projectRepository->totalPrice($request);
         $working = 0;
         $stopped = 0;
         $unpaid = 0;
@@ -52,6 +53,7 @@ class ProjectService {
             'total' => $total_projects,
             'working' => $working,
             'stopped' => $stopped,
+            'all_price_projects' => $all_price_projects,
             'unpaid' => $unpaid
         );
         return $data;

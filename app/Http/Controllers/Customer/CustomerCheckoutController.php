@@ -29,10 +29,11 @@ class CustomerCheckoutController extends Controller
         $this->expenditureStatisticService = $expenditureStatisticService;
     }
     public function confirmCheckout(Request $request){
-        try{
-            DB::beginTransaction();
-            $project = $this->projectService->show($request->project_id);
-            $project_comments = $this->projectService->findWithComments($request->project_id, $request);
+        // try{
+        //     DB::beginTransaction();
+            $project_id = $request->project_id;
+            $project = $this->projectService->show($project_id);
+            $project_comments = $this->projectService->findWithComments($project_id, $request);
             $price_order = 0;
             if($project_comments->package){
                 $price_order = match ($project_comments->package) {
@@ -47,6 +48,7 @@ class CustomerCheckoutController extends Controller
                 $price_order = $price_order + 10000;
             }
             $temp_price_order = $price_order;
+            Project::where('id', $project_id)->update(['price' => $price_order]);
             $price_order = $temp_price_order + $price_order * 0.1; // Cộng VAT
             $wallet_info = $this->walletService->checkWalletUser();
             $balance = $wallet_info->balance ?? 0; // Số tiền
@@ -79,24 +81,24 @@ class CustomerCheckoutController extends Controller
                         'updated_at' => Carbon::now()
                     ]);
                 }
-                DB::commit();
+                // DB::commit();
                 return response()->json([
                     'status' => $surplus > 0 ? 'success' : 'error',
                     'data' => $transaction
                 ]);
             } else {
-                DB::rollback();
+                // DB::rollback();
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Project not found'
                 ]);
             }
-        }catch(\Exception $e){
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ]);
-        }
+        // }catch(\Exception $e){
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => $e->getMessage()
+        //     ]);
+        // }
     }
 
     public function updateExpenditureStatistic($data){
