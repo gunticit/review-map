@@ -77,58 +77,56 @@
                     </div>
                 </form>
                 <div id="list-project">
-                    <table class="table list-table">
-                        <thead>
-                            <tr>
-                                <th width="15"></th>
-                                <th width="35" class="list-table-stt" scope="col">STT</th>
-                                <th class="list-table-title" scope="col">Tên dự án</th>
-                                <th class="list-table-link-map" scope="col">URL Google Map</th>
-                                <th class="list-table-progree" scope="col">
-                                    <a href="javascript:void(0);" class="sort">Trạng thái</a>
-                                </th>
-                                <th class="list-table-status" scope="col">
-                                    <a href="javascript:void(0);" class="sort">Thao tác </a>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($projects as $project)
-                            <tr>
-                                <td width="15" style="padding: 5px">
-                                    <input type="checkbox" class="form-check-input" id="check_{{ $project->id }}">
-                                </td>
-                                <td width="35">{{ $project->id }}</td>
-                                <td class="list-table-title">
-                                    <a href="{{ route('project.edit', ['id' => $project->id]) }}">{{ $project->name }}</a>
-                                </td>
-                                <td class="list-table-link-map">
-                                    <a class="btn" target="_blank" href="https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:{{$project->place_id}}" role="button">
-                                        <span class="material-symbols-outlined">link</span>
-                                    </a>
-                                </td>
-                                <td class="list-table-progree">
-                                    <a class="{{ checkStatus($project->status)['className'] }}">{{ checkStatus($project->status)['labelStatus'] }}</a>
-                                </td>
-                                <td class="list-table-status">
-                                    @if($project->status == 1)
-                                        <a href="javascript:void(0)" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-warning btn-change-status" role="button">
-                                            <span class="material-symbols-outlined">motion_photos_paused</span> <span>Tạm dừng</span>
+                    <div class="group-table-list">
+                        <table class="table list-table">
+                            <thead>
+                                <tr>
+                                    <th width="35" class="list-table-stt" scope="col">STT</th>
+                                    <th class="list-table-title" scope="col">Tên dự án</th>
+                                    <th class="list-table-link-map" scope="col">URL Google Map</th>
+                                    <th class="list-table-progree" scope="col">
+                                        <a href="javascript:void(0);" class="sort">Trạng thái</a>
+                                    </th>
+                                    <th class="list-table-status" scope="col">
+                                        <a href="javascript:void(0);" class="sort">Thao tác </a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($projects as $project)
+                                <tr>
+                                    <td width="35">{{ $project->id }}</td>
+                                    <td class="list-table-title">
+                                        <a href="{{ route('project.edit', ['id' => $project->id]) }}">{{ $project->name }}</a>
+                                    </td>
+                                    <td class="list-table-link-map">
+                                        <a class="btn" target="_blank" href="https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:{{$project->place_id}}" role="button">
+                                            <span class="material-symbols-outlined">link</span>
                                         </a>
-                                    @elseif($project->status == 4)
-                                        <a href="javascript:void(0)" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-success btn-change-status" role="button">
-                                            <span class="material-symbols-outlined"> play_arrow </span> <span>Tiếp tục</span> 
-                                        </a>
-                                    @elseif($project->status == 5)
-                                        <a href="{{ route('page.order.project', ['id' => $project->id]) }}" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-primary" role="button">
-                                            <span class="material-symbols-outlined"> payments </span> <span>Thanh toán</span>
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td class="list-table-progree">
+                                        <a class="{{ checkStatus($project->status)['className'] }}">{{ checkStatus($project->status)['labelStatus'] }}</a>
+                                    </td>
+                                    <td class="list-table-status">
+                                        @if($project->status == 1)
+                                            <a href="javascript:void(0)" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-warning btn-change-status" role="button">
+                                                <span class="material-symbols-outlined">motion_photos_paused</span> <span>Tạm dừng</span>
+                                            </a>
+                                        @elseif($project->status == 4)
+                                            <a href="javascript:void(0)" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-success btn-change-status" role="button">
+                                                <span class="material-symbols-outlined"> play_arrow </span> <span>Tiếp tục</span> 
+                                            </a>
+                                        @elseif($project->status == 5)
+                                            <a href="{{ route('page.order.project', ['id' => $project->id]) }}" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-primary" role="button">
+                                                <span class="material-symbols-outlined"> payments </span> <span>Thanh toán</span>
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     {{ $projects->links('vendor.pagination.custom') }}
                 </div>
             </div>

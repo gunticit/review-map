@@ -11,7 +11,7 @@
             <h5>Tổng dự án</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{!! $projects['total'] ?? 0 !!}</h6>
+            <h6 class="text-primary">{!! $total ?? 0 !!}</h6>
           </div>
         </div>
       </div>
@@ -22,7 +22,7 @@
             <h5>{{ __('common.doing') }}</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{!! $projects['total_working'] ?? 0 !!}</h6>
+            <h6 class="text-primary">{!! $working ?? 0 !!}</h6>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
             <h5>Đã tạm dừng</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{!! $projects['total_stopped'] ?? 0 !!}</h6>
+            <h6 class="text-primary">{!! $stopped ?? 0 !!}</h6>
           </div>
         </div>
       </div>
@@ -64,11 +64,11 @@
           </div>
         </div>
         <div class="col-md-2 col-12">
-          <select class="form-select" aria-label="Default select example">
-            <option>Năm</option>
+          <select class="form-select" aria-label="Lọc Năm" id="filter-year">
+            <option value="">Năm</option>
             @if(!empty($filters['years']))
               @foreach($filters['years'] as $year)
-                <option value="{{ $year }}">{{ $year }}</option>
+                <option {!! $filter_data['year'] == $year ? 'selected' : '' !!} value="{{ $year }}">{{ $year }}</option>
               @endforeach
             @endif
           </select>
@@ -136,4 +136,18 @@
     </div>
   </div>
 </section>
+@endsection
+@section('js')
+  <script>
+    $(document).ready(function(){
+      $('#filter-year').on('change', function(){
+        let year = $(this).val();
+        if(year){
+          window.location.href = "{{ route('customer.overview') }}?year=" + year;
+        }else{
+          window.location.href = "{{ route('customer.overview') }}";
+        }
+      })
+    });
+  </script>
 @endsection

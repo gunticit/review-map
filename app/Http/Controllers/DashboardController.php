@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\DashboardService;
 use App\Services\ExpenditureStatisticService;
+use App\Services\ProjectService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,30 +12,34 @@ use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
-    protected $dashboardService, $expenditureStatisticService;
+    protected $dashboardService, $expenditureStatisticService, $projectService;
     public function __construct(
         DashboardService $dashboardService,
-        ExpenditureStatisticService $expenditureStatisticService
+        ExpenditureStatisticService $expenditureStatisticService,
+        ProjectService $projectService
     ){
         $this->middleware('auth');
         $this->dashboardService = $dashboardService;
         $this->expenditureStatisticService = $expenditureStatisticService;
+        $this->projectService = $projectService;
     }
     public function changeLanguage($language){
         Session::put('language', $language);
         return redirect()->back();
     }
     public function index(Request $request){
-        $data = $this->dashboardService->info($request);
+        $data = $this->projectService->list($request);
         $filters =  array(
             'years' => array(
-                date('Y'),
                 date('Y') - 1,
+                date('Y'),
                 date('Y') + 1
             ) 
         );
         
         $data_completed = $data_distributed = [];
+
+        $year_filter = isset($request->year) ? $request->year : date('Y');
 
         for ($i = 1; $i <= 12; $i++) {
             $data_completed[$i] = [
@@ -45,7 +50,8 @@ class DashboardController extends Controller
                 "label" => "Tháng $i",
                 "y" => 0 
             ];
-            $data_expenditure[$i] = [
+            $key_month = $year_filter.'-'.($i < 10 ? '0'.$i : $i);
+            $data_expenditure[$key_month] = [
                 "label" => "Tháng $i",
                 "y" => 0
             ];
@@ -69,19 +75,31 @@ class DashboardController extends Controller
         $data_distributed = array_values($data_distributed);
         $expenditure = $this->expenditureStatisticService->getAllExpenditureByUser(Auth::user()->id);
         $expenditure_month = $this->expenditureStatisticService->getMonthExpenditureByUser(Auth::user()->id);
-        // dd($expenditure_month);
-
+        $data_map_dexpenditure = array();
+        foreach($data_expenditure as $key => $dexpenditure){
+            $data_map_dexpenditure[] = array(
+                'label' => $dexpenditure['label'],
+                'y' => $expenditure_month[$key] ?? 0
+            );
+        }
         $data_chars = array(
             'completed' =>  $data_completed,
             'distributed' =>  $data_distributed,
-            'spents' =>  $this->dashboardService->getMoneySpents('spents'),
+            'spents' =>  $data_map_dexpenditure,
         );
         return view('pages.dashboard', [
             'projects' => $data['projects'] ?? array(),
+            'total' => $data['total'] ?? 0,
+            'working' => $data['working'] ?? 0,
+            'stopped' => $data['stopped'] ?? 0,
+            'unpaid' => $data['unpaid'] ?? 0,
             'money' => array(
                 'spent' => $expenditure
             ),
             'filters' => $filters,
+            'filter_data' => array(
+                'year' => $request->input('year', date('Y')),
+            ),
             'data_chars' => $data_chars
         ]);
     }

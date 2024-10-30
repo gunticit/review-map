@@ -39,7 +39,8 @@ class DashboardService {
     public function getProjectsCompleted(){
         return $this->projectRepositoryInterface->countDataGroupMonth(array('status' => Project::COMPLETED_PROJECT));
     }
-
+    
+    // Dự án đã phân phối
     public function getProjectsDistributed(){
         return $this->projectRepositoryInterface->countDataGroupMonth(array('list_status' => array(Project::COMPLETED_PROJECT, Project::WORKING_PROJECT)));
     }

@@ -5172,9 +5172,27 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
 #detail-video video{
   width: 100% !important;
 }
+@media (max-width: 569px){
+  .list-table td:first-child, .list-table th:first-child{
+    width: 100%;
+  }
+  table.bt tfoot th::before, table.bt tfoot td::before, table.bt tbody td::before{
+    text-align: left;
+    width: 30%;
+  }
+  .btn,.btn.btn-outline-primary, .btn.btn-primary{
+    font-size: 14px;
+  }
+  .accout .card.active .card-header .btn-outline-primary{
+    display: inline-flex;
+  }
+}
 @media (max-width: 768px) {
   .step-xac-thuc .step-images {
     flex-direction: column;
+  }
+  .position-relative{
+    text-align: center;
   }
   .step-xac-thuc .step-images > .step-image {
     max-width: 320px;
@@ -5466,7 +5484,15 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
   #btn-add{
     max-width: 35%;
     padding: 10px 15px;
-    float: right;
+    float: right !important;
+  }
+  .accout .card.active .card-header .btn-outline-primary{
+    float: right !important;
+  }
+}
+@media (max-width: 1199px){
+  .accout .card-header .btn{
+    float: right !important;
   }
 }
 @media (min-width: 992px) {

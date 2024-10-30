@@ -23,6 +23,9 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         if(isset($request->name)){
             $query->whereLike('name', '%'. $request->name . '%');
         }
+        if(isset($request->year)){
+            $query->whereYear('created_at', $request->year);
+        }
         return $query;
     }
 
@@ -44,6 +47,9 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         $query = $this->model->query();
         if(isset($filter['status'])){
             $query->where('status', $filter['status']);
+        }
+        if(isset($filter['year'])){
+            $query->whereYear('created_at', $filter['year']);
         }
         return $query->count();
     }
