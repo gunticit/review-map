@@ -34,6 +34,11 @@ class DashboardController extends Controller
             }
             $total_project_guarantee = 0;
         }
+        $years = array(
+            date('Y') - 1,
+            date('Y'),
+            date('Y') + 1
+        );
         $data =  array(
             'total_customer' => $total_customer,
             'total_project' => $total_project,
@@ -43,7 +48,11 @@ class DashboardController extends Controller
             'total_project_guarantee' => $total_project_guarantee
         );
         return view('pages.admin.dashboard.customer-overview', array(
-            'overview' => $data
+            'overview' => $data,
+            'years' => $years,
+            'filters' => array(
+                'year' => $request->year ?? ''
+            )
         ));
     }
     public function partnerOverview(){

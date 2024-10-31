@@ -3361,6 +3361,8 @@ iframe {
   border-color: #E4E4E4;
   border-radius: 8px;
   margin-left: auto;
+  position: relative;
+  top: -10px;
 }
 
 .canvasjs-chart-credit {
@@ -5171,6 +5173,16 @@ section .trumbowyg .trumbowyg-button-pane .trumbowyg-open-dropdown::after {
 }
 #detail-video video{
   width: 100% !important;
+}
+body #search-places{
+  right: 10px;
+  width: 74%;
+  padding: 8px 15px;
+  min-height: 45px !important;
+  top: 7px !important;
+}
+.relative{
+  position: relative;
 }
 @media (max-width: 569px){
   .list-table td:first-child, .list-table th:first-child{

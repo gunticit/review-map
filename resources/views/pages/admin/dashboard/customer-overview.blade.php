@@ -94,19 +94,18 @@
   <div class="container-fluid">
     <div class="col-inner">
       <div class="row">
-        <div class="col-md-10 col-12">
+        <div class="col-md-12 col-12 relative">
           <div class="section-title d-flex align-center justify-content-center">
             <span class="material-symbols-outlined">
               home_pin
             </span> 
             <h2>Bản đồ, số lượng và vị trí khách hàng</h2>
           </div>
-        </div>
-        <div class="col-md-2 col-12">
-          <select class="form-select" aria-label="Default select example">
+
+          <select class="form-select" onchange="handleChangeYear(this.value)" aria-label="Năm" style="position: absolute;top: -10px;right: 10px;z-index: 2">
             <option>Năm</option>
-            @if(!empty($filters['years']))
-              @foreach($filters['years'] as $year)
+            @if(!empty($years))
+              @foreach($years as $year)
                 <option value="{{ $year }}">{{ $year }}</option>
               @endforeach
             @endif
@@ -114,7 +113,7 @@
         </div>
       </div>
       <!-- end chart  -->
-      <div id="map-customer" style="height: 290px; max-width: 100%; margin: 0px auto;">
+      <div id="map-customer" style="height: 490px; max-width: 100%; margin: 0px auto;">
           <gmp-map center="40.12150192260742,-100.45039367675781" zoom="4" map-id="DEMO_MAP_ID">
             <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
           </gmp-map>
@@ -206,5 +205,9 @@
     ];
 
     initMap();
+
+    function handleChangeYear(year){
+      window.location.href="{{ route('overview.customer') }}?year="+year
+    }
   </script>
 @endsection
