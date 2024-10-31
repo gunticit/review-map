@@ -43,13 +43,13 @@ function initMap() {
             const latLng = place.geometry.location;
             let latitude = latLng.lat();
             let longitude = latLng.lng();
-            document.getElementById('lat').value = latitude;
-            document.getElementById('long').value = longitude;
-            document.getElementById('place-id').value = place?.place_id;
-            document.getElementById('place-name').innerHTML = place?.name;
+            document.getElementById('lat').value = latitude ?? null;
+            document.getElementById('long').value = longitude ?? null;
+            document.getElementById('place-id').value = place?.place_id ?? null;
+            document.getElementById('place-name').innerHTML = place?.name ?? '';
             document.getElementById('place-address').innerHTML = place?.formatted_address !== undefined ? place?.formatted_address : '';
             document.getElementById('place-telephone').innerHTML = place?.formatted_phone_number !== undefined ? 'Số điện thoại: ' + place?.formatted_phone_number : '';
-            document.getElementById('place-rate').innerHTML = place?.rating !== undefined ? 'Rating: ' + place?.rating + ' (' + place?.user_ratings_total + ' đánh giá)' : '';
+            document.getElementById('place-rate').innerHTML = place?.rating !== undefined ? 'Rating: ' + place?.rating + ' (' + place?.user_ratings_total + ' đánh giá)' : 'Rating: Chưa có đánh giá';
             document.getElementById('info-map-reviews').innerHTML = `
             <h3>${place.name}</h3>
             <div class="list-star">
@@ -61,13 +61,13 @@ function initMap() {
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star" aria-hidden="true"></i>
                 </p>
-                ${place?.rating !== undefined ? '(' + place?.user_ratings_total + ')' : ''}
+                ${place?.rating !== undefined ? '(' + place?.user_ratings_total + ')' : '(0)'}
             </div>
             <p>${place.formatted_address !== undefined ? place?.formatted_address : ''}</p>
             <p>${place.formatted_phone_number !== undefined ? 'Số điện thoại: ' + place?.formatted_phone_number : ''}</p>
             <div class="rating-row">
                 ${place?.rating !== undefined ? '<h4>Đánh giá: <span id="avg-rating">' + place?.rating + '</span></h4>' : ''}
-                <span>${place?.user_ratings_total !== undefined ? '(<span id="rating-total">' + place?.user_ratings_total + '<span> lượt)' : ''}</span>
+                <p>${place?.user_ratings_total !== undefined ? '(<span id="rating-total">' + place?.user_ratings_total + '<span> lượt)' : 'Đánh giá: (<span id="rating-total">0<span> lượt)'}</p>
             </div>
             <div id="rating-desire-group">
                 <input type="hidden" name="rating_google" id="rating-google" value="${place?.rating !== undefined ? place?.rating : 0}"/>
@@ -108,6 +108,9 @@ function handleRatingDesire() {
     $('body #suggest').remove();
     let rating_desire = $('body #rating-desire').val();
     let rsTest = $('body #avg-rating').text().trim(); // Điểm google trả về
+    if(!rsTest){
+        rsTest = 0;
+    }
     rsTest = parseFloat((rsTest) + 0.2).toFixed(1);
     if (rating_desire.includes(',')) {
         rating_desire = rating_desire.replace(',', '.');
@@ -156,7 +159,7 @@ function handleRatingDesire() {
                 $('#rating-desire-group').append(`
                     <div id="suggest">
                         <p style="display: flex;gap: 5px;margin-top: 5px;"><span style="margin-top: 5px;color: #e6be00;font-weight: bold;" class="material-symbols-outlined">wb_sunny</span> Số lượng đánh giá cần thiệt để đạt ${rating_desire} sao là ${parseInt(total_rvmm)} đánh giá. Nếu bạn vẫn muốn tiếp tục, vui lòng chọn gói review cao hơn.</p>
-                        <p>Gói review đề xuất: ${package}</p>
+                        <p>Gói review đề xuất: ${package ?? 'Chưa có gói nào phù hợp'}</p>
                     </div>
                 `);
             }else{
