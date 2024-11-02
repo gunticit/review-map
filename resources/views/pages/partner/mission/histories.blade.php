@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-<script src="https://www.google.com/recaptcha/api.js"></script>
 <section class="section nhan-nhiem-vu mb-5 mt-5">
     <div class="container-fluid">
         <div class="row">
@@ -196,7 +195,7 @@
         e.preventDefault();
         const recaptcha = grecaptcha.getResponse();
         if(recaptcha){
-            localStorage.setItem('captchaChecked', true);
+            setCookie('captchaChecked', true, 0.0104);
             $('#recaptcha-form').submit();
         }
     })

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Mission;
+use App\Models\Order;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -56,9 +58,53 @@ class DashboardController extends Controller
         ));
     }
     public function partnerOverview(){
+        // Tổng số đối tác
         $total_partners = User::role('partner')->count();
+        // Xác thực tài khoản
+        $total_verify = User::role('partner')->join('certification_accounts', 'users.id', '=', 'certification_accounts.user_id')->count();
+        // Tổng số đối tác đã nhận hoa hồng (là đã hoàn thành nhiệm vụ)
+        $has_commission = Mission::whereNotIn('status', [5, 6])
+        ->distinct()
+        ->count('user_id');
+        // Tổng số đơn hàng
+        $order_total = Order::where('status', '!=', 'cancelled')->count();
+        // Tổng số nhiệm vụ đã hoàn thành
+        $mission_complete = Mission::where('status', 1)->count();
+        // Số nhiệm vụ đang thực hiện
+        $mission_working = Mission::whereIn('status', array(2,3,4))->count();
+        $user_count = User::get()->countBy('level');
+        $data_chart_level = array();
+        $user_count_sum = $user_count->toArray() ? array_sum($user_count->toArray()) : 0;
+        $data_user_count = array();
+        for($i = 1; $i <= 5; $i++){
+            $data_user_count[$i] = $user_count[$i] ?? 0;
+        }
+        $arr_colors = array(
+            '#d3d3d3',
+            '#b3b3ff',
+            '#6497e5',
+            '#b3d1ff',
+            '#ffc107',
+            '#ffecb3'
+        );
+        if(!empty($data_user_count)){
+            foreach($data_user_count as $key => $value){
+                $dt_val = $user_count_sum > 0 ? $value / $user_count_sum * 100 : 0;
+                $data_chart_level[] = array(
+                    'name' => 'Cấp '.$key,
+                    'y' => number_format($dt_val, 2),
+                    'color' => $arr_colors[$key]
+                );
+            }
+        }
         $data =  array(
             'total_partner' => $total_partners,
+            'total_verify' => $total_verify,
+            'order_total' => $order_total,
+            'mission_complete' => $mission_complete,
+            'mission_working' => $mission_working,
+            'has_commission' => $has_commission,
+            'data_chart_level' => $data_chart_level,
             'total_partner_verified' => 0,
             'total_partner_commission' => 0, // Hoa hồng
             'total_order' => 0,

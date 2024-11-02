@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('warrantie_projects', function (Blueprint $table) {
-            $table->id();
-            $table->integer('project_id');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('level',[1,2,3,4,5])->nullable();
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('warrantie_projects');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('level');
+        });
     }
 };

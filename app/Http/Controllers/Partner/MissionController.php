@@ -228,7 +228,7 @@ class MissionController extends Controller
         $project_info = Project::find($mission->project_id);
         $data['mission'] = new MissionResource($mission);
         $data['mission_id'] = $id;
-        $data['link_map'] = isset($project_info->place_id)?'https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:' . $project_info->place_id.'&reviews':'';
+        $data['link_map'] = isset($project_info->place_id)?'https://www.google.com/maps/embed/v1/place?key={{env("GOOGLE_MAP_API_KEY")}}&q=place_id:' . $project_info->place_id.'&reviews':'';
         return view('pages.partner.mission.confirm', $data);
     }
 

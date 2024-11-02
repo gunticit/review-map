@@ -14,7 +14,7 @@ class ChangePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'current_password' => ['required', 'current_password'],
+            'current_password' => ['required', 'incorrect'],
             'new_password' => [
                 'required',
                 'string',
@@ -29,6 +29,7 @@ class ChangePasswordRequest extends FormRequest
         return [
             'current_password.required' => 'Vui lòng nhập mật khẩu hiện tại.',
             'current_password.password' => 'Mật khẩu hiện tại không đúng.',
+            'current_password.incorrect' => 'Mật khẩu không chính xác.',
             'new_password.required' => 'Vui lòng nhập mật khẩu mới.',
             'new_password.min' => 'Mật khẩu mới phải có ít nhất 8 ký tự.',
             'new_password.mixedCase' => 'Mật khẩu mới phải chứa cả chữ hoa và chữ thường.',

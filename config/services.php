@@ -35,10 +35,10 @@ return [
         ],
     ],
 
-    'recaptcha_v3' => [
-        'siteKey' => env('RECAPTCHA_SITE_KEY'),
-        'secretKey' => env('RECAPTCHA_SECRET'),
-    ],
+    // 'recaptcha_v3' => [
+    //     'siteKey' => env('RECAPTCHA_SITE_KEY'),
+    //     'secretKey' => env('RECAPTCHA_SECRET'),
+    // ],
     'recaptcha_v2' => [
         'siteKey' => env('RECAPTCHA_SITE_KEY'),
         'secretKey' => env('RECAPTCHA_SECRET'),

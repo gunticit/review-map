@@ -7,7 +7,7 @@
       <div class="col-sm-8">
         <div class="row">
           <div class="col-xl-6 col-md-6 col-6 mb-4">
-            <div class="thong-ke-item text-center">
+            <div class="thong-ke-item text-center mb-0">
               <div class="thong-ke-head">
                 <span class="material-symbols-outlined">
                   group
@@ -15,12 +15,12 @@
                 <h5>Tổng số đối tác</h5>
               </div>
               <div class="thong-ke-content">
-                <h6 class="text-primary">{!! $projects['total'] ?? 0 !!}</h6>
+                <h6 class="text-primary">{!! $total_partner ?? 0 !!}</h6>
               </div>
             </div>
           </div>
           <div class="col-xl-6 col-md-4 col-6 mb-4">
-            <div class="thong-ke-item text-center">
+            <div class="thong-ke-item text-center mb-0">
               <div class="thong-ke-head">
                 <span class="material-symbols-outlined">
                   person_check
@@ -28,12 +28,12 @@
                 <h5>Tổng số đối tác đã xác thực</h5>
               </div>
               <div class="thong-ke-content">
-                <h6 class="text-primary">{!! $projects['total_working'] ?? 0 !!}</h6>
+                <h6 class="text-primary">{!! $total_verify ?? 0 !!}</h6>
               </div>
             </div>
           </div>
           <div class="col-xl-6 col-md-6 col-6 mb-4">
-            <div class="thong-ke-item text-center">
+            <div class="thong-ke-item text-center mb-0">
               <div class="thong-ke-head">
                 <span class="material-symbols-outlined">
                   payments
@@ -41,12 +41,12 @@
                 <h5>Tổng số đối tác đã xác nhận hoa hồng</h5>
               </div>
               <div class="thong-ke-content">
-                <h6 class="text-primary">100</h6>
+                <h6 class="text-primary">{{ $has_commission }}</h6>
               </div>
             </div>
           </div>
           <div class="col-xl-6 col-md-6 col-6 mb-4">
-            <div class="thong-ke-item text-center">
+            <div class="thong-ke-item text-center mb-0">
               <div class="thong-ke-head">
                 <span class="material-symbols-outlined">
                   receipt_long
@@ -54,12 +54,12 @@
                 <h5>Tổng số đơn hàng</h5>
               </div>
               <div class="thong-ke-content">
-                <h6 class="text-danger">100</h6>
+                <h6 class="text-danger">{{ $order_total }}</h6>
               </div>
             </div>
           </div>
           <div class="col-xl-6 col-md-6 col-6 mb-4">
-            <div class="thong-ke-item text-center">
+            <div class="thong-ke-item text-center mb-0">
               <div class="thong-ke-head">
                 <span class="material-symbols-outlined">
                   task
@@ -67,12 +67,12 @@
                 <h5>Tổng số nhiệm vụ đã hoàn thành</h5>
               </div>
               <div class="thong-ke-content">
-                <h6 class="text-danger">100</h6>
+                <h6 class="text-danger">{{ $mission_complete }}</h6>
               </div>
             </div>
           </div>
           <div class="col-xl-6 col-md-6 col-6 mb-4">
-            <div class="thong-ke-item text-center">
+            <div class="thong-ke-item text-center mb-0">
               <div class="thong-ke-head">
                 <span class="material-symbols-outlined">
                   tv_options_edit_channels
@@ -80,17 +80,18 @@
                 <h5>Số nhiệm vụ đang thực hiện</h5>
               </div>
               <div class="thong-ke-content">
-                <h6 class="text-danger">100</h6>
+                <h6 class="text-danger">{{ $mission_working }}</h6>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="panel">
+        <div class="panel panel-chart">
           <div class="panel-body">
             <h4>Cấp độ thành viên</h4>
-            <div id="chart-partner"></div>
+            <div id="chart-partner-overview" style="height: 370px; width: 100%;"></div>
+            <div id="chartLabels" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;"></div>
           </div>
         </div>
       </div>
@@ -99,7 +100,7 @@
 </section>
 <!-- end thong ke  -->
 <!-- du-an-cua-ban -->
-<section class="du-an-cua-ban">
+<section class="du-an-cua-ban mb-4">
   <div class="container-fluid">
     <div class="col-inner">
       <div class="row">
@@ -120,9 +121,74 @@
           </select>
         </div>
       </div>
-      <!-- end chart  -->
-      <div id="map-partner" style="height: 290px; max-width: 100%; margin: 0px auto;"></div>
+      <div id="map" style="height: 500px; max-width: 100%; margin: 0px auto;"></div>
     </div>
   </div>
 </section>
+@endsection
+@section('js')
+  <script>
+      window.onload = function () {
+      
+      var chart = new CanvasJS.Chart("chart-partner-overview", {
+        exportEnabled: true,
+        animationEnabled: true,
+        title:{
+          text: ""
+        },
+        legend:{
+          cursor: "pointer",
+          itemclick: explodePie
+        },
+        data: [{
+          type: "doughnut",
+          innerRadius: 60,
+          showInLegend: true,
+          indexLabelPlacement: "inside",
+          toolTipContent: "<strong>{y}%</strong>",
+          indexLabel: "{y}%",
+          dataPoints: @json($data_chart_level)
+        }]
+      });
+      chart.render();
+    }
+    
+    function explodePie (e) {
+      if(typeof (e.dataSeries.dataPoints[e.dataPointIndex].exploded) === "undefined" || !e.dataSeries.dataPoints[e.dataPointIndex].exploded) {
+        e.dataSeries.dataPoints[e.dataPointIndex].exploded = true;
+      } else {
+        e.dataSeries.dataPoints[e.dataPointIndex].exploded = false;
+      }
+      e.chart.render();
+    
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_API_KEY') }}&callback=initMap" async defer></script>
+  <script>
+    let map;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 10.8231, lng: 106.6297 }, 
+            zoom: 10,
+        });
+        const locations = [
+            { lat: 10.8231, lng: 106.6297, title: "Sai Gon" },
+            { lat: 21.0285, lng: 105.8542, title: "Ha Noi" },
+            { lat: 16.0471, lng: 108.2068, title: "Da Nang" }
+        ];
+        locations.forEach(location => {
+            const marker = new google.maps.Marker({
+                position: { lat: location.lat, lng: location.lng },
+                map: map,
+                title: location.title,
+            });
+            const infoWindow = new google.maps.InfoWindow({
+                content: `<h5>${location.title}</h5>`,
+            });
+            marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+            });
+        });
+    }
+  </script>
 @endsection

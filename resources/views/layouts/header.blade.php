@@ -40,6 +40,7 @@
         <script src="{{ asset('./assets/js/verifyOtp.js') }}?v={{ time() }}"></script>
         <script src="{{ asset('./js/payment/dynamicDepositAmount.js') }}?v={{ time() }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://www.google.com/recaptcha/api.js"></script>
         <link href="
         https://cdn.jsdelivr.net/npm/jquery-datetime-picker@2.5.11/jquery.datetimepicker.min.css
         " rel="stylesheet">
@@ -67,7 +68,7 @@
                 <div class="modal-body">
                     <h4 class="fw-500 text-primary">60 phút</h4>
                     <p>Phần thưởng <span class="fw-500">10.000 VND</span> khi Review <span class="fw-500">RO1234</span></p>
-                    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_V2_SITE_KEY') }}"></div>
+                    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
                 </div>
                 <div class="modal-footer">
                     <a  class="btn btn-outline-primary btn-lg" data-bs-dismiss="modal" aria-label="Close" >Hủy</a>
@@ -81,10 +82,15 @@
 <script>
     $(window).on('load', function() {
         // Get mission
-        $('#btn-get-mission, #btn-get-mission2').on('click', function(e){
+        $('body #btn-get-mission,body #btn-get-mission2').on('click', function(e){
             e.preventDefault();
             e.stopPropagation();
-            let check_location = localStorage.getItem('current_location');
+            let checkCaptcha = getCookie('captchaChecked');
+            if(!checkCaptcha){
+                $('#missionModal').modal('show');
+                return;
+            }
+            let check_location = getCookie('current_location');
             if(!check_location){
                 $('#warning-location-modal').modal('show');
             } else {

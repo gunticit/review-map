@@ -12,7 +12,7 @@
             <h5>Nhiệm vụ <br> đã nhận</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">100</h6>
+            <h6 class="text-primary">{{ $total_mission }}</h6>
           </div>
         </div>
       </div>

@@ -95,7 +95,6 @@
                 error: function(xhr) {
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
-                        
                         for (let key in errors) {
                             $('#error-message').append('<p class="text-danger">'+errors[key]+'</p>');
                         }

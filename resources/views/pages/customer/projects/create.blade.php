@@ -185,25 +185,6 @@
     .border-error{
         border: 1px solid #f00 !important;
     }
-    .btn-check-map{
-        background: #b0b0b0;
-        color: #3c3b3b;
-        border: transparent;
-        cursor: pointer;
-        transition: all ease .4s
-    }
-    .btn-check-map.btn-success{
-        background: #00bb0e;
-        color: #ffffff;
-    }
-    .btn-check-map:hover{
-        background: #c1c1c1;
-        color: #3c3b3b;
-    }
-    .btn-check-map.border-error{
-        border: 1px solid #f00;
-        background: #f1f1f1;
-    }
     .loader {
         width: 48px;
         height: 48px;
@@ -788,9 +769,10 @@
     </script>
     <script>
         // Add preview map
-        $('#confirm-url-map').on('click', function(){
-            let place_id = $('#place-id').val();
+        $('body #confirm-url-map').on('click', function(){
+            let place_id = $('body #place-id').val();
             if(place_id != ''){
+                $('#preview-map').remove();
                 $('#preview-map').html(`<iframe src="https://www.google.com/maps/embed/v1/place?key={{ env('GOOGLE_MAP_API_KEY') }}&q=place_id:${place_id}" 
                 width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>`);
             }

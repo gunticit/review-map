@@ -256,11 +256,17 @@
                             <label>Chọn Map<span class="required">*</span>
                             </label>
                             <div class="row">
+                                <div id="preview-map">
+                                    @if($project->place_id)
+                                    <iframe src="https://www.google.com/maps/embed/v1/place?key={{ env('GOOGLE_MAP_API_KEY') }}&q=place_id:{{ $project->place_id }}" 
+                                    width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                                    @endif
+                                </div>
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-primary btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">Nhấn để Map</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn {!! $project->place_id ? 'btn-success':'btn-primary' !!} btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">Nhấn để Map</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
                                 </div>
                                 <input id="lat" type="hidden" name="latitude" value="{{ $project->latitude }}" />
-                                <input id="long" type="hidden" name="longitude" value="{{ $project->place_id }}" />
+                                <input id="long" type="hidden" name="longitude" value="{{ $project->longitude }}" />
                                 <input id="place-id" type="hidden" name="place_id" value="{{ $project->place_id }}" />
                             </div>
                         </div>
@@ -407,22 +413,6 @@
                                 <input type="number" step="0.1" min="{{ $project->rating_google }}" max="4.9" class="form-control" value="{{ $project->rating_desire }}" name="rating_desire" id="rating-desire"/>
                             </div>
                         </div>
-                        <div id="video-intro">
-                            <h2>Hướng dẫn lấy URL</h2>
-                            <div id="detail-video">
-                                <button onclick="playPause()" type="button" class="btn-play-video">
-                                    <span class="material-symbols-outlined">
-                                        play_circle
-                                    </span>
-                                </button>
-                                <video id="video1" width="420" style="max-width: 100%;">
-                                    <source src="{{ asset('assets/video/mov_bbb.mp4') }}" type="video/mp4">
-                                    <source src="{{ asset('assets/video/mov_bbb.ogg') }}" type="video/ogg">
-                                    Your browser does not support HTML video.
-                                </video>
-                            </div>
-                        </div>
-                        <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/MLpWrANjFbI?si=ZGXqWQK6lxYSxRAW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
                         <h3 class="col-title">Rải chậm</h3>
                         <p>Rải chậm giúp các đánh giá thật hơn. Chi phí rải chậm một ngày là 2.000 VND</p>
                         <h3 class="col-title">Từ khóa</h3>
@@ -710,6 +700,17 @@
                     $('#form-create-project').submit();
                 }
             }); 
+        });
+    </script>
+    <script>
+        // Add preview map
+        $('body #confirm-url-map').on('click', function(){
+            let place_id = $('body #place-id').val();
+            if(place_id != ''){
+                $('#preview-map').remove();
+                $('#preview-map').html(`<iframe src="https://www.google.com/maps/embed/v1/place?key={{ env('GOOGLE_MAP_API_KEY') }}&q=place_id:${place_id}" 
+                width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>`);
+            }
         });
     </script>
 @endsection
