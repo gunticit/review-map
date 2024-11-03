@@ -19,18 +19,18 @@
                 @endphp
                 <!-- Sidenav Heading (Khac)-->
                 <div class="sidenav-menu-heading">Khác</div>
-                <a class="nav-link" href="{{ route($roleSupport) }}">
+                <a class="nav-link {!! request()->routeIs($roleSupport) || request()->routeIs('customer.support.create') ? 'active' : '' !!}" href="{{ route($roleSupport) }}">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">support_agent</span>
                     </div> <?= __('menu.request_support') ?>
                 </a>
-                <a class="nav-link" href="{{ route('faq') }}">
+                <a class="nav-link {!! request()->routeIs('faq') ? 'active' : '' !!}" href="{{ route('faq') }}">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">quiz</span>
                     </div> FAQ
                 </a>
                 @if(Auth::user()->getRoleNames()->first() == 'admin')
-                <a class="nav-link" href="{{ route('setting') }}">
+                <a class="nav-link {!! request()->routeIs('setting') ? 'active' : '' !!}" href="{{ route('setting') }}">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">
                             settings
@@ -38,7 +38,7 @@
                     </div> Cài đặt
                 </a>
                 @endif
-                <a class="nav-link link-danger" href="{{ route('logout') }}">
+                <a class="nav-link link-danger {{ request()->routeIs('logout') ? 'active' : '' }}" href="{{ route('logout') }}">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">logout</span>
                     </div> <?= __('menu.logout') ?>

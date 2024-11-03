@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <section class="section notificate-partner mb-5 mt-5">
+    <section class="section notificate-partner mb-5 mt-5 list-notificate">
         <div class="container-fluid">
             <div class="row">
                 <div class="clear col-sm-12 text-right">
@@ -59,7 +59,7 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td class="list-table-stt">{!! date('d/m/Y H:i:s', strtotime($notificate->created_at)) !!}</td>
                                     <td class="list-table-code">
-                                        <a href="{{ route('edit.notificate.partner', $notificate->id) }}" class="text-primary">{{ $notificate->title }}</a>
+                                        <a href="{{ route('detail.notificate.partner', $notificate->id) }}" class="text-primary">{{ $notificate->title }}</a>
                                     </td>
                                     <td class="list-table-actions">
                                         <form action="{{ route('delete.notificate.partner', $notificate->id) }}" method="POST" style="display:inline-block;">

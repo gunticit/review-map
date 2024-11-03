@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('role_id')->nullable();
             $table->integer('support_id')->nullable();
             $table->string('file_path')->nullable();
+            $table->integer('send_group_id')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

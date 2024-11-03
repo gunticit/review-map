@@ -57,7 +57,7 @@ Route::group([
         Route::get('/detail-notificate-partner/{id}', [NotificateController::class, 'partner_detail'])->name('detail.notificate.partner');
         Route::get('/create-notificate-partner', [NotificateController::class, 'partner_create'])->name('create.notificate.partner');
         Route::post('/store-notificate-partner', [NotificateController::class, 'partner_store'])->name('store.notificate.partner');
-        Route::put('/edit-notificate-partner/{id}', [NotificateController::class, 'partner_edit'])->name('edit.notificate.partner');
+        Route::post('/edit-notificate-partner/{id}', [NotificateController::class, 'partner_edit'])->name('edit.notificate.partner');
         Route::delete('/delete-notificate-partner/{id}', [NotificateController::class, 'partner_delete'])->name('delete.notificate.partner');
 
         Route::get('/list-notificate-customer', [NotificateController::class, 'customer_list'])->name('list.notificate.customer');

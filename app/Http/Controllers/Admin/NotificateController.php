@@ -27,7 +27,7 @@ class NotificateController extends Controller
     {
         $customer_ids = User::role('customer')->get()->pluck('id')->toArray();
         $request->merge(['user_ids' => $customer_ids]);
-        $notifications = $this->notificationService->list($request);
+        $notifications = $this->notificationService->customer_list($request);
         return view('pages.admin.notification.customer-list',[
             'notifications' => $notifications
         ]);
@@ -36,24 +36,26 @@ class NotificateController extends Controller
     {
         $partner_ids = User::role('partner')->get()->pluck('id')->toArray();
         $request->merge(['user_ids' => $partner_ids]);
-        $notifications = $this->notificationService->list($request);
+        $notifications = $this->notificationService->partner_list($request);
         return view('pages.admin.notification.partner-list',[
             'notifications' => $notifications
         ]);
     }
 
-    public function partner_create(Request $request){
-        $deparments = Department::all();
-        return view('pages.admin.notification.partner-create',[
-            'departments' => $deparments
+    public function partner_detail($id){
+        $notification = $this->notificationService->find($id);
+        return view('pages.admin.notification.partner-detail',[
+            'notification' => $notification
         ]);
+    }
+
+    public function partner_create(Request $request){
+        return view('pages.admin.notification.partner-create');
     }
 
     public function customer_create(Request $request){
         $deparments = Department::all();
-        return view('pages.admin.notification.customer-create',[
-            'departments' => $deparments
-        ]);
+        return view('pages.admin.notification.customer-create');
     }
 
     public function partner_delete($id){
@@ -65,7 +67,7 @@ class NotificateController extends Controller
     {
         try {
             $data = $request->all();
-            $data['filepath'] = implode('|', $this->uploadImage($request));
+            $data['file_path'] = implode('|', $this->uploadImage($request));
             $partner_ids = User::role('partner')->get()->pluck('id')->toArray();
             $dataNotification = [];
             foreach($partner_ids as $partner_id) {
@@ -73,6 +75,7 @@ class NotificateController extends Controller
                     'user_id' => $partner_id,
                     'title' => $data['title'],
                     'content' => $data['content'],
+                    'file_path' => $data['file_path'] ?? '',
                     'created_at' => now(),
                     'created_by' => auth()->user()->id
                 ];

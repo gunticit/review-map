@@ -20,7 +20,7 @@
                     </div>
                     <div class="file-download text-right">
                         @if(isset($notification->file_path))
-                            <a href="{{ url($notification->file_path) }}" class="btn btn-outline-primary fw-300 mt-3 py-2 px-4" target="_blank">
+                            <a href="{{ url('storage/'.$notification->file_path) }}" class="btn btn-outline-primary fw-300 mt-3 py-2 px-4" target="_blank">
                                 <span class="material-symbols-outlined">
                                     download
                                 </span>

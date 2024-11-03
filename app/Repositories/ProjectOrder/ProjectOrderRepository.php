@@ -5,7 +5,7 @@ use App\Repositories\BaseRepository;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 
-class  ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
+class ProjectOrderRepository extends BaseRepository implements ProjectOrderRepositoryInterface
 {
     protected $model;
 

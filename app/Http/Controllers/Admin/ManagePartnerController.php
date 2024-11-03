@@ -71,6 +71,7 @@ class ManagePartnerController extends Controller
             'partner_id' => $id,
             'partner_info' => $partner_info,
             'project_info' => $project_info,
+            'expenditure_info' => $expenditure_info,
             'projects' => $projects
         ]);
     }

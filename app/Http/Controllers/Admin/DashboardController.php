@@ -97,6 +97,15 @@ class DashboardController extends Controller
                 );
             }
         }
+        $data_customer_data = User::role('customer')->where('latitude', '!=', null)->where('longitude', '!=', null)->select('name','id','latitude','longitude')->get()->toArray();
+        $data_customer_data = array_map(function($item){
+            return array(
+                'name' => $item['name'],
+                'id' => $item['id'],
+                'latitude' => (float)$item['latitude'],
+                'longitude' => (float)$item['longitude']
+            );
+        },$data_customer_data);
         $data =  array(
             'total_partner' => $total_partners,
             'total_verify' => $total_verify,
@@ -105,6 +114,9 @@ class DashboardController extends Controller
             'mission_working' => $mission_working,
             'has_commission' => $has_commission,
             'data_chart_level' => $data_chart_level,
+            'data_customer_data' => $data_customer_data,
+            'current_lat' => $data_customer_data[0]['latitude'],
+            'current_long' => $data_customer_data[0]['longitude'],
             'total_partner_verified' => 0,
             'total_partner_commission' => 0, // Hoa hồng
             'total_order' => 0,

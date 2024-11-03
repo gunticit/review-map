@@ -12,7 +12,7 @@
         <a class="nav-link {!! request()->routeIs('overview.partner') ? 'active' : '' !!}" href="{{ route('overview.partner') }}"><?= __('menu.home_partner') ?></a>
     </nav>
 </div>
-<a class="nav-link" href="{{ route('statistics.index') }}">
+<a class="nav-link {!! request()->routeIs('statistics.index') ? 'active' : '' !!}" href="{{ route('statistics.index') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             monitoring
@@ -26,20 +26,20 @@
         <span class="material-symbols-outlined">chevron_right</span>
     </div>
 </a>
-<div class="collapse {!! request()->routeIs('home') || request()->routeIs('list.notificate.partner') || request()->routeIs('list.notificate.customer') ? 'show' : '' !!}" id="collapseNotification" data-bs-parent="#accordionNotification">
+<div class="collapse {!! request()->routeIs('home') || request()->routeIs('list.notificate.partner') || request()->routeIs('create.notificate.partner') || request()->routeIs('create.notificate.customer') || request()->routeIs('list.notificate.customer') ? 'show' : '' !!}" id="collapseNotification" data-bs-parent="#accordionNotification">
     <nav class="sidenav-menu-nested nav accordion" id="accordionNotificationChild">
-        <a class="nav-link {!! request()->routeIs('list.notificate.customer') ? 'active' : '' !!}" href="{{ route('list.notificate.customer') }}">Thông báo khách hàng</a>
-        <a class="nav-link {!! request()->routeIs('list.notificate.partner') ? 'active' : '' !!}" href="{{ route('list.notificate.partner') }}">Thông báo đối tác</a>
+        <a class="nav-link {!! request()->routeIs('list.notificate.customer') || request()->routeIs('create.notificate.customer') ? 'active' : '' !!}" href="{{ route('list.notificate.customer') }}">Thông báo khách hàng</a>
+        <a class="nav-link {!! request()->routeIs('list.notificate.partner') || request()->routeIs('create.notificate.partner') ? 'active' : '' !!}" href="{{ route('list.notificate.partner') }}">Thông báo đối tác</a>
     </nav>
 </div>
-<a class="nav-link" href="{{ route('manage-customer.index') }}">
+<a class="nav-link {!! request()->routeIs('manage-customer.index') ? 'active' : '' !!}" href="{{ route('manage-customer.index') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             group
         </span>
     </div> Quản lý khách hàng
 </a>
-<a class="nav-link" href="{{ route('project.list') }}">
+<a class="nav-link {!! request()->routeIs('project.list') ? 'active' : '' !!}" href="{{ route('project.list') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             description
@@ -54,7 +54,7 @@
     </div> <span>Kiểm duyệt</span> 
     {{-- <span class="badge bg-danger rounded-pill ms-2">2</span> --}}
 </a>
-<a class="nav-link {!! request()->routeIs('admin.manage.partner.list') !!}" href="{{ route('admin.manage.partner.list') }}">
+<a class="nav-link {!! request()->routeIs('admin.manage.partner.list') || request()->routeIs('admin.manage.partner.info') || request()->routeIs('admin.manage.partner.wallet') || request()->routeIs('admin.manage.partner.project') || request()->routeIs('admin.manage.partner.edit') ? 'active' : '' !!}" href="{{ route('admin.manage.partner.list') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             group
@@ -80,14 +80,14 @@
         <span class="material-symbols-outlined">chevron_right</span>
     </div>
 </a>
-<div class="collapse {!! request()->routeIs('category.index') || request()->routeIs('product.index') || request()->routeIs('order.index') ? 'show' : '' !!}" id="collapseProduct" data-bs-parent="#accordionProduct">
+<div class="collapse {!! request()->routeIs('category.index') || request()->routeIs('category.create') || request()->routeIs('product.index') || request()->routeIs('product.create') || request()->routeIs('order.index') || request()->routeIs('order.create') ? 'show' : '' !!}" id="collapseProduct" data-bs-parent="#accordionProduct">
     <nav class="sidenav-menu-nested nav accordion" id="accordionProductChild">
-        <a class="nav-link {!! request()->routeIs('category.index') ? 'active' : '' !!}" href="{{ route('category.index') }}">Danh mục sản phẩm</a>
-        <a class="nav-link {!! request()->routeIs('product.index') ? 'active' : '' !!}" href="{{ route('product.index') }}">Danh sách sản phẩm</a>
-        <a class="nav-link {!! request()->routeIs('order.index') ? 'active' : '' !!}" href="{{ route('order.index') }}">Quản lý đơn đặt hàng</a>
+        <a class="nav-link {!! request()->routeIs('category.index') || request()->routeIs('category.create') ? 'active' : '' !!}" href="{{ route('category.index') }}">Danh mục sản phẩm</a>
+        <a class="nav-link {!! request()->routeIs('product.index') || request()->routeIs('product.create') ? 'active' : '' !!}" href="{{ route('product.index') }}">Danh sách sản phẩm</a>
+        <a class="nav-link {!! request()->routeIs('order.index') || request()->routeIs('order.create') ? 'active' : '' !!}" href="{{ route('order.index') }}">Quản lý đơn đặt hàng</a>
     </nav>
 </div>
-<a class="nav-link" href="{{ route('voucher.index') }}">
+<a class="nav-link {!! request()->routeIs('voucher.index') || request()->routeIs('voucher.create') ? 'active' : '' !!}" href="{{ route('voucher.index') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">
             barcode_scanner

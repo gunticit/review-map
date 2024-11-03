@@ -72,6 +72,7 @@ class VoucherController extends Controller
     }
 
     public function checkAjaxApplyVoucher(Request $request){
-        $voucher =$this->voucherService
+        $voucher =$this->voucherService->checkAjaxApplyVoucher($request);
+        return $voucher;
     }
 }

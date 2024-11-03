@@ -42,7 +42,7 @@
                             <tr>
                                 <td width="35">{{ $partner->id }}</td>
                                 <td class="list-table-title">
-                                    <a href="{{ route('project.edit', ['id' => $partner->id]) }}">{{ $partner->name }}</a>
+                                    <a href="{{ route('admin.manage.partner.info', ['id' => $partner->id]) }}">{{ $partner->name }}</a>
                                 </td>
                                 <td>
                                     {{ $partner->name }}

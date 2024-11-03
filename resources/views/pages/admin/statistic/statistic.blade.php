@@ -26,7 +26,7 @@
             <h5>Tổng chi phí</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{!! $projects['total_working'] ?? 0 !!}</h6>
+            <h6 class="text-primary">{!! moneyFormat($total_expense) ?? 0 !!} VND</h6>
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@
             <h5>Tổng lợi nhuận</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{!! $projects['total_stopped'] ?? 0 !!}</h6>
+            <h6 class="text-primary">{!! moneyFormat($total_profit) ?? 0 !!}</h6>
           </div>
         </div>
       </div>

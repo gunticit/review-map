@@ -4412,11 +4412,17 @@ table.bt .list-table-title a {
   margin-left: 20px;
 }
 .single-post-description {
-  max-width: 1000px;
   color: #5D6A83;
   margin: auto;
+  padding: 15px;
+  background: #f7f7f7;
+  border-radius: 8px;
+  width: 90%;
+  max-width: unset;
 }
-
+.list-notificate .list-table td, .list-notificate .list-table th{
+  text-align: center;
+}
 .Tagslist-wrap {
   margin-bottom: 10px;
 }

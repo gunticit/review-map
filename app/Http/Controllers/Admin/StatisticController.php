@@ -29,6 +29,10 @@ class StatisticController extends Controller
         );
         $project_info = $this->projectService->list($request);
         $mission_price = $this->missionService->getPrice($request);
+        // Tổng chi phí
+        $total_expense = 0;
+        // Tổng lợi nhuận
+        $total_profit = 0;
         $data_chars = array(
             'total_cost' => 0,
             'total_commission' => 0,
@@ -38,7 +42,8 @@ class StatisticController extends Controller
             'filters' => $filters,
             'revenue' =>  0, // Doanh thu
             'commission' =>  0, // Hoa hồng
-            'profits' =>  0, // Lợi nhuận
+            'total_profit' =>  $total_profit, // Lợi nhuận
+            'total_expense' => $total_expense, // Tổng chi phí
             'all_price_projects' => $project_info['all_price_projects'] ?? 0,
             'data_chars' => $data_chars
         ]);

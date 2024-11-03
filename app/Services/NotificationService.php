@@ -23,6 +23,21 @@ class NotificationService {
         return $data;
     }
 
+    public function find($id){
+        $data = $this->notificationRepository->find($id);
+        return $data;
+    }
+
+    public function customer_list($request){
+        $data = $this->notificationRepository->listByGroupTitle($request);
+        return $data;
+    }
+
+    public function partner_list($request){
+        $data = $this->notificationRepository->listByGroupTitle($request);
+        return $data;
+    }
+
     public function create($request){
         $notification = $this->filterData($request);
         $data = $this->notificationRepository->create($notification);

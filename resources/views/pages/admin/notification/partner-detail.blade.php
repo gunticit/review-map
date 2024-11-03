@@ -90,13 +90,13 @@
                     <!-- Title Input -->
                     <div class="mb-4">
                         <label for="inputlist-table">{{ __('support.title') }} <span class="required">*</span></label>
-                        <input class="form-control" name="title" id="inputlist-table" type="text" placeholder="Nhập tiêu đề" value="{{ old('title') }}" required>
+                        <input class="form-control" name="title" id="inputlist-table" type="text" placeholder="Nhập tiêu đề" value="{{ $notification->title }}" required>
                     </div>
                     
                     <!-- Content Input -->
                     <div class="mb-4">
                         <label for="inputDescription">{{ __('support.content') }} <span class="required">*</span></label>
-                        <textarea class="form-control" name="content" id="inputDescription" placeholder="Nhập mô tả" required>{{ old('content') }}</textarea>
+                        <textarea class="form-control" name="content" id="inputDescription" placeholder="Nhập mô tả" required>{{ $notification->content }}</textarea>
                     </div>
 
                     <!-- File Upload -->

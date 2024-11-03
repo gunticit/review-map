@@ -10,8 +10,8 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
 <script src="{{ asset('./assets/js/map.js') }}"></script>
 <script>
-    let latitude = Number('<?= $project->latitude ?>');
-    let longitude = Number('<?= $project->longitude ?>');
+    let latitude = Number('<?= $project->latitude ?? 0 ?>');
+    let longitude = Number('<?= $project->longitude ?? 0 ?>');
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             latitude = position.coords.latitude;
