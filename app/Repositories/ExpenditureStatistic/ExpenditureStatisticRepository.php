@@ -41,6 +41,9 @@ class  ExpenditureStatisticRepository extends BaseRepository implements Expendit
         if($request->month){
             $query->whereMonth('month', $request->month);
         }
+        if($request->year){
+            $query->whereYear('month', $request->year);
+        }
         return $query->first();
     }
 
@@ -54,5 +57,10 @@ class  ExpenditureStatisticRepository extends BaseRepository implements Expendit
     
     public function getMonthExpenditureByUser($user_id){
         return $this->model->where('user_id', $user_id)->select('month','money')->get()->pluck('money','month')->toArray();
+    }
+
+    public function getAllExpenditure(){
+        $data = $this->model->selectRaw('month,sum(money) as money')->groupBy('month')->orderBy('month', 'desc')->get()->pluck('money','month')->toArray();
+        return $data;
     }
 }

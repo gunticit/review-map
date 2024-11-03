@@ -49,12 +49,24 @@ class DashboardController extends Controller
             'total_project_pause' => $total_project_pause,
             'total_project_guarantee' => $total_project_guarantee
         );
+        $data_customer_data = User::role('customer')->where('latitude', '!=', null)->where('longitude', '!=', null)->select('name','id','latitude','longitude')->get()->toArray();
+        $data_customer_data = array_map(function($item){
+            return array(
+                'name' => $item['name'],
+                'id' => $item['id'],
+                'latitude' => (float)$item['latitude'],
+                'longitude' => (float)$item['longitude']
+            );
+        },$data_customer_data);
         return view('pages.admin.dashboard.customer-overview', array(
             'overview' => $data,
             'years' => $years,
             'filters' => array(
                 'year' => $request->year ?? ''
-            )
+            ),
+            'data_customer_data' => $data_customer_data,
+            'current_lat' => $data_customer_data[0]['latitude'],
+            'current_long' => $data_customer_data[0]['longitude'],
         ));
     }
     public function partnerOverview(){
@@ -97,15 +109,15 @@ class DashboardController extends Controller
                 );
             }
         }
-        $data_customer_data = User::role('customer')->where('latitude', '!=', null)->where('longitude', '!=', null)->select('name','id','latitude','longitude')->get()->toArray();
-        $data_customer_data = array_map(function($item){
+        $data_partner_data = User::role('partner')->where('latitude', '!=', null)->where('longitude', '!=', null)->select('name','id','latitude','longitude')->get()->toArray();
+        $data_partner_data = array_map(function($item){
             return array(
                 'name' => $item['name'],
                 'id' => $item['id'],
                 'latitude' => (float)$item['latitude'],
                 'longitude' => (float)$item['longitude']
             );
-        },$data_customer_data);
+        },$data_partner_data);
         $data =  array(
             'total_partner' => $total_partners,
             'total_verify' => $total_verify,
@@ -114,9 +126,9 @@ class DashboardController extends Controller
             'mission_working' => $mission_working,
             'has_commission' => $has_commission,
             'data_chart_level' => $data_chart_level,
-            'data_customer_data' => $data_customer_data,
-            'current_lat' => $data_customer_data[0]['latitude'],
-            'current_long' => $data_customer_data[0]['longitude'],
+            'data_partner_data' => $data_partner_data,
+            'current_lat' => $data_partner_data[0]['latitude'],
+            'current_long' => $data_partner_data[0]['longitude'],
             'total_partner_verified' => 0,
             'total_partner_commission' => 0, // Hoa hồng
             'total_order' => 0,

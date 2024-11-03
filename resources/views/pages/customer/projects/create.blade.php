@@ -313,7 +313,11 @@
                             <label>{{ __('project.choose_map') }}<span class="required">*</span>
                             </label>
                             <div class="row">
-                                <div id="preview-map"></div>
+                                <div class="col-12">
+                                    <div id="preview-map"></div>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-12 group-check-map">
                                     <button type="button" class="btn btn-primary btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">{{ __('project.press_to_choose') }}</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
                                 </div>
@@ -772,7 +776,7 @@
         $('body #confirm-url-map').on('click', function(){
             let place_id = $('body #place-id').val();
             if(place_id != ''){
-                $('#preview-map').remove();
+                $('#preview-map iframe').remove();
                 $('#preview-map').html(`<iframe src="https://www.google.com/maps/embed/v1/place?key={{ env('GOOGLE_MAP_API_KEY') }}&q=place_id:${place_id}" 
                 width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>`);
             }

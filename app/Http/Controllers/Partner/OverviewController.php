@@ -14,16 +14,16 @@ class OverviewController extends Controller
     public function index()
     {
         $total_mission = Mission::where('user_id', auth()->user()->id)->get()->pluck('status')->toArray();
-        $total_mission = 0;
+        
         if(!empty($total_mission)){
+            // dd($total_mission);
         }
-        dd($total_mission);
         $data = array(
             'data_chars' => array(
                 'completed' => 0,
                 'money_earned' => 0
             ),
-            'total_mission' => $total_mission
+            'total_mission' => 0
         );
         return view('pages.partner.overview.index', $data);
     }

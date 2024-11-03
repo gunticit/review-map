@@ -100,3 +100,14 @@
         })
     })
 </script>
+
+<script>
+    $('#submit-captcha').on('click', function(e){
+        e.preventDefault();
+        const recaptcha = grecaptcha.getResponse();
+        if(recaptcha){
+            setCookie('captchaChecked', true, 0.0104);
+            $('#recaptcha-form').submit();
+        }
+    })
+</script>

@@ -3,17 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\ExpenditureStatisticService;
 use App\Services\MissionService;
 use App\Services\ProjectService;
 use Illuminate\Http\Request;
 
 class StatisticController extends Controller
 {
-    protected $projectService, $missionService;
-    public function __construct(ProjectService $projectService, MissionService $missionService)
+    protected $projectService, $missionService, $expenditureStatisticService;
+    public function __construct(
+        ProjectService $projectService, 
+        MissionService $missionService,
+        ExpenditureStatisticService $expenditureStatisticService
+    )
     {
         $this->projectService = $projectService;
         $this->missionService = $missionService;
+        $this->expenditureStatisticService = $expenditureStatisticService;
     }
     /**
      * Display a listing of the resource.
@@ -29,10 +35,13 @@ class StatisticController extends Controller
         );
         $project_info = $this->projectService->list($request);
         $mission_price = $this->missionService->getPrice($request);
-        // Tổng chi phí
+        // Tổng thu nhập ADMIN: Tổng số chi tiêu khách hàng
+        $earning_by_months = $this->expenditureStatisticService->getAllExpenditure();
+        $total_earning = array_sum($earning_by_months);
+        // Tổng chi phí ADMIN: Tổng tiền đối tác kiếm được
         $total_expense = 0;
         // Tổng lợi nhuận
-        $total_profit = 0;
+        $total_profit = $total_earning - $total_expense;
         $data_chars = array(
             'total_cost' => 0,
             'total_commission' => 0,
@@ -40,10 +49,10 @@ class StatisticController extends Controller
         );
         return view('pages.admin.statistic.statistic', [
             'filters' => $filters,
-            'revenue' =>  0, // Doanh thu
-            'commission' =>  0, // Hoa hồng
-            'total_profit' =>  $total_profit, // Lợi nhuận
-            'total_expense' => $total_expense, // Tổng chi phí
+            'earning_by_months' => $earning_by_months,
+            'total_earning' =>  $total_earning, // Tổng thu nhập admin
+            'total_profit' =>  $total_profit, // Lợi nhuận admin
+            'total_expense' => $total_expense, // Tổng chi phí admin
             'all_price_projects' => $project_info['all_price_projects'] ?? 0,
             'data_chars' => $data_chars
         ]);

@@ -113,11 +113,8 @@
         </div>
       </div>
       <!-- end chart  -->
-      <div id="map-customer" style="height: 490px; max-width: 100%; margin: 0px auto;">
-          <gmp-map center="40.12150192260742,-100.45039367675781" zoom="4" map-id="DEMO_MAP_ID">
-            <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
-          </gmp-map>
-      </div>
+      
+      <div id="map" style="height: 500px; max-width: 100%; margin: 0px auto;"></div>
     </div>
   </div>
 </section>
@@ -135,79 +132,31 @@
   <script async src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_API_KEY') }}&callback=console.debug&libraries=maps,marker&v=beta">
   </script>
   <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+  
+  <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_API_KEY') }}&callback=initMap" async defer></script>
   <script>
-    async function initMap() {
-      // Request needed libraries.
-      const { Map, InfoWindow } = await google.maps.importLibrary("maps");
-      const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
-        "marker",
-      );
-      const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 3,
-        center: { lat: -28.024, lng: 140.887 },
-        mapId: "DEMO_MAP_ID",
-      });
-      const infoWindow = new google.maps.InfoWindow({
-        content: "",
-        disableAutoPan: true,
-      });
-      // Create an array of alphabetical characters used to label the markers.
-      const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      // Add some markers to the map.
-      const markers = locations.map((position, i) => {
-        const label = labels[i % labels.length];
-        const pinGlyph = new google.maps.marker.PinElement({
-          glyph: label,
-          glyphColor: "white",
+    let map;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: {{$current_lat}}, lng: {{$current_long}} }, 
+            zoom: 10,
         });
-        const marker = new google.maps.marker.AdvancedMarkerElement({
-          position,
-          content: pinGlyph.element,
+        const locations = @json($data_customer_data);
+        locations.forEach(location => {
+            const marker = new google.maps.Marker({
+                position: { lat: location.latitude, lng: location.longitude },
+                map: map,
+                title: location.name,
+            });
+            let urlMap = `{{ route('admin.manage.partner.info', ['id' => ':id']) }}`.replace(':id', location.id);
+            const infoWindowContent = `<h5><a href="${urlMap}">${location.name}</a></h5>`;
+            const infoWindow = new google.maps.InfoWindow({
+                content: infoWindowContent,
+            });
+            marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+            });
         });
-
-        // markers can only be keyboard focusable when they have click listeners
-        // open info window when marker is clicked
-        marker.addListener("click", () => {
-          infoWindow.setContent(position.lat + ", " + position.lng);
-          infoWindow.open(map, marker);
-        });
-        return marker;
-      });
-
-      // Add a marker clusterer to manage the markers.
-      const markerCluster = new markerClusterer.MarkerClusterer({ markers, map });
-    }
-
-    const locations = [
-      { lat: -31.56391, lng: 147.154312 },
-      { lat: -33.718234, lng: 150.363181 },
-      { lat: -33.727111, lng: 150.371124 },
-      { lat: -33.848588, lng: 151.209834 },
-      { lat: -33.851702, lng: 151.216968 },
-      { lat: -34.671264, lng: 150.863657 },
-      { lat: -35.304724, lng: 148.662905 },
-      { lat: -36.817685, lng: 175.699196 },
-      { lat: -36.828611, lng: 175.790222 },
-      { lat: -37.75, lng: 145.116667 },
-      { lat: -37.759859, lng: 145.128708 },
-      { lat: -37.765015, lng: 145.133858 },
-      { lat: -37.770104, lng: 145.143299 },
-      { lat: -37.7737, lng: 145.145187 },
-      { lat: -37.774785, lng: 145.137978 },
-      { lat: -37.819616, lng: 144.968119 },
-      { lat: -38.330766, lng: 144.695692 },
-      { lat: -39.927193, lng: 175.053218 },
-      { lat: -41.330162, lng: 174.865694 },
-      { lat: -42.734358, lng: 147.439506 },
-      { lat: -42.734358, lng: 147.501315 },
-      { lat: -42.735258, lng: 147.438 },
-      { lat: -43.999792, lng: 170.463352 },
-    ];
-
-    initMap();
-
-    function handleChangeYear(year){
-      window.location.href="{{ route('overview.customer') }}?year="+year
     }
   </script>
 @endsection

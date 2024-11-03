@@ -45,6 +45,7 @@ class MissionController extends Controller
             $data['project'] = $project;
             $data['user_id'] = $user_id;
             $data['mission'] = $mission;
+            $data['link_map'] = isset($project->place_id)?'https://www.google.com/maps/place?key='.env("GOOGLE_MAP_API_KEY").'&q=place_id:' . $project->place_id.'&reviews':'';
             return view('pages.partner.mission.index', $data);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -228,7 +229,7 @@ class MissionController extends Controller
         $project_info = Project::find($mission->project_id);
         $data['mission'] = new MissionResource($mission);
         $data['mission_id'] = $id;
-        $data['link_map'] = isset($project_info->place_id)?'https://www.google.com/maps/embed/v1/place?key={{env("GOOGLE_MAP_API_KEY")}}&q=place_id:' . $project_info->place_id.'&reviews':'';
+        $data['link_map'] = isset($project->place_id)?'https://www.google.com/maps/place?key='.env("GOOGLE_MAP_API_KEY").'&q=place_id:' . $project->place_id.'&reviews':'';
         return view('pages.partner.mission.confirm', $data);
     }
 

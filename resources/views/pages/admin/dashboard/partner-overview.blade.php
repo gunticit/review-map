@@ -166,38 +166,27 @@
   <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_API_KEY') }}&callback=initMap" async defer></script>
   <script>
     let map;
-function initMap() {
-    // Khởi tạo bản đồ với vị trí trung tâm từ biến PHP
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: {{$current_lat}}, lng: {{$current_long}} }, 
-        zoom: 10,
-    });
-
-    // Chuyển đổi dữ liệu từ PHP sang JSON
-    const locations = @json($data_customer_data);
-    
-    // Tạo marker và InfoWindow cho mỗi vị trí trong locations
-    locations.forEach(location => {
-        const marker = new google.maps.Marker({
-            position: { lat: location.latitude, lng: location.longitude },
-            map: map,
-            title: location.name,
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: {{$current_lat}}, lng: {{$current_long}} }, 
+            zoom: 10,
         });
-        let urlMap = `{{ route('admin.manage.partner.info', ['id' => ':id']) }}`.replace(':id', location.id);
-        // Xây dựng URL động với location.id
-        const infoWindowContent = `<h5><a href="${urlMap}">${location.name}</a></h5>`;
-
-        // Tạo InfoWindow với nội dung động
-        const infoWindow = new google.maps.InfoWindow({
-            content: infoWindowContent,
+        const locations = @json($data_partner_data);
+        locations.forEach(location => {
+            const marker = new google.maps.Marker({
+                position: { lat: location.latitude, lng: location.longitude },
+                map: map,
+                title: location.name,
+            });
+            let urlMap = `{{ route('admin.manage.partner.info', ['id' => ':id']) }}`.replace(':id', location.id);
+            const infoWindowContent = `<h5><a href="${urlMap}">${location.name}</a></h5>`;
+            const infoWindow = new google.maps.InfoWindow({
+                content: infoWindowContent,
+            });
+            marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+            });
         });
-
-        // Thêm sự kiện 'click' để mở InfoWindow khi click vào marker
-        marker.addListener("click", () => {
-            infoWindow.open(map, marker);
-        });
-    });
-}
-
+    }
   </script>
 @endsection

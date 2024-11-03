@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('content')
-
+<style>
+    #thank-you{
+        display: none
+    }
+</style>
 <section class="section nhan-nhiem-vu-step mb-5 mt-5">
     <div class="container-fluid">
         <div class="col-inner text-center">
@@ -61,15 +65,24 @@
                 </section>
                 <h3>step 4</h3>
                 <section>
-                    <h2 class="mb-3">Cảm ơn bạn đã thực hiện nhiệm vụ</h2>
-                    <p>Hệ thống đang tiến hành xử lý nhiệm vụ của bạn, thao tác <br> này có thể sẽ tốn một ít thời gian.</p>
-                    
-                    <div class="text-center">
-                        <img src="{{ asset('assets/img/nhiem-vu-hoan-thanh.jpg') }}" alt="nhiem-vu" class="mb-4 hoan-thanh-img" >
-                        <a class="btn btn-primary mb-4" href="{{route('mission.index')}}" >Trở lại trang nhiệm vụ</a>
-                    </div>
+                    <h5 class="card-title mb-2">Nhận nhiệm vụ</h5>
+                    <h4 class="d-flex my-3 justify-content-center text-primary">{{ $project->name }}</h4>
+                    <a href="{{ $link_map }}" target="_blank" class="btn btn-primary mt-3 mb-3">Đến trang đánh giá <span class="material-symbols-outlined">
+                        near_me
+                        </span></a>
+                    <p style="color: #96A3BE">Vui lòng nhập link chia sẻ</p>
+                    <input placeholder="Nhập link chia sẻ" required class="form-control bg-body-tertiary rounded-3 p-2 input-link-confirm" type="text" value="{{ $mission->link_confirm ?? '' }}">
                 </section>
             </div> 
+            <div id="thank-you">
+                <h2 class="mb-3">Cảm ơn bạn đã thực hiện nhiệm vụ</h2>
+                <p>Hệ thống đang tiến hành xử lý nhiệm vụ của bạn, thao tác <br> này có thể sẽ tốn một ít thời gian.</p>
+                
+                <div class="text-center">
+                    <img src="{{ asset('assets/img/nhiem-vu-hoan-thanh.jpg') }}" alt="nhiem-vu" class="mb-4 hoan-thanh-img" >
+                    <a class="btn btn-primary mb-4" href="{{route('mission.index')}}" >Trở lại trang nhiệm vụ</a>
+                </div>
+            </div>
             @else 
             <span class="material-symbols-outlined" style="font-size: 120px">
                 dvr
@@ -130,6 +143,30 @@
                 next: "Tiếp tục",
                 previous: "Quay lại",
                 loading: "Đang tải ..."
+            },
+            onFinished: function (event, currentIndex) {
+                if($('.input-link-confirm').val() == ''){
+                    $('.input-link-confirm').addClass('border-error');
+                    return false;
+                }else{
+                    $('.input-link-confirm').removeClass('border-error');
+                }
+                $.ajax({
+                    url: "{{ route('mission.update', ['mission' => ':id']) }}".replace(':id', {{$mission->id}}),
+                    type: "PUT",
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'mission_id': {{$mission->id}},
+                        'link_confirm': $('.input-link-confirm').val()
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if(data.status == 'success'){
+                            // location.href = "{{ route('mission.success') }}";
+                            window.location.href = "{{ route('mission.histories') }}";
+                        }
+                    }
+                });
             }
         });
 

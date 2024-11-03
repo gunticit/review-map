@@ -48,4 +48,10 @@ class ExpenditureStatisticService
         $data = $this->expenditureStatisticRepository->getMonthExpenditureByUser($user_id);
         return $data;
     }
+
+    // Admin: Tổng số chi tiêu của khách hàng
+    public function getAllExpenditure(){
+        $data = $this->expenditureStatisticRepository->getAllExpenditure();
+        return $data;
+    }
 }

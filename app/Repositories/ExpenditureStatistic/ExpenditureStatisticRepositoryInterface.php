@@ -8,4 +8,5 @@ interface ExpenditureStatisticRepositoryInterface
     public function findByUser($filter = array());
     public function getAllExpenditureByUser($user_id);
     public function getMonthExpenditureByUser($user_id);
+    public function getAllExpenditure();
 }

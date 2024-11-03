@@ -13,7 +13,7 @@
             <h5>Thống kê doanh thu</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">{!! moneyFormat($all_price_projects) ?? 0 !!} VND</h6>
+            <h6 class="text-primary">{!! moneyFormat($total_earning) ?? 0 !!} VND</h6>
           </div>
         </div>
       </div>
