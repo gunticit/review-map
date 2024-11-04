@@ -59,13 +59,10 @@
         $('#inputSearch').on('keypress', function(e){
             if(e.which === 13){
                 e.preventDefault();
-
                 const keyword = $(this).val();
-                alert(keyword);
                 if(!keyword){
                     return;
                 }
-
                 try{
                     const url = `/notification?keyword=${encodeURIComponent(keyword)}`;
                     window.location.href = url;

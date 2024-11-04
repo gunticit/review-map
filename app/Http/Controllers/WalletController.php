@@ -12,19 +12,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Onepay;
+use App\Services\TransactionHistoryService;
 
 class WalletController extends Controller
 {
-    protected $walletService, $paymentMethodService, $onepay;
+    protected $walletService, $paymentMethodService, $onepay, $transactionHistoryService;
 
     public function __construct(
         WalletService $walletService,
         PaymentMethodService $paymentMethodService,
+        TransactionHistoryService $transactionHistoryService,
         Onepay $onepay
     ) {
         $this->walletService = $walletService;
         $this->paymentMethodService = $paymentMethodService;
         $this->onepay = $onepay;
+        $this->transactionHistoryService = $transactionHistoryService;
     }
     public function index(Request $request)
     {
@@ -41,10 +44,12 @@ class WalletController extends Controller
         if(Auth::user()->getRoleNames()->first() == 'partner'){
             $balance = $this->walletService->getBalance();
         }
+        $histories = $this->transactionHistoryService->listHistoriesByUser($user_info->id);
         return view('pages.wallet.withdraw', [
             'certificationAccount' => $certificationAccount,
             'user_info' => $user_info,
-            'balance' => $balance
+            'balance' => $balance,
+            'withdraws' => $histories
         ]);
     }
     public function setupWalletAndDeposit(Request $request)
@@ -52,7 +57,7 @@ class WalletController extends Controller
         if ($request->input('method_payment') == 'onepay') {
             $amount = $request->input('depositAmountCustom') ? $request->input('depositAmountCustom') : $request->input('depositAmount');
             $ticketNo = $request->ip();
-            $reference_id = 'ONEPAY_' . round(microtime(true));
+            $reference_id = strtoupper(uniqid('ONEPAY_'));
             $data = [
                 'amount' => $amount,
                 'ticketNo' => $ticketNo,
@@ -141,9 +146,10 @@ class WalletController extends Controller
                 'wallet_id' => $wallet->id,
                 'type' => 'withdraw',
                 'amount' => $data['amount'],
+                'transaction_code' => strtoupper(uniqid('WITHDRAW_')),
                 'status' => 'pending',
                 'payment_method_id' => $data['payment_method_id'],
-                'reference_id' => uniqid('WITHDRAW_'),
+                'reference_id' => strtoupper(uniqid('WITHDRAW_')),
                 'created_by' => Auth::user()->id,
             ]);
 

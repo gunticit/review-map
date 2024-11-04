@@ -149,9 +149,9 @@ $(document).ready(function () {
     function checkCookie(cname) {
         let cookie = getCookie(cname);
         if (cookie != "") {
-            alert("Cookie đã được cài đặt " + cookie);
+            showAlert("Cookie đã được cài đặt " + cookie);
         } else {
-            alert("Cookie chưa được caài đặt");
+            showAlert("Cookie chưa được caài đặt");
         }
     }
 });

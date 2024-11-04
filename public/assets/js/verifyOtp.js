@@ -17,7 +17,7 @@ $(document).ready(function () {
                 if (response.success) {
                     successCallback(response); // Gọi lại hàm callback nếu thành công
                 } else {
-                    alert(response.message || 'Có lỗi xảy ra!'); // Hiển thị thông báo lỗi
+                    showAlert(response.message || 'Có lỗi xảy ra!'); // Hiển thị thông báo lỗi
                 }
             },
             error: function (xhr) {
@@ -38,7 +38,7 @@ $(document).ready(function () {
             const response = xhr.responseJSON; // Lấy phản hồi JSON từ server
             form.find('.error-message').text("*" + response.message || 'Có lỗi xảy ra!').removeClass('d-none'); // Hiển thị thông báo lỗi từ server
         } else {
-            alert('Đã xảy ra lỗi khi gửi dữ liệu. Vui lòng thử lại.'); // Thông báo lỗi chung
+            showAlert('Đã xảy ra lỗi khi gửi dữ liệu. Vui lòng thử lại.'); // Thông báo lỗi chung
         }
         // Xử lý lỗi cho OTP
         if (form.attr('id') === 'otpForm') {
@@ -47,7 +47,7 @@ $(document).ready(function () {
             otpAttemptsInput.val(currentAttempts + 1); // 
 
             if (currentAttempts + 1 >= 5) {
-                alert('Bạn đã nhập sai mã OTP quá nhiều lần. Vui lòng thử lại sau.');
+                showAlert('Bạn đã nhập sai mã OTP quá nhiều lần. Vui lòng thử lại sau.');
                 setTimeout(function () {
                     location.reload(); 
                 }, 5000); 

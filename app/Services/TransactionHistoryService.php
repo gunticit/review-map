@@ -44,4 +44,8 @@ class TransactionHistoryService {
     public function wallet($id){
         return $this->transactionhistoryRepository->wallet($id);
     }
+
+    public function listHistoriesByUser($user_id){
+        return $this->transactionhistoryRepository->listHistoriesByUser($user_id);
+    }
 }

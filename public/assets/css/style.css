@@ -3909,9 +3909,13 @@ h3.col-title {
   top: 3px;
   margin-left: 10px;
 }
-.list-table tr.recharge .list-table-so-tien,
 .list-table tr.recharge .list-table-content-3 {
   color: var(--bs-success);
+}
+.list-table tr.recharge .list-table-so-tien{
+  font-weight: bold;
+  font-family: Arial;
+  font-size: 14px;
 }
 .list-table tr.recharge .list-table-so-tien a:not(.btn),
 .list-table tr.recharge .list-table-content-3 a:not(.btn) {

@@ -107,7 +107,7 @@
     <script>
         function handleDelete(id) {
             if (id === null || id === undefined) {
-                alert('Lỗi: Không thể xóa bài viết!');
+                showAlert('Lỗi: Không thể xóa bài viết!');
                 return;
             }
 
@@ -138,11 +138,11 @@
                     },
                     error: function(xhr, status, error) {
                         if (xhr.status === 404) {
-                            alert('Lỗi: Không tìm thấy bài viết!');
+                            showAlert('Lỗi: Không tìm thấy bài viết!');
                         } else if (xhr.status === 403) {
-                            alert('Lỗi: Không có quyền xóa bài viết!');
+                            showAlert('Lỗi: Không có quyền xóa bài viết!');
                         } else {
-                            alert('Lỗi: ' + error);
+                            showAlert('Lỗi: ' + error);
                         }
                     }
                 });

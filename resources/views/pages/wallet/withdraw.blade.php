@@ -37,35 +37,36 @@
                             </div>
                         </form>
                         @if(!empty($withdraws))
-                            <table class="table list-table">
-                                <thead>
-                                    <tr>
-                                        <th class="list-table-stt" scope="col">STT</th>
-                                        <th class="list-table-time" scope="col">Thời gian</th>
-                                        <th class="list-table-so-tien" scope="col">Mã giao dịch</th>
-                                        <th class="list-table-phuong-thuc" scope="col">Phương thức rút</th>
-                                        <th class="list-table-tai-khoan-nhan" scope="col">Tài khoản nhận</th>
-                                        <th class="list-table-so-tien-rut" scope="col">Số tiền rút</th>
-                                        <th class="list-table-trang-thai" scope="col">Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($withdraws as $key => $withdraw)
-                                        <tr class="recharge">
-                                            <td class="list-table-stt" scope="col">{{ $withdraw->id }}</td>
-                                            <td class="list-table-time" scope="col">{{ date('d/m/Y H:i', strtotime($withdraw->created_at)) }}</td>
-                                            <td class="list-table-so-tien" scope="col">{{ $withdraw->transaction_code ?? '' }}</td>
-                                            <td class="list-table-phuong-thuc" scope="col">{{ $withdraw->payment_method->name ?? '' }}</td>
-                                            <td class="list-table-tai-khoan-nhan" scope="col">{{ $withdraw->bank_number ?? '' }}</td>
-                                            <td class="list-table-so-tien-rut" scope="col">{{ $withdraw->amount }} VND</td>
-                                            <td class="list-table-trang-thai" scope="col">
-                                                <span class="text-success">{{ $withdraw->status == 'pending' ? 'Đang xử lý' : ($withdraw->status == 'completed' ? 'Thành công' : 'Thất bại') }}</span>
-                                            </td>
+                            <div class="group-table-list">
+                                <table class="table list-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="list-table-stt" scope="col">STT</th>
+                                            <th class="list-table-time" scope="col">Thời gian</th>
+                                            <th class="list-table-so-tien" scope="col">Mã giao dịch</th>
+                                            <th class="list-table-phuong-thuc" scope="col">Phương thức rút</th>
+                                            <th class="list-table-tai-khoan-nhan" scope="col">Tài khoản nhận</th>
+                                            <th class="list-table-so-tien-rut" scope="col">Số tiền rút</th>
+                                            <th class="list-table-trang-thai" scope="col">Trạng thái</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($withdraws as $key => $withdraw)
+                                            <tr class="recharge">
+                                                <td class="list-table-stt" scope="col">{{ $withdraw->history_id }}</td>
+                                                <td class="list-table-time" scope="col">{{ date('d/m/Y H:i', strtotime($withdraw->created_at)) }}</td>
+                                                <td class="list-table-so-tien" scope="col">{{ $withdraw->transaction_code ?? '' }}</td>
+                                                <td class="list-table-phuong-thuc" scope="col">{{ config('constants.method_payments')[$withdraw->payment_method_id] ?? '' }}</td>
+                                                <td class="list-table-tai-khoan-nhan" scope="col">{{ $withdraw->bank_number ?? '' }}</td>
+                                                <td class="list-table-so-tien-rut" scope="col">{{ formatCurrency($withdraw->amount) }}</td>
+                                                <td class="list-table-trang-thai" scope="col">
+                                                    <span class="text-success">{{ $withdraw->status == 'pending' ? 'Đang xử lý' : ($withdraw->status == 'completed' ? 'Thành công' : 'Thất bại') }}</span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                             <div class="list-table-footer d-flex justify-content-between align-items-center">
                                 {{ $withdraws->links('vendor.pagination.custom') }}
                             </div>
@@ -181,6 +182,9 @@
             });
 
         });
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+        }
         $('#amount').on('change', function(){
             let amount = $(this).val();
             if(parseInt(amount) > 0){
@@ -194,13 +198,16 @@
                 $('#alert-amount-check').text('Số tiền tối thiểu là 50.000 VND');
                 return;
             }else{
-                $('#amount').css('border', '1px solid transparent');
+                $('#amount').css('border', '1px solid #E8E9EB');
                 $('#button-submit').removeAttr('disabled');
                 $('#alert-amount-check').text('');
+                $('#totalAmount').text(formatCurrency(amount));
             }
         });
         $('#all_amount').on('click', function(){
-            $('#amount').val(0);
+            const balance = $('#balance').val();
+            $('#amount').val(balance);
+            $('#totalAmount').text(formatCurrency(balance));
         });
     </script>
 @endsection

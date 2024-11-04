@@ -205,11 +205,11 @@
                     if (response.success) {
                         location.reload();
                     } else {
-                        alert(response.message);
+                        showAlert(response.message);
                     }
                 },
                 error: function(xhr) {
-                    alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                    showAlert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
                 }
             });
         });
@@ -231,11 +231,11 @@
                     if (response.success) {
                         location.reload();
                     } else {
-                        alert(response.message);
+                        showAlert(response.message);
                     }
                 },
                 error: function(xhr) {
-                    alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                    showAlert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
                 }
             });
         });
@@ -259,11 +259,11 @@
                     if (response.success) {
                         location.reload();
                     } else {
-                        alert(response.message);
+                        showAlert(response.message);
                     }
                 },
                 error: function(xhr) {
-                    alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                    showAlert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
                 }
             });
         });
@@ -304,7 +304,7 @@
                     }
                 },
                 error: function(xhr) {
-                    alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                    showAlert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
                 }
             });
         });
@@ -347,7 +347,7 @@
                     }
                 },
                 error: function(xhr) {
-                    alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                    showAlert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
                 }
             });
         });

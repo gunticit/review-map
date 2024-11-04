@@ -108,7 +108,7 @@ $(document).ready(function(){
             $tempInput.val(content).select();
             document.execCommand('copy');
             $tempInput.remove();
-            alert('Đã sao chép nội dung!');
+            showAlert('Đã sao chép nội dung!');
         });
     </script>
 @endsection

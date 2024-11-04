@@ -60,7 +60,8 @@ class CustomerCheckoutController extends Controller
                 'amount' => $price_order,
                 'type' => 'payment',
                 'status' => $surplus > 0 ? 'completed' : 'failed',
-                'reference_id' => 'PAYMENT_'.time(),
+                'reference_id' => strtoupper(uniqid('PAYMENT_')),
+                'transaction_code' => strtoupper(uniqid('PAYMENT_'))
             );
             $transaction = $this->transactionHistoryService->create($data_transaction);
             $data_expenditure = array(

@@ -18,6 +18,13 @@
         "status_notification" => [
             1 => "common.status_notification.read",
             2 => "common.status_notification.unread"
+        ],
+        "method_payments" => [
+            1 => 'Ví điện tử Momo',
+            2 => 'Ví VnPay',
+            3 => 'Ngân hàng ATM', 
+            4 => 'Thanh toán thẻ VISA',
+            5 => 'Ví OnePay',
         ]
     );
 ?>
