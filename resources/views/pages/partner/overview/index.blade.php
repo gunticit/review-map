@@ -5,6 +5,17 @@
 <section class="thong-ke">
   <div class="container-fluid">
     <div class="row">
+      <div class="col-12">
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+      </div>
       <div class="col-xl-2 col-md-4 col-6 mb-4 mb-xl-0">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
@@ -67,7 +78,7 @@
             <h5>Tổng dư ví</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-success">500.000 VND</h6>
+            <h6 class="text-success">{!! moneyFormat($balance) ?? 0 !!} VND</h6>
           </div>
         </div>
       </div>

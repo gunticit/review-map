@@ -3291,6 +3291,12 @@ iframe {
 .sidenav-light .sidenav-menu .nav .nav-link.active {
   color: var(--bs-primary);
 }
+.sidenav-light .sidenav-menu .nav .nav-link.active .sidenav-collapse-arrow, .sidenav .sidenav-menu .nav .nav-link .sidenav-collapse-arrow{
+  transform: rotate(0);
+}
+.sidenav .sidenav-menu .nav .nav-link.collapsed .sidenav-collapse-arrow{
+  transform: rotate(90deg);
+}
 .sidenav-light .sidenav-menu .collapse .nav .nav-link:not(.active) {
   color: #96A3BE;
 }
@@ -4419,6 +4425,9 @@ table.bt .list-table-title a {
   border-radius: 8px;
   width: 90%;
   max-width: unset;
+}
+.alert-danger > ul{
+  margin-bottom: 0;
 }
 .list-notificate .list-table td, .list-notificate .list-table th{
   text-align: center;

@@ -4,16 +4,23 @@ namespace App\Http\Controllers\Partner;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mission;
+use App\Services\WalletService;
 use Illuminate\Http\Request;
 
 class OverviewController extends Controller
 {
+    protected $walletService;
+    public function __construct(WalletService $walletService){
+        $this->walletService = $walletService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $total_mission = Mission::where('user_id', auth()->user()->id)->get()->pluck('status')->toArray();
+
+        $balance = $this->walletService->getBalance();
         
         if(!empty($total_mission)){
             // dd($total_mission);
@@ -23,6 +30,7 @@ class OverviewController extends Controller
                 'completed' => 0,
                 'money_earned' => 0
             ),
+            'balance' => $balance,
             'total_mission' => 0
         );
         return view('pages.partner.overview.index', $data);

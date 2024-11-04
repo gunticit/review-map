@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+        .text-expired{
+            text-decoration: line-through
+        }
+    </style>
     <!-- danh-sach-du-an -->
     <section class="section danh-sach-du-an mb-5">
         <div class="container-fluid">
@@ -53,6 +58,7 @@
                             <th class="list-table-description" scope="col">Mô tả</th>
                             <th class="list-table-money" scope="col">Số tiền giảm</th>
                             <th class="list-table-number" scope="col">Số lượng</th>
+                            <th class="list-table-number" scope="col">Đã sử dụng</th>
                             <th class="list-table-date" scope="col">Ngày bắt đầu</th>
                             <th class="list-table-actions" scope="col">Hành động</th>
                         </tr>
@@ -60,16 +66,19 @@
                     <tbody>
                         @if(!empty($vouchers))
                             @foreach($vouchers as $voucher)
-                                <tr class="voucher-{{ $voucher->id }}">
+                                <tr class="voucher-{{ $voucher->id }} {!! ($voucher->uses_left >= $voucher->max_uses || $voucher->end_date < date('Y-m-d')) ? 'text-danger text-expired' : '' !!}">
                                     <td class="list-table-stt">{{ $voucher->id }}</td>
                                     <td class="list-table-code">{{ $voucher->code }}</td>
                                     <td class="list-table-name">{{ $voucher->name }}</td>
                                     <td class="list-table-description">{{ $voucher->description }}</td>
                                     <td class="list-table-money">{{ number_format($voucher->discount_value) }} {{ $voucher->discount_type == 'fixed' ? 'VNĐ' : '%' }}</td>
-                                    <td class="list-table-money">{{ number_format($voucher->max_uses) }}</td>
+                                    <td class="list-table-number">{{ number_format($voucher->max_uses) }}</td>
+                                    <td class="list-table-number">{{ number_format($voucher->uses_left) }}</td>
                                     <td class="list-table-date">{{ date('d/m/Y', strtotime($voucher->start_date)) }}</td>
                                     <td class="list-table-actions">
+                                        @if(($voucher->uses_left < $voucher->max_uses))
                                         <a href="{{ route('voucher.edit', $voucher->id) }}" class="btn btn-warning">Sửa</a>
+                                        @endif
                                         <form action="{{ route('voucher.destroy', $voucher->id) }}" method="POST" style="display:inline-block;">
                                             {{ csrf_field() }}
                                             @method('DELETE')

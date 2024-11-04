@@ -60,13 +60,14 @@ class VoucherController extends Controller
      */
     public function update(VoucherRequest $request, $id)
     {
-        try{
+        // try{
             $voucher = Voucher::findOrFail($id);
-            $voucher->update($request->all());
+            $data = $this->getData($request);
+            $voucher->update($data);
             return redirect()->route('voucher.index')->with('success', 'Cập nhật mã giảm giá thành công!');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Đã có lỗi xảy ra khi cập nhật má giảm giá.');
-        }
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->with('error', 'Đã có lỗi xảy ra khi cập nhật mã giảm giá.');
+        // }
     }
 
     /**

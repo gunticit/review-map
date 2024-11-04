@@ -16,6 +16,7 @@ use App\Classes\Onepay;
 class WalletController extends Controller
 {
     protected $walletService, $paymentMethodService, $onepay;
+
     public function __construct(
         WalletService $walletService,
         PaymentMethodService $paymentMethodService,

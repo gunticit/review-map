@@ -9,16 +9,19 @@ use App\Models\Comment;
 use App\Models\Mission;
 use App\Models\Project;
 use App\Models\ProjectImage;
+use App\Services\HistoryService;
 use App\Services\MissionService;
+use App\Services\WalletService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MissionController extends Controller
 {
-    protected $missionService;
+    protected $missionService,$walletService, $historyService;
 
-    public function __construct(MissionService $missionService){
+    public function __construct(MissionService $missionService,WalletService $walletService,HistoryService $historyService){
         $this->missionService = $missionService;
     }
 
@@ -30,13 +33,17 @@ class MissionController extends Controller
         try {
             DB::beginTransaction();
             $user_id = auth()->user()->id;
+            $count_project = Project::where('status', 2)->count();
+            if($count_project == 0) {
+                return redirect()->back()->withErrors(['error' => 'Chưa có dự án nào được tạo. Vui lòng nhận nhiệm vụ sau!']);
+            }
             $project = Project::join('missions', 'projects.id', '=', 'missions.project_id')
             ->leftJoin('comments', 'comments.id', '=', 'missions.comment_id')
-            ->where('missions.user_id', $user_id)->where('missions.status', 2)->select(
+            ->where('missions.user_id', $user_id)->where('projects.status', 2)->where('missions.status', 2)->select(
                 'projects.*',
-                'comments.comment'
+                'comments.comment',
+                'missions.id as mission_id'
             )->first();
-            $mission = [];
             if(empty($project)) {
                 list($project, $mission) = $this->getProjectConditions($user_id);
             }
@@ -44,6 +51,9 @@ class MissionController extends Controller
             $data = array();
             $data['project'] = $project;
             $data['user_id'] = $user_id;
+            if(empty($mission)) {
+                $mission = $this->missionService->find($project->mission_id);
+            }
             $data['mission'] = $mission;
             $data['link_map'] = isset($project->place_id)?'https://www.google.com/maps/place?key='.env("GOOGLE_MAP_API_KEY").'&q=place_id:' . $project->place_id.'&reviews':'';
             return view('pages.partner.mission.index', $data);
@@ -106,7 +116,7 @@ class MissionController extends Controller
                 'project_id' => $project->id,
                 'status' => 2,
                 'comment_id' => $comment->id,
-                'price' => getPriceFromPackage($project->package),
+                'price' => 10000, // Cập nhật sau, hiện tại cấp 1 là 10k
                 'latitude' => $project->latitude,
                 'longitude' => $project->longitude,
                 'image_id' => $project->has_images ? $this->randomImage($project->id) : null
@@ -189,6 +199,13 @@ class MissionController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $this->missionService->update($request, $id);
+        $price_plus = 10000; // Cộng vào ví 10k khi hoàn thành nhiệm vụ + history
+        $balance = $this->walletService->getBalance();
+        $user_id = Auth::user()->id;
+        if(empty($user_id)){
+            return redirect()->route('login')->withErrors(['error' => 'Bạn phải đăng nhập để hoàn thêm nhiệm vụ!']);
+        }
+        $this->walletService->update($balance + $price_plus, $user_id);
         return json_encode([
             'status' => 'success',
             'message' => 'Update mission success',

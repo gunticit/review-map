@@ -18,13 +18,16 @@
                 </a>
 
                 <!-- Sidenav Accordion (Nhiemvu)-->
-                <a class="nav-link {!! request()->routeIs('mission.index') || request()->routeIs('mission.histories') ? 'active' : '' !!}" href="{{ route('mission.index') }}">
+                <a class="nav-link {!! request()->routeIs('mission.index') || request()->routeIs('mission.histories') ? 'active' : '' !!}" href="javascript:void(0);"  data-bs-toggle="collapse" data-bs-target="#collapseNhiemvu" aria-expanded="false" aria-controls="collapseNhiemvu">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">assignment</span>
                     </div> Nhiệm vụ
+                    <div class="sidenav-collapse-arrow">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </div>
                 </a>
                 <!-- Sidenav Accordion (Nhiemvu)-->
-                <div class="collapse show" id="collapseNhiemvu" data-bs-parent="#accordionSidenav">
+                <div class="collapse {!! request()->routeIs('mission.index') || request()->routeIs('mission.histories') ? 'show' : '' !!}" id="collapseNhiemvu" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavNhiemvuMenu">
                         <a class="nav-link {!! request()->routeIs('mission.index') ? 'active' : '' !!}" id="btn-get-mission" href="{{ route('mission.index') }}" data-bs-target="#nhanNhiemVuModal">Nhận nhiệm vụ</a>
                         <a class="nav-link {!! request()->routeIs('mission.histories') ? 'active' : '' !!}" href="{{ route('mission.histories') }}">Lịch sử nhiệm vụ</a>
@@ -41,10 +44,9 @@
                         <span class="material-symbols-outlined">chevron_right</span>
                     </div>
                 </a>
-                <div class="collapse " id="collapseVicuatoi" data-bs-parent="#accordionSidenav">
-                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavVicuatoiMenu">
+                <div class="collapse {!! request()->routeIs('wallet.withdraw') ? 'show' : '' !!}" id="collapseVicuatoi" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion {!! request()->routeIs('wallet.withdraw') ? 'active' : '' !!}" id="accordionSidenavVicuatoiMenu">
                         <a class="nav-link {!! request()->routeIs('wallet.withdraw') ? 'active' : '' !!}" href="{{ route('wallet.withdraw') }}">Rút tiền</a>
-                        <a class="nav-link" href="6.1.lich-su-so-du.php">Lịch sử số dư</a>
                     </nav>
                 </div>
                 

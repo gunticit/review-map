@@ -87,6 +87,7 @@
                                 <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="logo">
                                 <p>Số dư của tôi</p>
                                 <h3 class="wallet-number text-primary">{{ moneyFormat($balance) }} VND</h3>
+                                <input type="hidden" name="balance" id="balance" value="{{ $balance }}">
                                 {{-- <div class="wallet-btn d-flex justify-content-around align-items-center  ">
                                     <a class="btn btn-warning" href="javascript:void(0);"><span
                                             class="material-symbols-outlined">add_card</span> Rút thêm </a>
@@ -158,8 +159,24 @@
                 modalVerifyWallet.show();
             }
 
-            $('.button-submit').on('click', function(e){
+            $('#button-submit').on('click', function(e){
                 e.preventDefault();
+                e.stopPropagation();
+                const balance = $('#balance').val();
+                const amount = $('#amount').val();
+                const all_amount = $('#all_amount').prop('checked');
+                if(amount == 0 && !all_amount){
+                    showAlert('error', 'Vui lòng nhập số tiền rút');
+                    return;
+                }
+                if (isNaN(amount) && !all_amount) {
+                    showAlert("error", "Vui lòng nhập một số hợp lệ.");
+                    return false; // Ngăn form submit nếu input không phải là số
+                }
+                if(balance < amount){
+                    showAlert('error', 'Số dư không đủ, hãy thực hiện thêm nhiệm vụ!');
+                    return;
+                }
                 $('#form-withdraw').submit();
             });
 
