@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
+use App\Http\Controllers\Admin\AdminFaqController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\SupportController;
 
@@ -27,6 +28,8 @@ Route::group([
         Route::resource('/statistics', StatisticController::class);
         Route::resource('/category', CategoryController::class);
         Route::resource('/product', ProductController::class);
+        Route::resource('/admin-faq', AdminFaqController::class);
+        Route::get('/product-check-code/{product_code}', [ProductController::class, 'productCheckCode'])->name('product.check.code');
         Route::resource('/order', OrderController::class);
         Route::resource('/voucher', AdminVoucherController::class);
         Route::get('/categories-list', [CategoryController::class, 'categoriesList'])->name('categories.list');

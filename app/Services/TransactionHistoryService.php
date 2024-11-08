@@ -48,4 +48,8 @@ class TransactionHistoryService {
     public function listHistoriesByUser($user_id){
         return $this->transactionhistoryRepository->listHistoriesByUser($user_id);
     }
+
+    public function totalMoneyHistoriesByField($request){
+        return $this->transactionhistoryRepository->totalMoneyHistoriesByField($request);
+    }
 }

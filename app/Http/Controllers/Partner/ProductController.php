@@ -5,24 +5,27 @@ namespace App\Http\Controllers\Partner;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    protected $productService;
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         $categories = Category::all();
-        $products = Product::where('active', 1);
-        if(isset($request->category_id)){
-            $products = $products->where('category_id', $request->category_id);
-        }
-        $products = $products->get();
+        $products = $this->productService->list($request);
         return view('pages.partner.store.product',[
             'categories' => $categories,
-            'products' => $products
+            'products' => $products,
+            'filter_data' => $request->all()
         ]);
     }
 
@@ -72,5 +75,12 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function findBySlug(string $slug){
+        $product = $this->productService->findBySlug($slug);
+        return view('pages.partner.store.product-detail',[
+            'product' => $product
+        ]);
     }
 }

@@ -49,11 +49,21 @@ class ProductService {
         if($data) {
             $imagePath = null;
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images/product', 'public');
-                $this->productImageRepository->create([
-                    'product_id' => $data->id,
-                    'link_image' => $imagePath
-                ]);
+                if(is_array($request->file('image'))){
+                    foreach ($request->file('image') as $image) {
+                        $imagePath = $image->store('images/product', 'public');
+                        $this->productImageRepository->create([
+                            'product_id' => $data->id,
+                            'link_image' => $imagePath
+                        ]);
+                    }
+                }else{
+                    $imagePath = $request->file('image')->store('images/product', 'public');
+                    $this->productImageRepository->create([
+                        'product_id' => $data->id,
+                        'link_image' => $imagePath
+                    ]);
+                }
             }
             return $data;
         }
@@ -62,6 +72,11 @@ class ProductService {
 
     public function show($id){
         $data = $this->productRepository->find($id);
+        return $data;
+    }
+
+    public function findBySlug($slug){
+        $data = $this->productRepository->findBySlug($slug);
         return $data;
     }
 
@@ -89,5 +104,10 @@ class ProductService {
             'stock' => $data['stock'] ?? 0,
             'keyword' => $data['keyword'] ?? $data['name']
         );
+    }
+
+    public function checkCode($product_code){
+        $data = $this->productRepository->findByKey('product_code',$product_code);
+        return $data;
     }
 }

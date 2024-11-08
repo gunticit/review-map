@@ -21,6 +21,7 @@ Route::group([
     Route::get('/wallet/verify/create',  [WalletController::class, 'createVerify'])->name('wallet.verify.create');
     Route::post('/wallet/verify',  [WalletController::class, 'storeVerify'])->name('wallet.verify.store');
     Route::get('/store-product',  [ProductController::class, 'index'])->name('store.product');
+    Route::get('/detail-product/{slug}',  [ProductController::class, 'findBySlug'])->name('detail.product.partner');
     
     Route::get('/cart',  [CartController::class, 'index'])->name('cart.index');
     Route::patch('/cart/update-quantity',  [CartController::class, 'updateQuantity'])->name('cart.update.quantity');

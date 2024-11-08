@@ -15,14 +15,14 @@
           <div class="loading-bar"></div>
         </div>
     </div>
-    <form action="{{ route('category.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin-faq.store') }}" id="form-create-faq" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="container-fluid">
             <div class="row">
                 <!-- cot 1 -->
                 <div class="col-xl-12 col-md-12 col-12 mb-4 mb-xl-0">
                     <div class="col-inner">
-                        <h2 class="section-title mb-4">Tạo danh mục</h2>
+                        <h2 class="section-title mb-4">Tạo câu hỏi thường gặp</h2>
                         <!-- Form Group (list-table)-->
                         @if ($errors->any())
                             <div class="alert alert-danger">
@@ -34,28 +34,20 @@
                             </div>
                         @endif
                         <div class="mb-4"><!-- class: invalid -->
-                            <label for="inputlist-table">Tên danh mục <span class="required">*</span>
+                            <label for="inputlist-table">Tiêu đề <span class="required">*</span>
                             </label>
-                            <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="Tên danh mục" value="" required>
-                            @error('name')
+                            <input class="form-control require" id="inputlist-table" name="title" type="text" placeholder="Câu hỏi thường gặp" value="" required>
+                            @error('title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
                         <div class="mb-4">
-                            <label for="inputlist-table">Thuộc danh mục <span>(nếu có)</span></label>
-                            <select class="form-select form-control" name="parent" id="parent" data-placeholder="Thuộc danh mục"></select>
-                        </div>
-                        <div class="mb-4">
                             <label for="inputlist-table">Mô tả <span>(nếu có)</span></label>
-                            <textarea id="description" name="description" class="form-control"></textarea>
+                            <textarea id="content" name="content" class="form-control"></textarea>
                         </div>
-                        <div class="mb-4">
-                            <label>Hình ảnh <span>(nếu có)</span></label>
-                            <input class="form-control" id="image" name="image" type="file" placeholder="Hình ảnh" />
-                        </div>
-                        <div class="mb-4">
+                        <div class="mb-4 text-right">
                             <button class="btn btn-primary" type="submit">Thêm mới</button>
                         </div>
                     </div>

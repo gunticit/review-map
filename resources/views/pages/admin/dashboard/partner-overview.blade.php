@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <!-- thong ke -->
-<section class="thong-ke">
+<section class="thong-ke skeleton">
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-8">
@@ -111,14 +111,16 @@
           </div>
         </div>
         <div class="col-md-2 col-12">
-          <select class="form-select" aria-label="Default select example">
-            <option>Năm</option>
-            @if(!empty($filters['years']))
-              @foreach($filters['years'] as $year)
-                <option value="{{ $year }}">{{ $year }}</option>
-              @endforeach
-            @endif
-          </select>
+          <div class="form-group">
+            <select class="form-select" aria-label="Default select example">
+              <option>Năm</option>
+              @if(!empty($filters['years']))
+                @foreach($filters['years'] as $year)
+                  <option value="{{ $year }}">{{ $year }}</option>
+                @endforeach
+              @endif
+            </select>
+          </div>
         </div>
       </div>
       <div id="map" style="height: 500px; max-width: 100%; margin: 0px auto;"></div>

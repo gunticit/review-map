@@ -2,7 +2,7 @@
 @section('content')
 
 <!-- thong ke -->
-<section class="thong-ke">
+<section class="thong-ke skeleton">
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
@@ -34,7 +34,7 @@
             <h5>Đã hoàn thành</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">90</h6>
+            <h6 class="text-primary">{{ $total_mission_by_status[1] }}</h6>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@
             <h5>Bị từ chối</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">10</h6>
+            <h6 class="text-primary">{{ $total_mission_by_status[5] }}</h6>
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@
             <h5>Đang chờ <br> hệ thống duyệt</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">10</h6>
+            <h6 class="text-primary">{{ $total_mission_by_status[3] }}</h6>
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@
             <h5>Đang chờ <br> nhân viên duyệt</h5>
           </div>
           <div class="thong-ke-content">
-            <h6 class="text-primary">10</h6>
+            <h6 class="text-primary">{{ $total_mission_by_status[4] }}</h6>
           </div>
         </div>
       </div>
@@ -87,7 +87,7 @@
 </section>
 <!-- end thong ke  -->
 <!-- du-an-cua-ban -->
-<section class="du-an-cua-ban">
+<section class="du-an-cua-ban skeleton">
   <div class="container-fluid">
     <div class="col-inner">
       <div class="row">
@@ -98,12 +98,14 @@
           </div>
         </div>
         <div class="col-md-2 col-12">
-          <select class="form-select" aria-label="Default select example">
-            <option>Năm</option>
-            <option value="1">2024</option>
-            <option value="2">2023</option>
-            <option value="3">2025</option>
-          </select>
+          <div class="form-group">
+            <select class="form-select" aria-label="Lọc theo năm">
+              <option>Năm</option>
+              <option value="{!! date('Y') - 1 !!}">{!! date('Y') - 1 !!}</option>
+              <option value="{!! date('Y') !!}">{!! date('Y') !!}</option>
+              <option value="{!! date('Y') + 1 !!}">{!! date('Y') + 1 !!}</option>
+            </select>
+          </div>
         </div>
       </div>
       <!-- chart  -->
@@ -129,43 +131,7 @@
                 name: "Đánh giá đã hoàn thành",
                 showInLegend: true,
                 color: "#436CFF",
-                dataPoints: [{
-                  label: "Tháng 1",
-                  y: 60
-                }, {
-                  label: "Tháng 2",
-                  y: 40
-                }, {
-                  label: "Tháng 3",
-                  y: 100
-                }, {
-                  label: "Tháng 4",
-                  y: 70
-                }, {
-                  label: "Tháng 5",
-                  y: 50
-                }, {
-                  label: "Tháng 6",
-                  y: 60
-                }, {
-                  label: "Tháng 7",
-                  y: 50
-                }, {
-                  label: "Tháng 8",
-                  y: 49
-                }, {
-                  label: "Tháng 9",
-                  y: 70
-                }, {
-                  label: "Tháng 10",
-                  y: 34
-                }, {
-                  label: "Tháng 11",
-                  y: 24
-                }, {
-                  label: "Tháng 12",
-                  y: 64
-                }, ]
+                dataPoints: @json($data_chars['completed'])
               },
               // set data Số tiền kiếm được
               {
@@ -174,43 +140,7 @@
                 axisYType: "secondary",
                 showInLegend: true,
                 color: "#E8EDFF",
-                dataPoints: [{
-                  label: "Tháng 1",
-                  y: 70
-                }, {
-                  label: "Tháng 2",
-                  y: 30
-                }, {
-                  label: "Tháng 3",
-                  y: 30
-                }, {
-                  label: "Tháng 4",
-                  y: 40
-                }, {
-                  label: "Tháng 5",
-                  y: 70
-                }, {
-                  label: "Tháng 6",
-                  y: 30
-                }, {
-                  label: "Tháng 7",
-                  y: 40
-                }, {
-                  label: "Tháng 8",
-                  y: 79
-                }, {
-                  label: "Tháng 9",
-                  y: 80
-                }, {
-                  label: "Tháng 10",
-                  y: 20
-                }, {
-                  label: "Tháng 11",
-                  y: 50
-                }, {
-                  label: "Tháng 12",
-                  y: 20
-                }, ]
+                dataPoints: @json($data_chars['money_earned'])
               },
             ]
           });
@@ -227,7 +157,9 @@
         }
       </script>
       <!-- end chart  -->
-      <div id="chartContainer" style="height: 290px; max-width: 100%; margin: 0px auto;"></div>
+      <div class="group-chart">
+        <div id="chartContainer" style="height: 290px; max-width: 100%; margin: 0px auto;"></div>
+      </div>
     </div>
   </div>
 </section>

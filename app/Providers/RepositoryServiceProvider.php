@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\AdminFaq\AdminFaqRepository;
+use App\Repositories\AdminFaq\AdminFaqRepositoryInterface;
 use App\Repositories\Bank\BankRepositoryInterface;
 use App\Repositories\Bank\BankRepositoryRepository;
 use Illuminate\Support\ServiceProvider;
@@ -77,6 +79,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PaymentMethodRepositoryInterface::class, PaymentMethodRepository::class);
         $this->app->bind(BankRepositoryInterface::class, BankRepositoryRepository::class);
         $this->app->bind(ExpenditureStatisticRepositoryInterface::class, ExpenditureStatisticRepository::class);
+        $this->app->bind(AdminFaqRepositoryInterface::class, AdminFaqRepository::class);
     }
 
     /**

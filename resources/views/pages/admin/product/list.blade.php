@@ -1,5 +1,25 @@
 @extends('layouts.app')
 @section('content')
+<style>
+    .list-table-image .bt-content{
+        display: flex;
+        gap: 5px;
+        overflow: auto;
+        justify-content: center
+    }
+    .list-table-image .bt-content img{
+        height: 110px;
+        object-fit: contain;
+        border: 1px solid #dddddd;
+        border-radius: 8px;
+    }
+    .btn.btn-info,.btn.btn-danger{
+        padding: 10px;
+    }
+    .btn.btn-info > span, .btn.btn-danger > span{
+        font-size: 20px;
+    }
+</style>
     <!-- danh-sach-du-an -->
     <section class="section danh-sach-du-an mb-5">
         <div class="container-fluid">
@@ -81,7 +101,9 @@
                                    {{ $product->product_code }}
                                 </td>
                                 <td class="list-table-image" scope="col">   
-                                    <img src="{{ asset($product->image) }}" alt="image" width="100px">
+                                    @if(!empty($product->images[0]))
+                                        <img src="{!! asset('storage/'.$product->images[0]->link_image) !!}" alt="image" width="100px">
+                                    @endif
                                 </td>
                                 <td class="list-table-product">
                                     
@@ -90,7 +112,16 @@
                                     {!! $product->price ? formatVND($product->price) : '' !!}
                                 </td>
                                 <td class="list-table-handle">
-                                    {{$product->id}}
+                                    <button class="btn btn-info" type="button" onclick="handleEdit({{ $product->id }})">
+                                        <span class="material-symbols-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                    <button class="btn btn-danger" type="button" onclick="handleDelete({{ $product->id }})">
+                                        <span class="material-symbols-outlined">
+                                            delete
+                                        </span>
+                                    </button>
                                 </td>
                             </tr>
                             @endforeach

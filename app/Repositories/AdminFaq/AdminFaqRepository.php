@@ -1,20 +1,20 @@
 <?php
-namespace App\Repositories\Category;
+namespace App\Repositories\AdminFaq;
 
 use App\Repositories\BaseRepository;
-use App\Models\Category;
+use App\Models\Faq;
 
-class  CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
+class  AdminFaqRepository extends BaseRepository implements AdminFaqRepositoryInterface
 {
     protected $model;
 
-    public function __construct(Category $category)
+    public function __construct(Faq $category)
     {
         $this->model = $category;
     }
 
     public function list($request){
-        $query = $this->model->query()->with('createdBy','parent');
+        $query = $this->model->query()->with('createdBy');
         if(isset($request->user_id)){
             $query->where('created_by', $request->user_id);
         }
@@ -26,6 +26,8 @@ class  CategoryRepository extends BaseRepository implements CategoryRepositoryIn
             foreach ($orderBy as $column => $direction) {
                 $query->orderBy($column, $direction);
             }
+        }else{
+            $query->orderBy('created_at', 'desc');
         }
         
         $page = $request->page ?? 1;

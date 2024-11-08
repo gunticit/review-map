@@ -3182,15 +3182,23 @@ img {
 .nav-fixed .topnav {
   z-index: 1039;
 }
-.nav-fixed #layoutSidenav #layoutSidenav_nav {
+#sideNav_skeleton{
+  width: 15rem;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+}
+.nav-fixed #layoutSidenav #layoutSidenav_nav, #sideNav_skeleton {
   width: 15rem;
   height: 100vh;
   z-index: 1038;
 }
-.nav-fixed #layoutSidenav #layoutSidenav_nav .sidenav {
+.nav-fixed #layoutSidenav #layoutSidenav_nav .sidenav, #sideNav_skeleton .sidenav {
   padding-top: 3.625rem;
 }
-.nav-fixed #layoutSidenav #layoutSidenav_nav .sidenav .sidenav-menu {
+.nav-fixed #layoutSidenav #layoutSidenav_nav .sidenav .sidenav-menu, #sideNav_skeleton .sidenav .sidenav-menu {
   overflow-y: overlay;
 }
 .nav-fixed #layoutSidenav #layoutSidenav_nav .sidenav .sidenav-menu::-webkit-scrollbar {

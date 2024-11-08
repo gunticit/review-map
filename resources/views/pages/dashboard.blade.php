@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <!-- thong ke -->
-<section class="thong-ke">
+<section class="thong-ke skeleton">
   <div class="container-fluid">
     <div class="row">
       <div class="col-xl-3 col-md-4 col-6 mb-4 mb-xl-0">
@@ -53,7 +53,7 @@
 </section>
 <!-- end thong ke  -->
 <!-- du-an-cua-ban -->
-<section class="du-an-cua-ban">
+<section class="du-an-cua-ban skeleton">
   <div class="container-fluid">
     <div class="col-inner">
       <div class="row">
@@ -64,14 +64,16 @@
           </div>
         </div>
         <div class="col-md-2 col-12">
-          <select class="form-select" aria-label="Lọc Năm" id="filter-year">
-            <option value="">Năm</option>
-            @if(!empty($filters['years']))
-              @foreach($filters['years'] as $year)
-                <option {!! $filter_data['year'] == $year ? 'selected' : '' !!} value="{{ $year }}">{{ $year }}</option>
-              @endforeach
-            @endif
-          </select>
+          <div class="form-group">
+            <select class="form-select" aria-label="Lọc theo năm" id="filter-year">
+              <option value="">Năm</option>
+              @if(!empty($filters['years']))
+                @foreach($filters['years'] as $year)
+                  <option {!! $filter_data['year'] == $year ? 'selected' : '' !!} value="{{ $year }}">{{ $year }}</option>
+                @endforeach
+              @endif
+            </select>
+          </div>
         </div>
       </div>
       <!-- chart  -->
@@ -132,7 +134,9 @@
         }
       </script>
       <!-- end chart  -->
-      <div id="chartContainer" style="height: 290px; max-width: 100%; margin: 0px auto;"></div>
+      <div class="group-chart">
+        <div id="chartContainer" style="height: 290px; max-width: 100%; margin: 0px auto;"></div>
+      </div>
     </div>
   </div>
 </section>

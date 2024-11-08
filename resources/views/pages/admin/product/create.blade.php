@@ -201,7 +201,7 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
-    <form action="{{ route('product.store') }}" id="form-create-project" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('product.store') }}" id="form-create-product" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="container-fluid">
             <div class="row">
@@ -221,10 +221,10 @@
                         @endif
                         <div class="mb-4"><!-- class: invalid -->
                             <div class="row">
-                                <div class="col-sm-4">
-                                    <label for="inputlist-table">Mã sản phẩm <span class="required">*</span>
+                                <div class="col-sm-4" id="product-code-area">
+                                    <label for="product-code">Mã sản phẩm <span class="required">*</span>
                                     </label>
-                                    <input class="form-control require" id="inputlist-table" name="product_code" type="text" placeholder="Mã sản phẩm" value="" required>
+                                    <input class="form-control require" id="product-code" name="product_code" type="text" placeholder="Mã sản phẩm" value="" required>
                                     @error('product_code')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -232,9 +232,9 @@
                                     @enderror
                                 </div>
                                 <div class="col-sm-8">
-                                    <label for="inputlist-table">Tên sản phẩm <span class="required">*</span>
+                                    <label for="product-name">Tên sản phẩm <span class="required">*</span>
                                     </label>
-                                    <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="Tên sản phẩm" value="" required>
+                                    <input class="form-control require" id="product-name" name="name" type="text" placeholder="Tên sản phẩm" value="" required>
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -256,24 +256,30 @@
                         </div>
                         <div class="mb-4">
                             <label for="inputlist-table">Mô tả <span>(nếu có)</span></label>
-                            <textarea id="description" name="description" class="form-control"></textarea>
+                            <textarea id="description" placeholder="Mô tả sản phẩm" name="description" class="form-control"></textarea>
                         </div>
                         <div class="mb-4 row">
                             <div class="col-sm-8">
                                 <label for="inputlist-table">Giá sản phẩm</label>
-                                <input class="form-control" id="price" name="price" type="number" placeholder="Tên sản phẩm" value="">
+                                <input class="form-control" id="price" name="price" type="number" placeholder="Giá sản phẩm" value="">
                             </div>
                             <div class="col-sm-4">
                                 <label for="inputlist-table">Số lượng trong kho</label>
-                                <input class="form-control" id="stock" name="stock" type="number" placeholder="Tên sản phẩm" value="">
+                                <input class="form-control" id="stock" name="stock" type="number" placeholder="Số lượng trong kho" value="">
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label>Hình ảnh <span>(nếu có)</span></label>
-                            <input class="form-control" id="image" name="image" type="file" placeholder="Hình ảnh" />
+                            <label>Hình ảnh ( Gồm: Ảnh đầu tiên là ảnh đại diện và ảnh chi tiết)</label>
+                            <label for="inputFile" class="custom-file-upload">
+                                <span class="material-symbols-outlined">link</span> Tải hình lên
+                            </label>
+                            <input class="form-control" id="inputFile" name="image[]" type="file" placeholder="Hình ảnh" multiple />
+                            <div id="fileError" class="alert alert-danger" style="display: none;">Tệp quá lớn hoặc không được hỗ trợ.</div>
+                            <!-- Khu vực hiển thị tên tệp -->
+                            <div id="fileList" class="mb-4 col-6"></div>
                         </div>
                         <div class="mb-4">
-                            <button class="btn btn-primary" type="submit">Thêm mới</button>
+                            <button class="btn btn-primary" id="btn-submit" type="submit">Thêm mới</button>
                         </div>
                     </div>
                 </div>
@@ -361,4 +367,45 @@
         }
     } );
 </script> 
+<script>
+    $(document).ready(function () {
+        const getSelectedFiles = setupFileInput('#inputFile', '#fileList', '#fileError', 2);
+        
+        $('#inputFile').on('change', function () {
+            const selectedFiles = getSelectedFiles(); // Get the array of selected files
+            console.log('Currently selected files:', selectedFiles); // Log the files
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#product-code').on('change', function(){
+            var product_code = $(this).val();
+            $.ajax({
+                url: "{{ route('product.check.code', ['product_code' => 'PRD_CODE']) }}".replace('PRD_CODE', product_code),
+                method: "GET",
+                data: {
+                    product_code: product_code,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if(!data.status){
+                        $('#product-code').addClass('is-valid');
+                        $('#product-code').removeClass('is-invalid');
+                        $('#btn-submit').removeAttr('disabled');
+                        $('#product-code-area .invalid-feedback').remove();
+                    }else{
+                        $('#product-code').addClass('is-invalid');
+                        $('#product-code').removeClass('is-valid');
+                        $('#btn-submit').attr('disabled','disabled');
+                        $('#product-code-area').append(`<span class="invalid-feedback" role="alert">
+                            <strong>Mã sản phẩm đã được sử dụng.</strong>
+                        </span>`);
+                    }
+                }
+            });
+        })
+    });
+</script>
 @endsection

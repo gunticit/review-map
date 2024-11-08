@@ -13,13 +13,13 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="clear col-sm-12 text-right">
-                    <button class="btn btn-primary my-3" type="button" onclick="window.location.href='{{ route('category.create') }}'">
-                        <i class="fas fa-plus"></i> Tạo danh mục
+                    <button class="btn btn-primary my-3" type="button" onclick="window.location.href='{{ route('admin-faq.create') }}'">
+                        <i class="fas fa-plus"></i> Tạo FAQ
                     </button>
                 </div>
             </div>
             <div class="col-inner">
-                <h2 class="section-title mb-4">Danh sách dự án</h2>
+                <h2 class="section-title mb-4">Danh sách FAQ</h2>
                 <div id="group-alert">
                     @if(session('success'))
                         <div class="alert alert-success">
@@ -39,13 +39,13 @@
                         </script>
                     @endif
                 </div>
-                <form id="formSearch" action="{{ route('category.index') }}" method="GET">
+                <form id="formSearch" action="{{ route('admin-faq.index') }}" method="GET">
                     <div class="input-group group-search">
                         <div class="input-group">
                             <button class="input-group-text" type="submit">
                                 <span class="material-symbols-outlined">search</span>
                             </button>
-                            <input type="text" value="{{ request()->name }}" placeholder="Tìm kiếm" name="name" class="form-control" id="inputSearch">
+                            <input type="text" value="{{ request()->title }}" placeholder="Tìm kiếm" name="title" class="form-control" id="inputSearch">
                         </div>
                         <button class="btn btn-default btn-filter" type="button" onclick="filter()">
                             <img src="{{ asset('./assets/img/filter.svg') }}" alt="filter"> <span>Tìm kiếm</span>
@@ -57,12 +57,11 @@
                         <tr>
                             <th class="list-table-stt" scope="col">STT</th>
                             <th class="list-table-name">
-                                Tên danh mục
+                                Tiêu đề
                             </th>
                             <th class="list-table-image">
-                                Hình ảnh
+                                Nội dung
                             </th>
-                            <th>Thuộc nhóm</th>
                             <th class="list-table-creater" scope="col">Người tạo</th>
                             <th class="list-table-progree" scope="col">Trạng thái</th>
                             <th class="list-table-time" scope="col">Ngày tạo</th>
@@ -72,32 +71,34 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if(!empty($categories))
-                            @foreach($categories as $category)
-                            <tr class="category-{{ $category->id }}">
-                                <td class="list-table-stt" scope="col">{{ $category->id }}</td>
+                        @if(!empty($faqs))
+                            @foreach($faqs as $faq)
+                            <tr class="faq-{{ $faq->id }}">
+                                <td class="list-table-stt" scope="col">{{ $faq->id }}</td>
                                 <td class="list-table-name">
-                                    {{ $category->name }}
+                                    <p style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.5; margin-bottom: 0">{{ $faq->title }}</p>
                                 </td>
-                                <td class="list-table-name">
-                                    <img src="{{ asset('storage/' . $category->image) }}" width="50" alt="">
-                                </td>
-                                <td class="list-table-name">
-                                    {{ optional($category->parent)->name }}
+                                <td class="list-table-content">
+                                    <p style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.5; margin-bottom: 0">{{ $faq->content }}</p>
                                 </td>
                                 <td class="list-table-creater" scope="col">
                                     {{
-                                        $category->createdBy->name
+                                        $faq->createdBy->title ?? 'Admin'
                                     }}
                                 </td>
                                 <td class="list-table-progree" scope="col">
-                                    {{ $category->active ? 'Hoạt động' : 'Không hoạt động' }}
+                                    {{ $faq->active ? 'Hoạt động' : 'Không hoạt động' }}
                                 </td>
                                 <td class="list-table-time" scope="col">
-                                    {{ date('d/m/Y', strtotime($category->created_at)) }}
+                                    {{ date('d/m/Y', strtotime($faq->created_at)) }}
                                 </td>
                                 <td class="list-table-handle text-center">
-                                    <button class="btn btn-danger" type="button" onclick="handleDelete({{ $category->id }})">
+                                    <button class="btn btn-info" type="button" onclick="handleEdit({{ $faq->id }})">
+                                        <span class="material-symbols-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                    <button class="btn btn-danger" type="button" onclick="handleDelete({{ $faq->id }})">
                                         <span class="material-symbols-outlined">
                                             delete
                                         </span>
@@ -108,32 +109,33 @@
                         @endif
                     </tbody>
                 </table>
-                {{ $categories->links('vendor.pagination.custom') }}
+                {{ $faqs->links('vendor.pagination.custom') }}
             </div>
         </div>
     </section>
     <script>
+        function handleEdit(id){
+            window.location.href = "{{ route('admin-faq.edit', ':admin_faq') }}".replace(':admin_faq', id);
+        }
         function handleDelete(id) {
             if (id === null || id === undefined) {
                 showAlert('Lỗi: Không thể xóa bài viết!');
                 return;
             }
-
             if (confirm('Bạn có chắc muốn xoá ?')) {
                 $.ajax({
-                    url: "{{ route('destroy.category.id', ':id') }}".replace(':id', id),
-                    type: 'POST',
+                    url: "{{ route('admin-faq.destroy', ':admin_faq') }}".replace(':admin_faq', id),
+                    type: 'DELETE',
                     data: {
-                        _token: '{{ csrf_token() }}' // Thêm CSRF token
+                        _token: '{{ csrf_token() }}', // Thêm CSRF token
                     },
                     success: function(response) {
-                        console.log(response);
                         if(response.status){
                             $('#group-alert').append(`
                                 <div class="alert alert-success">
                                     Xóa danh mục thành công
                                 </div>`);
-                            $('.category-' + id).remove();
+                            $('.faq-' + id).remove();
                         }else{
                             $('#group-alert').append(`
                                 <div class="alert alert-error">

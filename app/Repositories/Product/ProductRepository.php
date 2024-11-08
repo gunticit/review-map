@@ -15,8 +15,16 @@ class  ProductRepository extends BaseRepository implements ProductRepositoryInte
 
     public function list($request){
         $query = $this->model->query();
+        $query = $this->model->query()->with(['createdBy', 'images', 'category' => function($query) use ($request) {
+            if (!empty($request->category_id)) {
+                $query->where('id', $request->category_id);
+            }
+        }]);
         if(isset($request->user_id)){
             $query->where('created_by', $request->user_id);
+        }
+        if (!empty($request->category_id)) {
+            $query->where('category_id', $request->category_id);
         }
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){
@@ -28,5 +36,9 @@ class  ProductRepository extends BaseRepository implements ProductRepositoryInte
         $page = $request->page ?? 1;
         $perPage = $request->per_page ?? 15;
         return $query->paginate($perPage, ['*'], 'page', $page);
+    }
+
+    public function findBySlug($slug){
+        return $this->model->query()->with(['createdBy', 'images', 'category'])->where('slug', $slug)->first();
     }
 }

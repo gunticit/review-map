@@ -94,7 +94,7 @@
             
                 <h2 class="section-title mb-4">Thanh toán</h2>
                 <div class="wallet-card">
-                    <img src="img/rivi-logo.svg" alt="logo">
+                    <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="rivi logo">
                     <p>Số dư của tôi</p>
                     <h3 class="wallet-number text-primary">{{ $wallet->balance_formatted }}</h3>
                 </div>

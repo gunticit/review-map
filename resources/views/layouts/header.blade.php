@@ -108,6 +108,9 @@
         if(recaptcha){
             setCookie('captchaChecked', true, 0.0104);
             $('#recaptcha-form').submit();
+            $('#submit-captcha').prop('disabled', true);
+            $('#submit-captcha').text('Đang xử lý...')
+            $('#submit-captcha').prepend(`<span class="spinner-border spinner-border-sm" style="margin-right: 5px;" role="status" aria-hidden="true"></span> `);
         }
     })
 </script>

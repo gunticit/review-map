@@ -74,7 +74,7 @@
                         <span class="material-symbols-outlined">quiz</span>
                     </div> FAQ
                 </a>
-                <a class="nav-link link-danger" href="login.php">
+                <a class="nav-link link-danger" href="{{ route('logout') }}">
                     <div class="nav-link-icon">
                         <span class="material-symbols-outlined">logout</span>
                     </div> Đăng xuất

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('transaction_histories', function (Blueprint $table) {
             $table->id();
             $table->integer('wallet_id'); // Id ví
-            $table->enum('type', ['deposit', 'withdraw', 'payment']); // nạp | rút | thanh toán
+            $table->enum('type', ['deposit', 'withdraw', 'payment', 'mined']); // nạp | rút | thanh toán | hoàn thành nhiệm vụ
             $table->string('transaction_code')->nullable();
             $table->decimal('amount', 15, 0); // Số tiền
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');

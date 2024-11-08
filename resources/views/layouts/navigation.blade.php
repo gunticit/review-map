@@ -108,13 +108,13 @@
         <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="rivi logo">
     </a>
     <!-- Sidenav Toggle Button-->
-    <button class="btn btn-icon" id="sidebarToggle">
+    <button class="btn btn-icon d-none" id="sidebarToggle">
         <span class="material-symbols-outlined">chevron_left</span>
     </button>
     <!-- Navbar title-->
     <h1 class="topnav-title">{{ $heading_title ?? '' }}</h1>
     <!-- Navbar Items-->
-    <ul class="navbar-nav align-items-center ms-auto">
+    <ul class="navbar-nav align-items-center ms-auto skeleton">
         <!-- Documentation Dropdown-->
         <li class="nav-item dropdown no-caret d-none d-md-block me-3">
             <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

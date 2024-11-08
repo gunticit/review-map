@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -46,9 +45,8 @@ class ProductController extends Controller
                 'name' => 'required|string|max:255',
                 'category_id' => 'nullable|exists:categories,id',
                 'description' => 'nullable|string',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Giới hạn kích thước ảnh 2MB
+                'image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Giới hạn kích thước ảnh 2MB
             ]);
-    
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
@@ -124,5 +122,13 @@ class ProductController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
+    }
+    public function productCheckCode($product_code){
+        $data = $this->productService->checkCode($product_code);
+        return response()->json([
+            'title' => 'API Check Product By Code',
+            'data' => $data,
+            'status' => $data ? true : false
+        ]);
     }
 }

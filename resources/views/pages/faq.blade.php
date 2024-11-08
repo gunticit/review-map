@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <!-- thong ke -->
-<section class="thong-ke">
+<section class="thong-ke skeleton">
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-3 col-md-4 col-6 mb-4 mb-xl-0">
@@ -57,7 +57,7 @@
     <div class="container-fluid">
         <div class="col-inner">
             <h2 class="section-title mb-4 text-center">Các câu hỏi phổ biến</h2>
-            <div class="accordion" id="accordion">
+            <div class="accordion skeleton" id="accordion">
                 @if(!empty($faqs))
                     @foreach($faqs as $key => $faq)
                         <div class="accordion-item">
