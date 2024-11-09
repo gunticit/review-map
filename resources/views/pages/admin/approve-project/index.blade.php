@@ -19,9 +19,9 @@
                                         @if (!empty($projects))
                                             <ul>
                                                 @foreach ($projects as $project)
-                                                    <li onclick="showProject({{ $project['id'] }})">
+                                                    <li onclick="showProject({{ $project['project_id'] }})">
                                                         <div href="javascript:void(0);"
-                                                            class="project-id-{{ $project['id'] }} list-group-item list-group-item-action active {{ $project['status'] == 2 ? 'approve' : '' }}"
+                                                            class="project-id-{{ $project['project_id'] }} list-group-item list-group-item-action active {{ $project['status'] == 2 ? 'approve' : '' }}"
                                                             aria-current="true">
                                                             <div class="d-flex w-100 justify-content-between">
                                                                 <h5 class="mb-1">{{ $project['name'] }}</h5>
@@ -88,24 +88,24 @@
                     $('#info-project *').remove();
                     $('#info-project').append(`
                 <div class="form-detail">
-                    <div class="form-group">
+                    <div class="form-group mb-4">
                         <label>Tên dự án</label>
                         <input type="text" class="form-control" readonly value="${data.data?.name ?? ''}">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-4">
                         <label>Mô tả</label> 
                         <textarea class="form-control" readonly rows="5">${data.data?.description ?? ''}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Hình ảnh</label>
-                        <ul style="list-style:none; padding-left: 0">
-                            ${data.data?.images ? data.data?.images?.map((image) => 
-                            `<li style="margin-right: 5px; cursor: pointer">
-                                    <img src="/${image.image_url}" width="100; border-radius: 5px">
-                                </li>`).join('') : ''}
-                        </ul>
-                    </div>
-                    <div class="d-flex gap-3 group-actiion text-right">
+                    </div>${data.data.image_url ?
+                        `<div class="form-group mb-4">
+                            <label>Hình ảnh</label>
+                            <ul style="list-style:none; padding-left: 0">
+                                ${data.data?.images ? data.data?.images?.map((image) => 
+                                `<li style="margin-right: 5px; cursor: pointer">
+                                        <img src="/${image.image_url}" width="100; border-radius: 5px">
+                                    </li>`).join('') : ''}
+                            </ul>
+                        </div>`:''
+                    }<div class="d-flex gap-3 group-actiion text-right">
                         <button onclick="handleViewRate('${data.data?.place_id}')" class="btn btn-outline-primary">Xem đánh giá</button>    
                         ${data.data?.status !== {{ $status_complete }} ?`
                                 <button onclick="handleWrongImage(${data.data?.id})" class="btn btn-danger">Không thấy ảnh, sai ảnh</button>  

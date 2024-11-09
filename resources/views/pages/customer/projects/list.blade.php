@@ -108,7 +108,7 @@
                                         <a class="{{ checkStatus($project->status)['className'] }}">{{ checkStatus($project->status)['labelStatus'] }}</a>
                                     </td>
                                     <td class="list-table-status">
-                                        @if($project->status == 1)
+                                        @if($project->status == 2)
                                             <a href="javascript:void(0)" style="display: flex;" val-status="{{ $project->status }}" val-id="{{ $project->id }}" class="btn btn-outline-warning btn-change-status" role="button">
                                                 <span class="material-symbols-outlined">motion_photos_paused</span> <span>Tạm dừng</span>
                                             </a>
@@ -163,8 +163,8 @@
             $('.btn-change-status').on('click', function() {
                 if(confirm('Xác nhận lại thay đổi trạng thái dự án')){
                     let currentStatus = $(this).attr('val-status');
-                    let status = 1;
-                    if(currentStatus == 1){
+                    let status = 2;
+                    if(currentStatus == 2){
                         status = 4;
                     }
                     $.ajax({

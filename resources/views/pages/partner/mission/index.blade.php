@@ -8,14 +8,6 @@
 <section class="section nhan-nhiem-vu-step mb-5 mt-5">
     <div class="container-fluid">
         <div class="col-inner text-center">
-            <div class="col-xl-12 col-md-12 col-12 mb-4">
-                <!-- class: bg-warning, bg-success, bg-danger  -->
-                <div id="message-location" class="message bg-danger">
-                    <div class="d-flex align-items-center" id="alert-location">
-                        <span class="material-symbols-outlined me-2">info</span>
-                    </div>
-                </div>
-            </div>
             @if(!empty($project))
             <div class="section-step">
                 <h3>step 1</h3>
@@ -92,25 +84,6 @@
         </div>
     </div>
 
-<!-- Modal Vi Tri -->
-<div class="modal fade ViTri" id="ViTri" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center">
-            <div class="modal-header ">
-                <h2 class="modal-title" id="ViTriLabel">Yêu cầu cho phép <br> truy cập vị trí</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-                <p>Chúng tôi cần biết vị trí của bạn để phân phối nhiệm vụ ở gần bạn. 
-                    Hãy <span class="text-primary">Cho phép truy cập vị trí</span> để tiếp tục
-                </p>
-                <img src="{{ asset('assets/img/Group-1000006623.png')}}" alt="1000006623">
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end modal vi tri  -->
 </section>
 <script src="{{ asset('assets/js/jquery.steps.min.js') }}"></script>
 
@@ -190,42 +163,6 @@
             a[0].click();
             a.remove();
         });
-
-        let check_location = getCookie('current_location');
-        if(!check_location){
-            navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        $('#ViTri').modal('hide');
-                        $('#message-location').remove();
-                        $.ajax({
-                            url: "{{ route('profile.update.location') }}", 
-                            type: "post",    //request type,
-                            dataType: 'json',
-                            data: {
-                                latitude: position.coords.latitude,
-                                longitude: position.coords.longitude
-                            },
-                            success:function(result){
-                                // localStorage.setItem('current_location', JSON.stringify(position.coords));
-                                setCookie('current_location', JSON.stringify(position.coords), 1);
-                            },
-                            error:function(result){
-                                console.log(result)
-                            }
-                        });
-                    },
-                    function(error) {
-                        $('#ViTri').modal('show');
-                        $('#alert-location').append(`
-                            <p class="alert-alert mb-0">Bạn cần cung cấp vị trí để có thể làm nhiệm vụ. Vui lòng tải lại trang.
-                                <a href="{{route('mission.index')}}" class="ms-2">Tải lại trang <span class="material-symbols-outlined">replay</span></a>
-                            </p>
-                        `);
-                    }
-                );
-        } else {
-            $('#message-location').remove();
-        }
     })
     </script>
 @endsection

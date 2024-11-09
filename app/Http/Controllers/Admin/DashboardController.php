@@ -54,8 +54,8 @@ class DashboardController extends Controller
             return array(
                 'name' => $item['name'],
                 'id' => $item['id'],
-                'latitude' => (float)$item['latitude'],
-                'longitude' => (float)$item['longitude']
+                'latitude' => (float)$item['latitude'] ?? 0,
+                'longitude' => (float)$item['longitude'] ?? 0
             );
         },$data_customer_data);
         return view('pages.admin.dashboard.customer-overview', array(
@@ -65,8 +65,8 @@ class DashboardController extends Controller
                 'year' => $request->year ?? ''
             ),
             'data_customer_data' => $data_customer_data,
-            'current_lat' => $data_customer_data[0]['latitude'],
-            'current_long' => $data_customer_data[0]['longitude'],
+            'current_lat' => $data_customer_data[0]['latitude'] ?? 0,
+            'current_long' => $data_customer_data[0]['longitude'] ?? 0,
         ));
     }
     public function partnerOverview(){
@@ -127,8 +127,8 @@ class DashboardController extends Controller
             'has_commission' => $has_commission,
             'data_chart_level' => $data_chart_level,
             'data_partner_data' => $data_partner_data,
-            'current_lat' => $data_partner_data[0]['latitude'],
-            'current_long' => $data_partner_data[0]['longitude'],
+            'current_lat' => $data_partner_data[0]['latitude'] ?? 0,
+            'current_long' => $data_partner_data[0]['longitude'] ?? 0,
             'total_partner_verified' => 0,
             'total_partner_commission' => 0, // Hoa hồng
             'total_order' => 0,

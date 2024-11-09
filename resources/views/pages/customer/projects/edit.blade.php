@@ -253,7 +253,8 @@
                         </div>
                         <!-- Form Group (UrlMap)-->
                         <div class="mb-4"><!-- class: active -->
-                            <label>Chọn Map<span class="required">*</span>
+                            <label>
+                                Chọn Map <span style="margin-left: 5px" class="required">*</span>
                             </label>
                             <div class="row">
                                 <div id="preview-map">

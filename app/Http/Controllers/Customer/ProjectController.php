@@ -58,9 +58,10 @@ class ProjectController extends Controller
     }
 
     public function create(Request $request){
+        $user = Auth::user();
         $data = array(
-            'latitude' => '10.8299',
-            'longitude' => '106.68029'
+            'latitude' => $user->latitude ?? '10.8299',
+            'longitude' => $user->longitude ?? '106.68029'
         );
         return view('pages.customer.projects.create',$data);
     }

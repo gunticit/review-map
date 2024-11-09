@@ -3771,7 +3771,10 @@ h3.col-title {
   height: 68px;
   vertical-align: middle;
   padding: 5px;
-  min-width: 130px;
+  min-width: 160px;
+}
+.list-table th{
+  text-align: center;
 }
 .list-table td:first-child, .list-table th:first-child{
   width: 150px;
@@ -5260,7 +5263,7 @@ body .btn.btn-info > span{
 .skeleton h4,
 .skeleton .description, .skeleton a, .skeleton .accordion-item, .skeleton .nav-item,
 .skeleton .product-image, .skeleton .product-title, .skeleton .product-price, .skeleton .add-to-cart,
-.skeleton.filter-group, .skeleton .group-chart, .skeleton .form-group {
+.skeleton.filter-group, .skeleton .group-chart, .skeleton .form-group, .skeleton .panel-chart {
   background-color: #ededed;
   background: linear-gradient(
     100deg,
@@ -5273,7 +5276,7 @@ body .btn.btn-info > span{
   animation: 1s loading ease-in-out infinite;
 }
 .skeleton .thong-ke-item > *, .skeleton .accordion-item > *, .skeleton .nav-item > *,
-.skeleton .product-image > *, .skeleton.filter-group > *, .skeleton .form-group > *,
+.skeleton .product-image > *, .skeleton.filter-group > *, .skeleton .form-group > *, .skeleton .panel-chart > *,
 .skeleton .product-title > *, .skeleton .product-price > *, .skeleton .add-to-cart, .skeleton .group-chart > *{
   opacity: 0;
 }

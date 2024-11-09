@@ -146,14 +146,14 @@
                     break;
                 case 1:
                     $className = 'text-success';
-                    $labelStatus = 'Đang thực hiện';
-                    break;
-                case 2:
-                    $className = 'text-success';
                     $labelStatus = 'Hoàn thành';
                     break;
-                case 3:
+                case 2:
                     $className = 'text-warning';
+                    $labelStatus = 'Đang thực hiện';
+                    break;
+                case 3:
+                    $className = 'text-danger';
                     $labelStatus = 'Hoàn lại';
                     break;
                 case 4:

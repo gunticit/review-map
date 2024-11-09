@@ -12,7 +12,7 @@
 <section class="thong-ke skeleton">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xl-4 col-md-4 col-6 mb-4">
+      <div class="col-xl-4 col-md-4 col-6">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">contract</span>
@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4">
+      <div class="col-xl-4 col-md-4 col-6">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">task</span>
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4">
+      <div class="col-xl-4 col-md-4 col-6">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">
@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4">
+      <div class="col-xl-4 col-md-4 col-6">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">
@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4">
+      <div class="col-xl-4 col-md-4 col-6">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">
@@ -73,7 +73,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-4 col-6 mb-4">
+      <div class="col-xl-4 col-md-4 col-6">
         <div class="thong-ke-item text-center">
           <div class="thong-ke-head">
             <span class="material-symbols-outlined">

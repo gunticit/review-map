@@ -310,7 +310,7 @@
                         </script>
                         <!-- Form Group (UrlMap)-->
                         <div class="mb-4"><!-- class: active -->
-                            <label>{{ __('project.choose_map') }}<span class="required">*</span>
+                            <label>{{ __('project.choose_map') }} <span style="margin-left: 5px" class="required">*</span>
                             </label>
                             <div class="row">
                                 <div class="col-12">

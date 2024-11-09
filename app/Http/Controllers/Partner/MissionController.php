@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Partner;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ReCaptchaV2Request;
 use App\Http\Resources\MissionResource;
 use App\Models\Comment;
 use App\Models\Mission;
@@ -23,6 +22,8 @@ class MissionController extends Controller
 
     public function __construct(MissionService $missionService,WalletService $walletService,HistoryService $historyService){
         $this->missionService = $missionService;
+        $this->walletService = $walletService;
+        $this->historyService = $historyService;
     }
 
     /**
@@ -51,8 +52,11 @@ class MissionController extends Controller
             $data = array();
             $data['project'] = $project;
             $data['user_id'] = $user_id;
-            if(empty($mission)) {
+            if(!empty($project) && empty($mission)) {
                 $mission = $this->missionService->find($project->mission_id);
+            }else{
+                // Trường hợp này rơi vào khoảng cách địa lý, không có dự án nào trong phạm vi cho phép
+                return redirect()->back()->withErrors(['error' => 'Chưa có nhiệm vụ nào được tạo. Bạn vui lòng chờ thêm nhiệm vụ!']);
             }
             $data['mission'] = $mission;
             $data['link_map'] = isset($project->place_id)?'https://www.google.com/maps/place?key='.env("GOOGLE_MAP_API_KEY").'&q=place_id:' . $project->place_id.'&reviews':'';
@@ -63,68 +67,71 @@ class MissionController extends Controller
         }
 
     }
-    private function getProjectConditions($user_id) {
-        //Check điều kiện số mission phải nhỏ hơn số lượt của gói 
-        $mission = [];
-        $projectResult = [];
-        $projects = Project::where('status', Project::WORKING_PROJECT)->get();
-        $projects = $projects->shuffle();
-        // Đếm số lần tạo mission
-        $projects = $projects->take(1)->all();
-        foreach($projects as $project) {
-            // Đếm nhiệm vụ của project đang thực hiện và đã hoàn thành trong ngày
-            $countMissionToDay = Mission::where('project_id', $project->id)->whereDate('created_at', Carbon::today())->whereIn('status', [1, 2])->count();
-            $countMission = Mission::where('project_id', $project->id)->whereIn('status', [1, 2])->count();
-            $conditionPackage = true;
-            $conditionSlow = true;
-            // check tổng nhiệm vụ không được lớn hơn rãi chậm trong ngày
-            if($project->is_slow === true && $countMissionToDay > $project->point_slow) {
-                $conditionSlow = false;
-            }
-            // check tổng nhiệm vụ không được lớn hơn gói dự án đăng ký
-            switch($project->package){
-                case 1:
-                    $conditionPackage = $countMission < 10;
-                    break;
-                case 2:
-                    $conditionPackage = $countMission < 50;
-                    break;
-                case 3:
-                    $conditionPackage = $countMission < 100;
-                    break;
-                case 4:
-                    $conditionPackage = $countMission < 200;
-                    break;
-                default: 
-                    $conditionPackage = true;
-            }
-            // tính khoảng cách vị trí đối tác với dự án
-            $distance = getDistanceBetweenPoints($project->latitude, $project->longitude, auth()->user()->latitude, auth()->user()->longitude);
-            if ($distance['kilometers'] == 0) {
-                $conditionDistance = false;
-            } else {
-                $conditionDistance = $distance['kilometers'] > 20 ? true : false;
-            }
-            // Nếu tổng nhiệm vụ lớn hơn số lượng package hoặc vị trí > 20km thì random lại project
-            if((!$conditionPackage || $conditionDistance || !$conditionSlow)) {
-                continue;
-            } 
-            // create mission
-            $comment = $this->randomComment($project->id);
-            $mission = Mission::create([
-                'user_id' => $user_id,
-                'project_id' => $project->id,
-                'status' => 2,
-                'comment_id' => $comment->id,
-                'price' => 10000, // Cập nhật sau, hiện tại cấp 1 là 10k
-                'latitude' => $project->latitude,
-                'longitude' => $project->longitude,
-                'image_id' => $project->has_images ? $this->randomImage($project->id) : null
-            ]);
-            Comment::where('id', $comment->id)->update(['is_used' => 1]);
-            // Cập nhật comment đã sử dụng
-            $projectResult = $project;
+    private function getProjectConditions($user_id, $checkedProjectIds = []) {
+        // Lọc project không nằm trong danh sách đã kiểm tra và lấy project ngẫu nhiên
+        $projects = Project::where('status', Project::WORKING_PROJECT)
+            ->whereNotIn('id', $checkedProjectIds)
+            ->get()
+            ->shuffle()
+            ->take(1)
+            ->all();
+        $data = $this->createMissionByProjects($projects, $user_id);
+        [$projectResult, $mission] = $data;
+    
+        // Nếu không có project nào thoả mãn, thêm project đã kiểm tra vào danh sách và gọi lại đệ quy
+        if (empty($projectResult) && !empty($projects)) {
+            $checkedProjectIds = array_merge($checkedProjectIds, array_column($projects, 'id'));
+            return $this->getProjectConditions($user_id, $checkedProjectIds); // Gọi lại đệ quy với danh sách đã cập nhật
         }
+    
+        return $data;
+    }
+
+    public function createMissionByProjects($projects = [], $user_id){
+        $mission = $projectResult = [];
+        
+        if (!empty($projects)) {
+            foreach ($projects as $project) {
+                $countMissionToDay = Mission::where('project_id', $project->id)
+                    ->whereDate('created_at', Carbon::today())
+                    ->whereIn('status', [1, 2])
+                    ->count();
+                    
+                $countMission = Mission::where('project_id', $project->id)
+                    ->whereIn('status', [1, 2])
+                    ->count();
+    
+                // Kiểm tra điều kiện
+                $conditionPackage = match ($project->package) {
+                    1 => $countMission < 10,
+                    2 => $countMission < 50,
+                    3 => $countMission < 100,
+                    4 => $countMission < 200,
+                    default => true,
+                };
+                $conditionSlow = !$project->is_slow || $countMissionToDay <= $project->point_slow;
+                $distance = getDistanceBetweenPoints($project->latitude, $project->longitude, auth()->user()->latitude, auth()->user()->longitude);
+                $conditionDistance = $distance['kilometers'] <= 20;
+                if ($conditionPackage && $conditionSlow && $conditionDistance) {
+                    $comment = $this->randomComment($project->id);
+                    $mission = Mission::create([
+                        'user_id' => $user_id,
+                        'project_id' => $project->id,
+                        'status' => 2,
+                        'comment_id' => $comment->id,
+                        'price' => 10000,
+                        'latitude' => $project->latitude,
+                        'longitude' => $project->longitude,
+                        'image_id' => $project->has_images ? $this->randomImage($project->id) : null
+                    ]);
+                    
+                    Comment::where('id', $comment->id)->update(['is_used' => 1]);
+                    $projectResult = $project;
+                    break;
+                }
+            }
+        }
+        
         return [$projectResult, $mission];
     }
 

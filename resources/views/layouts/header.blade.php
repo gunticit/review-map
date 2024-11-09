@@ -79,6 +79,26 @@
     </div>
 </div>
 <!-- end modal vi tri  -->
+
+<!-- Modal Vi Tri -->
+<div class="modal fade ViTri" id="ViTri" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header ">
+                <h2 class="modal-title" id="ViTriLabel">Yêu cầu cho phép <br> truy cập vị trí</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <p>Chúng tôi cần biết vị trí của bạn để phân phối nhiệm vụ ở gần bạn. 
+                    Hãy <span class="text-primary">Cho phép truy cập vị trí</span> để tiếp tục
+                </p>
+                <img src="{{ asset('assets/img/Group-1000006623.png')}}" alt="1000006623">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal vi tri  -->
 <script>
     $(window).on('load', function() {
         // Get mission
@@ -114,3 +134,69 @@
         }
     })
 </script>
+
+<script>
+    function getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    $.ajax({
+                        url: "{{ route('profile.update.location') }}",    //the page containing php script
+                        type: "post",    //request type,
+                        dataType: 'json',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            latitude: latitude,
+                            longitude: longitude
+                        },
+                        success:function(result){
+                            localStorage.setItem('current_location', JSON.stringify(position.coords));
+                        },
+                        error:function(result){
+                            console.log(result)
+                        }
+                    })
+                },
+                // Hàm lỗi, ví dụ khi người dùng từ chối truy cập
+                (error) => {
+                    $('#layoutSidenav_content main').prepend(`
+                        <div class="col-xl-12 col-md-12 col-12 mt-4 mb-0 px-3">
+                            <div id="message-location" class="message bg-danger">
+                                <div class="d-flex align-items-center" id="alert-location">
+                                    <span class="material-symbols-outlined me-2">info</span>
+                                    <p class="alert-alert mb-0">Bạn cần cung cấp vị trí để có thể làm nhiệm vụ. Vui lòng tải lại trang.
+                                        <a href="{{route('mission.index')}}" class="ms-2">Tải lại trang <span class="material-symbols-outlined">replay</span></a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    $('#ViTri').modal('show');
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            console.log("Người dùng đã từ chối yêu cầu lấy vị trí.");
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            console.log("Thông tin vị trí không có sẵn.");
+                            break;
+                        case error.TIMEOUT:
+                            console.log("Yêu cầu lấy vị trí quá thời gian cho phép.");
+                            break;
+                        default:
+                            console.log("Đã xảy ra lỗi không xác định.");
+                            break;
+                    }
+                }
+            );
+        } else {
+            showAlert('error','Trình duyệt của bạn không thể truy cập vị trí.');
+        }
+    }
+</script>
+@if(!Auth::user()?->latitude || !Auth::user()?->longitude)
+    <script>
+        getUserLocation();
+    </script>
+@endif

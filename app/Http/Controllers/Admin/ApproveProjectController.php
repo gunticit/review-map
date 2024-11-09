@@ -15,12 +15,14 @@ class ApproveProjectController extends Controller
         $data = array();
         $projects = Project::leftJoin('comments', 'projects.id', '=', 'comments.project_id')
         ->rightJoin('missions', 'comments.id', '=', 'missions.comment_id')
+        ->leftJoin('image_projects', 'missions.image_id', '=', 'image_projects.id')
         ->select(
             'projects.*',
             'projects.id as project_id',
             'comments.comment',
             'missions.*',
-            'missions.id as mission_id'
+            'missions.id as mission_id',
+            'image_projects.image_url as image_url'
         )
         ->get();
         $now = Carbon::now();
@@ -29,7 +31,6 @@ class ApproveProjectController extends Controller
                 $createdAt = $project['created_at'] ?? null;
 
                 $googleComments = app(ApiGoogleService::class)->getPlaceDetails($project['place_id']);
-                dd($googleComments);
                 if ($createdAt) {
                     $created_at = $createdAt->diffInMonths($now) < 1 ? Carbon::parse($createdAt)->locale(app()->getLocale())->diffForHumans():$createdAt->format('d/m/Y H:i');
                 } else {
@@ -37,6 +38,8 @@ class ApproveProjectController extends Controller
                 }
                 $data['projects'][] = array(
                     'id' => $project['id'],
+                    'project_id' => $project['project_id'],
+                    'image_id' => $project['image_id'],
                     'name' => $project['name'],
                     'description' => substr($project['description'], 0, 200),
                     'keyword' => $project['keyword'],
