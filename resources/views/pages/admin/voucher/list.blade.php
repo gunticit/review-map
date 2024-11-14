@@ -49,51 +49,61 @@
                         </button>
                     </div>
                 </form>
-                <table class="table list-table">
-                    <thead>
-                        <tr>
-                            <th class="list-table-stt" scope="col">STT</th>
-                            <th class="list-table-code">Mã</th>
-                            <th class="list-table-name" scope="col">Tên mã</th>
-                            <th class="list-table-description" scope="col">Mô tả</th>
-                            <th class="list-table-money" scope="col">Số tiền giảm</th>
-                            <th class="list-table-number" scope="col">Số lượng</th>
-                            <th class="list-table-number" scope="col">Đã sử dụng</th>
-                            <th class="list-table-date" scope="col">Ngày bắt đầu</th>
-                            <th class="list-table-actions" scope="col">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(!empty($vouchers))
-                            @foreach($vouchers as $voucher)
-                                <tr class="voucher-{{ $voucher->id }} {!! ($voucher->uses_left >= $voucher->max_uses || $voucher->end_date < date('Y-m-d')) ? 'text-danger text-expired' : '' !!}">
-                                    <td class="list-table-stt">{{ $voucher->id }}</td>
-                                    <td class="list-table-code">{{ $voucher->code }}</td>
-                                    <td class="list-table-name">{{ $voucher->name }}</td>
-                                    <td class="list-table-description">{{ $voucher->description }}</td>
-                                    <td class="list-table-money">{{ number_format($voucher->discount_value) }} {{ $voucher->discount_type == 'fixed' ? 'VNĐ' : '%' }}</td>
-                                    <td class="list-table-number">{{ number_format($voucher->max_uses) }}</td>
-                                    <td class="list-table-number">{{ number_format($voucher->uses_left) }}</td>
-                                    <td class="list-table-date">{{ date('d/m/Y', strtotime($voucher->start_date)) }}</td>
-                                    <td class="list-table-actions">
-                                        @if(($voucher->uses_left < $voucher->max_uses))
-                                        <a href="{{ route('voucher.edit', $voucher->id) }}" class="btn btn-warning">Sửa</a>
-                                        @endif
-                                        <form action="{{ route('voucher.destroy', $voucher->id) }}" method="POST" style="display:inline-block;">
-                                            {{ csrf_field() }}
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
+                <div class="group-table-list">
+                    <table class="table list-table">
+                        <thead>
                             <tr>
-                                <td colspan="11" class="text-center">Không có mã giảm giá nào được tìm thấy</td>
+                                <th class="list-table-stt" scope="col">STT</th>
+                                <th class="list-table-code">Mã</th>
+                                <th class="list-table-name" scope="col">Tên mã</th>
+                                <th class="list-table-description" scope="col">Mô tả</th>
+                                <th class="list-table-money" scope="col">Số tiền giảm</th>
+                                <th class="list-table-number" scope="col">Số lượng</th>
+                                <th class="list-table-number" scope="col">Đã sử dụng</th>
+                                <th class="list-table-date" scope="col">Ngày bắt đầu</th>
+                                <th class="list-table-actions" scope="col">Hành động</th>
                             </tr>
-                        @endif
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if(!empty($vouchers))
+                                @foreach($vouchers as $voucher)
+                                    <tr class="voucher-{{ $voucher->id }} {!! ($voucher->uses_left >= $voucher->max_uses || $voucher->end_date < date('Y-m-d')) ? 'text-danger text-expired' : '' !!}">
+                                        <td class="list-table-stt">{{ $voucher->id }}</td>
+                                        <td class="list-table-code">{{ $voucher->code }}</td>
+                                        <td class="list-table-name">{{ $voucher->name }}</td>
+                                        <td class="list-table-description">{{ $voucher->description }}</td>
+                                        <td class="list-table-money">{{ number_format($voucher->discount_value) }} {{ $voucher->discount_type == 'fixed' ? 'VNĐ' : '%' }}</td>
+                                        <td class="list-table-number">{{ number_format($voucher->max_uses) }}</td>
+                                        <td class="list-table-number">{{ number_format($voucher->uses_left) }}</td>
+                                        <td class="list-table-date">{{ date('d/m/Y', strtotime($voucher->start_date)) }}</td>
+                                        <td class="list-table-actions">
+                                            @if(($voucher->uses_left < $voucher->max_uses))
+                                            <a href="{{ route('voucher.edit', $voucher->id) }}" class="btn btn-warning">
+                                                <span class="material-symbols-outlined">
+                                                    edit
+                                                </span>
+                                            </a>
+                                            @endif
+                                            <form action="{{ route('voucher.destroy', $voucher->id) }}" method="POST" style="display:inline-block;">
+                                                {{ csrf_field() }}
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                                    <span class="material-symbols-outlined">
+                                                    delete
+                                                    </span>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="11" class="text-center">Không có mã giảm giá nào được tìm thấy</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </section>

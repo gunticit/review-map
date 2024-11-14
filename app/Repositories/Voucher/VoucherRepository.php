@@ -44,7 +44,10 @@ class  VoucherRepository extends BaseRepository implements VoucherRepositoryInte
     public function checkAjaxApplyVoucher($voucher_code){
         $query = $this->model->query();
         $query->where('code', $voucher_code);
+        $query->where('start_date', '<=', date('Y-m-d'));
+        $query->where('end_date', '>=', date('Y-m-d'));
         $query->where('status', 'active');
+        $query->whereRaw('max_uses >= uses_left + 1');
         return $query->first();
     }
 

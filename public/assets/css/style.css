@@ -3834,7 +3834,7 @@ h3.col-title {
 }
 .list-table-status .btn {
   height: unset;
-  padding: 0;
+  padding: 10px;
   font-weight: 500;
 }
 .list-table-status .btn:not(.btn) {
@@ -3973,7 +3973,15 @@ h3.col-title {
 .pagination .page-item .material-symbols-outlined {
   line-height: inherit;
 }
-
+.list-table-actions{
+  text-align: center;
+}
+.list-table-actions .btn{
+  padding: 10px;
+}
+.list-table-actions .btn span{
+  font-size: 20px;
+}
 table.bt {
   margin-top: 15px;
 }
@@ -5380,6 +5388,21 @@ body .btn.btn-info > span{
   }
   .accout .card.active .card-header .btn-outline-primary{
     float: right !important;
+  }
+  body #search-places{
+    top: 60px !important;
+    right: 0;
+    left: 10px !important;
+    width: calc(100% - 20px);
+  }
+  .modal.CheckUrl .modal-footer .btn{
+    min-width: 45%;
+  }
+  .btn-check-map{
+    width: 100%;
+  }
+  .sidenav-toggled #layoutSidenav #layoutSidenav_nav{
+    width: 85%;
   }
 }
 @media (max-width: 569px){

@@ -260,7 +260,7 @@
                                 <div id="preview-map">
                                     @if($project->place_id)
                                     <iframe src="https://www.google.com/maps/embed/v1/place?key={{ env('GOOGLE_MAP_API_KEY') }}&q=place_id:{{ $project->place_id }}" 
-                                    width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                                    width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                                     @endif
                                 </div>
                                 <div class="col-12">
@@ -710,7 +710,7 @@
             if(place_id != ''){
                 $('#preview-map').remove();
                 $('#preview-map').html(`<iframe src="https://www.google.com/maps/embed/v1/place?key={{ env('GOOGLE_MAP_API_KEY') }}&q=place_id:${place_id}" 
-                width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>`);
+                width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>`);
             }
         });
     </script>

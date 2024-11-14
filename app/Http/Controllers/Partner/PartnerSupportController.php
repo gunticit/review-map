@@ -37,7 +37,7 @@ class PartnerSupportController extends Controller
         return view('pages.partner.support.list', [
             'supports' => $supports,
             'projects' => $projects,
-            'heading_title' => 'Yêu cầu hỗ trợ'
+            // 'heading_title' => 'Yêu cầu hỗ trợ'
         ]);
     }
     public function edit(){

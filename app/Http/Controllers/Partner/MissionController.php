@@ -52,11 +52,11 @@ class MissionController extends Controller
             $data = array();
             $data['project'] = $project;
             $data['user_id'] = $user_id;
-            if(!empty($project) && empty($mission)) {
-                $mission = $this->missionService->find($project->mission_id);
-            }else{
+            if(empty($project) && empty($mission)) {
                 // Trường hợp này rơi vào khoảng cách địa lý, không có dự án nào trong phạm vi cho phép
                 return redirect()->back()->withErrors(['error' => 'Chưa có nhiệm vụ nào được tạo. Bạn vui lòng chờ thêm nhiệm vụ!']);
+            }else if(!empty($project) && empty($mission)) {
+                $mission = $this->missionService->find($project->mission_id);
             }
             $data['mission'] = $mission;
             $data['link_map'] = isset($project->place_id)?'https://www.google.com/maps/place?key='.env("GOOGLE_MAP_API_KEY").'&q=place_id:' . $project->place_id.'&reviews':'';

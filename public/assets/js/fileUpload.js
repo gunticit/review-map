@@ -18,7 +18,7 @@
                         <i class="material-symbols-outlined">image</i>
                         <p>Kéo thả hoặc <span class="text-primary">chọn hình ảnh</span> để tải lên</p>
                     </div>
-                    <input type="file" accept="image/png, image/gif, image/jpeg" id="${fileUploadId}" name="files[]" multiple hidden />
+                    <input type="file" accept="image/png, image/gif, image/jpeg" id="${fileUploadId}" name="images[]" multiple hidden />
                 </label>
             `;
 

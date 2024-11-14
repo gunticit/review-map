@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Resources\ProjectResource;
+use App\Models\Voucher;
 use App\Services\CommentService;
 use App\Services\ExpenditureStatisticService;
 use App\Services\HistoryService;
@@ -205,6 +206,7 @@ class ProjectController extends Controller
             );
         }
         $price_order = 0;
+
         if($project_comments->package){
             switch ($project_comments->package) {
                 case 1:
@@ -242,11 +244,25 @@ class ProjectController extends Controller
         $surplus = $available_balance - ($price_order + $money_slow + ($price_order + $money_slow) * 0.1); // Số dư tạm tính khi thanh toán
         $tmp_price = $price_order + ($point_slow > 0 ? 10000 : 0);
         $total_price = $tmp_price + ($tmp_price * 10 / 100);
+
+        $voucher_code = $project_comments->voucher_code ?? '';
+        $discount_value = 0;
+        if(!empty($voucher_code)){
+            $voucher_info = Voucher::where('code', $voucher_code)->select('discount_value')->first();
+            $discount_value = $voucher_info->discount_value ?? 0;
+            if($voucher_info->discount_type == 'percent'){
+                $total_price = $total_price - ($total_price * $discount_value / 100);
+            }else{
+                $total_price = $total_price - $discount_value;
+            }
+        }
+        
         return view('pages.customer.projects.order', [
             'projects' => $paginatedComments,
             'project_info' => $project_comments,
             'price_order' => $price_order,
             'balance' => $balance,
+            'discount_value' => $discount_value,
             'provisional_deduction' => $provisional_deduction,
             'available_balance' => $available_balance,
             'surplus' => $surplus,

@@ -33,7 +33,7 @@
     #discount-info .btn{
         position: absolute;
         top: 50%;
-        right: 0;
+        right: 3px;
         transform: translateY(-50%);
         z-index: 9;
         font-weight: normal
@@ -62,6 +62,9 @@
     #keyword-comment{
         font-weight: 500;
         color: #ff3232;
+    }
+    .list-table-so-du{
+        font-weight: bold;
     }
     @keyframes spin {
         0% { transform: rotate(0deg); }
@@ -96,42 +99,43 @@
                             </div>
                         </form>
 
-                        <table class="table list-table">
-                            <thead>
-                                <tr>
-                                    <th class="list-table-stt" scope="col">STT</th>
-                                    <th class="list-table-time" scope="col">Mã đơn</th>
-                                    <th class="list-table-so-tien" scope="col">Nội dung đánh giá</th>
-                                    <th class="list-table-content-3" scope="col">Rãi chậm</th>
-                                    <th class="list-table-so-du" scope="col">Hình ảnh</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if(!empty($projects))
-                                    @foreach($projects as $key => $project)
-                                        <tr>
-                                            <td class="list-table-stt" scope="col">{{ $project->id }}<input type="hidden" class="comment-id" value="{{ $project->id }}"></td>
-                                            <td class="list-table-time" scope="col">RO-{{ $project->id }}</td>
-                                            <td class="list-table-content" scope="col">
-                                                <div class="content-comment-{{ $project->id }}">{{ $project->comment ?? '' }}
-                                                    <button type="button" class="btn btn-default render-comment-again p-0 bg-white ms-2">
-                                                        <span class="material-symbols-outlined">
-                                                            border_color
-                                                        </span>
-                                                    </button>
-                                                </div> 
-                                                <input type="text" class="text-comment d-none ip-comment-id-{{ $project->id }}" value="{{ $project->comment ?? '' }}">
-                                            </td>
-                                            <td class="list-table-content-3" scope="col">{{ $project_info->point_slow ?? 0 }}</td>
-                                            <td class="list-table-so-du" scope="col">
-                                                {!! $project_info->has_image?'Có':'Không' !!}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
-
+                        <div class="group-table-list">
+                            <table class="table list-table">
+                                <thead>
+                                    <tr>
+                                        <th class="list-table-stt" scope="col">STT</th>
+                                        <th class="list-table-time" scope="col">Mã đơn</th>
+                                        <th class="list-table-so-tien" style="min-width: 250px" scope="col">Nội dung đánh giá</th>
+                                        <th class="list-table-content-3" scope="col">Rãi chậm</th>
+                                        <th class="list-table-so-du" scope="col">Hình ảnh</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(!empty($projects))
+                                        @foreach($projects as $key => $project)
+                                            <tr>
+                                                <td class="list-table-stt" scope="col">{{ $project->id }}<input type="hidden" class="comment-id" value="{{ $project->id }}"></td>
+                                                <td class="list-table-time" scope="col">RO-{{ $project->id }}</td>
+                                                <td class="list-table-content" scope="col">
+                                                    <div class="content-comment-{{ $project->id }}">{{ $project->comment ?? '' }}
+                                                        <button type="button" class="btn btn-default render-comment-again p-0 bg-white ms-2">
+                                                            <span class="material-symbols-outlined">
+                                                                border_color
+                                                            </span>
+                                                        </button>
+                                                    </div> 
+                                                    <input type="text" class="text-comment d-none ip-comment-id-{{ $project->id }}" value="{{ $project->comment ?? '' }}">
+                                                </td>
+                                                <td class="list-table-content-3" scope="col">{{ $project_info->point_slow ?? 0 }}</td>
+                                                <td class="list-table-content-3" scope="col">
+                                                    {!! $project_info->has_image?'Có':'Không' !!}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="list-table-footer d-flex justify-content-between align-items-center">
                             {{ $projects->links('vendor.pagination.custom') }}
                         </div>
@@ -158,8 +162,12 @@
                             <div class="col-sm-12">
                                 <label for="payment-info" class="fw-700">Mã giảm giá</label>
                                 <div id="discount-info">
-                                    <input class="form-control" id="voucher_code" placeholder="Mã giảm giá" value="">
-                                    <button class="btn btn-outline-primary" id="btn-apply-discount" type="button">Áp dụng</button>
+                                    <div class="relative">
+                                        <input class="form-control" value="{!! $project_info->voucher_code ?? '' !!}" id="voucher_code" placeholder="Mã giảm giá">
+                                        @if(empty($project_info->voucher_code))
+                                            <button class="btn btn-outline-primary" id="btn-apply-discount" type="button">Áp dụng</button>
+                                        @endif
+                                    </div>
                                 </div>
                                 <hr>
                             </div>
@@ -191,7 +199,7 @@
                                             <span>10%</span>
                                             <span>{!! number_format(($tmp_price * 10)/100, 0, ',', '.') . ' VND'; !!}</span>
                                         </li>
-                                        <li id="discount-voucher" class="text-warning">
+                                        <li id="discount-voucher" class="text-warning {!! 'text-warning d-flex':'' !!}">
                                             <span>Giảm giá</span>
                                             <span></span>
                                             <span id="value-voucher"></span>
@@ -203,51 +211,14 @@
                         <hr>
                         <div class="mb-4 total d-flex justify-content-between align-items-center">
                             <label for="total" class="fw-700">Tổng cộng</label>
-                            <h4>{!! number_format($total_price, 0, ',', '.') . ' VND'; !!}</h4>
+                            <h4 id="show-total-value">{!! number_format($total_price, 0, ',', '.') . ' VND'; !!}</h4>
+                            <input type="hidden" id="total_value" value="{{ $total_price }}">
                         </div>
 
-                        <button type="button" id="btn-deposit" class="btn btn-primary btn-full" > Thanh toán </button>
+                        <button type="button" id="btn-confirm-deposit" class="btn btn-primary btn-full" > Thanh toán </button>
                 
                     </div>
                 </div>
-            </div>
-            <div class="modal fade" id="depositModal" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header text-center">
-                            <h2 class="modal-title d-block" id="depositModalLabel">Thanh toán</h2>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <p class="text-center"><i style="color: #f00">(Tiền sẽ được hoàn nếu không thành công)</i></p>
-                        <div class="modal-body">
-                            {{-- <div class="depositAmount mb-4">
-                                <label class="d-block" for="depositAmount">Số tiền nạp</span></label>
-                                <input type="text" readonly class="form-control" name="depositAmount" id="depositAmount5" placeholder="Số tiền khác" />
-                            </div> --}}
-                            <div class="mb-4">
-                                <label for="payment-info">Thông tin thanh toán</label>
-                            </div>
-                            <div class="total d-flex justify-content-between align-items-center">
-                                <label for="total" class="fw-500">Số dư</label>
-                                <h6 style="font-style: italic; font-size: 14px; color: #5e5e5e">{!! number_format($balance, 0, ',', '.') . ' VND'; !!}</h6>
-                            </div>
-                            <div class="total d-flex justify-content-between align-items-center">
-                                <label for="total" class="mb-0 fw-700">Thanh toán</label>
-                                <h4 class="mb-0" style="color: #f00">{!! number_format($total_price, 0, ',', '.') . ' VND'; !!}</h4>
-                            </div>
-                            <hr>
-                            <div class="total d-flex justify-content-between align-items-center">
-                                <label for="total" class="fw-700">Số dư</label>
-                                <h4 style="{!! $surplus < 0 ? 'color: #f00;text-decoration: line-through;' : '' !!}">{!! number_format($surplus, 0, ',', '.') . ' VND'; !!}</h4>
-                            </div>
-                            @if($surplus > 0)
-                            <button type="button" id="btn-confirm-deposit" class="btn btn-primary btn-full mt-4" > Xác nhận </button>
-                            @else
-                            <button type="button" id="btn-deposit-wallet" class="btn btn-primary btn-full mt-4" > Nạp tiền </button>
-                            @endif
-                        </div>
-                    </div>
-                </div>      
             </div>
         </div>
     </section>
@@ -260,7 +231,7 @@
             <div class="modal-body">
               <p class="text-center text-black">Nội dung được RIVI AI tự sinh ra dựa theo từ khóa: <span id="keyword-comment">"{{ $project->keyword ?? '' }}"</span></p>
               <div class="textarea-wrapper group-comment-text">
-                <textarea readonly id="comment-textarea" class="form-control" rows="5"></textarea>
+                <textarea id="comment-textarea" class="form-control" rows="5"></textarea>
                 <div class="loading-spinner"></div>
               </div>
               <input type="hidden" name="comment_id_edit" id="comment-id-edit"/>
@@ -355,6 +326,7 @@
                         project_id: "{{ $project_info->id }}"
                     },
                     success: function(response) {
+                        console.log(response);
                         if(response.status == 'error') {
                             Swal.fire({
                                 title: "Thông báo",
@@ -378,8 +350,18 @@
             $('body #btn-deposit-wallet').on('click', function(){
                 window.location.href="{{ route('wallet',['order_id' => $project_id]) }}"
             });
+            $('#voucher_code').on('change', function(){
+                $('#voucher_code').removeClass('is-invalid');
+                $('#btn-apply-discount').addClass('btn-outline-primary');
+                $('#btn-apply-discount').removeClass('btn-primary');
+                $('#discount-info .invalid-feedback').remove();
+            });
             $('#btn-apply-discount').on('click', function(){
+                $('#discount-info .invalid-feedback').remove();
                 let voucher_code = $('#voucher_code').val();
+                if(voucher_code == '') {
+                    return false;
+                }
                 $.ajax({
                     type: "POST",
                     url: "{{ route('check.apply.voucher') }}",
@@ -389,18 +371,28 @@
                         voucher_code: voucher_code
                     },
                     success: function(response) {
-                        if(response.status == 'error') {
-
-                        }else{
-                            Swal.fire({
-                                title: " 😀",
-                                text: "Thành công",
-                                icon: "success"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = "{{ route('project.list') }}";
-                                }
-                            });
+                        let total_value = $('#total_value').val();
+                        if(response && parseFloat(response.min_order_value) <= parseFloat(total_value)) {
+                            $('#discount-voucher').addClass('d-flex');
+                            let discount_val = response.discount_value;
+                            if(response.discount_type == 'fixed'){
+                                discount_val = discount_val.toLocaleString('vi-VN') + ' VND';
+                                total_value = parseFloat(total_value) - parseFloat(discount_val);
+                            }else{
+                                discount_val = discount_val + '%';
+                                total_value = parseFloat(total_value) - (parseFloat(total_value) * parseFloat(response.discount_value) / 100);
+                            }
+                            $('#value-voucher').text('-' + discount_val);
+                            $('#total_value').val(total_value);
+                            $('#show-total-value').text(total_value.toLocaleString('vi-VN') + ' VND');
+                            $('#btn-apply-discount').hide();
+                            $('#voucher_code').attr('disabled', 'disabled');
+                            $('#voucher_code').css('font-weight', 'bold');
+                        } else { 
+                            $('#voucher_code').addClass('is-invalid');
+                            $('#btn-apply-discount').removeClass('btn-outline-primary');
+                            $('#btn-apply-discount').addClass('btn-primary');
+                            $('#discount-info').append('<div class="invalid-feedback d-block">Mã giảm giá không hợp lệ!</div>');
                         }
                     }
                 })

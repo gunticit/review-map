@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-2 col-md-3 col-12 mb-4 mb-md-0">
-                <a class="btn btn-primary btn-full" href="javascript:void(0);" id="btn-get-mission2" data-bs-target="#missionModal">Nhận nhiệm vụ</a>
+                <a class="btn btn-primary btn-full" href="{{ route('mission.index') }}" id="btn-get-mission2" data-bs-target="#missionModal">Nhận nhiệm vụ</a>
             </div>
             <div class="col-xl-10 col-md-9 col-12 mb-4 mb-md-0 "></div>
         </div>

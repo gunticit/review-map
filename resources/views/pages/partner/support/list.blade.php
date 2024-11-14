@@ -46,13 +46,6 @@
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-xl-10 col-md-8 col-12">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item fw-700 active" aria-current="page">
-                            <span class="support__title">Yêu cầu hỗ trợ</span>
-                        </li>
-                    </ol>
-                </nav>
             </div>
             <div class="col-xl-2 col-md-8 col-12 text-right support__btn">
                 <a href="{{ route('partner.support.create') }}" class="btn btn-primary d-flex flex-wrap support__crate">
@@ -90,24 +83,24 @@
                     </thead>
                     <tbody>
                         @if(!empty($supports))
-                        @foreach ($supports as $key => $support)
-                        <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td class="list-table-title">
-                                <a href="javascript:void(0);">{{ $support->title }}</a>
-                            </td>
-                            <td class="list-table-department">{{ $support->department->name }}</td>
-                            <td class="list-table-code">{{ $support->support_code }}</td>
-                            <td class="list-table-time">
-                                {{ date('d/m/Y', strtotime($support->created_at)) }} <span>{{ date('H:i', strtotime($support->created_at)) }}</span>
-                            </td>
-                            <td class="list-table-status">
-                                <span class="btn">
-                                    {!! __(config('constants.status_support')[$support->status]) !!}
-                                </span>
-                            </td>
-                        </tr>
-                        @endforeach
+                            @foreach ($supports as $key => $support)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td class="list-table-title">
+                                    <a href="javascript:void(0);">{{ $support->title }}</a>
+                                </td>
+                                <td class="list-table-department">{{ $support->department->name }}</td>
+                                <td class="list-table-code">{{ $support->support_code }}</td>
+                                <td class="list-table-time">
+                                    {{ date('d/m/Y', strtotime($support->created_at)) }} <span>{{ date('H:i', strtotime($support->created_at)) }}</span>
+                                </td>
+                                <td class="list-table-status">
+                                    <span class="btn">
+                                        {!! __(config('constants.status_support')[$support->status]) !!}
+                                    </span>
+                                </td>
+                            </tr>
+                            @endforeach
                         @endif
                     </tbody>
                 </table>

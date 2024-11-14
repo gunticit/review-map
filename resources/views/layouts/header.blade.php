@@ -110,13 +110,13 @@
                 $('#missionModal').modal('show');
                 return;
             }
-            let check_location = getCookie('current_location');
-            if(!check_location){
-                $('#warning-location-modal').modal('show');
-            } else {
+            // let check_location = getCookie('current_location');
+            // if(!check_location){
+            //     $('#warning-location-modal').modal('show');
+            // } else {
                 let href = $(this).attr('href');
                 window.location.href = href;
-            }
+            // }
         })
     })
 </script>
