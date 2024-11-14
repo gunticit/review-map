@@ -54,6 +54,7 @@ Route::group([
         Route::delete('/support-delete-by-ids/{ids}', [SupportController::class, 'deleteByIds'])->name('admin.support.delete.by.ids');
         Route::get('/support-create', [SupportController::class, 'create'])->name('admin.support.create');
         Route::get('/setting', [SettingController::class, 'index'])->name('setting');
+        Route::post('/update-setting', [SettingController::class, 'update'])->name('update.setting');
 
         //QL Thông báo đối tác
         Route::get('/list-notificate-partner', [NotificateController::class, 'partner_list'])->name('list.notificate.partner');

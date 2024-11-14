@@ -73,10 +73,10 @@
                                 <label for="payment" class="form-label">Phương thức thanh toán</label>
                                 <select class="form-select form-select-js form-control" name="payment_method" id="payment_method" disabled>
                                     <option value="momo" {{ old('payment_method', $accountPayment->payment_method) == 'momo' ? 'selected' : '' }}>Thanh toán qua ví điện tử Momo</option>
-                                    <option value="vnpay" {{ old('payment_method', $accountPayment->payment_method) == 'vnpay' ? 'selected' : '' }}>Quét mã VNPAY-QR</option>
-                                    <option value="atm" {{ old('payment_method', $accountPayment->payment_method) == 'atm' ? 'selected' : '' }}>Thẻ ngân hàng ATM</option>
-                                    <option value="visa" {{ old('payment_method', $accountPayment->payment_method) == 'visa' ? 'selected' : '' }}>Thẻ thanh toán quốc tế</option>
                                     <option value="onepay" {{ old('payment_method', $accountPayment->payment_method) == 'onepay' ? 'selected' : '' }}>Thanh toán qua Onepay</option>
+                                    {{-- <option value="vnpay" {{ old('payment_method', $accountPayment->payment_method) == 'vnpay' ? 'selected' : '' }}>Quét mã VNPAY-QR</option>
+                                    <option value="atm" {{ old('payment_method', $accountPayment->payment_method) == 'atm' ? 'selected' : '' }}>Thẻ ngân hàng ATM</option>
+                                    <option value="visa" {{ old('payment_method', $accountPayment->payment_method) == 'visa' ? 'selected' : '' }}>Thẻ thanh toán quốc tế</option> --}}
                                     
                                 </select>
                             </div>

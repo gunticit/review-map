@@ -28,8 +28,7 @@
                                                                 <small>{{ $project['created_at'] }}</small>
                                                             </div>
                                                             <div class="text-description" class="mb-1">
-                                                                {{ $project['description'] }}</div>
-                                                            <small class="text-keyword">{{ $project['keyword'] }}</small>
+                                                                {{ $project['comment'] }}</div>
                                                             <inpyut type="hidden" class="project-id"
                                                                 value="{{ $project['id'] }}">
                                                         </div>
@@ -86,40 +85,51 @@
                 dataType: 'json',
                 success: function(data) {
                     $('#info-project *').remove();
+
+                    let link_map = '';
+                    if (data.data.link_confirm) {
+                        link_map = data.data.link_confirm;
+                    } else {
+                        link_map = `https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:${data.data?.place_id}`;
+                    }
+
                     $('#info-project').append(`
-                <div class="form-detail">
-                    <div class="form-group mb-4">
-                        <label>Tên dự án</label>
-                        <input type="text" class="form-control" readonly value="${data.data?.name ?? ''}">
-                    </div>
-                    <div class="form-group mb-4">
-                        <label>Mô tả</label> 
-                        <textarea class="form-control" readonly rows="5">${data.data?.description ?? ''}</textarea>
-                    </div>${data.data.image_url ?
-                        `<div class="form-group mb-4">
-                            <label>Hình ảnh</label>
-                            <ul style="list-style:none; padding-left: 0">
-                                ${data.data?.images ? data.data?.images?.map((image) => 
-                                `<li style="margin-right: 5px; cursor: pointer">
-                                        <img src="/${image.image_url}" width="100; border-radius: 5px">
-                                    </li>`).join('') : ''}
-                            </ul>
-                        </div>`:''
-                    }<div class="d-flex gap-3 group-actiion text-right">
-                        <button onclick="handleViewRate('${data.data?.place_id}')" class="btn btn-outline-primary">Xem đánh giá</button>    
-                        ${data.data?.status !== {{ $status_complete }} ?`
-                                <button onclick="handleWrongImage(${data.data?.id})" class="btn btn-danger">Không thấy ảnh, sai ảnh</button>  
-                                <button onclick="handleWrongRate(${data.data?.id})" class="btn btn-danger">Không thấy đánh giá</button>  
-                                <button class="btn btn-primary" onclick="handleApprove(${data.data?.id})">Duyệt</button>
-                            `:``}
-                    </div>
-                </div>
-            `);
+                        <div class="form-detail">
+                            <div class="form-group mb-4">
+                                <label>Tên dự án</label>
+                                <input type="text" class="form-control" readonly value="${data.data?.name ?? ''}">
+                            </div>
+                            <div class="form-group mb-4">
+                                <label>Mô tả</label> 
+                                <textarea class="form-control" readonly rows="5">${data.data?.comment ?? ''}</textarea>
+                            </div>
+                            ${data.data.images && data.data.images.length ? `
+                                <div class="form-group mb-4">
+                                    <label>Hình ảnh</label>
+                                    <ul style="list-style:none; padding-left: 0">
+                                        ${data.data.images.map(image => `
+                                            <li style="margin-right: 5px; cursor: pointer">
+                                                <img src="/${image.image_url}" width="100" style="border-radius: 5px">
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>` : ''
+                            }
+                            <div class="d-flex gap-3 group-action text-right">
+                                <button onclick="handleViewRate('${link_map}')" class="btn btn-outline-primary">Xem đánh giá</button>
+                                ${data.data?.status !== {{$status_complete}} ? `
+                                    <button onclick="handleWrongImage(${data.data?.id})" class="btn btn-danger">Không thấy ảnh, sai ảnh</button>  
+                                    <button onclick="handleWrongRate(${data.data?.id})" class="btn btn-danger">Không thấy đánh giá</button>  
+                                    <button class="btn btn-primary" onclick="handleApprove(${data.data?.id})">Duyệt</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `);
                 }
             });
         }
 
-        function handleViewRate(place_id) {
+        function handleViewRate(link_map) {
             $('body').append(`
                 <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
                     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
@@ -130,7 +140,7 @@
                                 </span>
                             </button>
                             <div class="modal-body">
-                                <iframe src="https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:${place_id}" width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                                <iframe src="${link_map}" width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                             </div>
                         </div>
                     </div>

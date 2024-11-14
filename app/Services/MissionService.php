@@ -35,8 +35,13 @@ class MissionService {
     }
 
     public function update($request, $id){
+        $mission_info = $this->find($id);
+        $status = 3; // AI Duyệt
+        if(!empty($mission->image_id)){
+            $status = 4; // Nếu câu hỏi có hình ảnh thì admin duyệt
+        }
         $mission = $this->missionRepository->update([
-            'status' => 1,
+            'status' => $status,
             'link_confirm' => $request->link_confirm ?? '',
         ], $id);
 

@@ -247,8 +247,9 @@ class ProjectController extends Controller
 
         $voucher_code = $project_comments->voucher_code ?? '';
         $discount_value = 0;
+        $voucher_info = null;
         if(!empty($voucher_code)){
-            $voucher_info = Voucher::where('code', $voucher_code)->select('discount_value')->first();
+            $voucher_info = Voucher::where('code', $voucher_code)->select('discount_value','discount_type')->first();
             $discount_value = $voucher_info->discount_value ?? 0;
             if($voucher_info->discount_type == 'percent'){
                 $total_price = $total_price - ($total_price * $discount_value / 100);
@@ -262,6 +263,7 @@ class ProjectController extends Controller
             'project_info' => $project_comments,
             'price_order' => $price_order,
             'balance' => $balance,
+            'voucher_info' => $voucher_info,
             'discount_value' => $discount_value,
             'provisional_deduction' => $provisional_deduction,
             'available_balance' => $available_balance,

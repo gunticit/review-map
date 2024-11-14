@@ -150,6 +150,7 @@
                             <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="logo">
                             <p class="fw-700 {!! $available_balance == $balance ? '':'mb-0'!!}">Số dư của tôi</p>
                             <h3 class="wallet-number text-primary {!! $available_balance < $balance ? '':'mb-0'!!}">{{ number_format($balance, 0, ',', '.')}} VND</h3>
+                            <input type="hidden" name="balance" id="balance" value="{{ $balance }}">
                             @if($available_balance < $balance)
                             <p class="fw-700 text-success {!! $available_balance == $balance ? '':'mb-0'!!}">Khả dụng: {{ number_format($available_balance, 0, ',', '.') }} VND</p>
                             @endif
@@ -199,10 +200,12 @@
                                             <span>10%</span>
                                             <span>{!! number_format(($tmp_price * 10)/100, 0, ',', '.') . ' VND'; !!}</span>
                                         </li>
-                                        <li id="discount-voucher" class="text-warning {!! 'text-warning d-flex':'' !!}">
-                                            <span>Giảm giá</span>
+                                        <li id="discount-voucher" class="text-warning {!! !empty($discount_value) ? 'text-warning d-flex':'' !!}">
+                                            <span>Mã giảm giá</span>
                                             <span></span>
-                                            <span id="value-voucher"></span>
+                                            <span id="value-voucher">{!! 
+                                                !empty($voucher_info->discount_value) && $voucher_info->discount_type != 'percent' ? formatCurrency($voucher_info->discount_value) : (!empty($voucher_info->discount_value) && $voucher_info->discount_type == 'percent' ? $voucher_info->discount_value . '%' : '')
+                                            !!}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -317,7 +320,15 @@
                     }
                 });
             });
-            $('body #btn-confirm-deposit').on('click', function(){
+            $('body #btn-confirm-deposit').on('click', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                let total_value = $('#total_value').val();
+                let balance_value = $('#balance').val();
+                if(balance_value < total_value) {
+                    window.location.href="{{ route('wallet') }}";
+                    return false;
+                }
                 $.ajax({
                     type: "POST",
                     url: "{{ route('confirm.checkout') }}",

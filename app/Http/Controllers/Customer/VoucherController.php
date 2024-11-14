@@ -75,7 +75,7 @@ class VoucherController extends Controller
 
     public function checkAjaxApplyVoucher(Request $request){
         $voucher = $this->voucherService->checkAjaxApplyVoucher($request);
-        if(isset($request->project_id)){
+        if(isset($request->project_id) && !empty($voucher)){
             Project::where('id', $request->project_id)->update(['voucher_code' => $request->voucher_code]);
             $count_voucher = isset($voucher->uses_left) ? (int)$voucher->uses_left + 1 : 1;
             Voucher::where('id', $voucher->id)->update(['uses_left' => $count_voucher]);

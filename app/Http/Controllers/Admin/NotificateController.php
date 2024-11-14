@@ -128,4 +128,9 @@ class NotificateController extends Controller
         }
         return $data;
     }
+
+    public function customer_delete($id){
+        $this->notificationService->destroy($id);
+        return redirect()->back();
+    }
 }

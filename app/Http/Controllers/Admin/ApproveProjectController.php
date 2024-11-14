@@ -45,6 +45,7 @@ class ApproveProjectController extends Controller
                     'keyword' => $project['keyword'],
                     'url' => 'project/' . $project['id'],
                     'status' => $project['status'],
+                    'comment' => $project['comment'],
                     'id_confirm' => $project['id_confirm'],
                     'place_id' => $project['place_id'],
                     'id_cancel' => $project['id_cancel'],

@@ -206,7 +206,7 @@ class MissionController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $this->missionService->update($request, $id);
-        $price_plus = 10000; // Cộng vào ví 10k khi hoàn thành nhiệm vụ + history
+        $price_plus = 0; // Cộng vào ví 10k khi hoàn thành nhiệm vụ + history
         $balance = $this->walletService->getBalance();
         $user_id = Auth::user()->id;
         if(empty($user_id)){
