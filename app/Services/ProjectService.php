@@ -74,7 +74,11 @@ class ProjectService {
     }
 
     public function show($id){
-        $data = $this->projectRepository->find($id);
+        $query = $this->projectRepository->query();
+        $query = $query->with(['missions' => function($query){
+            $query->with('comments');
+        }]);
+        $data = $query->find($id);
         return $data;
     }
 

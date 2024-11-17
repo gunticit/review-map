@@ -35,6 +35,10 @@ return new class extends Migration
             $table->integer('image_id')->nullable(); // Có thể có hoặc không, có liên quan đến trạng thái
             // Status chú ý comment phía trên
             $table->integer('status'); // 2: Đang thực hiện, 1: Đã hoàn thành, 3: Chờ hệ thống duyệt, 4: Chờ nhân viên duyệt, 5: Đã từ chối, 6: Đã hết hạn 
+            $table->boolean('no_image')->nullable();
+            $table->boolean('no_review')->nullable();
+            $table->dateTime('checked_at')->nullable();
+            $table->integer('num_check')->default(0);
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->timestamp('completed_at')->nullable();

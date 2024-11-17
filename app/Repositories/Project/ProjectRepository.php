@@ -20,6 +20,9 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         if(isset($request->user_id) && Auth::user()->getRoleNames()->first() != 'admin'){
             $query->where('created_by', $request->user_id);
         }
+        if(isset($request->status)){
+            $query->where('status', $request->status);
+        }
         if(isset($request->name)){
             $query->whereLike('name', '%'. $request->name . '%');
         }
@@ -31,6 +34,9 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
 
     public function list($request){
         $query = $this->handleFilter($request);
+        $query = $query->with(['missions' => function($query){
+            $query->with('comments');
+        }]);
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){
             foreach ($orderBy as $column => $direction) {

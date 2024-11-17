@@ -6,31 +6,29 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Services\ApiGoogleService;
+use App\Services\ProjectService;
 use Carbon\Carbon;
 
 
 class ApproveProjectController extends Controller
 {
-    public function index(){
+    public $projectService;
+    public function __construct(ProjectService $projectService)
+    {
+        $this->projectService = $projectService;
+    }
+    public function index(Request $request){
         $data = array();
-        $projects = Project::leftJoin('comments', 'projects.id', '=', 'comments.project_id')
-        ->rightJoin('missions', 'comments.id', '=', 'missions.comment_id')
-        ->leftJoin('image_projects', 'missions.image_id', '=', 'image_projects.id')
-        ->select(
-            'projects.*',
-            'projects.id as project_id',
-            'comments.comment',
-            'missions.*',
-            'missions.id as mission_id',
-            'image_projects.image_url as image_url'
-        )
-        ->get();
+        $request = $request->merge([
+            'status' => 6
+        ]);
+        $projects = $this->projectService->fullList($request);
         $now = Carbon::now();
         if(!empty($projects)){
             foreach($projects as $project){
                 $createdAt = $project['created_at'] ?? null;
 
-                $googleComments = app(ApiGoogleService::class)->getPlaceDetails($project['place_id']);
+                //$googleComments = app(ApiGoogleService::class)->getPlaceDetails($project['place_id']);
                 if ($createdAt) {
                     $created_at = $createdAt->diffInMonths($now) < 1 ? Carbon::parse($createdAt)->locale(app()->getLocale())->diffForHumans():$createdAt->format('d/m/Y H:i');
                 } else {
@@ -38,13 +36,17 @@ class ApproveProjectController extends Controller
                 }
                 $data['projects'][] = array(
                     'id' => $project['id'],
-                    'project_id' => $project['project_id'],
+                    'project_code' => $project['project_code'],
                     'image_id' => $project['image_id'],
                     'name' => $project['name'],
                     'description' => substr($project['description'], 0, 200),
                     'keyword' => $project['keyword'],
+                    'missions' => $project['missions'] ?? array(),
                     'url' => 'project/' . $project['id'],
                     'status' => $project['status'],
+                    'latitude' => $project['latitude'],
+                    'longitude' => $project['longitude'],
+                    'price' => $project['price'],
                     'comment' => $project['comment'],
                     'id_confirm' => $project['id_confirm'],
                     'place_id' => $project['place_id'],

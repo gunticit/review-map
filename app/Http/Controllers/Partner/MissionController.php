@@ -15,6 +15,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 
 class MissionController extends Controller
 {
@@ -192,6 +194,20 @@ class MissionController extends Controller
         return view('pages.partner.mission.detail', $data);
     }
 
+    public function showJson(string $id){
+        $mission = $this->missionService->find($id);
+        return response()->json([
+            'data' => array(
+                'mission' => $mission,
+                'images' => $mission->images ?? null,
+                'comments' => $mission->comments ?? null,
+                'project' => $mission->project ?? null
+            ),
+            'title' => 'Chi tiết nhiệm vụ',
+            'status' => 1
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -274,8 +290,103 @@ class MissionController extends Controller
         return view('pages.partner.mission.histories', $data);
     }
 
-
     public function verifyRecaptcha(Request $request){
         return redirect()->route('mission.index');
+    }
+
+    public function resultGoogleMap(string $place_id){
+        $url = 'https://places.googleapis.com/v1/places/'. $place_id;
+        $fields = 'id,displayName,rating,reviews,userRatingCount,location,reviews';
+        $apiKey = env('GOOGLE_MAP_API_KEY');
+
+        // Gửi request GET
+        $response = Http::get($url, [
+            'fields' => $fields,
+            'key'    => $apiKey
+        ]);
+
+        // Kiểm tra phản hồi
+        if ($response->successful()) {
+            // Trả về dữ liệu JSON
+            $data_map = $response->json();
+            if(!empty($data_map['reviews'])) {
+                foreach ($data_map['reviews'] as $key => $value) {
+                    $data_map['reviews'][] = array(
+                        'rating' => $value['rating'],
+                        'text' => $value['text'],
+                        'googleMapsUri' => $value['googleMapsUri']
+                    );
+                }
+            }
+            return response()->json([
+                'title' => 'Review api google map',
+                'data' => $data_map,
+                'status' => 1
+            ]);
+        } else {
+            // Xử lý lỗi
+            return response()->json([
+                'error' => $response->status(),
+                'message' => $response->body(),
+            ], $response->status());
+        }
+    }
+
+
+    public function updateStatus(Request $request, $id){
+        try{
+            $validator = Validator::make($request->all(), [
+                'status' => 'required|in:1,2'
+            ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'messaage' => $validator->errors()->all()
+                ]);
+            }
+            $data = $this->missionService->updateStatus($request, $id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Cập nhật trạng thái thành công',
+                'data' => $data
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()                
+            ]);
+        }
+    }
+
+    public function updateNoImage(Request $request, $id){
+        try{
+            $data = $this->missionService->updateNoImage($request, $id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Cập nhật trạng thái thành công',
+                'data' => $data
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()                
+            ]);
+        }
+    }
+
+    public function updateNoReview(Request $request, $id){
+        try{
+            $data = $this->missionService->updateNoReview($request, $id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Cập nhật trạng thái thành công',
+                'data' => $data
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()                
+            ]);
+        }
     }
 }

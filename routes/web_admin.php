@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\Admin\AdminFaqController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\SupportController;
+use App\Http\Controllers\Partner\MissionController;
 
 Route::group([
         'prefix' => '/admin',
@@ -44,6 +45,11 @@ Route::group([
         Route::post('/show-project-json/{id}', [ProjectController::class, 'showJson'])->name('show.project.json');
         Route::post('/project-wrong-image', [ProjectController::class, 'wrongImage'])->name('project.wrong.image');
         Route::post('/update-project-status/{id}', [ProjectController::class, 'updateStatus'])->name('update.project.status');
+        Route::post('/mission-show-json/{id}', [MissionController::class, 'showJson'])->name('show.mission.json');
+        Route::post('/result-google-map/{place_id}', [MissionController::class, 'resultGoogleMap'])->name('result.google.map');
+        Route::post('/update-mission-status/{id}', [MissionController::class, 'updateStatus'])->name('update.mission.status');
+        Route::post('/update-no-image/{id}', [MissionController::class, 'updateNoImage'])->name('update.no.image');
+        Route::post('/update-no-review/{id}', [MissionController::class, 'updateNoReview'])->name('update.no.review');
 
         
         Route::get('/support', [SupportController::class, 'index'])->name('admin.support');

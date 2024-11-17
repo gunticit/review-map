@@ -29,8 +29,9 @@ class MissionService {
     }
 
     public function find($id){
-        $mission = $this->missionRepository->find($id);
-        $mission = new MissionResource($mission);
+        $query = $this->missionRepository->query();
+        $query->with(['comments','images','project']);
+        $mission = $query->find($id);
         return $mission;
     }
 
@@ -48,6 +49,13 @@ class MissionService {
         return $mission;
     }
 
+    public function updateStatus($request, $id){
+        $mission = $this->missionRepository->update([
+            'status' => $request->status,
+        ], $id);
+        return $mission;
+    }
+
     public function getRandomMission($request){
         $data = $this->missionRepository->getRandomMission($request);
         return $data;
@@ -55,5 +63,23 @@ class MissionService {
 
     public function getPrice($request){
         return 0;
+    }
+
+    public function updateNoImage($request, $id){
+        $mission = $this->missionRepository->find($id);
+        $count_check = $mission->num_check ?? 0;
+        return $this->missionRepository->update([
+            'no_image' => true,
+            'num_check' => $count_check + 1
+        ], $id);
+    }
+
+    public function updateNoReview($request, $id){
+        $mission = $this->missionRepository->find($id);
+        $count_check = $mission->num_check ?? 0;
+        return $this->missionRepository->update([
+            'no_review' => true,
+            'num_check' => $count_check + 1
+        ], $id);
     }
 }
