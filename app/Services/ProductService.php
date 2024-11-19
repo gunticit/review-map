@@ -88,7 +88,36 @@ class ProductService {
     public function update($request, $id){
         $product = $this->filterData($request);
         $data = $this->productRepository->update($product, $id);
+
+        if ($request->hasFile('image')) {
+            $img_product = $this->productImageRepository->findByKey('product_id', $id, ['*'], [], 'all');
+            if(!empty($img_product)){
+                foreach ($img_product as $img) {
+                    $this->productImageRepository->delete($img->id);
+                }
+            }
+            if(is_array($request->file('image'))){
+                foreach ($request->file('image') as $image) {
+                    $imagePath = $image->store('images/product', 'public');
+                    $this->productImageRepository->create([
+                        'product_id' => $data->id,
+                        'link_image' => $imagePath
+                    ]);
+                }
+            }else{
+                $imagePath = $request->file('image')->store('images/product', 'public');
+                $this->productImageRepository->create([
+                    'product_id' => $data->id,
+                    'link_image' => $imagePath
+                ]);
+            }
+        }
         return $data; 
+    }
+
+    public function delete($id){
+        $data = $this->productRepository->delete($id);
+        return $data;
     }
 
     private function filterData($request): array{
@@ -97,7 +126,7 @@ class ProductService {
             'name' => $data['name'] ?? null,
             'category_id' => $data['category_id'] ?? null,
             'slug' => slugify($data['name']) ?? null,
-            'price' => $data['price'] ?? 0,
+            'price' => $data['price'] && $data['price'] > 0 ? $data['price'] : 0,
             'description' => $data['description'] ?? null,
             'product_code' => $data['product_code'] ?? null,
             'sku' => $data['sku'] ?? null,

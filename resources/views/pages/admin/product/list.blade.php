@@ -68,7 +68,6 @@
                     <thead>
                         <tr>
                             <th class="list-table-stt" scope="col">STT</th>
-                            <th class="list-table-customer-code" scope="col">Mã khách hàng</th>
                             <th class="list-table-product-name" scope="col">Tên sản phẩm</th>
                             <th class="list-table-product-code" scope="col">
                                 Mã sản phẩm
@@ -88,48 +87,76 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if(!empty($products) && count($products) > 0)
                             @foreach($products as $product)
+                                <tr id="item-product-{{ $product->id }}">
+                                    <td class="list-table-product-name" scope="col">{{ $product->id }}</td>
+                                    <td class="list-table-product-code text-center" scope="col">
+                                    {{ $product->name }}
+                                    </td>
+                                    <td class="list-table-product-code text-center" scope="col">
+                                    {{ $product->product_code }}
+                                    </td>
+                                    <td class="list-table-image text-center" scope="col">   
+                                        <img src="{!! !empty($product->images[0]?->link_image) ? asset('storage/'.$product->images[0]->link_image) : asset('assets/img/no-image.png') !!}" alt="image" width="100px">
+                                    </td>
+                                    <td class="list-table-product">
+                                        
+                                    </td>
+                                    <td class="list-table-price text-center">
+                                        {!! formatVND($product->price) !!}
+                                    </td>
+                                    <td class="list-table-handle text-center">
+                                        <button class="btn btn-info" type="button" onclick="handleEdit({{ $product->id }})">
+                                            <span class="material-symbols-outlined">
+                                                edit
+                                            </span>
+                                        </button>
+                                        <button class="btn btn-danger" type="button" onclick="handleDelete({{ $product->id }})">
+                                            <span class="material-symbols-outlined">
+                                                delete
+                                            </span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
-                                <td class="list-table-product-name" scope="col">{{ $product->id }}</td>
-                                <td class="list-table-product-code" scope="col">
-                                   
-                                </td>
-                                <td class="list-table-product-code" scope="col">
-                                   {{ $product->name }}
-                                </td>
-                                <td class="list-table-product-code" scope="col">
-                                   {{ $product->product_code }}
-                                </td>
-                                <td class="list-table-image" scope="col">   
-                                    @if(!empty($product->images[0]))
-                                        <img src="{!! asset('storage/'.$product->images[0]->link_image) !!}" alt="image" width="100px">
-                                    @endif
-                                </td>
-                                <td class="list-table-product">
-                                    
-                                </td>
-                                <td class="list-table-price">
-                                    {!! $product->price ? formatVND($product->price) : '' !!}
-                                </td>
-                                <td class="list-table-handle">
-                                    <button class="btn btn-info" type="button" onclick="handleEdit({{ $product->id }})">
-                                        <span class="material-symbols-outlined">
-                                            edit
-                                        </span>
-                                    </button>
-                                    <button class="btn btn-danger" type="button" onclick="handleDelete({{ $product->id }})">
-                                        <span class="material-symbols-outlined">
-                                            delete
-                                        </span>
-                                    </button>
+                                <td colspan="7">
+                                    <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có sản phẩm') }}</span>
                                 </td>
                             </tr>
-                            @endforeach
+                        @endif
                     </tbody>
                 </table>
+                @if(!empty($products) && count($products) > 0)
                 {{ $products->links('vendor.pagination.custom') }}
+                @endif
             </div>
         </div>
     </section>
     <!-- end danh-sach-du-an --> 
+@endsection
+@section('js')
+    <script>
+        function handleEdit(id) {
+            window.location.href = "{{route('product.edit', ['product' => 'ID_PRODUCT'])}}".replace('ID_PRODUCT', id);
+        }
+        function handleDelete(id){
+            $.ajax({
+                url: "{{route('product.destroy', ['product' => 'ID_PRODUCT'])}}".replace('ID_PRODUCT', id),
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: id,
+                    _method: 'DELETE'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('#item-product-'+id).remove();
+                    showAlert('success','Xóa thành công');
+                }
+            })
+        }
+    </script>
 @endsection

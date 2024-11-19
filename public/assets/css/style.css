@@ -5288,6 +5288,11 @@ body .btn.btn-info > span{
 .skeleton .product-title > *, .skeleton .product-price > *, .skeleton .add-to-cart, .skeleton .group-chart > *{
   opacity: 0;
 }
+.icon-image{
+  border: 1px solid #c1c1c1;
+  border-radius: 8px;
+  background-color: #f8f8f8;
+}
 @keyframes loading {
   to {
     background-position-x: -20%;

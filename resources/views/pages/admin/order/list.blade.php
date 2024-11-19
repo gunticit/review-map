@@ -50,10 +50,13 @@
                             <th>
                                 Số điện thoại đặt
                             </th>
-                            <th></th>
+                            <th>
+                                Thao tác
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
+                        @if(!empty($orders) && count($orders) > 0)
                             @foreach($orders as $order)
                             <tr class="order-{{ $order['id'] }}">
                                 <td class="list-table-stt" scope="col">{{ $order['id'] }}</td>
@@ -80,9 +83,18 @@
                                 </td>
                             </tr>
                             @endforeach
+                        @else
+                            <tr>
+                                <td colspan="7">
+                                    <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có đơn hàng') }}</span>
+                                </td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
+                @if(!empty($orders) && count($orders) > 0)
                 {{ $orders->links('vendor.pagination.custom') }}
+                @endif
             </div>
         </div>
     </section>

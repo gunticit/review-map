@@ -8,18 +8,6 @@
 <script src="https://kit.fontawesome.com/5ad6bf3d69.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
-<script src="{{ asset('./assets/js/map.js') }}"></script>
-<script>
-    let latitude = Number('<?= $project->latitude ?>');
-    let longitude = Number('<?= $project->longitude ?>');
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            latitude = position.coords.latitude;
-            longitude = position.coords.longitude;
-            console.log(latitude, longitude);
-        });
-    }
-</script>
 <style>
     #map{
         width: 100%;
@@ -213,15 +201,15 @@
 </style>
 <!-- tao-du-an -->
 <section class="section tao-du-an mb-5 mt-5">
-    <form action="{{ route('project.update', ['id' => $project->id]) }}" id="form-create-project" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('product.update', ['product' => $product->id]) }}" id="form-create-product" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
         @method('PUT')
         <div class="container-fluid">
             <div class="row">
                 <!-- cot 1 -->
-                <div class="col-xl-8 col-md-12 col-12 mb-4 mb-xl-0">
+                <div class="col-xl-12 col-md-12 col-12 mb-4 mb-xl-0">
                     <div class="col-inner">
-                        <h2 class="section-title mb-4">Chi tiết dự án</h2>
+                        <h2 class="section-title mb-4">Chỉnh sửa sản phẩm</h2>
                         <!-- Form Group (list-table)-->
                         @if ($errors->any())
                             <div class="alert alert-danger">
@@ -233,174 +221,67 @@
                             </div>
                         @endif
                         <div class="mb-4"><!-- class: invalid -->
-                            <label for="inputlist-table">Tên dự án <span class="required">*</span>
-                            </label>
-                            <input class="form-control require" id="inputlist-table" name="name" type="text" placeholder="RIVI" value="{{ $project->name }}" required>
-                            @error('name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <small class="d-none">Tên dự án cho phép dưới 50 ký tự bao gồm các khoảng trắng.</small>
-                        </div>
-                        <!-- Form Group (UrlMap)-->
-                        <div class="mb-4"><!-- class: active -->
-                            <label>
-                                Chọn Map <span style="margin-left: 5px" class="required">*</span>
-                            </label>
                             <div class="row">
-                                <div class="col-12">
-                                    <button type="button" class="btn btn-primary btn-check-map col-sm-12" data-bs-toggle="modal" data-bs-target="#CheckUrl"><span style="margin-right: 5px">Nhấn để Map</span> <i class="fa fa-map-pin" aria-hidden="true"></i></button>
-                                </div>
-                                <input id="lat" type="hidden" name="latitude" value="{{ $project->latitude }}" />
-                                <input id="long" type="hidden" name="longitude" value="{{ $project->place_id }}" />
-                                <input id="place-id" type="hidden" name="place_id" value="{{ $project->place_id }}" />
-                            </div>
-                        </div>
-                        <!-- Form Group (Description)-->
-                        <div class="mb-4">
-                            <label for="inputDescription">Mô tả dự án
-                            </label>
-                            <textarea class="form-control" name="description" id="inputDescription" placeholder="Nhập mô tả"></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-12">
-                                <!-- Form Group (Review)-->
-                                <div class="mb-4">
-                                    <label for="inputReview">Chọn gói review <span class="required">*</span>
+                                <div class="col-sm-4" id="product-code-area">
+                                    <label for="product-code">Mã sản phẩm <span class="required">*</span>
                                     </label>
-                                    <select class="form-control form-select require" name="package" id="inputReview" required>
-                                        <option <?= !isset($project->package) ? 'selected' : '' ?> value="">--- Chọn gói ---</option>
-                                        <option <?= $project->package == 1 ? 'selected' : '' ?> value="1">RIVI10 - 45.000 VND/đánh giá - 10 lượt đánh giá</option>
-                                        <option <?= $project->package == 2 ? 'selected' : '' ?> value="2">RIVI50 - 35.000 VND/đánh giá - 50 lượt đánh giá</option>
-                                        <option <?= $project->package == 3 ? 'selected' : '' ?> value="3">RIVI100 - 30.000 VND/đánh giá - 100 lượt đánh giá</option>
-                                        <option <?= $project->package == 4 ? 'selected' : '' ?> value="4">RIVI200 - 25.000 VND/đánh giá - 200 lượt đánh giá</option>
-                                    </select>
-                                    @error('package')
+                                    <input class="form-control require" id="product-code" name="product_code" type="text" placeholder="Mã sản phẩm" value="{{ $product->product_code }}" required>
+                                    @error('product_code')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-8">
+                                    <label for="product-name">Tên sản phẩm <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control require" id="product-name" name="name" type="text" placeholder="Tên sản phẩm" value="{{ $product->name }}" required>
+                                    @error('name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6 col-12">
-                                <!-- Form Group (RaiCham)-->
-                                <div class="mb-4 RaiCham">
-                                    <label for="inputRaiCham">
-                                        Rải chậm
-                                    </label>
-                                    <button type="button" class="btn" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Rải chậm là hình thức đánh giá review mỗi ngày.
-                                Ví dụ: Nếu bạn nhập số lượng rải chậm là 2 tương đương dự án của bạn sẽ nhận 2 lượt đánh giá mỗi ngày">
-                                        <span class="material-symbols-outlined">info</span>
-                                    </button>
-                                    <div class="input-group" id="group-raicham">
-                                        <span class="input-group-text" for="inputRaiChamCheck">
-                                            <input type="checkbox" <?= $project->is_slow ? 'checked' : '' ?> name="is_slow" class="form-check-input" id="inputRaiChamCheck">
-                                        </span>
-                                        <input type="number" min="2" name="point_slow" value="{{ $project->point_slow }}" readonly class="form-control" id="inputRaiCham">
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                        <!-- Form Group (Tags)-->
                         <div class="mb-4">
-                            <label for="Tagslist-table">Từ khóa <span class="required">*</span>
+                            <label for="inputlist-table">Thuộc danh mục <span>(nếu có)</span></label>
+                            <select class="form-select form-control" name="category_id" id="category_id" data-placeholder="Thuộc danh mục">
+                                <option value="">Chọn thuộc danh mục</option>
+                                @if(!empty($categories))
+                                    @foreach($categories as $category)
+                                        <option {!! isset($product->category_id) && $category->id == $product->category_id ? 'selected' : '' !!} value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="inputlist-table">Mô tả <span>(nếu có)</span></label>
+                            <textarea id="description" placeholder="Mô tả sản phẩm" name="description" class="form-control">{{ $product->description }}</textarea>
+                        </div>
+                        <div class="mb-4 row">
+                            <div class="col-sm-8">
+                                <label for="inputlist-table">Giá sản phẩm</label>
+                                <input class="form-control" id="price" name="price" type="number" placeholder="Giá sản phẩm" value="{{ $product->price }}">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="inputlist-table">Số lượng trong kho</label>
+                                <input class="form-control" id="stock" name="stock" type="number" placeholder="Số lượng trong kho" value="{{ $product->stock }}">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label>Hình ảnh ( Gồm: Ảnh đầu tiên là ảnh đại diện và ảnh chi tiết)</label>
+                            <label for="inputFile" class="custom-file-upload">
+                                <span class="material-symbols-outlined">link</span> Tải hình lên
                             </label>
-                            <div class="Tagslist-wrap">
-                                <span>Đồ uống ngon</span>
-                                <span>Yên tĩnh</span>
-                                <span>Nhân viên thân thiện</span>
-                                <span>Náo nhiệt</span>
-                                <span>Không gian đẹp</span>
-                                <span>Ưu đãi hấp dẫn</span>
-                            </div>
-                            <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
-                            @error('keyword')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <input class="form-control" id="inputFile" name="image[]" type="file" placeholder="Hình ảnh" multiple />
+                            <div id="fileError" class="alert alert-danger" style="display: none;">Tệp quá lớn hoặc không được hỗ trợ.</div>
+                            <!-- Khu vực hiển thị tên tệp -->
+                            <div id="fileList" class="mb-4 col-6"></div>
                         </div>
-                        <!-- Form Group (Img)-->
-                        <div class="inputImg"><!-- class: active -->
-                            <label class="d-block" for="inputImg">Hình ảnh
-                            </label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="has_image" id="inputImg1" value="1">
-                                <label class="form-check-label" for="inputImg1"> Có </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="has_image" id="inputImg2" value="0" checked>
-                                <label class="form-check-label" for="inputImg2"> Không </label>
-                            </div>
-                            <div class="d-none" id="group-upload-image">
-                                <p>
-                                    <small>Các hình ảnh bắt buộc phải được chụp bằng thiết bị thật, chúng tôi sẽ phân phối mỗi đánh giá kèm với 1 ảnh. Đánh giá có ảnh sẽ được phân phối ngẫu nhiên xen kẽ với đánh giá chỉ có chữ.</small>
-                                </p>
-                                <p>
-                                    <small>Số lượng ảnh không vượt quá 10% số lượng gói đánh giá. Định dạng ảnh là (*.jpeg, *.png). Giá của 1 tấm ảnh là 5k/tấm.</small>
-                                </p>
-                                <div id="fileUpload"></div>
-                            </div>
+                        <div class="mb-4">
+                            <button class="btn btn-primary" id="btn-submit" type="submit">Chỉnh sửa</button>
                         </div>
-                    </div>
-                </div>
-                <!-- cot 2 -->
-                <div class="col-xl-4 col-md-12 col-12 ">
-                    <div class="col-inner col-guide">
-                        <div id="info-map-reviews">
-                            <h3>{{ $project->name }}</h3>
-                            <div class="list-star">
-                                <span>{{ $project->rating_google }}</span>
-                                <p>
-                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 1 ? 'active' : ''!!}"></i>
-                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 2 ? 'active' : ''!!}"></i>
-                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 3 ? 'active' : ''!!}"></i>
-                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 4 ? 'active' : ''!!}"></i>
-                                    <i class="fa fa-star {!! (int)$project->total_rating_google >= 5 ? 'active' : ''!!}" aria-hidden="true"></i>
-                                </p>
-                                {{ $project->total_rating_google }}
-                            </div>
-                            <p>{{ $project->address_google }}</p>
-                            <p>{{ $project->telephone_google }}</p>
-                            <div class="rating-row">
-                                <h4>Đánh giá: <span id="avg-rating">{{ $project->rating_google }}</span></h4>
-                                <span>{{ $project->total_rating_google }}</span>
-                            </div>
-                            <div id="rating-desire-group">
-                                <input type="hidden" name="rating_google" id="rating-google" value="{{ $project->rating_google }}"/>
-                                <input type="text" onchange="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" value="{{ $project->rating_desire }}" name="rating_desire" id="rating-desire"/>
-                            </div>
-                        </div>
-                        <div id="video-intro">
-                            <h2>Hướng dẫn lấy URL</h2>
-                            <div id="detail-video">
-                                <button onclick="playPause()" type="button" class="btn-play-video">
-                                    <span class="material-symbols-outlined">
-                                        play_circle
-                                    </span>
-                                </button>
-                                <video id="video1" width="420" style="max-width: 100%;">
-                                    <source src="{{ asset('assets/video/mov_bbb.mp4') }}" type="video/mp4">
-                                    <source src="{{ asset('assets/video/mov_bbb.ogg') }}" type="video/ogg">
-                                    Your browser does not support HTML video.
-                                </video>
-                            </div>
-                        </div>
-                        <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/MLpWrANjFbI?si=ZGXqWQK6lxYSxRAW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
-                        <h3 class="col-title">Rải chậm</h3>
-                        <p>Rải chậm giúp các đánh giá thật hơn. Chi phí rải chậm một ngày là 2.000 VND</p>
-                        <h3 class="col-title">Từ khóa</h3>
-                        <p>RIVI AI sẽ dùng trí tuệ nhân tạo để tạo ra các nội dung đánh giá bám sát vào sản phẩm/dịch vụ của bạn. <br>
-                            <strong>Ví dụ:</strong> Khi bạn có từ khóa “Cà phê ngon” thì RIVI AI sẽ tạo ra các nội dung sau:
-                        </p>
-                        <ul>
-                            <li>Quán cà phê ngon, đồ uống bổ dưỡng, không gian thoải mái, phục vụ nhanh nhẹn</li>
-                            <li>Không gian quán cà phê ngon và ấm cúng, đồ uống tuyệt vời, nhân viên thân thiện</li>
-                            <li>Đồ uống tại quán cà phê ngon và đa dạng , không gian sang trong và sạch sẽ</li>
-                            <li>Quán cà phê ngon, đồ uống chất lượng, không gian yên tĩnh và thư giãn</li>
-                        </ul>
-                        <input class="btn btn-primary btn-full" type="button" id="btn-submit" value="Đặt đơn" />
                     </div>
                 </div>
             </div>
@@ -431,249 +312,101 @@
         </div>
     </div>
 </div>
-<!-- Jquery table input Tags -->
-<script src="{{ asset('./assets/js/bootstrap-tagsinput.js') }}"></script>
-<script src="{{ asset('./assets/js/fileUpload.js') }}"></script>
 <script>
-    // Jquery 
-    jQuery(document).ready(function($) {
-        //Jquery table input Tags
-        var tagInput1 = new TagsInput({
-            selector: 'Tagslist-table',
-            duplicate : false,
-            max : 10
-        });
-        tagInput1.addData([]);
-
-        // file Upload
-        $("#fileUpload").fileUpload();
-        $('#confirm-url-map').on('click', function(){
-            $('#CheckUrl').modal('hide');
-            $('#video-intro').hide();
-            $('#info-map-reviews').show();
-            
-            if($('#place-id').val() == ''){
-                $('.btn-check-map').addClass('border-error');
-            }else{
-                $('.btn-check-map').removeClass('border-error');
-                $('.btn-check-map').addClass('btn-success');
+    $('#parent').select2( {
+        theme: 'bootstrap-5',
+        ajax: {
+            url: "{{ route('categories.list') }}",
+            dataType: "json",
+            type: "GET",
+            data: function (params) {
+                var queryParameters = {
+                    name: params.term
+                }
+                return queryParameters;
+            },
+            processResults: function (data) {
+                if(data.data.data && data.data.data.length > 0){
+                    return {
+                        results: $.map(data.data.data, function (item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                            })
+                    };
+                }
+                return {
+                    results: [
+                        {
+                            text: 'Không có kết quả',
+                            id: ''
+                        }
+                    ]
+                }
+            },
+            results: function (data) {
+                if(data.data.data && data.data.data.length > 0){
+                    return {
+                        results: $.map(data.data, function (item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                }
+                return {
+                    results: [
+                        {
+                            text: 'Không có kết quả',
+                            id: ''
+                        }
+                    ]
+                }
             }
+        }
+    } );
+</script> 
+<script>
+    $(document).ready(function () {
+        const getSelectedFiles = setupFileInput('#inputFile', '#fileList', '#fileError', 2);
+        
+        $('#inputFile').on('change', function () {
+            const selectedFiles = getSelectedFiles(); // Get the array of selected files
+            console.log('Currently selected files:', selectedFiles); // Log the files
         });
     });
-</script> 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_API_KEY') }}&callback=initMap&fields=id,displayName,rating,reviews,userRatingCount&libraries=places&v=weekly" defer></script>
-    <script>
-        function addTag(tagText) {
-            var exists = false;
-            $('.tags-input-wrapper .tag').each(function() {
-                if ($(this).text().trim() == tagText + '×') {
-                    $(this).remove();
-                    exists = true;
-                    return false;
-                }
-            });
-            if (!exists) {
-                var newTag = $('<span class="tag">' + tagText + '<a>×</a></span>');
-                $('.tags-input-wrapper').prepend(newTag);
-            }
-        }
-        $('.Tagslist-wrap > span').click(function(){
-            $(this).toggleClass('active');
-            let value = $(this).text();
-            addTag(value.trim());
-        })
-        $(document).on('click', '.tags-input-wrapper .tag a', function() {
-            var textCheck = $(this).parent().text().trim(); 
-            textCheck = textCheck.replace("×", ""); 
-
-            $('.Tagslist-wrap span').each(function() {
-                var tagText = $(this).text().trim(); 
-                if (tagText === textCheck) { 
-                    $(this).removeClass('active'); 
-                    return false; 
-                }
-            });
-
-            $(this).parent().remove(); // Xóa tag từ danh sách tags-input-wrapper
-        });
-
-        // Rating
-        function handleRateChange(event, rating){
-            $('#info-map-reviews .group-reviews-alert').remove();
-            let rate = event.target.value;
-            let message = '';
-            let errors = false;
-            if(rate > 0 && rate < 5){
-                errors = false;
-            }else{
-                errors = true;
-                if(rate < 0){
-                    $('#changeRate').val(0);
-                    message = 'Giá trị đánh giá từ 0 đến 5';
-                }
-                if(rate > 5){
-                    $('#changeRate').val(5);
-                    message = 'Giá trị đánh giá không quá 5';
-                }
-            }
-            if (errors) {
-                $('#info-map-reviews').append(`
-                    <div class="group-reviews-alert">
-                        <p class="text-danger">${message}</p>
-                    </div>
-                `);
-            } else {
-                $('#info-map-reviews').append(`
-                    <div class="group-reviews-alert">
-                        <p class="text-success">${message}</p>
-                    </div>
-                `);
-            }
-            setTimeout(() => {
-                $('#info-map-reviews .group-reviews-alert').remove();
-            }, 3500);
-        }
-        // $('#inputReview').on('change', function(){
-        //     if($(this).val()){
-        //         $('#inputRaiCham').prop('readonly',false);
-        //         $('#inputRaiChamCheck').prop('checked', true);
-        //         $('#inputRaiCham').focus();
-        //     }else{
-        //         $('#inputRaiCham').prop('readonly',true);
-        //         $('#inputRaiChamCheck').prop('checked', false);
-        //     }
-        // })
-        $('#inputRaiChamCheck').on('change', function(){
-            if($(this).is(':checked')){
-                $('#inputRaiCham').prop('readonly',false);
-                $('#inputRaiChamCheck').prop('checked', true);
-                $('#inputRaiCham').focus();
-            }else{
-                $('#inputRaiCham').prop('readonly',true);
-                $('#inputRaiChamCheck').prop('checked', false);
-            }
-        });
-        $('#inputRaiCham').on('change', function(){
-            $('#group-raicham small').remove();
-            let review = $('#inputReview').val();
-            const data = $(this).val();
-            if(data <= 2){
-                $(this).val(2);
-            }
-            if(data > 2 && review == 1){
-                $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);
-                if(data > 10){
-                    $(this).val(10);
-                }
-            }
-            if(data > 5 && review == 2){
-                $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);
-                $(this).val(5);
-            }
-            if(data > 10 && review == 3){
-                $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);                
-                $(this).val(10);
-            }
-            if(data > 20 && review == 3){
-                $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);
-                $(this).val(20);
-            }
-            setTimeout(() => {
-                $('#group-raicham small').remove();
-            }, 5000);
-        });
-        // Upload image
-        $('input[name=has_image]').on('change', function(){
-            if($(this).is(':checked') && $(this).val() === '1'){
-                $('#group-upload-image').removeClass('d-none');
-            }else if($(this).val() === '0'){
-                $('#group-upload-image').addClass('d-none');
-            }  
-        });
-        var myVideo = document.getElementById("video1"); 
-
-        function playPause() { 
-            if (myVideo.paused){
-                $('#detail-video .btn-play-video *').remove();
-                $('#detail-video .btn-play-video').html(`<span class="material-symbols-outlined">
-                pause_circle
-                </span>`);
-                myVideo.play(); 
-            }else{
-                $('#detail-video .btn-play-video *').remove();
-                $('#detail-video .btn-play-video').html(`<span class="material-symbols-outlined">
-                play_circle
-                </span>`);
-                myVideo.pause();
-            }
-                
-        } 
-        $(document).ready(function() {
-            function validateRequiredFields() {
-                $('.alert').remove();
-                $('.require').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).addClass('border-error');
-                        var alertMessage = $('<div class="alert text-danger">Bắt buộc nhập dữ liệu</div>');
-                        $(this).after(alertMessage);
-                        $(this).addClass('error');
-                        return false;
-                    } else {
-                        $(this).removeClass('border-error');
-                        $(this).removeClass('error');
+</script>
+<script>
+    $(document).ready(function () {
+        $('#product-code').on('change', function(){
+            var product_code = $(this).val();
+            $.ajax({
+                url: "{{ route('product.check.code', ['product_code' => 'PRD_CODE']) }}".replace('PRD_CODE', product_code),
+                method: "GET",
+                data: {
+                    product_code: product_code,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if(!data.status){
+                        $('#product-code').addClass('is-valid');
+                        $('#product-code').removeClass('is-invalid');
+                        $('#btn-submit').removeAttr('disabled');
+                        $('#product-code-area .invalid-feedback').remove();
+                    }else{
+                        $('#product-code').addClass('is-invalid');
+                        $('#product-code').removeClass('is-valid');
+                        $('#btn-submit').attr('disabled','disabled');
+                        $('#product-code-area').append(`<span class="invalid-feedback" role="alert">
+                            <strong>Mã sản phẩm đã được sử dụng.</strong>
+                        </span>`);
                     }
-                });
-                if($('#place-id').val() == ''){
-                    $('.btn-check-map').addClass('border-error');
-                    return false;
-                }else{
-                    $('.btn-check-map').removeClass('border-error');
-                }
-                if($('.tags-input-wrapper .tag').length == 0){
-                    $('.tags-input-wrapper').addClass('border-error');
-                    return false;
-                }else{
-                    $('.tags-input-wrapper').removeClass('border-error');
-                }
-                if($('body #rating-desire').val() == 0 || $('body #rating-desire').val() == null || $('body #rating-desire').val() == ''){
-                    $('body #rating-desire').addClass('border-error');
-                    $('body #rating-desire-group').append('<p class="alert text-danger">Vui lòng nhập giá trị mong muốn</p>');
-                    return false;
-                }
-                return true;
-            }
-            $('.tags-input-wrapper').on('change', function(){
-                if($('.tags-input-wrapper .tag').length == 0){
-                    $('.tags-input-wrapper').addClass('border-error');
-                }else{
-                    $('.tags-input-wrapper').removeClass('border-error');
-                }
-                $(this).parent().find('.alert.text-danger').remove();
-            });
-            $('.Tagslist-wrap span').on('click', function(){
-                if($('.tags-input-wrapper .tag').length == 0){
-                    $('.tags-input-wrapper').addClass('border-error');
-                    return false;
-                }else{
-                    $('.tags-input-wrapper').removeClass('border-error');
-                }
-                $(this).parent().parent().find('.alert.text-danger').remove();
-            });
-            $('.require').on('change', function(){
-                if($(this).val()){
-                    $(this).removeClass('border-error');
-                    $(this).removeClass('error');
-                    $(this).parent().find('.alert.text-danger').remove();
                 }
             });
-            $('#btn-submit').on('click', function(e){
-                e.preventDefault();
-                let checkValidate = validateRequiredFields();
-                
-                if ($('.alert').length === 0 && checkValidate) {
-                    $('#form-create-project').submit();
-                }
-            }); 
-        });
-    </script>
+        })
+    });
+</script>
 @endsection

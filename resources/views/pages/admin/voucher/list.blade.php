@@ -65,7 +65,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(!empty($vouchers))
+                            @if(!empty($vouchers) && count($vouchers) > 0)
                                 @foreach($vouchers as $voucher)
                                     <tr class="voucher-{{ $voucher->id }} {!! ($voucher->uses_left >= $voucher->max_uses || $voucher->end_date < date('Y-m-d')) ? 'text-danger text-expired' : '' !!}">
                                         <td class="list-table-stt">{{ $voucher->id }}</td>
@@ -98,11 +98,16 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="11" class="text-center">Không có mã giảm giá nào được tìm thấy</td>
+                                    <td colspan="11">
+                                        <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có mã giảm giá') }}</span>
+                                    </td>
                                 </tr>
                             @endif
                         </tbody>
                     </table>
+                    @if(!empty($vouchers) && count($vouchers) > 0)
+                    {{ $vouchers->links('vendor.pagination.custom') }}
+                    @endif
                 </div>
             </div>
         </div>

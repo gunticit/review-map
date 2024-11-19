@@ -70,7 +70,8 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        return view('pages.admin.product.edit');
+        $product = $this->productService->show($id);
+        return view('pages.admin.product.edit', compact('product'));
     }
 
     /**
@@ -82,7 +83,7 @@ class ProductController extends Controller
             $this->productService->update($request, $id);
             return redirect()->route('product.index')->with('success', 'Cập nhật sản phẩm thành công');
         }catch(\Exception $e){
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
@@ -93,7 +94,11 @@ class ProductController extends Controller
     {
         try{
             $this->productService->delete($id);
-            return redirect()->route('product.index')->with('success', 'Xoá sản phẩm thành công');
+            return response()->json([
+                'title' => 'Xóa sản phẩm',
+                'status' => true,
+                'message' => 'Xóa sản phẩm thành công'
+            ]);
         }catch(\Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
         }

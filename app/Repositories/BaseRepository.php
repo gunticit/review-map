@@ -60,7 +60,10 @@ class BaseRepository implements RepositoryInterface
     }
  
     // Find the record with the given id
-    public function findByKey($key, $value, $columns = ['*'], $with = []) {
+    public function findByKey($key, $value, $columns = ['*'], $with = [], $option = '') {
+        if($option == 'all'){
+            return $this->model->select($columns)->where($key, $value)->get();
+        }
         return $this->model->select($columns)->where($key, $value)->first();
     }
  

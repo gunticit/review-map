@@ -72,15 +72,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if(!empty($categories))
+                        @if(!empty($categories) && count($categories) > 0)
                             @foreach($categories as $category)
                             <tr class="category-{{ $category->id }}">
                                 <td class="list-table-stt" scope="col">{{ $category->id }}</td>
                                 <td class="list-table-name">
                                     {{ $category->name }}
                                 </td>
-                                <td class="list-table-name">
-                                    <img src="{{ asset('storage/' . $category->image) }}" width="50" alt="">
+                                <td class="list-table-image text-center" scope="col">   
+                                    <img class="icon-image" src="{!! !empty($category->image) ? asset('storage/'.$category->image) : asset('assets/img/no-image.png') !!}" alt="image" width="100px">
                                 </td>
                                 <td class="list-table-name">
                                     {{ optional($category->parent)->name }}
@@ -105,10 +105,18 @@
                                 </td>
                             </tr>
                             @endforeach
+                        @else
+                        <tr>
+                            <td colspan="8">
+                                <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có danh mục') }}</span>
+                            </td>
+                        </tr>
                         @endif
                     </tbody>
                 </table>
+                @if(!empty($categories) && count($categories) > 0)
                 {{ $categories->links('vendor.pagination.custom') }}
+                @endif
             </div>
         </div>
     </section>

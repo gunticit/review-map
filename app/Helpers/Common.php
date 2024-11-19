@@ -222,7 +222,7 @@
 
     if (!function_exists('formatVND')) {
         function formatVND($number) {
-            return number_format($number, 0, ',', '.') . ' ₫';
+            return !empty($number) && $number > 0 ? number_format($number, 0, ',', '.') . ' ₫' : 0 .'đ';
         }
     }
 
