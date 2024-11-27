@@ -25,6 +25,7 @@ class ProjectRequest extends FormRequest
             'name' => 'required',
             'place_id' => 'required',
             'package' => 'required',
+            'files' => 'max:2048'
         ];
     }
 
@@ -33,6 +34,7 @@ class ProjectRequest extends FormRequest
             'name.required' => 'Vui lòng nhập tên dự án',
             'package.required' => 'Vui lòng chọn gói mua',
             'place_id.required' => 'Bản đồ lỗi, Vui lòng chọn lại bản đồ',
+            'files.max' => 'Vui lý chọn file < 2MB'
         ];
     }
 }

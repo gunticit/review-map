@@ -57,10 +57,10 @@ class ProjectImageService {
 
     public function createDataImages($request, $project_id){
         $data = array();
-        if ($request->hasFile('images')) {
+        if ($request->hasFile('files')) {
             $this->projectImageRepository->deleteByKey('project_id',$project_id);
             $folder = 'uploads' . '/' . date('Y-m') . '/' . date('d') . '/' . $project_id;
-            foreach ($request->file('images') as $image) {
+            foreach ($request->file('files') as $image) {
                 $path = $image->store($folder, 'public');
                 $data[] = array(
                     'image_url' => $path,
