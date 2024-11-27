@@ -3,13 +3,13 @@
 
     $.fn.fileUpload = function (options) {
         var settings = $.extend({
-            // Mặc định không có giới hạn
-            maxFileCount: Infinity 
+            maxFileCount: Infinity
         }, options);
 
         return this.each(function () {
             var fileUploadDiv = $(this);
             var fileUploadId = `fileUpload-${++fileUploadCount}`;
+            var selectedFiles = []; // Mảng lưu trữ các file đã được chọn
 
             // Tạo nội dung HTML cho khu vực tải lên tệp
             var fileDivContent = `
@@ -18,7 +18,7 @@
                         <i class="material-symbols-outlined">image</i>
                         <p>Kéo thả hoặc <span class="text-primary">chọn hình ảnh</span> để tải lên</p>
                     </div>
-                    <input type="file" accept="image/png, image/gif, image/jpeg" id="${fileUploadId}" name="images[]" multiple hidden />
+                    <input type="file" accept="image/png, image/gif, image/jpeg" id="${fileUploadId}" name="files[]" multiple hidden />
                 </label>
             `;
 
@@ -41,9 +41,7 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="no-file"><td colspan="6">No files selected!</td></tr>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 `);
 
@@ -57,28 +55,22 @@
                     createTable();
                 }
 
-                // Remove "No files selected!" message if present
-                tableBody.find('.no-file').remove();
-
-                // Lấy số lượng tệp tối đa cho phép từ dropdown
-                var maxFileCount = settings.maxFileCount();
-
-                // Check if maxFileCount is not set or is zero
-                if (!maxFileCount || maxFileCount === 0) {
-                    var message = "Bạn cần phải chọn gói review. Số lượng ảnh phù hợp gói số lượng gói đánh giá.";
-                    $('#modalMessage').text(message);
-                    $('#modalAlert').modal('show');
-                    return; // Dừng lại nếu maxFileCount không có hoặc bằng 0
-                }
-
                 // Kiểm tra tổng số tệp đã tải lên
-                var currentFileCount = tableBody.children('tr').not('.no-file').length;
+                var currentFileCount = tableBody.children().length;
+
+                // Lấy số lượng tệp tối đa cho phép từ options
+                var maxFileCount = settings.maxFileCount();
 
                 // Nếu số lượng tệp hiện tại cộng với số tệp mới vượt quá giới hạn
                 if (currentFileCount + files.length > maxFileCount) {
-                    var message = `Số lượng ảnh không vượt quá ${maxFileCount}% số lượng gói đánh giá. Định dạng ảnh là (*.jpeg, *.png). Giá của 1 tấm ảnh là 5k/tấm.`;
-                    $('#modalMessage').text(message);
+                    // Cập nhật nội dung modal
+                    $('#modalMessage').text(`Số lượng ảnh không vượt quá ${maxFileCount}! Các tệp đã chọn sẽ được làm mới.`);
                     $('#modalAlert').modal('show');
+
+                    // Reset lại tất cả các tệp
+                    tableBody.empty();
+                    selectedFiles = []; // Xóa mảng lưu trữ các tệp đã chọn
+
                     return; // Dừng lại nếu vượt quá giới hạn
                 }
 
@@ -97,7 +89,7 @@
                     if (!fileExists) {
                         tableBody.append(`
                             <tr>
-                                <td class="stt">${tableBody.children('tr').not('.no-file').length + 1}</td>
+                                <td class="stt">${tableBody.children().length + 1}</td>
                                 <td class="fileName">${fileName}</td>
                                 <td class="preview">${preview}</td>
                                 <td class="fileSize">${fileSize}</td>
@@ -105,27 +97,27 @@
                                 <td class="delete"><button type="button" class="deleteBtn"><i class="material-symbols-outlined">delete</i></button></td>
                             </tr>
                         `);
+
+                        selectedFiles.push(file); // Thêm file vào danh sách
                     }
                 });
-
-                // Clear the file input value to allow re-selection of the same file
-                fileUploadDiv.find(`#${fileUploadId}`).val('');
 
                 // Tái khởi tạo các sự kiện nút xóa sau khi thêm tệp mới
                 tableBody.find(".deleteBtn").off('click').on('click', function () {
-                    $(this).closest("tr").remove();
+                    var row = $(this).closest("tr");
+                    var fileName = row.find(".fileName").text();
 
-                    if (tableBody.find("tr").not('.no-file').length === 0) {
-                        tableBody.append('<tr class="no-file"><td colspan="6">No files selected!</td></tr>');
+                    // Xóa tệp khỏi danh sách
+                    selectedFiles = selectedFiles.filter(file => file.name !== fileName);
+
+                    row.remove();
+
+                    if (tableBody.find("tr").length === 0) {
+                        tableBody.append('<tr><td colspan="6" class="no-file">No files selected!</td></tr>');
                     }
                 });
-
-                // Check if the number of uploaded files is less than the maxFileCount
-                if (tableBody.children('tr').not('.no-file').length < maxFileCount) {
-                    $('#modalMessage').text(message);
-                }
             }
-            
+
             // Sự kiện khi kéo thả tệp
             fileUploadDiv.on({
                 dragover: function (e) {
@@ -144,9 +136,28 @@
             fileUploadDiv.find(`#${fileUploadId}`).change(function () {
                 handleFiles(this.files);
             });
+
+            // Xử lý khi nhấn nút gửi
+            $('#btn-submit').on('click', function () {
+                var maxFileCount = settings.maxFileCount();
+                var currentFileCount = selectedFiles.length;
+
+                // Khi người dùng chưa chọn tệp
+                if (currentFileCount === 0) {
+                    $('#modalMessage').text('Bạn chưa chọn tệp nào!');  // Cập nhật nội dung modal
+                    $('#modalAlert').modal('show');
+                    return;
+                } else if (currentFileCount < maxFileCount) {
+                    $('#modalMessage').text(`Bạn cần tải lên đủ ${maxFileCount} tệp! Hiện tại bạn đã tải lên ${currentFileCount} tệp.`);
+                    $('#modalAlert').modal('show');
+                    return;
+                }
+
+            });
         });
     };
 })(jQuery);
+
 
 // Modal HTML
 $('body').append(`
