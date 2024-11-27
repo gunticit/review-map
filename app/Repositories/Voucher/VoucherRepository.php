@@ -14,7 +14,7 @@ class  VoucherRepository extends BaseRepository implements VoucherRepositoryInte
     }
 
     public function list($request){
-        $query = $this->model->query()->with('created_by','parent');
+        $query = $this->model->query()->with('createdBy');
         if(isset($request->user_id)){
             $query->where('created_by', $request->user_id);
         }

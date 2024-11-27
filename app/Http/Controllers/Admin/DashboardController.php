@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function customerOverview(){
+    public function customerOverview(Request $request){
         $total_customer = User::role('customer')->count();
         $total_project = Project::whereNull('deleted_by')->count();
         $total_project_status = Project::whereNull('deleted_by')->select('status', DB::raw('count(*) as count'))
@@ -69,21 +69,44 @@ class DashboardController extends Controller
             'current_long' => $data_customer_data[0]['longitude'] ?? 0,
         ));
     }
-    public function partnerOverview(){
+    public function partnerOverview(Request $request){
         // Tổng số đối tác
-        $total_partners = User::role('partner')->count();
+        $total_partners = User::role('partner');
+        if(!empty($request->year)){
+            $total_partners = $total_partners->whereYear('created_at', $request->year);
+        }
+        $total_partners = $total_partners->count();
         // Xác thực tài khoản
-        $total_verify = User::role('partner')->join('certification_accounts', 'users.id', '=', 'certification_accounts.user_id')->count();
+        $total_verify = User::role('partner')->join('certification_accounts', 'users.id', '=', 'certification_accounts.user_id');
+        if(!empty($request->year)){
+            $total_verify = $total_verify->whereYear('users.created_at', $request->year);
+        }
+        $total_verify = $total_verify->count();
         // Tổng số đối tác đã nhận hoa hồng (là đã hoàn thành nhiệm vụ)
-        $has_commission = Mission::whereNotIn('status', [5, 6])
-        ->distinct()
+        $has_commission = Mission::whereNotIn('status', [5, 6]);
+        if(!empty($request->year)){
+            $has_commission = $has_commission->whereYear('created_at', $request->year);
+        }
+        $has_commission = $has_commission->distinct()
         ->count('user_id');
         // Tổng số đơn hàng
-        $order_total = Order::where('status', '!=', 'cancelled')->count();
+        $order_total = Order::where('status', '!=', 'cancelled');
+        if(!empty($request->year)){
+            $order_total = $order_total->whereYear('created_at', $request->year);
+        }
+        $order_total = $order_total->count();
         // Tổng số nhiệm vụ đã hoàn thành
-        $mission_complete = Mission::where('status', 1)->count();
+        $mission_complete = Mission::where('status', 1);
+        if(!empty($request->year)){
+            $mission_complete = $mission_complete->whereYear('created_at', $request->year);
+        }
+        $mission_complete = $mission_complete->count();
         // Số nhiệm vụ đang thực hiện
-        $mission_working = Mission::whereIn('status', array(2,3,4))->count();
+        $mission_working = Mission::whereIn('status', array(2,3,4));
+        if(!empty($request->year)){
+            $mission_working = $mission_working->whereYear('created_at', $request->year);
+        }
+        $mission_working = $mission_working->count();
         $user_count = User::get()->countBy('level');
         $data_chart_level = array();
         $user_count_sum = $user_count->toArray() ? array_sum($user_count->toArray()) : 0;
@@ -134,6 +157,14 @@ class DashboardController extends Controller
             'total_order' => 0,
             'total_mission_success' => 0,
             'total_mission_working' => 0,
+            'years' => array(
+                date('Y') - 1,
+                date('Y'),
+                date('Y') + 1
+            ),
+            'filter_data' => array(
+                'year' => $request->year ?? null
+            )
         );
         return view('pages.admin.dashboard.partner-overview', $data);
     }

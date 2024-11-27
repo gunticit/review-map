@@ -21,7 +21,7 @@ class VoucherController extends Controller
     }
     public function index(Request $request)
     {
-        $vouchers = Voucher::all();
+        $vouchers = $this->voucherService->list($request);
         return view('pages.admin.voucher.list', [
             'vouchers' => $vouchers,
         ]);
@@ -34,8 +34,7 @@ class VoucherController extends Controller
     public function store(VoucherRequest $request)
     {
         // try {
-            $data = $this->getData($request);
-            Voucher::create($data);
+            $this->voucherService->create($request);
             return redirect()->route('voucher.index')->with('success', 'Thêm voucher thành công!');
         // } catch (\Exception $e) {
         //     $logs = array(

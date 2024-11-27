@@ -35,11 +35,6 @@ class VoucherService {
     }
 
     public function create($request){
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images/vouchers', 'public');
-            $request->image = $imagePath;
-        }
         $voucher = $this->filterData($request);
         $data = $this->voucherRepository->create($voucher);
         return $data;
@@ -69,12 +64,17 @@ class VoucherService {
 
     private function filterData($request): array{
         return array(
+            'code' => $request->code ?? '',
             'name' => $request->name ?? '',
-            'slug' => Str::slug($request->name) ?? '',
-            'parent_id' => $request->parent ?? null,
-            'description' => $request->description ?? '',
-            'image' => $request->image ?? '',
-            'created_by' => auth()->user()->id ?? null,
+            'description' => $request->description ?? null,
+            'discount_type' => $request->discount_type ?? null,
+            'discount_value' => $request->discount_value ?? 0,
+            'start_date' => $request->start_date ?? null,
+            'end_date' => $request->end_date ?? null,
+            'max_uses' => $request->max_uses ?? 0,
+            'uses_left' => $request->uses_left ?? 0,
+            'status' => $request->status ?? 'active',
+            'min_order_value' => $request->min_order_value ?? null
         );
     }
 }

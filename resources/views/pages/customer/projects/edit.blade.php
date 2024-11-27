@@ -609,7 +609,7 @@
                 $('#group-raicham small').remove();
             }, 5000);
         });
-        // Upload image
+        // Hiển thị thông báo upload hình ảnh
         $('input[name=has_image]').on('change', function(){
             if($(this).is(':checked') && $(this).val() === '1'){
                 $('#group-upload-image').removeClass('d-none');

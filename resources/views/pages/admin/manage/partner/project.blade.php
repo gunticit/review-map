@@ -134,77 +134,81 @@
                             @endforeach
                         </div>
                     </form>
-                    <table class="table list-table">
-                        <thead>
-                            <tr>
-                                @foreach ($cols as $index => $col)
-                                    <th scope="col">
-                                        <div class="table-th">
-                                            <button type="submit" class="table-th-col">
-                                                {!! $col['label'] !!}
-                                            </button>
-                                        </div>
-                                    </th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($projects as $project)
+                    <div class="group-table-list">
+                        <table class="table list-table">
+                            <thead>
                                 <tr>
-                                    <td>{{ $project->id }}</td>
-                                    <td>{{ $project->formatted_created_at }}</td>
-                                    <td>{{ $project->project_code }}</td>
-                                    <td>{{ $project->name }}</td>
-                                    <td class="text-center">
-                                        <a class="btn" target="_blank" href="https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:{{$project->place_id}}" role="button">
-                                            <span class="material-symbols-outlined">link</span>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        @if(isset($project->missions))
-                                            @foreach ($project->missions as $mission)
-                                                {{ $mission->link_confirm }}
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        {{-- 0: Huỷ, 1: Hoàn thành, 2: Đang thực hiện, 3: Hoàn lại, 4: Tạm ngưng, 5: Chưa thanh toán, 6: Đang chờ duyệt (khi hoàn thành nhiệm vụ) --}}
-                                        @if ($project->status == 0)
-                                            <div class="table-td-alert">
-                                                Huỷ
+                                    @foreach ($cols as $index => $col)
+                                        <th style="{!! $index == 0 ? 'min-width: auto' : '' !!}" scope="col">
+                                            <div class="table-th">
+                                                <button type="submit" class="table-th-col">
+                                                    {!! $col['label'] !!}
+                                                </button>
                                             </div>
-                                        @elseif ($project->status == 1)
-                                            <div class="table-td-alert">
-                                                Hoàn thành
-                                            </div>
-                                        @elseif ($project->status == 2)
-                                            <div class="table-td-alert" style="background-color: #FFF0E6; color: #FE964A">
-                                                Đang thực hiện
-                                            </div>
-                                        @elseif ($project->status == 3)
-                                            <div class="table-td-alert">
-                                                Hoàn lại
-                                            </div>
-                                        @elseif ($project->status == 4)
-                                            <div class="table-td-alert">
-                                                Tạm ngưng
-                                            </div>
-                                        @elseif ($project->status == 5)
-                                            <div class="table-td-alert" style="background-color: #E8EDFF; color: #436CFF">
-                                                Chưa thanh toán
-                                            </div>
-                                        @elseif ($project->status == 6)
-                                            <div class="table-td-alert">
-                                                Đang chờ duyệt
-                                            </div>
-                                        @endif
-                                    </td>
-                                    <td>{{ $project->profit }}</td>
-                                    <td>{{ $project->description }}</td>
+                                        </th>
+                                    @endforeach
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($projects as $project)
+                                    <tr>
+                                        <td style="max-width:100px; min-width: unset; width: auto" class="text-center">{{ $project->id }}</td>
+                                        <td class="text-center">{{ $project->formatted_created_at }}</td>
+                                        <td class="text-center">{{ $project->project_code }}</td>
+                                        <td>{{ $project->name }}</td>
+                                        <td class="text-center">
+                                            <a class="btn" target="_blank" href="https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:{{$project->place_id}}" role="button">
+                                                <span class="material-symbols-outlined">link</span>
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            @if(isset($project->missions))
+                                                @foreach ($project->missions as $key => $mission)
+                                                    @if($key == 0)
+                                                    {{ $mission->link_confirm }}
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            {{-- 0: Huỷ, 1: Hoàn thành, 2: Đang thực hiện, 3: Hoàn lại, 4: Tạm ngưng, 5: Chưa thanh toán, 6: Đang chờ duyệt (khi hoàn thành nhiệm vụ) --}}
+                                            @if ($project->status == 0)
+                                                <div class="table-td-alert">
+                                                    Huỷ
+                                                </div>
+                                            @elseif ($project->status == 1)
+                                                <div class="table-td-alert">
+                                                    Hoàn thành
+                                                </div>
+                                            @elseif ($project->status == 2)
+                                                <div class="table-td-alert" style="background-color: #FFF0E6; color: #FE964A">
+                                                    Đang thực hiện
+                                                </div>
+                                            @elseif ($project->status == 3)
+                                                <div class="table-td-alert">
+                                                    Hoàn lại
+                                                </div>
+                                            @elseif ($project->status == 4)
+                                                <div class="table-td-alert">
+                                                    Tạm ngưng
+                                                </div>
+                                            @elseif ($project->status == 5)
+                                                <div class="table-td-alert" style="background-color: #E8EDFF; color: #436CFF">
+                                                    Chưa thanh toán
+                                                </div>
+                                            @elseif ($project->status == 6)
+                                                <div class="table-td-alert">
+                                                    Đang chờ duyệt
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">{{ $project->profit }}</td>
+                                        <td>{{ $project->description }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
         
                     <div class="list-table-footer d-flex justify-content-between align-items-center">
                         <div class="list-table-per-page">

@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\TransactionHistory;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Services\ExpenditureStatisticService;
 use App\Services\ProjectService;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -57,11 +59,12 @@ class ManagePartnerController extends Controller
             $query->whereRaw("unaccent(lower(name)) ILIKE unaccent(?)", ['%' . strtolower($keyword) . '%']);
         }
 
-        if ($orderBy) {
-            $query->orderBy($orderBy, $sort);
-        }
-        $projects = $query->paginate($perPage, ['*'], 'page', $page)
-            ->appends(request()->query());
+        // if ($orderBy) {
+        //     $query->orderBy($orderBy, $sort);
+        // }
+        // $projects = $query->paginate($perPage, ['*'], 'page', $page)
+        //     ->appends(request()->query());
+        $projects = $query->get();
 
         foreach ($projects as $project) {
             $project->formatted_created_at = $project->created_at->format('d/m/Y H:i');
@@ -76,52 +79,50 @@ class ManagePartnerController extends Controller
         ]);
     }
 
-    public function wallet(Request $request, $id)
+    public function wallet(Request $request, $user_id)
     {
-        $orderBy = $request->order_by ?? 'id';
-        $sort = $request->sort ?? 'desc';
-        $page = $request->page ?? 1;
-        $perPage = $request->per_page ?? 10;
-        $keyword = $request->keyword ?? '';
-        
-        $query = TransactionHistory::query()->with(['wallet', 'user']);
-
-        if ($keyword) {
-            $query->where(function ($q) use ($keyword) {
-                $q->whereHas('user', function ($subQuery) use ($keyword) {
-                    $subQuery->whereRaw("unaccent(lower(name)) ILIKE unaccent(?)", ['%' . strtolower($keyword) . '%']);
-                })
-                ->orWhere('transaction_histories.id', 'like', "%{$keyword}%")
-                ->orWhere('transaction_histories.reference_id', 'like', "%{$keyword}%")
-                ->orWhere('transaction_histories.amount', 'like', "%{$keyword}%");
-            });
+        $wallet = Wallet::where('user_id', $user_id)->first();
+        $type_transaction = config('constants.type_histories');
+        if(!empty($wallet->id)){
+            $transactionHistories = TransactionHistory::leftjoin('wallets', 'wallets.id', '=', 'transaction_histories.wallet_id')
+            ->where('transaction_histories.wallet_id', $wallet->id)->get();
         }
-
-        if ($orderBy === 'user_name') {
-            $query->join('wallets', 'transaction_histories.wallet_id', '=', 'wallets.id')
-                ->join('users', 'wallets.user_id', '=', 'users.id')
-                ->orderBy('users.name', $sort)
-                ->select('transaction_histories.*');
-        } else {
-            $query->orderBy($orderBy, $sort);
+        $data_transaction = array();
+        $user_name = User::find($user_id)->name;
+        if(!empty($transactionHistories)){
+            foreach($transactionHistories as $transactionHistory){
+                $data_transaction[] = [
+                    'id' => $transactionHistory->id,
+                    'wallet_id' => $transactionHistory->wallet_id,
+                    'reference_id' => $transactionHistory->reference_id,
+                    'payment_method' => $transactionHistory->type,
+                    'amount' => $transactionHistory->amount,
+                    'user_name' => $user_name,
+                    'created_at' => $transactionHistory->created_at,
+                    'status' => $transactionHistory->status,
+                    'transaction_code' => $transactionHistory->transaction_code,
+                    'type' => $type_transaction[$transactionHistory->type]
+                ];
+            }
         }
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 10;  // Adjust as needed
+        $currentItems = array_slice($data_transaction, ($currentPage - 1) * $perPage, $perPage);
 
-        $transactionHistories = $query->paginate($perPage, ['*'], 'page', $page)
-            ->appends(request()->query());
-
-        foreach ($transactionHistories as $transactionHistory) {
-            $transactionHistory->formatted_created_at = $transactionHistory->created_at->format('d/m/Y H:i');
-            $transactionHistory->payment_method = $transactionHistory->payment_method_id ? PaymentMethod::getLabel($transactionHistory->payment_method_id) : '';
-            $transactionHistory->amount = number_format($transactionHistory->amount, 0, ',', '.') . ' VND';
-        }
-
+        $data_transaction = new LengthAwarePaginator(
+            $currentItems,
+            count($data_transaction),
+            $perPage,
+            $currentPage,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
         return view('pages.admin.manage.partner.wallet', [
-            'transactionHistories' => $transactionHistories,
-            'partner_id' => $id
+            'transactionHistories' => $data_transaction,
+            'partner_id' => $user_id
         ]);
     }
 
-    public function project(Request $request, $id)
+    public function project(Request $request, $user_id)
     {
         $orderBy = $request->order_by ?? 'id';
         $sort = $request->sort ?? 'desc';
@@ -149,7 +150,7 @@ class ManagePartnerController extends Controller
 
         return view('pages.admin.manage.partner.project', [
             'projects' => $projects,
-            'partner_id' => $id
+            'partner_id' => $user_id
         ]);
     }
 

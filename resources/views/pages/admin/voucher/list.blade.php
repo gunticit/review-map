@@ -97,7 +97,7 @@
                                     </tr>
                                 @endforeach
                             @else
-                                <tr>
+                                <tr class="no-result">
                                     <td colspan="11">
                                         <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có mã giảm giá') }}</span>
                                     </td>

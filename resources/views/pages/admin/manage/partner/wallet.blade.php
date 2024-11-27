@@ -116,7 +116,7 @@
                     ['label' => 'STT', 'value' => 'id'],
                     ['label' => 'Thời gian', 'value' => 'created_at'],
                     ['label' => 'Mã giao dịch', 'value' => 'reference_id'],
-                    ['label' => 'Phương thức rút', 'value' => 'payment_method_id'],
+                    ['label' => 'Phương thức', 'value' => 'payment_method_id'],
                     ['label' => 'Tài khoản nhận', 'value' => 'user_name'],
                     ['label' => 'Số tiền rút', 'value' => 'amount'],
                     ['label' => 'Trạng thái', 'value' => 'status'],
@@ -183,25 +183,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($transactionHistories as $transactionHistory)
-                                    <tr>
-                                        <td class="text-center">{{ $transactionHistory->id }}</td>
-                                        <td>{{ $transactionHistory->formatted_created_at }}</td>
-                                        <td>{{ $transactionHistory->reference_id }}</td>
-                                        <td class="text-center">{{ $transactionHistory->payment_method }}</td>
-                                        <td>{{ $transactionHistory->user->name }}</td>
-                                        <td class="color-black fw-500">{{ $transactionHistory->amount }}</td>
-                                        <td>
-                                            @if ($transactionHistory->status == 'completed')
-                                                <div class="text-center fw-500 color-success">Thành công</div>
-                                            @elseif ($transactionHistory->status == 'failed')
-                                                <div class="text-center fw-500 color-danger">Thất bại</div>
-                                            @else
-                                                <div class="text-center fw-500 color-warning">Chờ xử lý</div>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                @if(!empty($transactionHistories))
+                                    @foreach ($transactionHistories as $transactionHistory)
+                                        <tr>
+                                            <td class="text-center">{{ $transactionHistory['id'] }}</td>
+                                            <td class="text-center">{{ $transactionHistory['created_at'] }}</td>
+                                            <td class="text-center">{{ $transactionHistory['reference_id'] }}</td>
+                                            <td class="text-center">{!! $transactionHistory['payment_method'] ? config('constants.type_histories')[$transactionHistory['payment_method']] : null !!}</td>
+                                            <td class="text-center">{{ $transactionHistory['user_name'] }}</td>
+                                            <td class="text-center color-black fw-500">{{ $transactionHistory['amount'] }}</td>
+                                            <td>
+                                                @if ($transactionHistory['status'] == 'completed')
+                                                    <div class="text-center fw-500 color-success">Thành công</div>
+                                                @elseif ($transactionHistory['status'] == 'failed')
+                                                    <div class="text-center fw-500 color-danger">Thất bại</div>
+                                                @else
+                                                    <div class="text-center fw-500 color-warning">Chờ xử lý</div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>

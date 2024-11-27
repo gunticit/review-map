@@ -99,14 +99,14 @@
             <span class="material-symbols-outlined">
               home_pin
             </span> 
-            <h2>Bản đồ, số lượng và vị trí khách hàng</h2>
+            <h2>Bản đồ, số lượng và vị trí khách hàng  {{ $filters['year'] }}</h2>
           </div>
 
           <select class="form-select" onchange="handleChangeYear(this.value)" aria-label="Năm" style="position: absolute;top: -10px;right: 10px;z-index: 2">
             <option>Năm</option>
             @if(!empty($years))
               @foreach($years as $year)
-                <option value="{{ $year }}">{{ $year }}</option>
+                <option {!! !empty($filters['year']) && $filters['year'] == $year ? 'selected':'' !!} value="{{ $year }}">{{ $year }}</option>
               @endforeach
             @endif
           </select>
@@ -157,6 +157,11 @@
                 infoWindow.open(map, marker);
             });
         });
+    }
+  </script>
+  <script>
+    function handleChangeYear(year){
+      window.location.href='/admin/overview-customer?year='+year;
     }
   </script>
 @endsection

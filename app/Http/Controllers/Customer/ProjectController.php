@@ -17,6 +17,7 @@ use App\Services\ProjectImageService;
 use App\Services\WalletService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class ProjectController extends Controller
@@ -69,6 +70,7 @@ class ProjectController extends Controller
 
     public function store(ProjectRequest $request){
         try{
+            DB::beginTransaction();
             $data = $this->projectService->create($request);
             $project_id = $data->id;
             $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
@@ -88,14 +90,37 @@ class ProjectController extends Controller
                 $comments = $this->commentService->generateComment($request);
                 if(!empty($comments)){
                     $comments = explode('|', $comments);
-                    foreach($comments as $comment){
-                        if(!empty($comment)){
-                            $data_comment = array(
-                                'project_id' => $project_id,
-                                'comment' => $comment,
-                                'keyword' => implode(',', $keyword_data)
-                            );
-                            $this->commentService->create($data_comment);
+                    $sl_comment = 10;
+                    if(isset($request->package)){
+                        switch($request->package){
+                            case '1':
+                                $sl_comment = 10;
+                                break;
+                            case '2':
+                                $sl_comment = 50;
+                                break;
+                            case '3':
+                                $sl_comment = 100;
+                                break;
+                            default: 
+                                $sl_comment = 200;
+                                break;
+                        }
+                    }
+                    if(count($comments) < $sl_comment){
+                        $comments = $this->commentService->generateComment($request);
+                        $comments = explode('|', $comments);
+                    }
+                    if(!empty($comments)){
+                        foreach($comments as $comment){
+                            if(!empty($comment) && strlen(trim($comment)) > 0){
+                                $data_comment = array(
+                                    'project_id' => $project_id,
+                                    'comment' => $comment,
+                                    'keyword' => implode(',', $keyword_data)
+                                );
+                                $this->commentService->create($data_comment);
+                            }
                         }
                     }
                 }
@@ -105,7 +130,7 @@ class ProjectController extends Controller
                 $content_history = [
                     'title' => 'Dự án khởi tạo thành công',
                     'content' => 'Dự án khởi tạo thành công vào lúc: ' . $data['created_at'],
-                    'status' => 6, // Chờ admin duyệt
+                    'status' => 5, // Chờ thanh toán
                     'user_id' => Auth::user()->id
                 ];
                 $this->historyService->create([
@@ -113,6 +138,7 @@ class ProjectController extends Controller
                     'user_id' => Auth::user()->id
                 ]);
                 Session::flash('success', 'Khởi tạo dự án thành công');
+                DB::commit();
                 return redirect()->route('page.order.project', ['id' => $project_id])
                 ->with('success', 'Khởi tạo dự án thành công');
             }
@@ -129,6 +155,7 @@ class ProjectController extends Controller
             Session::flash('error', 'Tạo dự án không thành công');
             return redirect()->back()->withInput();
         }catch(\Exception $e){
+            DB::rollBack();
             throw new ProcessException($e);
         }
     }

@@ -5293,6 +5293,10 @@ body .btn.btn-info > span{
   border-radius: 8px;
   background-color: #f8f8f8;
 }
+.no-result td{
+  padding: 100px 0;
+  border-bottom: none;
+}
 @keyframes loading {
   to {
     background-position-x: -20%;

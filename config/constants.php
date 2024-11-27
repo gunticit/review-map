@@ -25,6 +25,12 @@
             3 => 'Ngân hàng ATM', 
             4 => 'Thanh toán thẻ VISA',
             5 => 'Ví OnePay',
+        ],
+        "type_histories" => [
+            'payment' => 'Thanh toán',
+            'deposit' => 'Nạp tiền',
+            'withdraw' => 'Rút tiền',
+            'mined' => 'Tiền nhiệm vụ'
         ]
     );
 ?>

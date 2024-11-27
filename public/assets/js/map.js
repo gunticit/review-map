@@ -111,7 +111,7 @@ function handleRatingDesire() {
     if(!rsTest){
         rsTest = 0;
     }
-    rsTest = parseFloat((rsTest) + 0.2).toFixed(1);
+    rsTest = parseFloat(rsTest).toFixed(1);
     if (rating_desire.includes(',')) {
         rating_desire = rating_desire.replace(',', '.');
     }
@@ -130,7 +130,7 @@ function handleRatingDesire() {
         }else if(rating_desire < 4.1 && rsTest > 4.1) {
             $('body #rating-desire').val(rsTest);
         }
-        if(rating_desire > 4.9) {
+        if(rating_desire > 5) {
             $('body #rating-desire').val(4.9);
             $('#rating-desire-group').append('<p class="text-danger">Đã đạt giới hạn tối đa của trung bình đánh giá.</p>');
         }

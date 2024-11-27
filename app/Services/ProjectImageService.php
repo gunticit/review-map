@@ -2,13 +2,9 @@
 
 namespace App\Services;
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Auth;
 use App\Repositories\ProjectImage\ProjectImageRepositoryInterface;
 use App\Http\Resources\ProjectImageResource;
 use App\Models\Project;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class ProjectImageService {

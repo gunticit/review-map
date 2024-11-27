@@ -107,16 +107,16 @@
         <div class="col-md-10 col-12">
           <div class="section-title">
             <span>Bản đồ</span>
-            <h2>Số lượng, vị trí đối tác</h2>
+            <h2>Số lượng, vị trí đối tác {{ $filter_data['year'] }}</h2>
           </div>
         </div>
         <div class="col-md-2 col-12">
           <div class="form-group">
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" onchange="handleChangeYear(this.value)" aria-label="Default select example">
               <option>Năm</option>
-              @if(!empty($filters['years']))
-                @foreach($filters['years'] as $year)
-                  <option value="{{ $year }}">{{ $year }}</option>
+              @if(!empty($years))
+                @foreach($years as $year)
+                  <option {{ $filter_data['year'] == $year ? 'selected' : '' }} value="{{ $year }}">{{ $year }}</option>
                 @endforeach
               @endif
             </select>
@@ -189,6 +189,11 @@
                 infoWindow.open(map, marker);
             });
         });
+    }
+  </script>
+  <script>
+    function handleChangeYear(year){
+      window.location.href = '/admin/overview-partner?year='+year;
     }
   </script>
 @endsection
