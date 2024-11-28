@@ -64,13 +64,8 @@
                 // Nếu số lượng tệp hiện tại cộng với số tệp mới vượt quá giới hạn
                 if (currentFileCount + files.length > maxFileCount) {
                     // Cập nhật nội dung modal
-                    $('#modalMessage').text(`Số lượng ảnh không vượt quá ${maxFileCount}! Các tệp đã chọn sẽ được làm mới.`);
+                    $('#modalMessage').text(`Số lượng ảnh không được vượt quá ${maxFileCount}. Vui lòng kiểm tra lại.`);
                     $('#modalAlert').modal('show');
-
-                    // Reset lại tất cả các tệp
-                    tableBody.empty();
-                    selectedFiles = []; // Xóa mảng lưu trữ các tệp đã chọn
-
                     return; // Dừng lại nếu vượt quá giới hạn
                 }
 
