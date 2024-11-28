@@ -130,7 +130,7 @@ function handleRatingDesire() {
         }else if(rating_desire < 4.1 && rsTest > 4.1) {
             $('body #rating-desire').val(rsTest);
         }
-        if(rating_desire > 5) {
+        if(rating_desire > 4.9) {
             $('body #rating-desire').val(4.9);
             $('#rating-desire-group').append('<p class="text-danger">Đã đạt giới hạn tối đa của trung bình đánh giá.</p>');
         }
