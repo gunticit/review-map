@@ -325,8 +325,21 @@
                 e.stopPropagation();
                 let total_value = $('#total_value').val();
                 let balance_value = $('#balance').val();
-                if(balance_value < total_value) {
-                    window.location.href="{{ route('wallet') }}";
+                if(parseFloat(balance_value) < parseFloat(total_value)) {
+                    Swal.fire({
+                        title: "Thông báo số dư",
+                        text: "Tài khoản của bạn không đủ để thanh toán. Vui lòng nạp thêm để tiếp tục",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Nạp tiền",
+                        cancelButtonText: "Hủy bỏ"
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href="{{ route('wallet') }}";
+                        }
+                    });
                     return false;
                 }
                 $.ajax({
@@ -337,7 +350,6 @@
                         project_id: "{{ $project_info->id }}"
                     },
                     success: function(response) {
-                        console.log(response);
                         if(response.status == 'error') {
                             Swal.fire({
                                 title: "Thông báo",
