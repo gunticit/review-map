@@ -51,6 +51,12 @@ class ProjectImageService {
         return $data;
     }
 
+
+    public function findImageByProject($project_id){
+        $data = $this->projectImageRepository->findImageByProject($project_id);
+        return $data;
+    }
+
     public function createDataImages($request, $project_id){
         $data = array();
         if ($request->hasFile('files')) {

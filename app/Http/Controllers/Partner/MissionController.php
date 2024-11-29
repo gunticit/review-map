@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\ProjectImage;
 use App\Services\HistoryService;
 use App\Services\MissionService;
+use App\Services\ProjectImageService;
 use App\Services\WalletService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,12 +21,18 @@ use Illuminate\Support\Facades\Validator;
 
 class MissionController extends Controller
 {
-    protected $missionService,$walletService, $historyService;
+    protected $missionService,$walletService, $historyService, $projectImageService;
 
-    public function __construct(MissionService $missionService,WalletService $walletService,HistoryService $historyService){
+    public function __construct(
+        MissionService $missionService,
+        WalletService $walletService,
+        HistoryService $historyService,
+        ProjectImageService $projectImageService
+    ){
         $this->missionService = $missionService;
         $this->walletService = $walletService;
         $this->historyService = $historyService;
+        $this->projectImageService = $projectImageService;
     }
 
     /**
@@ -47,6 +54,7 @@ class MissionController extends Controller
                 'comments.comment',
                 'missions.id as mission_id'
             )->first();
+            $this->getProjectConditions($user_id);
             if(empty($project)) {
                 list($project, $mission) = $this->getProjectConditions($user_id);
             }
@@ -78,6 +86,11 @@ class MissionController extends Controller
             ->take(1)
             ->all();
         $data = $this->createMissionByProjects($projects, $user_id);
+        if(!empty($project->has_image)){
+            $image = $this->projectImageService->findImageByProject($projects->id);
+            $data_image = $this->createImageProject($projects->id);
+        }
+        
         [$projectResult, $mission] = $data;
     
         // Nếu không có project nào thoả mãn, thêm project đã kiểm tra vào danh sách và gọi lại đệ quy

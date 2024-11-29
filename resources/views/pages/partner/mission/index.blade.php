@@ -15,9 +15,12 @@
                     <h2 class="mb-3">Nhận nhiệm vụ</h2>
                     <p>Bạn cần phải đánh giá 5 sao cho map</p>
                     <h2 class="text-primary">{{ $project->name }}</h2>
-                    <p id="short-description">
+                    @if(!empty($project->description))
+                    <p class="text-start">Giới thiệu dự án:</p>
+                    <p id="short-description" class="text-start">
                         {{ $project->description }}
                     </p>
+                    @endif
                 </section>
                 <h3>step 2</h3>
                 <section>
@@ -25,9 +28,9 @@
                     <p>Bạn cần phải đánh giá 5 sao cho map</p>
                     <h2 class="text-primary mb-4">{{ $project->name }}</h2>
                     <p class="text-black-50">Vui lòng copy nội dung bên dưới</p>
-                    <textarea class="form-control mb-3 textarea-copy" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">
-                        {!! $project->comment !!}
-                    </textarea>
+                    <p class="form-control mb-3 textarea-copy" id="floatingTextarea2" style="height: 100px">
+                        {!! $project->comment ? trim($project->comment) : '' !!}
+                    </p>
                     @if(!empty($mission->images))
                         <div class="mb-4 download-img-wrap position-relative">
                             <img src="{{$mission->images->image_url}}" alt="image download" class="download-img">
@@ -145,7 +148,7 @@
 
 
         $('.btn-copy').click(function(){
-            var textareaContent = $(this).closest('section').find('.textarea-copy').val();
+            var textareaContent = $('.textarea-copy').text();
             var tempTextarea = $('<textarea>');
             $('body').append(tempTextarea);
             tempTextarea.val(textareaContent).select();

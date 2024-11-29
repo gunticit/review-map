@@ -27,4 +27,10 @@ class  ProjectImageRepository extends BaseRepository implements ProjectImageRepo
         $perPage = $request->per_page ?? 15;
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
+    public function findImageByProject($project_id){
+        $query = $this->model->query();
+        $query = $query->where('project_id', $project_id);
+        $query = $query->first();
+        return $query;
+    }
 }
