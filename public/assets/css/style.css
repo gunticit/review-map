@@ -3428,7 +3428,58 @@ iframe {
   border: none;
   height: 54px;
   margin: 30px 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-bg-opacity: 1;
+  --tw-translate-x: -50%;
+  --tw-translate-y: -50%;
+  --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  --tw-text-opacity: 1;
+  -webkit-animation: ani2 .7s steps(29) forwards;
+  animation: ani2 .7s steps(29) forwards;
+  background-color: rgba(0, 76, 255, var(--tw-bg-opacity));
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+  cursor: pointer;
+  left: 50%;
+  -webkit-mask: url(https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/urban-sprite.png);
+  mask: url(https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/urban-sprite.png);
+  -webkit-mask-size: 3000% 100%;
+  mask-size: 3000% 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  position: relative;
+  text-align: center;
+  transform: var(--tw-transform);
+  width: 103%;
+  top: 20px;
   border-radius: 10px;
+}
+.login-form button[type=submit]:hover {
+  -webkit-animation: ani .7s steps(29) forwards;
+  animation: ani .7s steps(29) forwards;
+  transition: all ease .4s;
+}
+@keyframes ani {
+  0% {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+  95% {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  100% {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+    color: #2e54d7;
+    background-color: #fff;
+    border: 1px solid #2e54d7;
+  }
 }
 .login .form-login-forget .btn,
 .login label {
