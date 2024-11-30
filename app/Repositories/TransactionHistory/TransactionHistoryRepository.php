@@ -65,7 +65,7 @@ class TransactionHistoryRepository extends BaseRepository implements Transaction
 
     public function totalMoneyHistoriesByField($request){
         $query = $this->handleFilter();
-        $query = $query->with(['created_by','wallet' => function($query) use ($request) {
+        $query = $query->with(['createdBy','wallet' => function($query) use ($request) {
             if (!empty($request->user_id)) {
                 $query->where('user_id', $request->user_id);
             }

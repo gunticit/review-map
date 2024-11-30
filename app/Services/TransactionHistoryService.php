@@ -33,7 +33,7 @@ class TransactionHistoryService {
     }
 
     public function create($request){
-        $data = $this->getData($request);
+        $data = is_array($request) ? $request : $this->getData($request);
         $transactions = $this->transactionhistoryRepository->create($data);
         return $transactions;
     }
