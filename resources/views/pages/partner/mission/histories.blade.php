@@ -47,8 +47,8 @@
                             <th class="list-table-title" scope="col">Tên dự án</th>
                             <th class="list-table-link-map" scope="col">URL Google Map</th>
                             <th class="list-table-content-2" style="max-width: unset; min-width: 250px" scope="col">Nội dung</th>
-                            <th class="list-table-progree" scope="col">Trạng thái</th>
-                            <th class="list-table-profit" scope="col">Lợi nhuận</th>
+                            <th class="list-table-progree text-center" scope="col">Trạng thái</th>
+                            <th class="list-table-profit text-center" scope="col">Lợi nhuận</th>
                             <th class="list-table-note" scope="col">Ghi chú</th>
                         </tr>
                     </thead>
@@ -74,11 +74,11 @@
                                     <td class="list-table-content-2" style="max-width: unset; min-width: 250px">
                                         <p style="overflow: hidden; text-overflow: ellipsis; margin-bottom: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.5;">{{ $mission->comments->comment }}</p>
                                     </td>
-                                    <td class="list-table-progree">
+                                    <td class="list-table-progree text-center">
                                         <span class="{{ checkStatus($mission->status)['className'] }}">{{ statusMission($mission->status) }}</span>
                                     </td>
-                                    <td class="list-table-profit">
-                                        <span class="text-warning">{{ formatCurrency($mission->price) }}</span>
+                                    <td class="list-table-profit text-center">
+                                        <span class="{{ checkStatus($mission->status)['className'] }}">{{ formatCurrency($mission->price) }}</span>
                                     </td>
                                     <td class="list-table-note">
                                         @if(in_array($mission->status,$status_alert))

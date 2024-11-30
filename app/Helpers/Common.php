@@ -149,7 +149,7 @@
                     $labelStatus = 'Hoàn thành';
                     break;
                 case 2:
-                    $className = 'text-success';
+                    $className = 'text-warning';
                     $labelStatus = 'Đang thực hiện';
                     break;
                 case 3:

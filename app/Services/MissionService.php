@@ -53,6 +53,12 @@ class MissionService {
         $mission = $this->missionRepository->update([
             'status' => $request->status,
         ], $id);
+        if($request->status == 1){
+            $user_id = $mission['user_id'] ?? null;
+            if($user_id){
+                $this->
+            }
+        }
         return $mission;
     }
 
