@@ -51,6 +51,10 @@ class ProjectImageService {
         return $data;
     }
 
+    public function update($request, $id){
+        $data = $this->getData($request);
+        return $this->projectImageRepository->update($data, $id);
+    }
 
     public function findImageByProject($project_id){
         $data = $this->projectImageRepository->findImageByProject($project_id);
@@ -72,5 +76,14 @@ class ProjectImageService {
             $this->projectImageRepository->insert($data);
         }
         return $data;
+    }
+
+    public function getData($request){
+        return array(
+            'project_id' => $data->project_id ?? null,
+            'image_url' => $request->image_url ?? null,
+            'is_used' => $request->is_used ?? null,
+            'active' => $request->active ?? null
+        );
     }
 }

@@ -41,7 +41,6 @@ class MissionController extends Controller
     public function index(Request $request)
     {
         try {
-            DB::beginTransaction();
             $user_id = auth()->user()->id;
             $count_project = Project::where('status', 2)->count();
             if($count_project == 0) {
@@ -54,16 +53,13 @@ class MissionController extends Controller
                 'comments.comment',
                 'missions.id as mission_id'
             )->first();
-            $this->getProjectConditions($user_id);
             if(empty($project)) {
-                list($project, $mission) = $this->getProjectConditions($user_id);
+                [$project, $mission] = $this->getProjectConditions($user_id);
             }
-            DB::commit();
             $data = array();
             $data['project'] = $project;
             $data['user_id'] = $user_id;
             if(empty($project) && empty($mission)) {
-                // Trường hợp này rơi vào khoảng cách địa lý, không có dự án nào trong phạm vi cho phép
                 return redirect()->back()->withErrors(['error' => 'Chưa có nhiệm vụ nào được tạo. Bạn vui lòng chờ thêm nhiệm vụ!']);
             }else if(!empty($project) && empty($mission)) {
                 $mission = $this->missionService->find($project->mission_id);
@@ -78,28 +74,29 @@ class MissionController extends Controller
 
     }
     private function getProjectConditions($user_id, $checkedProjectIds = []) {
-        // Lọc project không nằm trong danh sách đã kiểm tra và lấy project ngẫu nhiên
-        $projects = Project::where('status', Project::WORKING_PROJECT)
-            ->whereNotIn('id', $checkedProjectIds)
-            ->get()
-            ->shuffle()
-            ->take(1)
-            ->all();
-        $data = $this->createMissionByProjects($projects, $user_id);
-        if(!empty($project->has_image)){
-            $image = $this->projectImageService->findImageByProject($projects->id);
-            $data_image = $this->createImageProject($projects->id);
-        }
+        try{
+            DB::beginTransaction();
+            $projects = Project::where('status', Project::WORKING_PROJECT)
+                ->whereNotIn('id', $checkedProjectIds)
+                ->get()
+                ->shuffle()
+                ->take(1)
+                ->all();
+            $data = $this->createMissionByProjects($projects, $user_id);
+            [$projectResult, $mission_create] = $data;
+
+            $mission = $this->missionService->find($mission_create);
         
-        [$projectResult, $mission] = $data;
-    
-        // Nếu không có project nào thoả mãn, thêm project đã kiểm tra vào danh sách và gọi lại đệ quy
-        if (empty($projectResult) && !empty($projects)) {
-            $checkedProjectIds = array_merge($checkedProjectIds, array_column($projects, 'id'));
-            return $this->getProjectConditions($user_id, $checkedProjectIds); // Gọi lại đệ quy với danh sách đã cập nhật
+            // Nếu không có project nào thoả mãn, thêm project đã kiểm tra vào danh sách và gọi lại đệ quy
+            if (empty($projectResult) && !empty($projects)) {
+                $checkedProjectIds = array_merge($checkedProjectIds, array_column($projects, 'id'));
+                return $this->getProjectConditions($user_id, $checkedProjectIds); // Gọi lại đệ quy với danh sách đã cập nhật
+            }
+            DB::commit();
+            return array($projectResult, $mission);
+        }catch(\Exception $e){
+            DB::rollBack();
         }
-    
-        return $data;
     }
 
     public function createMissionByProjects($projects = [], $user_id){
@@ -129,6 +126,9 @@ class MissionController extends Controller
                 $conditionDistance = $distance['kilometers'] <= 20;
                 if ($conditionPackage && $conditionSlow && $conditionDistance) {
                     $comment = $this->randomComment($project->id);
+                    if($project->has_image){
+                        $image = $this->randomImage($project->id);
+                    }
                     $mission = Mission::create([
                         'user_id' => $user_id,
                         'project_id' => $project->id,
@@ -137,16 +137,18 @@ class MissionController extends Controller
                         'price' => 10000,
                         'latitude' => $project->latitude,
                         'longitude' => $project->longitude,
-                        'image_id' => $project->has_images ? $this->randomImage($project->id) : null
+                        'image_id' => $image->id ?? null
                     ]);
                     
                     Comment::where('id', $comment->id)->update(['is_used' => 1]);
+                    if(!empty($image->id)){
+                        ProjectImage::where('id', $image->id)->update(['is_used' => 1]);
+                    }
                     $projectResult = $project;
                     break;
                 }
             }
         }
-        
         return [$projectResult, $mission];
     }
 

@@ -27,25 +27,25 @@
                     <h2 class="mb-3">Nhận nhiệm vụ</h2>
                     <p>Bạn cần phải đánh giá 5 sao cho map</p>
                     <h2 class="text-primary mb-4">{{ $project->name }}</h2>
+                    @if(empty($mission->images))
                     <p class="text-black-50">Vui lòng copy nội dung bên dưới</p>
+                    @else
+                    <p class="text-black-50">Vui lòng tải ảnh bên dưới và đính kèm nội dung</p>
+                    @endif
+                    @if(!empty($mission->images))
+                        <div class="mb-4 download-img-wrap position-relative">
+                            <img src="{{ asset('storage/'.$mission->images->image_url)}}" alt="image download" class="download-img">
+                        </div>
+                    @endif
                     <p class="form-control mb-3 textarea-copy" id="floatingTextarea2" style="height: 100px">
                         {!! $project->comment ? trim($project->comment) : '' !!}
                     </p>
-                    @if(!empty($mission->images))
-                        <div class="mb-4 download-img-wrap position-relative">
-                            <img src="{{$mission->images->image_url}}" alt="image download" class="download-img">
-                            <a class="btn btn-outline-primary btn-download-img" href="javascript:void(0);">
-                                <span class="material-symbols-outlined">download</span>
-                                Tải hình ảnh
-                            </a>
-                        </div>
-                    @endif
                     <div class="text-right">
                         <a class="btn btn-outline-primary btn-copy" href="javascript:void(0);">
                             <span class="material-symbols-outlined">content_copy</span>
                             Copy nội dung
                         </a>
-                        @if(!empty($mission))
+                        @if(!empty($mission->images))
                         <a class="btn btn-outline-primary ms-3 btn-download-img" href="javascript:void(0);">
                             <span class="material-symbols-outlined">download</span>
                             Tải hình ảnh

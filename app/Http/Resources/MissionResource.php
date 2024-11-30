@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Optional;
 
 class MissionResource extends JsonResource
 {
@@ -18,6 +19,7 @@ class MissionResource extends JsonResource
             'comment' => optional($this->comments)->comment,
             'keyword' => optional($this->comments)->keyword,
             'project_name' => optional($this->project)->name,
+            'link_confirm' => $this->link_confirm,
             'price' => formatCurrency($this->price),
             'project_code' => optional($this->project)->project_code,
             'project_description' => optional($this->project)->description,

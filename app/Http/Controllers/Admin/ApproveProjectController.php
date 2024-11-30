@@ -20,7 +20,7 @@ class ApproveProjectController extends Controller
     public function index(Request $request){
         $data = array();
         $request = $request->merge([
-            'status' => 6
+            'status' => 2
         ]);
         $projects = $this->projectService->fullList($request);
         $now = Carbon::now();

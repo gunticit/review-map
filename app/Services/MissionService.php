@@ -37,7 +37,7 @@ class MissionService {
 
     public function update($request, $id){
         $mission_info = $this->find($id);
-        $status = 3; // AI Duyệt
+        $status = 4; // Admin Duyệt
         if(!empty($mission->image_id)){
             $status = 4; // Nếu câu hỏi có hình ảnh thì admin duyệt
         }
