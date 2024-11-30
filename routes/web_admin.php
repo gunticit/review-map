@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\Admin\AdminFaqController;
+use App\Http\Controllers\CensorshipHistoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\SupportController;
 use App\Http\Controllers\Partner\MissionController;
@@ -50,6 +51,8 @@ Route::group([
         Route::post('/update-mission-status/{id}', [MissionController::class, 'updateStatus'])->name('update.mission.status');
         Route::post('/update-no-image/{id}', [MissionController::class, 'updateNoImage'])->name('update.no.image');
         Route::post('/update-no-review/{id}', [MissionController::class, 'updateNoReview'])->name('update.no.review');
+
+        Route::post('/create-censor-json', [CensorshipHistoryController::class, 'createJson'])->name('create.censor.json');
 
         
         Route::get('/support', [SupportController::class, 'index'])->name('admin.support');

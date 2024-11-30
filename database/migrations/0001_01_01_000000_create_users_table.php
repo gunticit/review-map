@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('country_code')->nullable();
             $table->integer('company_id')->nullable();
             $table->integer('department_id')->nullable();
+            $table->integer('level_partner')->nullable(); // lv1: (12h) 10k, lv2: (6h) 11k, lv3: (3h) 12k, lv4: (2h) 13k, lv5: (1h) 14k
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

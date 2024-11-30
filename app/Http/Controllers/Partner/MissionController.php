@@ -11,6 +11,7 @@ use App\Models\ProjectImage;
 use App\Services\HistoryService;
 use App\Services\MissionService;
 use App\Services\ProjectImageService;
+use App\Services\UserService;
 use App\Services\WalletService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,18 +22,20 @@ use Illuminate\Support\Facades\Validator;
 
 class MissionController extends Controller
 {
-    protected $missionService,$walletService, $historyService, $projectImageService;
+    protected $missionService,$walletService, $historyService, $projectImageService, $userService;
 
     public function __construct(
         MissionService $missionService,
         WalletService $walletService,
         HistoryService $historyService,
-        ProjectImageService $projectImageService
+        ProjectImageService $projectImageService,
+        UserService $userService
     ){
         $this->missionService = $missionService;
         $this->walletService = $walletService;
         $this->historyService = $historyService;
         $this->projectImageService = $projectImageService;
+        $this->userService = $userService;
     }
 
     /**
@@ -42,6 +45,10 @@ class MissionController extends Controller
     {
         try {
             $user_id = auth()->user()->id;
+            $lastTimeMakeMission = $this->checkLastTimeMakeMission($user_id);
+            if(empty($lastTimeMakeMission)) {
+                return redirect()->route('wating.mission');
+            }
             $count_project = Project::where('status', 2)->count();
             if($count_project == 0) {
                 return redirect()->back()->withErrors(['error' => 'Chưa có dự án nào được tạo. Vui lòng nhận nhiệm vụ sau!']);
@@ -85,7 +92,7 @@ class MissionController extends Controller
             $data = $this->createMissionByProjects($projects, $user_id);
             [$projectResult, $mission_create] = $data;
 
-            $mission = $this->missionService->find($mission_create);
+            $mission = $this->missionService->find($mission_create->id);
         
             // Nếu không có project nào thoả mãn, thêm project đã kiểm tra vào danh sách và gọi lại đệ quy
             if (empty($projectResult) && !empty($projects)) {
@@ -135,6 +142,7 @@ class MissionController extends Controller
                         'status' => 2,
                         'comment_id' => $comment->id,
                         'price' => 10000,
+                        'link_confirm' => null,
                         'latitude' => $project->latitude,
                         'longitude' => $project->longitude,
                         'image_id' => $image->id ?? null
@@ -236,19 +244,34 @@ class MissionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $this->missionService->update($request, $id);
-        $price_plus = 0; // Cộng vào ví 10k khi hoàn thành nhiệm vụ + history
-        $balance = $this->walletService->getBalance();
-        $user_id = Auth::user()->id;
-        if(empty($user_id)){
-            return redirect()->route('login')->withErrors(['error' => 'Bạn phải đăng nhập để hoàn thêm nhiệm vụ!']);
+        try{
+            DB::beginTransaction();
+                $mission = $this->missionService->update($request, $id);
+                if(empty($mission)){
+                    throw new \Exception('Update mission fail');
+                }
+                $price_plus = $this->checkMoneyByLevel();
+                $user_id = Auth::user()->id;
+                $wallet = $this->walletService->checkWalletUser($user_id);
+                if(empty($user_id)){
+                    return redirect()->route('login')->withErrors(['error' => 'Bạn phải đăng nhập để hoàn thêm nhiệm vụ!']);
+                }
+                $wallet_request = new Request();
+                $wallet_request->merge([
+                    'balance' => $wallet->balance,
+                    'temporary_addition' => (int)$wallet->temporary_addition + (int)$price_plus
+                ]);
+                $data = $this->walletService->update($wallet_request, $user_id);
+            DB::commit();
+            return json_encode([
+                'status' => 'success',
+                'message' => 'Update mission success',
+                'data' => $data
+            ]);
+        }catch(\Exception $e){
+            DB::rollBack();
+            throw $e;
         }
-        $this->walletService->update($balance + $price_plus, $user_id);
-        return json_encode([
-            'status' => 'success',
-            'message' => 'Update mission success',
-            'data' => $data
-        ]);
     }
 
     /**
@@ -299,8 +322,7 @@ class MissionController extends Controller
             'missions' => $missions
         );
         $data['status_alert'] = array(
-            Mission::STATUS_WATTING_SYSTEM,
-            Mission::STATUS_WATTING_ADMIN
+            Mission::STATUS_WATTING_SYSTEM
         );
         return view('pages.partner.mission.histories', $data);
     }
@@ -404,4 +426,89 @@ class MissionController extends Controller
             ]);
         }
     }
+
+    public function waitingMission(Request $request){
+        $user_id = Auth::user()->id;
+        $time_waiting = $this->checkLastTimeMakeMission($user_id, 'get_time');
+        return view('pages.waiting_mission',[
+            'time_waiting' => $time_waiting ?? null
+        ]);
+    }
+
+
+    public function checkLastTimeMakeMission($user_id, $type = null){
+        $mission = Mission::where('user_id', $user_id)->where('status', 1)->orderBy('completed_at', 'desc')->first();
+        $hour_plus = $this->checkTimeByLevel($user_id);
+        if(!empty($mission)){
+            $time = Carbon::createFromFormat('Y-m-d H:i:s', $mission->created_at)->addHours($hour_plus);
+            $now = Carbon::now();
+
+            if($time <= $now){
+                return true; // Nếu giờ hiện tại lớn hơn giờ đã làm trước đó + giờ theo cấp
+            }
+            if(!empty($type) && $type == 'get_time'){
+                $timestamp = $time->timestamp * 1000;
+                return $timestamp;
+            }
+            return false;
+        }
+    }
+
+    public function checkMoneyByLevel($user_id = null){
+        $user_id = $user_id ?? Auth::user()->id;
+        $user_info = $this->userService->find($user_id);
+        $money = 10000;
+        if(!empty($user_info->level)){
+            switch($user_info->level){
+                case 5: 
+                    $money = 14000;
+                    break;
+                case 4: 
+                    $money = 13000;
+                    break;
+                case 3: 
+                    $money = 12000;
+                    break;
+                case 2: 
+                    $money = 11000;
+                    break;
+                case 1:
+                    $money = 10000;
+                    break;
+                default: 
+                    $money = 10000;
+                    break;
+            }
+        }
+        return $money;
+    }
+
+    public function checkTimeByLevel($user_id = null){
+        $user_id = $user_id ?? Auth::user()->id;
+        $user_info = $this->userService->find($user_id);
+        $hour = 12;
+        if(!empty($user_info->level)){
+            switch($user_info->level){
+                case 5: 
+                    $hour = 1;
+                    break;
+                case 4: 
+                    $hour = 2;
+                    break;
+                case 3: 
+                    $hour = 3;
+                    break;
+                case 2: 
+                    $hour = 6;
+                    break;
+                case 1:
+                    $hour = 12;
+                    break;
+                default: 
+                    $hour = 12;
+                    break;
+            }
+        }
+        return $hour;
+    }   
 }

@@ -4,6 +4,9 @@
     #thank-you{
         display: none
     }
+    .border-error{
+        border: 1px solid #f00;
+    }
 </style>
 <section class="section nhan-nhiem-vu-step mb-5 mt-5">
     <div class="container-fluid">
@@ -38,7 +41,7 @@
                         </div>
                     @endif
                     <p class="form-control mb-3 textarea-copy" id="floatingTextarea2" style="height: 100px">
-                        {!! $project->comment ? trim($project->comment) : '' !!}
+                        {!! $mission->comments ? trim($mission->comments->comment) : '' !!}
                     </p>
                     <div class="text-right">
                         <a class="btn btn-outline-primary btn-copy" href="javascript:void(0);">
@@ -67,6 +70,7 @@
                         </span></a>
                     <p style="color: #96A3BE">Vui lòng nhập link chia sẻ</p>
                     <input placeholder="Nhập link chia sẻ" required class="form-control bg-body-tertiary rounded-3 p-2 input-link-confirm" type="text" value="{{ $mission->link_confirm ?? '' }}">
+                    <div class="error-link-confirm"></div>
                 </section>
             </div> 
             <div id="thank-you">
@@ -121,8 +125,10 @@
                 loading: "Đang tải ..."
             },
             onFinished: function (event, currentIndex) {
+                $('.error-link-confirm > span').remove();
                 if($('.input-link-confirm').val() == ''){
                     $('.input-link-confirm').addClass('border-error');
+                    $('.error-link-confirm').append('<span class="text-danger">Vui lòng nhập link chia sẻ</span>');
                     return false;
                 }else{
                     $('.input-link-confirm').removeClass('border-error');

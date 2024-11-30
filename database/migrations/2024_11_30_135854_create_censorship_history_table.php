@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('warrantie_projects', function (Blueprint $table) {
+        Schema::create('censorship_history', function (Blueprint $table) {
             $table->id();
-            $table->integer('project_id');
+            $table->integer('approver_id'); // Người duyệt
+            $table->integer('mission_id'); // Nhiệm vụ được duyệt
+            $table->integer('partner_id'); // Đối tác
+            $table->double('money', 15, 0); // Số tiền nhận
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('warrantie_projects');
+        Schema::dropIfExists('censorship_history');
     }
 };

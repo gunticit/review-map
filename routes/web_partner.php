@@ -33,6 +33,7 @@ Route::group([
     Route::get('/mission/confirm/{id}', [MissionController::class, 'missionConfirm'])->name('mission.confirm');
     Route::get('/mission-success', [MissionController::class, 'success'])->name('mission.success');
     Route::post('/verify-recaptcha', [MissionController::class, 'verifyRecaptcha'])->name('verify.recaptcha');
+    Route::get('/waiting-mission', [MissionController::class, 'waitingMission'])->name('wating.mission');
 
     //Support
     Route::get('/support', [PartnerSupportController::class, 'index'])->name('partner.support');

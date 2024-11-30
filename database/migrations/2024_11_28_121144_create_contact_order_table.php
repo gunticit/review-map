@@ -18,6 +18,12 @@ return new class extends Migration
             $table->string('telephone');
             $table->integer('user_id');
             $table->timestamps();
+            $table->softDeletes();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->integer('sort')->default(99);
+            $table->boolean('active')->default(true);
         });
     }
 

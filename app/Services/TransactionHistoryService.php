@@ -33,7 +33,8 @@ class TransactionHistoryService {
     }
 
     public function create($request){
-        $transactions = $this->transactionhistoryRepository->create($request);
+        $data = $this->getData($request);
+        $transactions = $this->transactionhistoryRepository->create($data);
         return $transactions;
     }
     
@@ -51,5 +52,18 @@ class TransactionHistoryService {
 
     public function totalMoneyHistoriesByField($request){
         return $this->transactionhistoryRepository->totalMoneyHistoriesByField($request);
+    }
+    public function getData($request){
+        $data = array(
+            'wallet_id' => $request->wallet_id,
+            'type' => $request->type,
+            'transaction_code' => $request->transaction_code ?? null,
+            'amount' => $request->amount,
+            'status' => $request->status,
+            'payment_method_id' => $request->payment_method_id,
+            'temp_balance' => $request->temp_balance,
+            'reference_id' => $request->reference_id
+        );
+        return $data;
     }
 }

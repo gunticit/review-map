@@ -63,7 +63,7 @@ class AuthSocialService
           return $finduser;
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            throw $e->getMessage();
         }
     }
 

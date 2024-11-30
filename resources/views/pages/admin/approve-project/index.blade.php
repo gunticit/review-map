@@ -407,6 +407,7 @@
             color: #363d47;
             margin-bottom: 10px;
             padding: 20px 10px;
+            border-radius: 8px;
         }
 
         /* #list-project .list-group-item.wating{
@@ -429,7 +430,6 @@
             color: #403647;
             padding: 12px 15px;
             border: 1px solid;
-            border-radius: 0;
         }
 
         #list-project .list-group-item.approve {

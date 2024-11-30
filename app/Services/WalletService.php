@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Enums\Status;
-use App\Enums\TypeTransaction;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Wallet\WalletRepositoryInterface;
 use App\Repositories\TransactionHistory\TransactionHistoryRepositoryInterface as TransactionHistoryRepository;
@@ -46,17 +45,20 @@ class WalletService
     }
 
 
-    public function createWalletAndDeposit($amount, $reference_id)
+    public function createWalletAndDeposit($request)
     {
         try {
             DB::beginTransaction();
-                $wallet = $this->checkWalletUser();
+                $amount = $request->amount ?? 0; 
+                $reference_id = $request->reference_id ?? null;
+                $user_id = $request->user_id ?? Auth::user()->id;
+                $wallet = $this->checkWalletUser($user_id);
                 $payload = [
                     'wallet_id' => $wallet->id,
-                    'amount' => $amount ?? 0,
-                    'type' => TypeTransaction::DEPOSIT,
+                    'amount' => $amount,
+                    'type' => 'deposit',
                     'status' => Status::COMPLETED,
-                    'reference_id' => $reference_id,
+                    'reference_id' => $reference_id
                 ];
                 $transactionHistorie = $this->transactionHistoryRepository->create($payload);
             DB::commit();
@@ -99,14 +101,30 @@ class WalletService
             return false;
         }
     }
-    public function checkWalletUser()
+    public function checkWalletUser($user_id = null)
     {
-        $user_id = Auth::user()->id;
+        $user_id = $user_id ?? Auth::user()->id;
         $wallet = $this->walletRepository->findByKey('user_id', $user_id);
         if (!$wallet) {
             $wallet = $this->walletRepository->create([
                 'user_id' => $user_id
             ]);
+        }
+        return $wallet;
+    }
+
+    public function partnerMineMoney($request){
+        $wallet = $this->checkWalletUser($request->user_id);
+
+        // Lúc nhân viên làm xong nhiệm vụ nên tạm tính giờ cộng vào ví thì trừ ra
+        $temporary_addition = (int)$wallet->temporary_addition - (int)$request->money;
+        if($wallet){
+            $data_update = array(
+                'balance' => (int)$wallet->balance + (int)$request->money,
+                'user_id' => $request->user_id,
+                'temporary_addition' => $temporary_addition > 0 ? $temporary_addition : 0
+            );
+            $this->walletRepository->update($data_update, $wallet->id);
         }
         return $wallet;
     }

@@ -139,37 +139,45 @@
         function checkStatus($status){
             $className = '';
             $labelStatus = '';
+            $badgeName = '';
             switch($status) {
                 case 0:
                     $className = 'text-danger';
                     $labelStatus = 'Huỷ';
+                    $badgeName = 'badge text-bg-dark';
                     break;
                 case 1:
                     $className = 'text-success';
                     $labelStatus = 'Hoàn thành';
+                    $badgeName = 'badge text-bg-success';
                     break;
                 case 2:
                     $className = 'text-warning';
                     $labelStatus = 'Đang thực hiện';
+                    $badgeName = 'badge text-bg-info';
                     break;
                 case 3:
                     $className = 'text-danger';
                     $labelStatus = 'Hoàn lại';
+                    $badgeName = 'badge text-bg-warning';
                     break;
                 case 4:
                     $className = 'text-warning';
                     $labelStatus = 'Tạm ngưng';
+                    $badgeName = 'badge text-bg-danger';
                     break;
                 case 5:
                     $className = 'text-warning';
                     $labelStatus = 'Chưa thanh toán';
+                    $badgeName = 'badge text-bg-secondary';
                     break;
                 default:
                     break;
             }
             return [
                 'className' => $className,
-                'labelStatus' => $labelStatus
+                'labelStatus' => $labelStatus,
+                'badgeName' => $badgeName
             ];
         }
     }

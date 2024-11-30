@@ -26,7 +26,7 @@
                 <!-- cot 1 -->
                 <div class="col-xl-8 col-md-12 col-12 mb-4 mb-xl-0">
                     <div class="col-inner">
-                        <h2 class="section-title mb-4">Lịch sử rút tiền</h2>
+                        <h2 class="section-title mb-4">Lịch sử giao dịch</h2>
 
                         <form>
                             <div class="input-group">
@@ -46,7 +46,7 @@
                                             <th class="list-table-so-tien" scope="col">Mã giao dịch</th>
                                             <th class="list-table-phuong-thuc" scope="col">Phương thức rút</th>
                                             <th class="list-table-tai-khoan-nhan" scope="col">Tài khoản nhận</th>
-                                            <th class="list-table-so-tien-rut" scope="col">Số tiền rút</th>
+                                            <th class="list-table-so-tien-rut" scope="col">Số tiền</th>
                                             <th class="list-table-trang-thai" scope="col">Trạng thái</th>
                                         </tr>
                                     </thead>
@@ -72,7 +72,7 @@
                             </div>
                         @else
                             <div class="col-sm-12 mt-4">
-                                <p class="text-center">Chưa có lịch sử rút tiền</p>
+                                <p class="text-center">Bạn chưa thực hiện giao dịch nào</p>
                             </div>
                         @endif
                     </div>

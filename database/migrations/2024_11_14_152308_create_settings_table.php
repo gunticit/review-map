@@ -17,6 +17,12 @@ return new class extends Migration
             $table->string('key_setting')->nullable();
             $table->string('value_setting')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_by')->nullable();
+            $table->integer('sort')->default(99);
+            $table->boolean('active')->default(true);
         });
     }
 

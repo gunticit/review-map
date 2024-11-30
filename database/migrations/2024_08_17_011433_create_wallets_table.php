@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('balance', 15, 0)->default(0); // Số dư của ví
             $table->string('unit_currency', 10)->default('VND'); // Loại tiền tệ
             $table->decimal('provisional_deduction', 15, 0)->default(0); // Số tiền trừ tạm thời
+            $table->decimal('temporary_addition', 15, 0)->default(0); // Số tiền cộng tạm thời
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

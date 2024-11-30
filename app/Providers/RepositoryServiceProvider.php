@@ -27,6 +27,8 @@ use App\Repositories\Comment\CommentRepository;
 use App\Repositories\Comment\CommentRepositoryInterface;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\CensorshipHistory\CensorshipHistoryRepository;
+use App\Repositories\CensorshipHistory\CensorshipHistoryRepositoryInterface;
 use App\Repositories\Company\CompanyRepository;
 use App\Repositories\Company\CompanyRepositoryInterface;
 use App\Repositories\ExpenditureStatistic\ExpenditureStatisticRepository;
@@ -80,6 +82,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(BankRepositoryInterface::class, BankRepositoryRepository::class);
         $this->app->bind(ExpenditureStatisticRepositoryInterface::class, ExpenditureStatisticRepository::class);
         $this->app->bind(AdminFaqRepositoryInterface::class, AdminFaqRepository::class);
+        $this->app->bind(CensorshipHistoryRepositoryInterface::class, CensorshipHistoryRepository::class);
     }
 
     /**

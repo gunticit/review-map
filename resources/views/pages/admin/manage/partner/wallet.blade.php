@@ -124,7 +124,7 @@
             @endphp
             <section class="section thong-bao mb-5 mt-5">
                 <div class="col-inner">
-                    <h3 class="section-title mb-4">Lịch sử rút tiền</h3>
+                    <h3 class="section-title mb-4">Lịch sử giao dịch</h3>
                     <form action="{{ route('admin.manage.partner.wallet', ['id' => $partner_id]) }}" method="GET">
                         <div class="input-group">
                             <button class="input-group-text" type="submit">
