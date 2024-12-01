@@ -6,6 +6,7 @@ use App\Enums\Status;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Wallet\WalletRepositoryInterface;
 use App\Repositories\TransactionHistory\TransactionHistoryRepositoryInterface as TransactionHistoryRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class WalletService
@@ -85,7 +86,12 @@ class WalletService
     {
         try {
             DB::beginTransaction();
-                $transactionHistorie = $this->createWalletAndDeposit($amount, $reference_id);
+                $request = new Request();
+                $request->merge([
+                    'amount' => $amount, 
+                    'reference_id' => $reference_id
+                ]);
+                $transactionHistorie = $this->createWalletAndDeposit($request);
                 if ($transactionHistorie->status == 'completed') {
                         $wallet = $this->walletRepository->find($transactionHistorie->wallet_id);
                         $wallet->balance = $wallet->balance + $transactionHistorie->amount;

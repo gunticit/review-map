@@ -3804,7 +3804,7 @@ h3.col-title {
 .list-table {
   color: #5D6A83;
 }
-.list-table a:not(.btn) {
+.list-table td a:not(.btn) {
   color: #5D6A83;
 }
 .list-table .sort::after {

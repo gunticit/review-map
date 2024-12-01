@@ -59,11 +59,11 @@
                                                 </td>
                                                 <td class="list-table-content-3 {{ $text_color }}">
                                                     @if($transaction_history->type == 'deposit')
-                                                        <span class="text-success">Nạp tiền</span>
+                                                        <span class="badge px-4 py-2 text-bg-success">Nạp tiền</span>
                                                     @elseif($transaction_history->type == 'payment')
-                                                        <span class="text-warning">Thanh toán</span>
+                                                        <span class="badge px-4 py-2 text-bg-warning">Thanh toán</span>
                                                     @elseif($transaction_history->type == 'withdraw')
-                                                        <span class="text-danger">Rút tiền</span>
+                                                        <span class="badge px-4 py-2 text-bg-danger">Rút tiền</span>
                                                     @endif
                                                 </td>
                                                 <td class="list-table-so-du {{ $text_color }}">

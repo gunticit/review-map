@@ -82,7 +82,7 @@
                             <thead>
                                 <tr>
                                     <th width="35" class="list-table-stt" scope="col">STT</th>
-                                    <th class="list-table-title" scope="col">Tên dự án</th>
+                                    <th class="list-table-title text-start" scope="col">Tên dự án</th>
                                     <th class="list-table-link-map" scope="col">URL Google Map</th>
                                     <th class="list-table-progree" scope="col">
                                         <a href="javascript:void(0);" class="sort">Trạng thái</a>
@@ -104,8 +104,8 @@
                                             <span class="material-symbols-outlined">link</span>
                                         </a>
                                     </td>
-                                    <td class="list-table-progree">
-                                        <a class="{{ checkStatus($project->status)['className'] }}">{{ checkStatus($project->status)['labelStatus'] }}</a>
+                                    <td class="list-table-progree text-center">
+                                        <a class="px-4 py-2 {{ checkStatus($project->status)['badgeName'] }}">{{ checkStatus($project->status)['labelStatus'] }}</a>
                                     </td>
                                     <td class="list-table-status">
                                         @if($project->status == 2)
