@@ -101,7 +101,7 @@
                                 <label for="payment" class="form-label">Phương thức thanh toán</label>
                                 <select class="form-select form-select-js" name="payment_method_id" id="payment">
                                     <option value="{{ \App\Enums\PaymentMethod::MOMO->value }}" selected>Thanh toán qua ví điện tử Momo</option>
-                                    <option value="onepay">Thanh toán qua Onepay</option>
+                                    <option value="5">Thanh toán qua Onepay</option>
                                     {{-- <option value="{{ \App\Enums\PaymentMethod::VNPAY->value }}">Quét mã VNPAY-QR</option>
                                     <option value="{{ \App\Enums\PaymentMethod::ATM->value }}">Thẻ ngân hàng ATM</option>
                                     <option value="{{ \App\Enums\PaymentMethod::VISA->value }}">Thẻ thanh toán quốc tế</option> --}}
@@ -173,6 +173,10 @@
                 if (isNaN(amount) && !all_amount) {
                     showAlert("error", "Vui lòng nhập một số hợp lệ.");
                     return false; // Ngăn form submit nếu input không phải là số
+                }
+                if(balance < 10000){
+                    showAlert('error', 'Số dư tối thiểu để rút tiền là 10.000 VND!');
+                    return;
                 }
                 if(balance < amount){
                     showAlert('error', 'Số dư không đủ, hãy thực hiện thêm nhiệm vụ!');
