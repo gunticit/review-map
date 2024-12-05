@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="product row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 skeleton">
-                    @if (!empty($products))
+                    @if (!empty($products) && count($products) > 0)
                         @foreach ($products as $product)
                             <div class="col">
                                 <div class="product-box">
@@ -43,6 +43,19 @@
                                 </div>
                             </div>
                         @endforeach
+                    @else
+                        <div class="col" style="margin: auto">
+                            <div class="product-box">
+                                <div class="product-image">
+                                    <a href="#">
+                                        <img src="{!! asset('assets/img/empty_cart.jpeg') !!}" alt="">
+                                    </a>
+                                </div>
+                                <h3 class="product-title text-center">
+                                    Hiện tại chưa có sản phẩm nào!
+                                </h3>
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>
