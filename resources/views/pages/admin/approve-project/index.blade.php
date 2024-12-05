@@ -22,6 +22,9 @@
             border-bottom: 1px solid #ccc;
             margin-bottom: 15px;
             padding-bottom: 15px;
+            background: #f1f1f1;
+            padding: 12px;
+            border-radius: 8px;
         }
         #reviews .list-group-item label{
             font-weight: bold;
@@ -34,6 +37,21 @@
             display: block;
             text-align: right;
         }
+        #result-partner h3{
+            text-transform: uppercase;
+            margin: 10px 0 20px;
+            padding: 10px;
+            box-shadow: 3px 3px 3px #ccc;
+            border-radius: 8px;
+        }
+        #list-project ul.list-missions {
+            margin-bottom: 15px;
+            overflow: auto;
+            max-height: 300px;
+        }
+        #list-project li .justify-content-between{
+            flex-wrap: wrap;
+        }
     </style>
     <section class="approve-project">
         <div class="container-fluid pt-4">
@@ -41,7 +59,7 @@
                 <div class="col-sm-4">
                     <div class="card">
                         <div class="card-body">
-                            <div class="panel">
+                            <div class="panel" style="padding: 0">
                                 <div class="panel-body">
                                     <h3>Danh sách dự án</h3>
                                     <div id="list-project" class="list-group">
@@ -191,12 +209,16 @@
                                     <input type="text" class="form-control" readonly value="${data.data.project?.name ?? ''}">
                                 </div>
                                 <div class="form-group mb-4">
-                                    <label>Từ khóa</label> 
-                                    <input type="text" class="form-control" readonly value="${data.data.project?.keyword ?? ''}">
-                                </div>
-                                <div class="form-group mb-4">
                                     <label>Nhiệm vụ</label> 
                                     <textarea class="form-control" readonly rows="5">${data.data.comments?.comment ?? ''}</textarea>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label>Nhân viên thực hiện</label> 
+                                    <input type="text" class="form-control" readonly value="${data.data.mission?.user?.name ?? ''}">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label>Tình trạng thực hiện</label> 
+                                    <input type="text" class="form-control" readonly value="${data.data.mission?.status == 1 ? 'Đã thực hiện' : 'Đang thực hiện'}">
                                 </div>
                                 ${
                                     data.data?.mission?.no_image || data.data?.mission?.no_review ? `
@@ -220,7 +242,7 @@
                                     ` : ''
                                 }
                                 <div class="d-flex gap-3 group-action text-right">
-                                    <button onclick="handleViewRate('${data.data.project?.place_id}')" class="btn btn-outline-primary">Xem đánh giá</button>
+                                    <button onclick="handleViewRate('${data.data.project?.place_id}','${data.data?.mission?.link_confirm}')" class="btn btn-outline-primary">Xem đánh giá</button>
                                     ${data.data?.mission?.status !== {{$status_complete}} && !!data.data?.project?.id && data.data?.mission?.num_check < 2 ? `
                                         <button onclick="handleNoImage(${data.data?.mission?.id})" class="btn btn-danger">Không thấy ảnh, sai ảnh</button>  
                                         <button onclick="handleNoRate(${data.data?.mission?.id})" class="btn btn-danger">Không thấy đánh giá</button>  
@@ -234,7 +256,7 @@
             });
         }
 
-        function handleViewRate(place_id) {
+        function handleViewRate(place_id,link_confirm = '', data = null) {
             let link_map = `https://www.google.com/maps/embed/v1/place?key={{env('GOOGLE_MAP_API_KEY')}}&q=place_id:${place_id}`;
             if(place_id){
                 $.ajax({
@@ -261,21 +283,47 @@
                                                 <div id="map-project">
                                                     <iframe src="${link_map}" width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                                                 </div>
+                                                <div id="result-partner">
+                                                    <h3>Link kết quả nhiệm vụ:</h3>
+                                                    <div class="text-center">
+                                                        <a href="${link_confirm}" class="btn btn-success" target="_blank">Link kết quả</a>    
+                                                    </div>
+                                                </div>
                                                 <div id="reviews">
-                                                    <h3>Bình luận gần nhất</h3>
+                                                    <h3>Bình luận gần đây</h3>
                                                     <ul>
                                                         ${
                                                             data_reviews.map(review => {
                                                                 if(!review.originalText?.text) return '';
+                                                                const dateStr = review.publishTime;
+                                                                const date = new Date(dateStr);
+
+                                                                // Lấy ngày, tháng, năm, giờ và phút
+                                                                const day = String(date.getDate()).padStart(2, '0');
+                                                                const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+                                                                const year = date.getFullYear();
+                                                                const hours = String(date.getHours()).padStart(2, '0');
+                                                                const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                                                                // Định dạng ngày giờ
+                                                                const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
                                                                 return `
                                                                     <li class="list-group-item list-group-item-action">
                                                                         <div class="d-block w-100 justify-content-between review-item">
-                                                                            <label>Người đánh giá</label>
-                                                                            <p class="mb-1">${review.authorAttribution?.displayName ?? '' }</p>
-                                                                            <label>Điểm đánh giá</label>
-                                                                            <p class="mb-1">${review.rating ?? '' }</p>
-                                                                            <label>Thời gian đánh giá</label>
-                                                                            <p class="mb-1">${review.publishTime ?? ''}</p>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-4 col-xs-12">
+                                                                                    <label>Người đánh giá</label>
+                                                                                    <p class="mb-1">${review.authorAttribution?.displayName ?? '' }</p>
+                                                                                </div>
+                                                                                <div class="col-sm-4 col-xs-12">
+                                                                                    <label>Điểm đánh giá</label>
+                                                                                    <p class="mb-1">${review.rating ?? '' }</p>
+                                                                                </div>
+                                                                                <div class="col-sm-4 col-xs-12">
+                                                                                    <label>Thời gian đánh giá</label>
+                                                                                    <p class="mb-1">${formattedDate ?? ''}</p>
+                                                                                </div>
+                                                                            </div>
                                                                             <label>Nội dung đánh giá</label>
                                                                             <p class="mb-1">${review.originalText?.text ?? ''}</p>
                                                                             <a href="${review.googleMapsUri ?? ''}" target="_blank"><span>Xem chi tiết</span></a>
@@ -346,8 +394,8 @@
                             icon: "success"
                         });
                         $('#item-mission-'+data.data.id).append(`
-                            <span class="material-symbols-outlined">
-                            feedback
+                            <span title="Không có hình ảnh" alt="Không có hình ảnh" class="material-symbols-outlined">
+                            imagesmode
                             </span>
                         `);
                     } else {

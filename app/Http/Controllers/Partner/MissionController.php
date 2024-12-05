@@ -451,6 +451,8 @@ class MissionController extends Controller
                 return $timestamp;
             }
             return false;
+        }else{
+            return true; // trường hợp chưa làm nhiệm vụ nào cả thì cho phép tạo mới
         }
     }
 

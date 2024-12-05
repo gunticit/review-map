@@ -30,4 +30,7 @@ class Mission extends Model
     public function images(){
         return $this->belongsTo(ProjectImage::class, 'image_id', 'id');
     }
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

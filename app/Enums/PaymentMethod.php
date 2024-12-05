@@ -8,6 +8,7 @@ enum PaymentMethod: string
     case VNPAY = "2";
     case ATM = "3";
     case VISA = "4";
+    case ONEPAY = "5";
 
     public static function getLabel(string $value): string
     {
@@ -16,6 +17,7 @@ enum PaymentMethod: string
             self::VNPAY->value => 'VNPay',
             self::ATM->value => 'Ngân hàng',
             self::VISA->value => 'Visa',
+            self::ONEPAY->value => 'OnePay',
             default => 'Không xác định',
         };
     }

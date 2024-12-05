@@ -46,7 +46,7 @@ class MissionService {
 
     public function find($id){
         $query = $this->missionRepository->query();
-        $query->with(['comments','images','project']);
+        $query->with(['comments','images','project','user']);
         $mission = $query->find($id);
         return $mission;
     }

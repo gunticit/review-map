@@ -35,7 +35,7 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
     public function list($request){
         $query = $this->handleFilter($request);
         $query = $query->with(['missions' => function($query){
-            $query->with('comments');
+            $query->with(['comments','user']);
         }]);
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){

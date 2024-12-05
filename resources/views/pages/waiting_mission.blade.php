@@ -93,6 +93,7 @@
         color: white;
         box-shadow: 0 4px 12px rgba(255, 99, 71, 0.5);
         transform: scale(1.05);
+        font-size: 35px;
     }
 
     /* Thêm hiệu ứng rung cho khi gần hết thời gian */

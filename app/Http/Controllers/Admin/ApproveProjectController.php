@@ -34,25 +34,28 @@ class ApproveProjectController extends Controller
                 } else {
                     $created_at = null;
                 }
-                $data['projects'][] = array(
-                    'id' => $project['id'],
-                    'project_code' => $project['project_code'],
-                    'image_id' => $project['image_id'],
-                    'name' => $project['name'],
-                    'description' => substr($project['description'], 0, 200),
-                    'keyword' => $project['keyword'],
-                    'missions' => $project['missions'] ?? array(),
-                    'url' => 'project/' . $project['id'],
-                    'status' => $project['status'],
-                    'latitude' => $project['latitude'],
-                    'longitude' => $project['longitude'],
-                    'price' => $project['price'],
-                    'comment' => $project['comment'],
-                    'id_confirm' => $project['id_confirm'],
-                    'place_id' => $project['place_id'],
-                    'id_cancel' => $project['id_cancel'],
-                    'created_at' => $created_at,
-                );
+                if(!empty($project['missions']) && count($project['missions']) > 0){
+                    $data['projects'][] = array(
+                        'id' => $project['id'],
+                        'project_code' => $project['project_code'],
+                        'image_id' => $project['image_id'],
+                        'name' => $project['name'],
+                        'description' => substr($project['description'], 0, 200),
+                        'keyword' => $project['keyword'],
+                        'missions' => $project['missions'] ?? array(),
+                        'user_name' => $project['missions'][0]['user']['name'] ?? '',
+                        'url' => 'project/' . $project['id'],
+                        'status' => $project['status'],
+                        'latitude' => $project['latitude'],
+                        'longitude' => $project['longitude'],
+                        'price' => $project['price'],
+                        'comment' => $project['comment'],
+                        'id_confirm' => $project['id_confirm'],
+                        'place_id' => $project['place_id'],
+                        'id_cancel' => $project['id_cancel'],
+                        'created_at' => $created_at,
+                    );
+                }
             }
         }
         $data['status_complete'] = Project::COMPLETED_PROJECT;
