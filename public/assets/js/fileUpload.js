@@ -134,20 +134,21 @@
 
             // Xử lý khi nhấn nút gửi
             $('#btn-submit').on('click', function () {
-                var maxFileCount = settings.maxFileCount();
-                var currentFileCount = selectedFiles.length;
-
+                let maxFileCount = settings.maxFileCount();
+                let currentFileCount = selectedFiles.length;
+                let has_image = $('input[name="has_image"]:checked').val();
                 // Khi người dùng chưa chọn tệp
-                if (currentFileCount === 0) {
-                    $('#modalMessage').text('Bạn chưa chọn tệp nào!');  // Cập nhật nội dung modal
-                    $('#modalAlert').modal('show');
-                    return;
-                } else if (currentFileCount < maxFileCount) {
-                    $('#modalMessage').text(`Bạn cần tải lên đủ ${maxFileCount} tệp! Hiện tại bạn đã tải lên ${currentFileCount} tệp.`);
-                    $('#modalAlert').modal('show');
-                    return;
+                if(has_image == 1){
+                    if (currentFileCount === 0) {
+                        $('#modalMessage').text('Bạn chưa chọn tệp nào!');  // Cập nhật nội dung modal
+                        $('#modalAlert').modal('show');
+                        return;
+                    } else if (currentFileCount < maxFileCount) {
+                        $('#modalMessage').text(`Bạn cần tải lên đủ ${maxFileCount} tệp! Hiện tại bạn đã tải lên ${currentFileCount} tệp.`);
+                        $('#modalAlert').modal('show');
+                        return;
+                    }
                 }
-
             });
         });
     };
