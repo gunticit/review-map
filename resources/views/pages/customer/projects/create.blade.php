@@ -518,6 +518,7 @@
             if(ratingGoogle == 0){
                 ratingGoogle = 0;
             }
+            $('.group-check-map .text-danger').remove();
             
             if($('#place-id').val() == ''){
                 $('.btn-check-map').addClass('border-error');
@@ -701,6 +702,8 @@
         $(document).ready(function() {
             function validateRequiredFields() {
                 $('.alert').remove();
+                $('.group-check-map .text-danger').remove();
+                $('body #rating-desire-group .text-danger').remove();
                 $('.require').each(function() {
                     if ($(this).val() === '') {
                         $(this).addClass('border-error');
