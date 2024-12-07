@@ -110,7 +110,7 @@
             <!-- User Info -->
             <div class="row mt-4 col-10 border border-primary rounded p-4">
                 <div class="col-md-2 text-center">
-                    <img src="{{ asset('./assets/img/profile-1.png') }}" class="img-fluid rounded-circle mb-3" alt="User Avatar" width="90" height="90">
+                    <img src="{{ $profile['avatar'] ?? asset('./assets/img/acount-img.svg') }}" class="img-fluid rounded-circle mb-3" alt="User Avatar" width="90" height="90">
                     <p>TÊN KHÁCH HÀNG</p>
                 </div>
                 <div class="col-md-10">
@@ -133,7 +133,7 @@
             <div class="col-12 d-flex justify-content-end">
                 <div class="row mt-4 col-10 border border-primary rounded p-4" style="background-color: #e8edff;">
                     <div class="col-md-2 text-center">
-                        <img src="{{ asset('./assets/img/profile-1.png') }}" class="img-fluid rounded-circle mb-3" alt="User Avatar" width="90" height="90">
+                        <img src="{{ $profile['avatar'] ?? asset('./assets/img/acount-img.svg') }}" class="img-fluid rounded-circle mb-3" alt="User Avatar" width="90" height="90">
                         <p>Rivi</p>
                     </div>
                     <div class="col-md-10">

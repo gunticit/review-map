@@ -28,7 +28,6 @@ class  NotificationRepository extends BaseRepository implements NotificationRepo
                 $query->orderBy($column, $direction);
             }
         }
-        
         $page = $request->page ?? 1;
         $perPage = $request->per_page ?? 15;
         return $query->paginate($perPage, ['*'], 'page', $page);

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Onepay;
+use App\Http\Requests\WalletRequest;
 use App\Services\TransactionHistoryService;
 
 class WalletController extends Controller
@@ -80,21 +81,11 @@ class WalletController extends Controller
         ]);
     }
 
-    public function storeVerify(Request $request)
+    public function storeVerify(WalletRequest $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'contract' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'front_id_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'back_id_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-
             DB::beginTransaction();
-            $data = $validator->validated();
+            $data = $request->all();
             $certificationAccount = CertificationAccount::create([
                 'user_id' => Auth::user()->id,
                 'contract' => $data['contract']->store('images/certification_accounts/contract', 'public'),
@@ -102,13 +93,13 @@ class WalletController extends Controller
                 'back_id_image' => $data['back_id_image']->store('images/certification_accounts/back_id_image', 'public'),
                 'created_by' => Auth::user()->id,
             ]);
-            DB::commit();
             if ($certificationAccount) {
+                DB::commit();
                 return redirect()->route('wallet.withdraw')->with('success', 'Xác thực tài khoản thành công');
             }
+            DB::rollBack();
             return redirect()->back()->with('error', 'Xác thực tài khoản thất bại');
         } catch (\Throwable $th) {
-            DB::rollBack();
             return redirect()->back()->with('error', $th->getMessage());
         }
     }

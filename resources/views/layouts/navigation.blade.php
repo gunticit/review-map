@@ -45,22 +45,20 @@
         });
     }
 
-    getNotification();
-
     readNotification = function(id, event) {
         event.removeClass('active');
         console.log(id);
         if (id) {
             $.ajax({
-            url: "{{ route('notification.user.read') }}",
-            method: 'PUT',
-            data: {
-                id: id
-            },
-            success: function(data) {
-                getNotification();
-            }
-        });  
+                url: "{{ route('notification.user.read') }}",
+                method: 'PUT',
+                data: {
+                    id: id
+                },
+                success: function(data) {
+                    getNotification();
+                }
+            });  
         }
     }
 
@@ -101,6 +99,10 @@
         $('.dropdown-notifications-count').css('display', 'block');
     });
 
+    $(document).ready(function() {
+        getNotification();
+    })
+
 </script>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Navbar Brand-->
@@ -122,8 +124,8 @@
                     <img src="{{ asset('./assets/img/vi.svg') }}" alt="vi">
                     <div class="fw-500">Tiếng Việt</div>
                 @else
-                    <img src="{{ asset('./assets/img/en.svg') }}" alt="en">
-                    <div class="fw-500">English</div>
+                    {{-- <img src="{{ asset('./assets/img/en.svg') }}" alt="en">
+                    <div class="fw-500">English</div> --}}
                 @endif
                 <span class="material-symbols-outlined">chevron_right</span>
             </a>
@@ -134,12 +136,12 @@
                     </div>
                     <div> {{ __('auth.vietnamese') }} </div>
                 </a>
-                <a class="dropdown-item " href="{!! route('user.language', ['language'=>'en']) !!}">
+                {{-- <a class="dropdown-item " href="{!! route('user.language', ['language'=>'en']) !!}">
                     <div class="dropdown-item-icon">
                         <img src="{{ asset('./assets/img/en.svg') }}" alt="en">
                     </div>
                     <div> English </div>
-                </a>
+                </a> --}}
             </div>
         </li>
         <!-- Alerts Dropdown-->
@@ -166,7 +168,7 @@
         <!-- User Dropdown-->
         <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img class="img-fluid" src="{{ asset('./assets/img/profile-1.png') }}" />
+                <img class="img-fluid" src="{{ $profile['avatar'] ?? asset('./assets/img/acount-img.svg') }}" />
             </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
                 <a class="dropdown-item text-primary" href="javascript:void(0);">

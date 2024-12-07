@@ -372,7 +372,7 @@
                             </div>
                         </div>
                         <!-- Form Group (Tags)-->
-                        <div class="mb-4">
+                        <div class="mb-4 group-tags">
                             <label for="Tagslist-table">{{ __('project.keyword') }} <span class="required">*</span>
                             </label>
                             <div class="Tagslist-wrap">
@@ -704,13 +704,14 @@
                 $('.alert').remove();
                 $('.group-check-map .text-danger').remove();
                 $('body #rating-desire-group .text-danger').remove();
+                let check_error = 0;
                 $('.require').each(function() {
                     if ($(this).val() === '') {
                         $(this).addClass('border-error');
-                        var alertMessage = $('<div class="alert text-danger">Bắt buộc nhập dữ liệu</div>');
+                        var alertMessage = $('<div class="alert text-danger p-0 m-0">Bắt buộc nhập dữ liệu</div>');
                         $(this).after(alertMessage);
                         $(this).addClass('error');
-                        return false;
+                        check_error = 1;
                     } else {
                         $(this).removeClass('border-error');
                         $(this).removeClass('error');
@@ -719,7 +720,7 @@
                 if($('#place-id').val() == ''){
                     $('.btn-check-map').addClass('border-error');
                     $('.group-check-map').append('<p class="text-danger">Chọn địa điểm cần đánh giá.</p>');
-                    return false;
+                    check_error = 1;
                 }else{
                     $('.btn-check-map').removeClass('border-error');
                     $('.group-check-map .text-danger').remove();
@@ -727,13 +728,22 @@
                 }
                 if($('.tags-input-wrapper .tag').length == 0){
                     $('.tags-input-wrapper').addClass('border-error');
-                    return false;
+                    $('.group-tags .text-danger').remove();
+                    $('.group-tags').append('<p class="text-danger">Vui lòng nhập từ khóa!</p>');
+                    check_error = 1;
                 }else{
                     $('.tags-input-wrapper').removeClass('border-error');
                 }
                 if($('body #rating-desire').val() == 0 || $('body #rating-desire').val() == null || $('body #rating-desire').val() == ''){
                     $('body #rating-desire').addClass('border-error');
-                    $('body #rating-desire-group').append('<p class="alert text-danger">Vui lòng nhập giá trị mong muốn</p>');
+                    $('body #rating-desire-group').append('<p class="alert text-danger p-0 m-0">Vui lòng nhập giá trị mong muốn</p>');
+                    var inputOffset = $('body #rating-desire').offset().top;  // Vị trí offset của input
+                    $('html, body').animate({
+                    scrollTop: inputOffset - 100
+                    }, 500);
+                    check_error = 1;
+                }
+                if(check_error == 1){
                     return false;
                 }
                 return true;
@@ -743,6 +753,7 @@
                     $('.tags-input-wrapper').addClass('border-error');
                 }else{
                     $('.tags-input-wrapper').removeClass('border-error');
+                    $('.group-tags .text-danger').remove();
                 }
                 $(this).parent().find('.alert.text-danger').remove();
             });
@@ -752,6 +763,7 @@
                     return false;
                 }else{
                     $('.tags-input-wrapper').removeClass('border-error');
+                    $('.group-tags .text-danger').remove();
                 }
                 $(this).parent().parent().find('.alert.text-danger').remove();
             });

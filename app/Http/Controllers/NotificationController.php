@@ -18,13 +18,13 @@ class NotificationController extends Controller
                     ->orWhere('content', 'like', '%'.$request->keyword.'%');
             });
         }
-        $notifications = $notifications->orderBy('created_at', 'desc')->paginate($perPage); 
+        $notifications = $notifications->orderBy('id', 'desc')->paginate($perPage); 
         return view('pages.notification.list', compact('notifications')); 
     }
 
     public function ajaxNotification(Request $request) 
     {
-        $data = Notification::where('user_id', $request->user_id)->orderBy('created_at', 'desc')->paginate(10)->toArray();
+        $data = Notification::where('user_id', $request->user_id)->orderBy('id', 'desc')->paginate(10)->toArray();
         $countUnread = Notification::where('user_id', $request->user_id)->whereNull('read_at')->count();
         $data['countUnread'] = $countUnread;
         return response()->json($data);

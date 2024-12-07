@@ -110,11 +110,11 @@
                 <a class="nav-link dropdown-toggle" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-expanded="false"> English </a>
                 <ul class="dropdown-menu">
                     <li>
-                    <a class="dropdown-item" href="{!! route('user.language', ['en']) !!}">English</a>
+                        <a class="dropdown-item" href="{!! route('user.language', ['vi']) !!}">{{ __('auth.vietnamese') }}</a>
                     </li>
-                    <li>
-                    <a class="dropdown-item" href="{!! route('user.language', ['vi']) !!}">{{ __('auth.vietnamese') }}</a>
-                    </li>
+                    {{-- <li>
+                        <a class="dropdown-item" href="{!! route('user.language', ['en']) !!}">English</a>
+                    </li> --}}
                 </ul>
                 </li>
             </ul>

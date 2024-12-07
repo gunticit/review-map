@@ -45,12 +45,12 @@ class RegisterRequest extends FormRequest
                 'required',
                 'string',
                 'confirmed',
-                Password::min(8)
-                    ->mixedCase()
+                Password::min(6)
+                    // ->mixedCase()
                     ->letters() 
-                    ->numbers() 
+                    // ->numbers() 
                     ->symbols() 
-                    ->uncompromised() 
+                    // ->uncompromised() 
             ]
         ];
     }
@@ -58,19 +58,20 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => __('auth.name_required'),
-            'email.required' => __('auth.email_required'),
-            'email.email' => __('auth.email_invalid'),
-            'role_id.required' => 'Role is required',
-            'permission_id.required' => 'Permission is required',
-            'telephone.required' => 'Telephone is required',
-            'password.required' => 'Mật khẩu là bắt buộc.',
-            'password.min' => 'Mật khẩu phải ít nhất :min ký tự.',
-            'password.mixedCase' => 'Mật khẩu phải bao gồm cả chữ hoa và chữ thường.',
-            'password.letters' => 'Mật khẩu phải chứa ít nhất một chữ cái.',
-            'password.numbers' => 'Mật khẩu phải chứa ít nhất một số.',
-            'password.symbols' => 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt.',
-            'password.uncompromised' => 'Mật khẩu này đã bị rò rỉ. Vui lòng chọn mật khẩu khác.'
+            'name.required' => __('Họ và tên là bắt buộc'),
+            'email.required' => __('Email là bắt buộc'),
+            'email.email' => __('Vui lòng nhập đúng định dạng email'),
+            'email.unique' => __('Email đã được được sử dụng'),
+            'telephone.unique' => __('Số điện thoại được sử dụng'),
+            'telephone.required' => __('Số điện thoại là bắt buộc'),
+            'telephone.phone' => __('Vui lòng nhập đúng điện thoại'),
+            'password.required' => __('Mật khẩu là bắt buộc.'),
+            'password.min' => __('Mật khẩu phải ít nhất :min ký tự.'),
+            // 'password.mixedCase' => 'Mật khẩu phải bao gồm cả chữ hoa và chữ thường.',
+            'password.letters' => __('Mật khẩu phải chứa ít nhất một chữ cái.'),
+            // 'password.numbers' => 'Mật khẩu phải chứa ít nhất một số.',
+            'password.symbols' => __('Mật khẩu phải chứa ít nhất một ký tự đặc biệt.'),
+            // 'password.uncompromised' => 'Mật khẩu này đã bị rò rỉ. Vui lòng chọn mật khẩu khác.'
         ];
     }
 }

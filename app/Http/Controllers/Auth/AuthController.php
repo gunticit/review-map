@@ -41,9 +41,10 @@ class AuthController extends BaseController
         return view('auth.login');
     }
 
-    public function register()
+    public function register(Request $request)
     {
-        return view('auth.register');
+        $email_verify = $request->has('email_verify') ? $request->input('email_verify') : '';
+        return view('auth.register', compact('email_verify'));
     }
 
     public function logout(){

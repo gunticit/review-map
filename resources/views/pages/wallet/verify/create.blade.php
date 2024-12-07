@@ -154,7 +154,7 @@
                                             <div class="step-1-contract-upload">
                                                 <small class="color-grey" id="text-upload-contract">Hợp đồng phải đúng tên đối tác</small>
                                                 <div class="btn btn-primary" id="btn-upload-contract"><span class="material-symbols-outlined fs-4">upload</span>Tải lên từ thiết bị</div>
-                                                <input class="" id="contract" name="contract" type="file" placeholder="" value="" required="">
+                                                <input id="contract" name="contract" type="file" placeholder="" value="" required="">
                                             </div>
                                         </div>
                                         <div class="error-message" id="contract_error">
@@ -183,7 +183,7 @@
                                                                 <p>Kéo thả hoặc <span class="text-primary">chọn hình ảnh</span> để tải lên</p>
                                                             </div>
                                                         </div>
-                                                        <input type="file" accept="image/png, image/gif, image/jpeg" id="front_id_image" name="front_id_image" false="" hidden="">
+                                                        <input type="file" accept="image/png, image/gif, image/jpeg, image/jpg" id="front_id_image" name="front_id_image" false="" hidden="">
                                                     </label>
                                                 </div>
                                                 <div class="error-message" id="front_id_image_error">
@@ -208,7 +208,7 @@
                                                                 <p>Kéo thả hoặc <span class="text-primary">chọn hình ảnh</span> để tải lên</p>
                                                             </div>
                                                         </div>
-                                                        <input type="file" accept="image/png, image/gif, image/jpeg" id="back_id_image" name="back_id_image" false="" hidden="">
+                                                        <input type="file" accept="image/png, image/gif, image/jpeg, image/jpg" id="back_id_image" name="back_id_image" false="" hidden="">
                                                     </label>
                                                 </div>
                                                 <div class="error-message" id="back_id_image_error">

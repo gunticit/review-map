@@ -43,7 +43,7 @@ class  UserRepository extends BaseRepository implements UserRepositoryInterface
         $user->save();
 
         // Gửi OTP qua email
-        Mail::to($user->email)->send(new OtpMail($otp));
+        Mail::to($user->email)->send(new OtpMail($otp, $user->email));
 
         return $otp;
     }

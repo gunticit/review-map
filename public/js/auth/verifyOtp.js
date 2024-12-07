@@ -72,7 +72,8 @@ $(document).ready(function () {
                 sendAjaxRequest($('#emailForm'), function (response) {
                     let emailOtpInput = isRegister ? '#emailOtp2' : '#emailOtp';
                     $(emailOtpInput).val(response.data.email);
-                    $('#otpMessage').text('Vui lòng nhập mã OTP đã gửi đến : ' + response.data.email);
+                    $('#email-verify').text(response.data.email);
+                    // $('#otpMessage').text('Vui lòng nhập mã OTP đã gửi đến : ' + response.data.email);
                     currentTab++;
                     showTab(currentTab);
                 }, nextBtnId);
@@ -99,11 +100,11 @@ $(document).ready(function () {
     }
 
     // Xử lý sự kiện khi nút "Tiếp tục" khi quên mật khẩu
-    $('#nextBtn').click(function () {
+    $('body #nextBtn').click(function () {
         handleNextButtonClick(false);
     });
     // Xử lý sự kiện khi nút "Tiếp tục" khi đăng ký
-    $('#nextBtnRegister').click(function () {
+    $('body #nextBtnRegister').click(function () {
         handleNextButtonClick(true);
     });
 

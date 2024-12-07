@@ -65,11 +65,13 @@ class CommentService {
         // GenerateCommentJob::dispatch($request);
         $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
         $description = isset($request->description) ? $request->description : '';
-        $keyword_value = isset($request->keyword_value) ? explode(',', $request->keyword_value): array();
-        $common = array_intersect($keyword, $keyword_value);
-        $diff1 = array_diff($keyword, $keyword_value);
-        $diff2 = array_diff($keyword_value, $keyword);
-        $keywords = array_merge($diff1, $diff2, $common);
+        if(!empty($request->keyword_value) && !empty($keyword)){
+            $keyword_value = isset($request->keyword_value) ? explode(',', $request->keyword_value): array();
+            $common = array_intersect($keyword, $keyword_value);
+            $diff1 = array_diff($keyword, $keyword_value);
+            $diff2 = array_diff($keyword_value, $keyword);
+            $keywords = array_merge($diff1, $diff2, $common);
+        }
         $comments = '';
         $sl_comment = 10;
         if(isset($request->package)){
@@ -89,8 +91,17 @@ class CommentService {
             }
         }
         if(!empty($keywords)){
+            $str_keyword = count($keywords) > 0 ? implode(', ', $keywords) : '';
+            $prompt = "Tạo cho tôi ".$sl_comment." bình luận không đánh số thứ tự mỗi ở mỗi bình luận, cuối mỗi bình luận cách nhau bởi dấu |";
+            if(!empty($description)){
+                $prompt .= " cho mô tả sau '".$description."' và";
+            }
+            if(!empty($str_keyword)){
+                $prompt .= " keyword chủ đề là: '(". $str_keyword .")' và";
+            }
+            $prompt .= " mỗi bình luận không quá 120 ký tự.";
             $stream = Gemini::geminiPro()
-                ->generateContent('Tạo cho tôi '.$sl_comment.' bình luận không đánh số thứ tự mỗi ở mỗi bình luận, cuối mỗi bình luận cách nhau bởi dấu | cho mô tả sau "'.$description.'" và keyword chủ đề là: ', implode(', ', $keywords) . ', và mỗi bình luận không quá 120 ký tự.');
+                ->generateContent($prompt);
             if(!empty($stream->text())){
                 $comments = $stream->text();
             }

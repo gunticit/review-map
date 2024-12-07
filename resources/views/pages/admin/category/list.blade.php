@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('css')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.8.1/css/lg-zoom.min.css" />
+@endsection
 @section('content')
 <style>
     .btn.btn-danger{
@@ -80,7 +83,12 @@
                                     {{ $category->name }}
                                 </td>
                                 <td class="list-table-image text-center" scope="col">   
-                                    <img class="icon-image" src="{!! !empty($category->image) ? asset('storage/'.$category->image) : asset('assets/img/no-image.png') !!}" alt="image" width="100px">
+                                    <a
+                                        data-lg-size="1600-1067"
+                                        href="{!! !empty($category->image) ? asset('storage/'.$category->image) : asset('assets/img/no-image.png') !!}"
+                                    >
+                                        <img class="icon-image" src="{!! !empty($category->image) ? asset('storage/'.$category->image) : asset('assets/img/no-image.png') !!}" alt="image" width="100px">
+                                    </a>
                                 </td>
                                 <td class="list-table-name text-center">
                                     {{ optional($category->parent)->name }}
@@ -164,5 +172,19 @@
                 });
             }
         }
+    </script>
+@endsection
+@section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.8.1/lightgallery.min.js"></script>
+    <script>
+        import lightGallery from "https://cdn.skypack.dev/lightgallery@2.0.0-beta.3";
+        import lgZoom from "https://cdn.skypack.dev/lightgallery@2.0.0-beta.3/plugins/zoom";
+        import lgShare from "https://cdn.skypack.dev/lightgallery@2.0.0-beta.3/plugins/share";
+        import lgHash from "https://cdn.skypack.dev/lightgallery@2.0.0-beta.3/plugins/hash";
+
+        lightGallery(document.getElementById("gallery-container"), {
+            speed: 500,
+            plugins: [lgZoom, lgShare, lgHash]
+        });
     </script>
 @endsection
