@@ -22,18 +22,29 @@ class Authenticate
             return redirect()->route('login');
         }
 
-        $profile = User::where('id',(Auth::user()->id))->with('accountPayment')->first();
-        view()->share('profile', array(
-            'id'         => $profile->id ?? null,
-            'name'   => $profile->name ?? null,
-            'username' => $profile->username ?? null,
-            'avatar' => $profile->avatar ?? null,
-            'email'     => $profile->email ?? null,
-            'telephone'   => $profile->telephone ?? null,
-            'language'   => $profile->language ?? null,
-            'dark_mode'  => $profile->dark_mode ?? null,
-            'country_code' => $profile->country_code ?? null
-        ));
+        $profile = User::where('id', Auth::user()->id)->with('accountPayment')->first();
+
+        if (!$profile->email_verified_at) {
+            $user_email = $profile->email;
+            Auth::logout();
+            return redirect()->route('register', ['email_verify' => $user_email])
+                ->withError(['not_verify_user', 'Vui lòng xác nhận tài khoản trước khi đăng nhập.']);
+        }
+
+        // Share profile to view
+        view()->share('profile', [
+            'id'         => $profile->id,
+            'name'       => $profile->name,
+            'username'   => $profile->username,
+            'avatar'     => $profile->avatar,
+            'email'      => $profile->email,
+            'telephone'  => $profile->telephone,
+            'language'   => $profile->language,
+            'dark_mode'  => $profile->dark_mode,
+            'country_code' => $profile->country_code,
+            'email_verified_at' => $profile->email_verified_at
+        ]);
+
         return $next($request);
     }
 }

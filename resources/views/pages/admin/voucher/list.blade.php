@@ -60,22 +60,22 @@
                                 <th class="list-table-money" scope="col">Số tiền giảm</th>
                                 <th class="list-table-number" scope="col">Số lượng</th>
                                 <th class="list-table-number" scope="col">Đã sử dụng</th>
-                                <th class="list-table-date" scope="col">Ngày bắt đầu</th>
+                                <th class="list-table-date" scope="col">Thời gian</th>
                                 <th class="list-table-actions" scope="col">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if(!empty($vouchers) && count($vouchers) > 0)
                                 @foreach($vouchers as $voucher)
-                                    <tr class="voucher-{{ $voucher->id }} {!! ($voucher->uses_left >= $voucher->max_uses || $voucher->end_date < date('Y-m-d')) ? 'text-danger text-expired' : '' !!}">
+                                    <tr class="voucher-{{ $voucher->id }} {!! ($voucher->uses_left >= $voucher->max_uses || !empty($voucher->end_date) && $voucher->end_date < date('Y-m-d')) ? 'text-danger text-expired' : '' !!}">
                                         <td class="list-table-stt">{{ $voucher->id }}</td>
-                                        <td class="list-table-code">{{ $voucher->code }}</td>
-                                        <td class="list-table-name">{{ $voucher->name }}</td>
+                                        <td class="list-table-code text-center">{{ $voucher->code }}</td>
+                                        <td class="list-table-name text-center">{{ $voucher->name }}</td>
                                         <td class="list-table-description">{{ $voucher->description }}</td>
-                                        <td class="list-table-money">{{ number_format($voucher->discount_value) }} {{ $voucher->discount_type == 'fixed' ? 'VNĐ' : '%' }}</td>
-                                        <td class="list-table-number">{{ number_format($voucher->max_uses) }}</td>
-                                        <td class="list-table-number">{{ number_format($voucher->uses_left) }}</td>
-                                        <td class="list-table-date">{{ date('d/m/Y', strtotime($voucher->start_date)) }}</td>
+                                        <td class="list-table-money text-center">{{ number_format($voucher->discount_value) }} {{ $voucher->discount_type == 'fixed' ? 'VNĐ' : '%' }}</td>
+                                        <td class="list-table-number text-center">{{ number_format($voucher->max_uses) }}</td>
+                                        <td class="list-table-number text-center">{{ number_format($voucher->uses_left) }}</td>
+                                        <td class="list-table-date text-center">{{ $voucher->start_date ? date('d/m/Y', strtotime($voucher->start_date)) : '' }} {{ $voucher->end_date ? ' - ' . date('d/m/Y', strtotime($voucher->end_date)) : ' - Vô hạn' }}</td>
                                         <td class="list-table-actions">
                                             @if(($voucher->uses_left < $voucher->max_uses))
                                             <a href="{{ route('voucher.edit', $voucher->id) }}" class="btn btn-warning">

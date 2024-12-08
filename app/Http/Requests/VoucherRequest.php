@@ -31,11 +31,11 @@ class VoucherRequest extends FormRequest
             ],
             'description' => 'nullable|string',
             'discount_type' => 'required|in:fixed,percent',
-            'discount_value' => 'required|numeric|min:0',
+            'discount_value' => 'required|numeric',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'max_uses' => 'required|integer|min:1',
-            'min_order_value' => 'nullable|numeric|min:0',
+            'max_uses' => 'integer|nullable',
+            'min_order_value' => 'nullable|numeric',
         ];
     }
 
@@ -52,7 +52,7 @@ class VoucherRequest extends FormRequest
             'discount_value.numeric' => 'Giá trị giảm giá phải là số.',
             'start_date.date' => 'Vui lòng cung cấp ngày bắt đầu hợp lệ.',
             'end_date.after_or_equal' => 'Ngày kết thúc phải bằng hoặc sau ngày bắt đầu.',
-            'max_uses.required' => 'Vui lòng chỉ định số lần sử dụng tối đa.',
+            'max_uses.integer' => 'Vui lòng chỉ nhập định dạng số.',
             'min_order_value.numeric' => 'Giá trị đơn hàng tối thiểu phải là số.',
         ];
     }

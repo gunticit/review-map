@@ -127,9 +127,9 @@ class AuthController extends BaseController
     {
         try {
             $this->authService->sendOtp($request->email);
-            return $this->sendResponse(['email' => $request->email], 'OTP sent successfully');
+            return $this->sendResponse(['email' => $request->email], 'Đã gửi Otp thành công!');
         } catch (Exception $e) {
-            return $this->sendError(null, $e->getMessage(), 422); // Using sendError
+            return $this->sendError(null, $e->getMessage(), 200); // Using sendError
         }
     }
 
@@ -141,18 +141,18 @@ class AuthController extends BaseController
         // kiểm tra số lần đã nhập
         if ($otp_attempts >= 5) {
             $this->authService->clearOtp($email);
-            return $this->sendError(null, 'Số lần nhập mã OTP đã vượt quá giới hạn.', 400);
+            return $this->sendError(null, 'Số lần nhập mã OTP đã vượt quá giới hạn.');
         }
 
         $otpArray = $request->input('otp');
 
-        $otp = implode('', $otpArray);
+        $otp = is_array($otpArray) ? implode('', $otpArray):$otpArray;
 
         // Verify the OTP
         if ($this->authService->verifyOtp($email, $otp)) {
             return $this->sendResponse(['email' => $email], 'Xác nhận OTP thành công');
         } else {
-            return $this->sendError(null, 'Mã xác thực không trùng khớp. Số lần thử còn lại: ' . (4 - $otp_attempts), 422);
+            return $this->sendError(null, 'Mã xác thực không trùng khớp. Số lần thử còn lại: ' . (4 - $otp_attempts), 200);
         }
     }
 
@@ -162,7 +162,7 @@ class AuthController extends BaseController
             $this->authService->updatePassword($request->email, $request->password);
             return $this->sendResponse(null, 'Đổi mật khẩu thành công');
         } catch (Exception $e) {
-            return $this->sendError(null, $e->getMessage(), 422); // Using sendError
+            return $this->sendError(null, $e->getMessage(), 200); // Using sendError
         }
     }
 

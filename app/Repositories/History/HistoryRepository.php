@@ -15,7 +15,7 @@ class  HistoryRepository extends BaseRepository implements HistoryRepositoryInte
     }
 
     public function list($request){
-        $query = $this->model->query();
+        $query = $this->model->query()->with(['createdBy']);
         if(!empty($request->keyword)){
             $keyword = $request->keyword;
             $query = $query->where(function ($query) use ($keyword) {

@@ -17,7 +17,6 @@
     </div>
 </div>
 
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var url = window.location.href;
@@ -32,5 +31,21 @@
             var newMessage = 'Bạn có chắc chắn muốn đăng nhập bằng Google với vai trò ' + roleMap[role] + ' không?';
             document.getElementById('confirmModalBody').textContent = newMessage;
         }
+    });
+    $('#otp1').on('paste', function(e) {
+        var pasteData = e.originalEvent.clipboardData.getData('text');
+        pasteData = pasteData.substring(0, 4);
+        var otpInputs = $('#otp1, #otp2, #otp3, #otp4');
+        otpInputs.each(function(index) {
+            $(this).val(pasteData[index] || '');
+        });
+        e.preventDefault();
+    });
+
+    $('#otp1, #otp2, #otp3, #otp4').on('paste', function(e) {
+        var pasteData = e.originalEvent.clipboardData.getData('text');
+        var char = pasteData.substring(0, 1);
+        $(this).val(char);
+        e.preventDefault();
     });
 </script>

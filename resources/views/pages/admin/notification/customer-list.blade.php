@@ -47,7 +47,7 @@
                     <table class="table list-table">
                         <thead>
                             <tr>
-                                <th class="list-table-stt" scope="col">STT</th>
+                                <th class="list-table-stt text-center" scope="col">#ID</th>
                                 <th class="list-table-code">Thời gian</th>
                                 <th class="list-table-name" scope="col">Tiêu đề</th>
                                 <th class="list-table-description" scope="col">Thao tác</th>
@@ -57,7 +57,7 @@
                             @if(!empty($notifications))
                                 @foreach($notifications as $key => $notificate)
                                     <tr class="notificate-{{ $notificate->id }}">
-                                        <td>{{ $key + 1 }}</td>
+                                        <td class="text-center">{{ $notificate->id }}</td>
                                         <td class="list-table-stt">{!! date('d/m/Y H:i:s', strtotime($notificate->created_at)) !!}</td>
                                         <td class="list-table-code">
                                             <a href="{{ route('edit.notificate.customer', $notificate->id) }}" class="text-primary">{{ $notificate->title }}</a>

@@ -30,6 +30,10 @@ class HistoryService {
         return $data;
     }
 
+    public function insert($data = array()){
+        return $this->historyRepository->insert($data);
+    }
+
     private function filterData($request): array{
         $data = is_array($request) ? $request : $request->all();
         return array(

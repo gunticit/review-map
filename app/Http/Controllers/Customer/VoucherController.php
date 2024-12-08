@@ -80,6 +80,11 @@ class VoucherController extends Controller
             $count_voucher = isset($voucher->uses_left) ? (int)$voucher->uses_left + 1 : 1;
             Voucher::where('id', $voucher->id)->update(['uses_left' => $count_voucher]);
         }
-        return $voucher;
+        return response()->json([
+            'title' => 'Api sử dụng voucher',
+            'status' => $voucher ? true : false,
+            'data' => $voucher,
+            'message' => $voucher ? 'Áp dụng voucher thành công' : 'Không thể sử dụng voucher này hoặc voucher đã hết hạn!'
+        ]);
     }
 }

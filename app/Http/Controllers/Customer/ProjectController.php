@@ -113,13 +113,16 @@ class ProjectController extends Controller
                     }
                     if(!empty($comments)){
                         foreach($comments as $comment){
-                            if(!empty($comment) && strlen(trim($comment)) > 0){
-                                $data_comment = array(
-                                    'project_id' => $project_id,
-                                    'comment' => $comment,
-                                    'keyword' => implode(',', $keyword_data)
-                                );
-                                $this->commentService->create($data_comment);
+                            if(!empty($comment)){
+                                $comment = str_replace('-','',trim($comment));
+                                if(strlen(trim($comment)) > 0){
+                                    $data_comment = array(
+                                        'project_id' => $project_id,
+                                        'comment' => $comment,
+                                        'keyword' => implode(',', $keyword_data)
+                                    );
+                                    $this->commentService->create($data_comment);
+                                }
                             }
                         }
                     }
@@ -127,31 +130,32 @@ class ProjectController extends Controller
                 if ($request->has('has_image') && $request->has_image == 1) {
                     $this->projectImageService->createDataImages($request, $project_id);
                 }
-                $content_history = [
-                    'title' => 'Dự án khởi tạo thành công',
-                    'content' => 'Dự án khởi tạo thành công vào lúc: ' . $data['created_at'],
-                    'status' => 5, // Chờ thanh toán
-                    'user_id' => Auth::user()->id
+                $history = [
+                    [
+                        'content' => json_encode([
+                            'title' => 'Dự án khởi tạo thành công',
+                            'content' => 'Bạn đã tạo dự án ' . $data['name'] . ' thành công!',
+                            'status' => 5, // Chờ thanh toán
+                            'user_id' => Auth::user()->id
+                        ]),
+                        'user_id' => Auth::user()->id
+                    ]
                 ];
-                $this->historyService->create([
-                    'content' => json_encode($content_history),
-                    'user_id' => Auth::user()->id
-                ]);
+                $this->updateHistory($history);
                 Session::flash('success', 'Khởi tạo dự án thành công');
                 DB::commit();
                 return redirect()->route('page.order.project', ['id' => $project_id])
                 ->with('success', 'Khởi tạo dự án thành công');
             }
-            $content_history = [
-                'title' => 'Dự án tạo không thành công',
-                'content' => 'Dự án tạo không thành công vào lúc: ' . $data['created_at'],
-                'status' => 0,
+            $history = [
+                'content' => json_encode([
+                    'title' => 'Dự án tạo không thành công',
+                    'content' => 'Dự án tạo không thành công',
+                    'status' => 0
+                ]),
                 'user_id' => Auth::user()->id
             ];
-            $this->historyService->create([
-                'content' => json_encode($content_history),
-                'user_id' => Auth::user()->id
-            ]);
+            $this->updateHistory($history);
             Session::flash('error', 'Tạo dự án không thành công');
             return redirect()->back()->withInput();
         }catch(\Exception $e){
@@ -174,6 +178,18 @@ class ProjectController extends Controller
                 if ($request->has('has_image') && $request->has_image == 1) {
                     $this->projectImageService->createDataImages($request, $data->id);
                 }
+                $content_history = 'Bạn đã thao tác ' . checkStatus($data->status) . ' dự án ' . $data->name;
+                $history = [
+                    [
+                        'content' => json_encode([
+                            'title' => 'Cập nhật dự án',
+                            'content' => $content_history,
+                            'status' => true
+                        ]),
+                        'user_id' => Auth::user()->id
+                    ]
+                ];
+                $this->updateHistory($history);
                 Session::flash('success', 'Cập nhật dự án thành công');
                 return redirect()->route('project.list');
             }
@@ -186,7 +202,19 @@ class ProjectController extends Controller
 
     public function updateStatus(Request $request, $id){
         try{
-            $this->projectService->updateStatus($request, $id);
+            $project = $this->projectService->updateStatus($request, $id);
+            $content_history = 'Bạn đã thao tác ' . checkStatus($project['status'])['labelStatus'] . ' dự án ' . $project['name'];
+            $history = [
+                [
+                    'content' => json_encode([
+                        'title' => 'Cập nhật trạng thái dự án',
+                        'content' => $content_history,
+                        'status' => $request->status
+                    ]),
+                    'user_id' => Auth::user()->id
+                ]
+            ];
+            $this->updateHistory($history);
             return response()->json([
                 'status' => 'success',
                 'data' => $request->status,
@@ -285,6 +313,28 @@ class ProjectController extends Controller
             }
         }
         
+        $history = [
+            [
+                'content' => json_encode([
+                    'title' => 'Thanh toán dự án',
+                    'content' => 'Bạn đã thanh toán dự án: ' . $project_comments->name . ' với số tiền ' . $total_price .' thành công!',
+                    'status' => 5, 
+                    'user_id' => Auth::user()->id
+                ]),
+                'user_id' => Auth::user()->id
+            ],
+            [
+                'content' => json_encode([
+                    'title' => 'Voucher đã sử dụng',
+                    'content' => 'Bạn đã sử dụng dụng ' . $project_comments->voucher_code . ' với trị giá giảm ' . $discount_value . ($voucher_info->discount_type == 'percent' ? '%' : 'đ'),
+                    'status' => 5, 
+                    'user_id' => Auth::user()->id
+                ]),
+                'user_id' => Auth::user()->id
+            ]
+        ];
+        $this->updateHistory($history);
+        
         return view('pages.customer.projects.order', [
             'projects' => $paginatedComments,
             'project_info' => $project_comments,
@@ -323,6 +373,18 @@ class ProjectController extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
+        }
+    }
+
+    public function updateHistory($histories = array()){
+        if(!empty($histories)){
+            $histories = array_map(function($history){
+                $history['created_by'] = Auth::user()->id;
+                $history['created_at'] = date('Y-m-d H:i:s');
+                $history['updated_at'] = date('Y-m-d H:i:s');
+                return $history;
+            }, $histories);
+            $this->historyService->insert($histories);
         }
     }
 }

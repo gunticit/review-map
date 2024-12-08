@@ -29,7 +29,9 @@ class User extends Authenticatable
         'country_code',
         'company_id',
         'google_id',
-        'usercode'
+        'usercode',
+        'email_verified_at',
+        'telephone_verified_at'
     ];
 
     /**

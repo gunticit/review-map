@@ -43,7 +43,7 @@ class OnepayController extends Controller
                 'content' => json_encode([
                     'title' => 'Nạp tiền tài khoản',
                     'status' => 'success',
-                    'content' => 'Nạp '.formatCurrency($amount).'  thành công vào lúc '.date('d-m-Y H:i:s'),
+                    'content' => 'Nạp '.formatCurrency($amount).'  thành công',
                 ]),
             ]);
             return redirect()->route('wallet')->with('success', 'Giao dịch thành công - Approved');

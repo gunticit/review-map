@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Session;
 use App\Helpers\Helper;
+use Carbon\Carbon;
 
 class AuthSocialService
 {
@@ -52,7 +53,7 @@ class AuthSocialService
                     'email' => $user->getEmail(),
                     'google_id' => $user->getId(),
                     'password' => Hash::make(Str::random(8)),
-                    'email_verified_at' => now(),
+                    'email_verified_at' => Carbon::now()->toDateTimeString(),
                 ];
                 $finduser = $this->userRepository->create($data); // Đổi tên $user thành $finduser
                 $this->setRole($finduser);

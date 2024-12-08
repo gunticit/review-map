@@ -45,7 +45,11 @@ class  VoucherRepository extends BaseRepository implements VoucherRepositoryInte
         $query = $this->model->query();
         $query->where('code', $voucher_code);
         $query->where('start_date', '<=', date('Y-m-d'));
-        $query->where('end_date', '>=', date('Y-m-d'));
+        $query->where(function($q) {
+            $q->where('end_date', '>=', date('Y-m-d'));
+            $q->orWhereNull('end_date');
+            return $q;
+        });
         $query->where('status', 'active');
         $query->whereRaw('max_uses >= uses_left + 1');
         return $query->first();

@@ -17,8 +17,8 @@ Route::group([
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('auth.authenticate');
         Route::post('/registerUser', [AuthController::class, 'registerUser'])->name('auth.registerUser');
-        Route::post('/password/email', [AuthController::class, 'sendOtp'])->name('password.email');
-        Route::post('/password/otp', [AuthController::class, 'verifyOtp'])->name('password.otp');
+        Route::post('/send-email', [AuthController::class, 'sendOtp'])->name('send.otp');
+        Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verify.otp');
         Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update');
         Route::get('auth/google', [SocicalController::class, 'redirectToGoogle'])->name('auth.google');
         Route::get('auth/google/callback', [SocicalController::class, 'handleGoogleCallback']);    

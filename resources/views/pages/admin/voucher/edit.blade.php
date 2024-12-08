@@ -91,7 +91,7 @@
                 <div class="col-sm-8">
                     <label for="discount_value">Giá trị giảm <span class="required">*</span></label>
                     <input type="number" name="discount_value" class="form-control"
-                        value="{{ $voucher->discount_value }}" placeholder="Nhập giá trị giảm" required>
+                        value="{!! $voucher->discount_value !!}" min="0" placeholder="Nhập giá trị giảm" required>
                     @error('discount_value')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -127,8 +127,8 @@
             <div class="row">
                 <!-- Số lượng voucher -->
                 <div class="col-sm-8">
-                    <label for="max_uses">Số lượng voucher</label>
-                    <input type="number" name="max_uses" class="form-control" value="{{ $voucher->max_uses }}"
+                    <label for="max_uses">Số lượng voucher <span class="required">*</span></label>
+                    <input type="number" name="max_uses" class="form-control" value="{!! $voucher->max_uses !!}"
                         placeholder="Nhập số lượng voucher">
                     @error('max_uses')
                     <span class="invalid-feedback" role="alert">
@@ -141,7 +141,7 @@
                 <div class="col-sm-4">
                     <label for="min_order_value">Giá trị tối thiểu đơn hàng</label>
                     <input type="number" name="min_order_value" class="form-control"
-                        value="{{ $voucher->min_order_value }}" placeholder="Nhập giá trị tối thiểu đơn hàng">
+                        value="{!! $voucher->min_order_value !!}" placeholder="Nhập giá trị tối thiểu đơn hàng">
                     @error('min_order_value')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

@@ -24,9 +24,10 @@
             <table class="table list-table">
                 <thead>
                     <tr>
-                        <th class="list-table-stt" scope="col">STT</th>
-                        <th class="list-table-time" scope="col">Thời gian</th>
-                        <th class="list-table-title" scope="col">Nhật ký hoạt động</th>
+                        <th class="list-table-stt" width="50" scope="col">STT</th>
+                        <th class="list-table-time text-start" width="200" scope="col">Thời gian</th>
+                        <th class="list-table-title text-start" width="1000" scope="col">Nhật ký hoạt động</th>
+                        <th class="list-table-title text-start" width="200" scope="col">Người tạo</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,13 +35,16 @@
                         @php $stt = 1; @endphp
                         @foreach($histories as $history)
                         <tr>
-                            <td>{{ $stt }}</td>
+                            <td width="50">{{ $stt }}</td>
                             <td class="list-table-time">{!! $history['created_at']->format('d/m/Y') !!} <span>{!! $history['created_at']->format('H:i') !!}</span></td>
                             <td class="list-table-title"> 
                                 @php
                                     $history_content = !empty($history['content'])?json_decode($history['content'], true):[];   
                                 @endphp
                                 {!! $history_content['title'] ?? '' !!} {!! $history_content['content'] ? ' - '.$history_content['content'] : '' !!}
+                            </td>
+                            <td>
+                                {{ $history['createdBy']->name }}
                             </td>
                         </tr>
                         @php $stt++; @endphp

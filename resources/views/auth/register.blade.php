@@ -76,6 +76,11 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                            @if(session('not_verify_user'))
+                                <span class="invalid-feedback text-start" role="alert">
+                                    <strong>Vui lòng xác thực tài khoản</strong>
+                                </span>
+                            @endif
                         </div>
                         <div class="input-group mb-3 d-block">
                             <input id="ip-password" type="password" placeholder="{{ __('auth.password') }}" class="form-control w-100 @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
@@ -163,7 +168,7 @@
             <div class="modal-body">
                 <div id="regForm">
                     <div class="tab">
-                        <form id="emailForm" action="{{ route('password.email') }}" method="POST">
+                        <form id="emailForm" action="{{ route('send.otp') }}" method="POST">
                                 {{ csrf_field() }}
                                 <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
                         <h2>Xác thực danh tính</h2>
@@ -191,9 +196,9 @@
                     <div class="tab" id="otpTab">
                         <h2>Nhập mã xác thực</h2>
                         <i>Mã OTP đã được gửi vào mail: <b id="email-verify"></b></i>
-                        <form id="otpForm" action="{{ route('password.otp') }}" method="POST">
+                        <form id="otpForm" action="{{ route('verify.otp') }}" method="POST">
                             {{ csrf_field() }}
-                            <p id="otpMessage"></p>
+                            <p id="otpMessage" class="text-danger"></p>
                             <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
                             <input type="hidden" class="form-control" id="emailOtp2" name="email" placeholder="Email" value="" required />
                             <input type="hidden" class="form-control" id="otpAttempts" name="otp_attempts" value="0"/>    
@@ -211,9 +216,12 @@
                                     <input type="number" class="form-control" name="otp[]" id="otp4"  required maxlength="1" min="0" max="9" oninput="limitInputLength(this)" />
                                 </div>
                             </div>
+                            <div class="d-flex w-100 text-end justify-content-end re-send-otp">
+                                <a href="javascript:void(0)" id="reset-otp" onclick="handleOtp()">Lấy mã</a>
+                            </div>
                         </form>
                     </div>
-                    <div class="tab">
+                    <div class="tab" id="successTab">
                         <h2>Thành công!</h2>
                         <p>Chúc mừng! Bạn đã xác thực thành công. Đăng nhập ngay thôi!!</p>
                         <div class="text-center">
@@ -223,15 +231,26 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <button id="nextBtnRegister" type="submit" class="btn btn-primary">
-                            <!-- Loading Message -->
-                        <div id="loadingMessage" style="display:none;" class="text-center">
-                            <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                         <span id="buttonText">Tiếp tục</span>
-                    </button>
+                        @if(empty($email_verify))
+                            <button id="nextBtnRegister" type="submit" class="btn btn-primary">
+                                <!-- Loading Message -->
+                                <div id="loadingMessage" style="display:none;" class="text-center">
+                                    <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <span id="buttonText">Tiếp tục</span>
+                            </button>
+                        @else
+                            <button id="confirm-otp-verify" class="btn btn-primary">
+                                <div id="loadingMessageOtpVerify" style="display:none;" class="text-center">
+                                    <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <span>Xác nhận</span>
+                            </button>
+                        @endif
                     </div>
                     <!-- Circles which indicates the steps of the form: -->
                     <div class="d-none">
@@ -272,28 +291,101 @@
                 var verifyModal = new bootstrap.Modal(document.getElementById('verifyModel'));
                 $('input[name=email]').val(email_verify);
                 $('#email-verify').text(email_verify);
+                $('#reset-otp').attr('val-html',email_verify);
                 $('#regForm .tab').hide();
                 $('#otpTab').show();
                 verifyModal.show();
             }
-            $('#otp1').on('paste', function(e) {
-                var pasteData = e.originalEvent.clipboardData.getData('text');
-                pasteData = pasteData.substring(0, 4);
-                var otpInputs = $('#otp1, #otp2, #otp3, #otp4');
-                otpInputs.each(function(index) {
-                    $(this).val(pasteData[index] || '');
-                });
-                e.preventDefault();
-            });
-
-            $('#otp1, #otp2, #otp3, #otp4').on('paste', function(e) {
-                var pasteData = e.originalEvent.clipboardData.getData('text');
-                var char = pasteData.substring(0, 1);
-                $(this).val(char);
-                e.preventDefault();
-            });
         });
-
+        function handleOtp(){
+            let email = $('#reset-otp').attr('val-html');
+            $.ajax({
+                url: "{{ route('send.otp') }}",
+                type: "POST",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    email: email
+                },
+                success: function(response) {
+                    $('.re-send-otp a').remove();
+                    $('.re-send-otp').append('<p>'+response.message+'</p>');
+                    var domain = window.location.hostname;
+                    var expiryDate = new Date();
+                        expiryDate.setTime(expiryDate.getTime() + (5 * 60 * 1000));
+                    document.cookie = "resendOtp=1; expires=" + expiryDate.toUTCString() + "; path=/; domain=" + domain + ";";
+                },
+            });
+        }
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        $(document).ready(function() {
+            if (getCookie('resendOtp')) {
+                // Nếu cookie không tồn tại, xóa phần tử có class 're-send-otp a'
+                $('.re-send-otp a').remove();
+            }
+            $('#confirm-otp-verify').on('click', function(){
+                let otpInputs = document.querySelectorAll('input[name="otp[]"]');
+                let otp_code = '';
+                let otp_attempts = 0;
+                let email_attempts = '';
+                if(localStorage.getItem('email_attempts')) {
+                    email_attempts = localStorage.getItem('email_attempts');
+                }
+                otpInputs.forEach(function(input) {
+                    if (input.value) {
+                        otp_code += input.value;
+                    }
+                });
+                if (otp_code.length !== 4) {
+                    $('#otpMessage').text('Mã OTP phải có 4 chữ số');
+                    return;
+                }
+                let email = $('#emailOtp2').val();
+                if(email != email_attempts){
+                    localStorage.setItem('email_attempts', email);
+                }else{
+                    if(localStorage.getItem('otp_attempts')) {
+                        otp_attempts = localStorage.getItem('otp_attempts');
+                    }
+                }
+                $.ajax({
+                    url: "{{ route('verify.otp') }}",
+                    type: "POST",
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        otp_attempts: otp_attempts,
+                        email: email,
+                        otp: otp_code,
+                    },
+                    beforeSend: function(){
+                        $(this).prop('disabled',true);
+                        $('#confirm-otp-verify > span').hide();
+                        $('#loadingMessageOtpVerify').show();
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#otpTab').hide();
+                            $('#successTab').show();
+                            otp_attempts += 1;
+                            localStorage.setItem('otp_attempts', otp_attempts);
+                        }else{
+                            $('#otpMessage').text(response.message);
+                        }
+                        $('#confirm-otp-verify').prop('disabled',false);
+                        $('#confirm-otp-verify > span').show();
+                        $('#loadingMessageOtpVerify').hide();
+                    }
+                })
+            });
+        })
     </script>
     <script type="module">
         import { RegisterForm } from '{{ asset("./assets/js/register.js") }}';

@@ -26,7 +26,10 @@ class NotificateController extends Controller
     public function customer_list(Request $request)
     {
         $customer_ids = User::role('customer')->get()->pluck('id')->toArray();
-        $request->merge(['user_ids' => $customer_ids]);
+        $request->merge([
+            'user_ids' => $customer_ids,
+            'order_by' => ['id' => 'desc']
+        ]);
         $notifications = $this->notificationService->customer_list($request);
         return view('pages.admin.notification.customer-list',[
             'notifications' => $notifications
@@ -35,7 +38,10 @@ class NotificateController extends Controller
     public function partner_list(Request $request)
     {
         $partner_ids = User::role('partner')->get()->pluck('id')->toArray();
-        $request->merge(['user_ids' => $partner_ids]);
+        $request->merge([
+            'user_ids' => $partner_ids,
+            'order_by' => ['id' => 'desc']
+        ]);
         $notifications = $this->notificationService->partner_list($request);
         return view('pages.admin.notification.partner-list',[
             'notifications' => $notifications

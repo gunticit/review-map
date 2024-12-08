@@ -89,7 +89,7 @@
                             <div class="col-sm-8">
                                 <label for="discount_value">Giá trị giảm <span class="required">*</span></label>
                                 <input type="number" name="discount_value" class="form-control"
-                                    value="{{ old('discount_value') }}" placeholder="Nhập giá trị giảm" required>
+                                    value="{!! old('discount_value') ?? 0 !!}" min="0" placeholder="Nhập giá trị giảm" required>
                                 @error('discount_value')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -102,7 +102,7 @@
                             <!-- Ngày bắt đầu -->
                             <div class="col-sm-6">
                                 <label for="start_date">Ngày bắt đầu</label>
-                                <input type="date" name="start_date" class="form-control" value="{{ old('start_date') }}">
+                                <input type="date" name="start_date" class="form-control" value="{!! old('start_date') ?? date('Y-m-d') !!}">
                                 @error('start_date')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -126,7 +126,7 @@
                             <!-- Số lượng voucher -->
                             <div class="col-sm-8">
                                 <label for="max_uses">Số lượng voucher</label>
-                                <input type="number" name="max_uses" class="form-control" value="{{ old('max_uses') }}"
+                                <input type="number" name="max_uses" class="form-control" value="{!! old('max_uses') ?? 1 !!}" min="1"
                                     placeholder="Nhập số lượng voucher">
                                 @error('max_uses')
                                 <span class="invalid-feedback" role="alert">
@@ -139,7 +139,7 @@
                             <div class="col-sm-4">
                                 <label for="min_order_value">Giá trị tối thiểu đơn hàng</label>
                                 <input type="number" name="min_order_value" class="form-control"
-                                    value="{{ old('min_order_value') }}" placeholder="Nhập giá trị tối thiểu đơn hàng">
+                                    value="{!! old('min_order_value') ?? 0 !!}" placeholder="Nhập giá trị tối thiểu đơn hàng">
                                 @error('min_order_value')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
