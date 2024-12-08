@@ -29,8 +29,8 @@ class CustomerCheckoutController extends Controller
         $this->expenditureStatisticService = $expenditureStatisticService;
     }
     public function confirmCheckout(Request $request){
-        // try{
-        //     DB::beginTransaction();
+        try{
+            DB::beginTransaction();
             $project_id = $request->project_id;
             $project = $this->projectService->show($project_id);
             $project_comments = $this->projectService->findWithComments($project_id, $request);
@@ -94,12 +94,12 @@ class CustomerCheckoutController extends Controller
                     'message' => 'Project not found'
                 ]);
             }
-        // }catch(\Exception $e){
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => $e->getMessage()
-        //     ]);
-        // }
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function updateExpenditureStatistic($data){

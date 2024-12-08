@@ -26,7 +26,7 @@
         <div class="col-xl-6 col-md-12 col-12">
             <div class="login-wrap">
                 <div class="logo">
-                    <a href="javascript:void(0);">
+                    <a href="">
                         <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="login">
                     </a>
                 </div>
@@ -35,11 +35,11 @@
                         {{ Session::get('success') }}
                     </div>
                 @endif
-                @if (Session::has('error'))
+                {{-- @if (Session::has('error'))
                     <div class="alert alert-danger">
                         {{ Session::get('error') }}
                     </div>
-                @endif
+                @endif --}}
                 {{-- @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -51,6 +51,11 @@
                 @endif --}}
                 <div class="login-form text-center">
                     <h1>{{ __('auth.register') }}</h1>
+                    @if ($errors->has('not_verify_user'))
+                        <div class="alert alert-danger">
+                            {{ $errors->first('not_verify_user') }}
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('auth.registerUser') }}" id="registerForm">
                         {{ csrf_field() }}
                         <div class="input-group mb-3 d-block">
@@ -76,11 +81,6 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                            @if(session('not_verify_user'))
-                                <span class="invalid-feedback text-start" role="alert">
-                                    <strong>Vui lòng xác thực tài khoản</strong>
-                                </span>
-                            @endif
                         </div>
                         <div class="input-group mb-3 d-block">
                             <input id="ip-password" type="password" placeholder="{{ __('auth.password') }}" class="form-control w-100 @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
@@ -379,6 +379,7 @@
                         }else{
                             $('#otpMessage').text(response.message);
                         }
+                        $('#confirm-otp-verify').hide();
                         $('#confirm-otp-verify').prop('disabled',false);
                         $('#confirm-otp-verify > span').show();
                         $('#loadingMessageOtpVerify').hide();

@@ -185,7 +185,7 @@
                 // Hàm lỗi, ví dụ khi người dùng từ chối truy cập
                 (error) => {
                     $('#layoutSidenav_content main').prepend(`
-                        <div class="col-xl-12 col-md-12 col-12 mt-4 mb-0 px-3">
+                        <div class="col-xl-12 col-md-12 col-12 m-0 p-0">
                             <div id="message-location" class="message bg-danger">
                                 <div class="d-flex align-items-center" id="alert-location">
                                     <span class="material-symbols-outlined me-2">info</span>

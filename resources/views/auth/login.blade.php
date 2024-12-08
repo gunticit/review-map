@@ -26,7 +26,7 @@
     <div class="col-xl-6 col-md-12 col-12">
         <div class="login-wrap">
         <div class="logo">
-            <a href="javascript:void(0);">
+            <a href="">
             <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="login">
             </a>
         </div>

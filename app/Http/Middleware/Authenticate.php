@@ -28,7 +28,7 @@ class Authenticate
             $user_email = $profile->email;
             Auth::logout();
             return redirect()->route('register', ['email_verify' => $user_email])
-                ->withError(['not_verify_user', 'Vui lòng xác nhận tài khoản trước khi đăng nhập.']);
+                ->withErrors(['not_verify_user' => 'Vui lòng xác nhận tài khoản trước khi đăng nhập.']);
         }
 
         // Share profile to view
