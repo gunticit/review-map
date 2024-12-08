@@ -103,8 +103,9 @@
                     <div class="login-other">
                         <span>{{ __('auth.login_with') }}</span>
                     </div>
-                    <a href="javascript:void(0);" class="btn btn-outline-secondary login-with-google">
-                        <img src="{{ asset('./assets/img/google-logo.svg') }}" alt="google"> Google </a>
+                    <a href="javascript:void(0);" class="btn btn-outline-secondary login-with-google" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                        <img src="{{ asset('./assets/img/google-logo.svg') }}" alt="google"> Google
+                    </a>
                     <div class="login-link-acount">
                         <span>{{ __('auth.already_have_account') }} </span>
                         <a href="{{ route('login') }}" class="btn-link">{{ __('auth.login') }}</a>
@@ -243,6 +244,7 @@
         </div>
     </div>
 </div>
+<x-login-by-google message="Bạn có chắc chắn muốn đăng nhập bằng Google với vai trò đối tác không?" />
 @endsection
 @section('js')
     <script src="{{ asset('./js/auth/verifyOtp.js') }}"></script>

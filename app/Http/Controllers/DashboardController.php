@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Services\DashboardService;
 use App\Services\ExpenditureStatisticService;
 use App\Services\ProjectService;

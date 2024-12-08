@@ -43,9 +43,9 @@ class AuthSocialService
 
     public function handleGoogleCallback()
     {
-        try {
-            $user = Socialite::driver('google')->user();
-            $finduser = User::where('google_id', $user->id)->first();
+        // try {
+            $user = Socialite::driver('google')->stateless()->user();
+            $finduser = User::where('email', $user->email)->first();
             if (empty($finduser)) { // Nếu lần đầu tiên đăng nhập, tạo người dùng mới
                 $data = [
                     'name' => $user->getName(),
@@ -58,13 +58,16 @@ class AuthSocialService
                 $this->setRole($finduser);
             }
             if(!$finduser->avatar){
-                $avatarUrl = Helper::saveAvatarGoogle($user->getAvatar(), $finduser);
+                $update_avatar = array(
+                    'avatar' => Helper::saveAvatarGoogle($user->getAvatar(), $finduser)
+                );
+                User::where('id', $finduser->id)->update($update_avatar);
             }
           return $finduser;
 
-        } catch (Exception $e) {
-            throw $e->getMessage();
-        }
+        // } catch (Exception $e) {
+        //     throw $e->getMessage();
+        // }
     }
 
     private function setRole($user)
