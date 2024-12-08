@@ -154,7 +154,7 @@
 
 
         $('.btn-copy').click(function(){
-            var textareaContent = $('.textarea-copy').text();
+            var textareaContent = $('.textarea-copy').text().trim();
             var tempTextarea = $('<textarea>');
             $('body').append(tempTextarea);
             tempTextarea.val(textareaContent).select();
