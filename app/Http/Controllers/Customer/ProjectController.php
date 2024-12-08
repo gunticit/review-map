@@ -322,17 +322,22 @@ class ProjectController extends Controller
                     'user_id' => Auth::user()->id
                 ]),
                 'user_id' => Auth::user()->id
-            ],
-            [
-                'content' => json_encode([
-                    'title' => 'Voucher đã sử dụng',
-                    'content' => 'Bạn đã sử dụng dụng ' . $project_comments->voucher_code . ' với trị giá giảm ' . $discount_value . ($voucher_info->discount_type == 'percent' ? '%' : 'đ'),
-                    'status' => 5, 
-                    'user_id' => Auth::user()->id
-                ]),
-                'user_id' => Auth::user()->id
             ]
         ];
+        if(!empty($voucher_info->discount_type)){
+            $history = [
+                ...$history,
+                [
+                    'content' => json_encode([
+                        'title' => 'Voucher đã sử dụng',
+                        'content' => 'Bạn đã sử dụng dụng ' . $project_comments->voucher_code . ' với trị giá giảm ' . $discount_value . ($voucher_info->discount_type == 'percent' ? '%' : 'đ'),
+                        'status' => 5, 
+                        'user_id' => Auth::user()->id
+                    ]),
+                    'user_id' => Auth::user()->id
+                ]
+            ];
+        }
         $this->updateHistory($history);
         
         return view('pages.customer.projects.order', [
