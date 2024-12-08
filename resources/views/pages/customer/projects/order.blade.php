@@ -204,7 +204,7 @@
                                             <span>Mã giảm giá</span>
                                             <span></span>
                                             <span id="value-voucher">{!! 
-                                                !empty($voucher_info->discount_value) && $voucher_info->discount_type != 'percent' ? formatCurrency($voucher_info->discount_value) : (!empty($voucher_info->discount_value) && $voucher_info->discount_type == 'percent' ? $voucher_info->discount_value . '%' : '')
+                                                !empty($voucher_info->discount_value) && $voucher_info->discount_type != 'percent' ? '-'.formatCurrency($voucher_info->discount_value) : (!empty($voucher_info->discount_value) && $voucher_info->discount_type == 'percent' ? '-'.$voucher_info->discount_value . '%' : '')
                                             !!}</span>
                                         </li>
                                     </ul>
@@ -380,6 +380,7 @@
                 $('#discount-info .invalid-feedback').remove();
             });
             $('#btn-apply-discount').on('click', function(){
+                $(this).attr('disabled', 'disabled');
                 $('#discount-info .invalid-feedback').remove();
                 let voucher_code = $('#voucher_code').val();
                 if(voucher_code == '') {
@@ -395,15 +396,16 @@
                     },
                     success: function(response) {
                         let total_value = $('#total_value').val();
-                        if(response && parseFloat(response.min_order_value) <= parseFloat(total_value)) {
+                        let data = response?.data;
+                        if(data && parseFloat(data?.min_order_value) <= parseFloat(total_value)) {
                             $('#discount-voucher').addClass('d-flex');
-                            let discount_val = response.discount_value;
-                            if(response.discount_type == 'fixed'){
+                            let discount_val = data.discount_value;
+                            if(data.discount_type == 'fixed'){
                                 discount_val = discount_val.toLocaleString('vi-VN') + ' VND';
                                 total_value = parseFloat(total_value) - parseFloat(discount_val);
                             }else{
                                 discount_val = discount_val + '%';
-                                total_value = parseFloat(total_value) - (parseFloat(total_value) * parseFloat(response.discount_value) / 100);
+                                total_value = parseFloat(total_value) - (parseFloat(total_value) * parseFloat(data.discount_value) / 100);
                             }
                             $('#value-voucher').text('-' + discount_val);
                             $('#total_value').val(total_value);
@@ -417,6 +419,9 @@
                             $('#btn-apply-discount').addClass('btn-primary');
                             $('#discount-info').append('<div class="invalid-feedback d-block">Mã giảm giá không hợp lệ!</div>');
                         }
+                    },
+                    complete: function() {
+                        $('#btn-apply-discount').removeAttr('disabled');
                     }
                 })
             });

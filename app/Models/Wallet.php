@@ -11,7 +11,13 @@ class Wallet extends Model
     use HasFactory, UserStamp;
 
     protected $table = 'wallets';
-    protected $fillable = ['user_id', 'balance', 'currency'];
+    protected $fillable = [
+        'user_id', 
+        'balance', 
+        'unit_currency',
+        'provisional_deduction',
+        'temporary_addition'
+    ];
     // protected $guarded = [];
     public $timestamps = true;
 

@@ -328,7 +328,7 @@
                         </div>
                         <!-- Form Group (Description)-->
                         <div class="mb-4">
-                            <label for="inputDescription">{{ __('project.description') }}
+                            <label for="inputDescription">{{ __('project.description') }} <span style="margin-left: 5px" class="required">*</span>
                             </label>
                             <textarea class="form-control" name="description" id="inputDescription" placeholder="{{ __('project.placeholder_description') }}"></textarea>
                         </div>

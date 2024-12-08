@@ -4,16 +4,19 @@ namespace App\Services;
 use Illuminate\Support\Str;
 use App\Repositories\Voucher\VoucherRepositoryInterface;
 use App\Http\Resources\VoucherResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class VoucherService {
-    protected $voucherRepository;
+    protected $voucherRepository, $historyService;
 
     public function __construct(
         VoucherRepositoryInterface $voucherRepository,
+        HistoryService $historyService,
     )
     {
         $this->voucherRepository = $voucherRepository;
+        $this->historyService = $historyService;
     }
 
     /**
@@ -59,6 +62,18 @@ class VoucherService {
     public function checkAjaxApplyVoucher($request){
         $voucher_code = $request->voucher_code;
         $check_voucher = $this->voucherRepository->checkAjaxApplyVoucher($voucher_code);
+        $history = [
+            [
+                'content' => json_encode([
+                    'title' => 'Thanh toán dự án',
+                    'content' => 'Bạn đã sử dụng mã voucher: ' . $voucher_code . (empty($check_voucher) ? ' lỗi' : ' thành công'),
+                    'status' => empty($check_voucher) ? 'fail' : 'success', 
+                    'user_id' => Auth::user()->id
+                ]),
+                'user_id' => Auth::user()->id
+            ]
+        ];
+        $this->updateHistory($history);
         return $check_voucher;
     }
 
@@ -76,5 +91,17 @@ class VoucherService {
             'status' => $request->status ?? 'active',
             'min_order_value' => $request->min_order_value ?? null
         );
+    }
+
+    public function updateHistory($histories = array()){
+        if(!empty($histories)){
+            $histories = array_map(function($history){
+                $history['created_by'] = Auth::user()->id;
+                $history['created_at'] = date('Y-m-d H:i:s');
+                $history['updated_at'] = date('Y-m-d H:i:s');
+                return $history;
+            }, $histories);
+            $this->historyService->insert($histories);
+        }
     }
 }

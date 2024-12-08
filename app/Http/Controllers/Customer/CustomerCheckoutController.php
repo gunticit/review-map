@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Voucher;
 use App\Services\ExpenditureStatisticService;
 use App\Services\ProjectService;
 use App\Services\TransactionHistoryService;
+use App\Services\HistoryService;
 use App\Services\WalletService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,10 +17,11 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerCheckoutController extends Controller
 {
-    protected $projectService, $transactionHistoryService, $walletService, $expenditureStatisticService;
+    protected $projectService, $transactionHistoryService, $historyService, $walletService, $expenditureStatisticService;
     public function __construct(
         ProjectService $projectService, 
         TransactionHistoryService $transactionHistoryService, 
+        HistoryService $historyService,
         WalletService $walletService,
         ExpenditureStatisticService $expenditureStatisticService
     )
@@ -27,6 +30,7 @@ class CustomerCheckoutController extends Controller
         $this->transactionHistoryService = $transactionHistoryService;
         $this->walletService = $walletService;
         $this->expenditureStatisticService = $expenditureStatisticService;
+        $this->historyService = $historyService;
     }
     public function confirmCheckout(Request $request){
         try{
@@ -52,14 +56,29 @@ class CustomerCheckoutController extends Controller
             $price_order = $temp_price_order + $price_order * 0.1; // Cộng VAT
             $wallet_info = $this->walletService->checkWalletUser();
             $balance = $wallet_info->balance ?? 0; // Số tiền
+
+            $voucher_code = $project_comments->voucher_code ?? '';
+            $discount_value = 0;
+            $voucher_info = null;
+            if(!empty($voucher_code)){
+                $voucher_info = Voucher::where('code', $voucher_code)->select('discount_value','discount_type')->first();
+                $discount_value = $voucher_info->discount_value ?? 0;
+                if($voucher_info->discount_type == 'percent'){
+                    $total_price = $price_order - ($price_order * $discount_value / 100);
+                }else{
+                    $total_price = $price_order - $discount_value;
+                }
+            }else{
+                $total_price = $price_order;
+            }
             $provisional_deduction = $wallet_info->provisional_deduction ?? 0; // Đã dùng tạm thời
-            $provisional_deduction_new = $price_order + $provisional_deduction;
-            $surplus = $balance - $provisional_deduction_new;
+            $provisional_deduction_new = $total_price + $provisional_deduction;
+            $new_balance = $balance - $provisional_deduction_new;
             $data_transaction = array(
                 'wallet_id' => $wallet_info->id,
-                'amount' => $price_order,
+                'amount' => $total_price,
                 'type' => 'payment',
-                'status' => $surplus > 0 ? 'completed' : 'failed',
+                'status' => $new_balance > 0 ? 'completed' : 'failed',
                 'reference_id' => strtoupper(uniqid('PAYMENT_')),
                 'transaction_code' => strtoupper(uniqid('PAYMENT_'))
             );
@@ -70,9 +89,37 @@ class CustomerCheckoutController extends Controller
                 'money' => $price_order
             );
             $this->updateExpenditureStatistic($data_expenditure);
-            if ($transaction && $surplus > 0) {
+            
+            $history = [
+                [
+                    'content' => json_encode([
+                        'title' => 'Thanh toán dự án',
+                        'content' => 'Bạn đã thanh toán dự án: ' . $project_comments->name . ' với số tiền ' . $total_price .' thành công!',
+                        'status' => 5, 
+                        'user_id' => Auth::user()->id
+                    ]),
+                    'user_id' => Auth::user()->id
+                ]
+            ];
+            if(!empty($voucher_info->discount_type)){
+                $history = [
+                    ...$history,
+                    [
+                        'content' => json_encode([
+                            'title' => 'Voucher đã sử dụng',
+                            'content' => 'Bạn đã sử dụng dụng ' . $project_comments->voucher_code . ' với trị giá giảm ' . $discount_value . ($voucher_info->discount_type == 'percent' ? '%' : 'đ'),
+                            'status' => 5, 
+                            'user_id' => Auth::user()->id
+                        ]),
+                        'user_id' => Auth::user()->id
+                    ]
+                ];
+            }
+            $this->updateHistory($history);
+            if ($transaction && $new_balance > 0) {
                 $request = $request->merge([
-                    'balance' => $balance - $price_order,
+                    'balance' => $new_balance,
+                    'provisional_deduction' => 0,
                     'user_id' => Auth::user()->id
                 ]);
                 $check = $this->walletService->update($request, $wallet_info->id);
@@ -82,16 +129,16 @@ class CustomerCheckoutController extends Controller
                         'updated_at' => Carbon::now()
                     ]);
                 }
-                // DB::commit();
+                DB::commit();
                 return response()->json([
-                    'status' => $surplus > 0 ? 'success' : 'error',
+                    'status' => 'success',
                     'data' => $transaction
                 ]);
             } else {
-                // DB::rollback();
+                DB::rollback();
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Project not found'
+                    'message' => 'Giao dịch thất bại!'
                 ]);
             }
         }catch(\Exception $e){
@@ -104,5 +151,17 @@ class CustomerCheckoutController extends Controller
 
     public function updateExpenditureStatistic($data){
         return $this->expenditureStatisticService->updateExpenditureStatistic($data);
+    }
+
+    public function updateHistory($histories = array()){
+        if(!empty($histories)){
+            $histories = array_map(function($history){
+                $history['created_by'] = Auth::user()->id;
+                $history['created_at'] = date('Y-m-d H:i:s');
+                $history['updated_at'] = date('Y-m-d H:i:s');
+                return $history;
+            }, $histories);
+            $this->historyService->insert($histories);
+        }
     }
 }
