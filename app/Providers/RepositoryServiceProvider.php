@@ -45,6 +45,8 @@ use App\Repositories\ProductImage\ProductImageRepository;
 use App\Repositories\ProductImage\ProductImageRepositoryInterface;
 use App\Repositories\Profile\ProfileRepository;
 use App\Repositories\Profile\ProfileRepositoryInterface;
+use App\Repositories\Setting\SettingRepository;
+use App\Repositories\Setting\SettingRepositoryInterface;
 use App\Repositories\TransactionHistory\TransactionHistoryRepositoryInterface;
 use App\Repositories\TransactionHistory\TransactionHistoryRepository;
 use App\Repositories\Voucher\VoucherRepository;
@@ -83,6 +85,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ExpenditureStatisticRepositoryInterface::class, ExpenditureStatisticRepository::class);
         $this->app->bind(AdminFaqRepositoryInterface::class, AdminFaqRepository::class);
         $this->app->bind(CensorshipHistoryRepositoryInterface::class, CensorshipHistoryRepository::class);
+        $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
     }
 
     /**

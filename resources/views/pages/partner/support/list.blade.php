@@ -85,7 +85,7 @@
                         @if(!empty($supports))
                             @foreach ($supports as $key => $support)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ ($supports->currentPage() - 1) * $supports->perPage() + $key + 1 }}</td>
                                 <td class="list-table-title">
                                     <a href="javascript:void(0);">{{ $support->title }}</a>
                                 </td>
@@ -94,7 +94,7 @@
                                 <td class="list-table-time">
                                     {{ date('d/m/Y', strtotime($support->created_at)) }} <span>{{ date('H:i', strtotime($support->created_at)) }}</span>
                                 </td>
-                                <td class="list-table-status">
+                                <td class="list-table-status text-center">
                                     <span class="btn">
                                         {!! __(config('constants.status_support')[$support->status]) !!}
                                     </span>

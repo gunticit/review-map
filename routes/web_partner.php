@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ManagePartnerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Partner\CartController;
 use App\Http\Controllers\Partner\ProductController;
@@ -43,4 +44,7 @@ Route::group([
     Route::delete('/support-delete/{id}', [PartnerSupportController::class, 'delete'])->name('partner.support.delete');
     Route::delete('/support-delete-by-ids/{ids}', [PartnerSupportController::class, 'deleteByIds'])->name('partner.support.delete.by.ids');
     Route::get('/support-create', [PartnerSupportController::class, 'create'])->name('partner.support.create');
+
+    //Ajax
+    Route::get('/ajax-list-partners', [ManagePartnerController::class, 'getListPartnerAjax'])->name('ajax.list.partners');
 });

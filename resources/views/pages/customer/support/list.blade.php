@@ -59,7 +59,7 @@
                             <td class="list-table-time">
                                 {!! date('d/m/Y', strtotime($support->created_at)) !!} <span>{!! date('hh:mm', strtotime($support->created_at)) !!}</span>
                             </td>
-                            <td class="list-table-progree">
+                            <td class="list-table-progree text-center">
                                 <span class="btn {!! 
                                     $support->status == 1 ? 'btn-success' : 
                                     ($support->status == 2 ? 'btn-primary' :

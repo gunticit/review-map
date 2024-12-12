@@ -37,7 +37,7 @@
                                         </a>
                                     </h3>
                                     <div class="product-price">
-                                        <span>{{ formatCurrency($product->price) }} VND</span>
+                                        <span>{{ formatCurrency($product->price) }}</span>
                                     </div>
                                     <button class="add-to-cart btn btn-primary">Thêm vào giỏ</button>
                                 </div>

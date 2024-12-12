@@ -114,7 +114,7 @@
                                     @if(!empty($projects))
                                         @foreach($projects as $key => $project)
                                             <tr>
-                                                <td class="list-table-stt" scope="col">{{ $project->id }}<input type="hidden" class="comment-id" value="{{ $project->id }}"></td>
+                                                <td class="list-table-stt" scope="col">{{ ($projects->currentPage() - 1) * $projects->perPage() + $key + 1 }}<input type="hidden" class="comment-id" value="{{ $project->id }}"></td>
                                                 <td class="list-table-time" scope="col">RO-{{ $project->id }}</td>
                                                 <td class="list-table-content" scope="col">
                                                     <div class="content-comment-{{ $project->id }}">{{ $project->comment ?? '' }}

@@ -11,7 +11,9 @@ use App\Services\ExpenditureStatisticService;
 use App\Services\ProjectService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;class ManagePartnerController extends Controller
+use Illuminate\Pagination\LengthAwarePaginator;
+
+class ManagePartnerController extends Controller
 {
     protected $userService, $expenditure, $projectService;
     public function __construct(
@@ -171,5 +173,12 @@ use Illuminate\Pagination\LengthAwarePaginator;class ManagePartnerController ext
 
     public function destroy(string $id)
     {
+    }
+    public function getListPartnerAjax(Request $request){
+        $data = $this->userService->list($request);
+        return response()->json([
+            'title' => 'Danh sách dối tác',
+            'data' => $data,
+        ]);
     }
 }

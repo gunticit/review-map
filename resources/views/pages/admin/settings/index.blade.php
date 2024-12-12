@@ -1,5 +1,12 @@
 @extends('layouts.app')
-
+@section('css')
+<style>
+    .setting-page .accordion-header .accordion-button:not(.collapsed){
+        color: #005dfb;
+    }
+</style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
 @section('content')
 <section class="section setting-page mb-5 mt-5">
     <div class="container-fluid">
@@ -56,13 +63,55 @@
                         </div>
                       </div>
                       <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Cấu hình dịch vụ
-                          </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          Cấu hình dịch vụ
+                        </button>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#collapseTwo">
                           <div class="accordion-body">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion-item">
+                        <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#headingPartner" aria-expanded="false" aria-controls="headingPartner">
+                            Cấu hình đối tác
+                        </button>
+                        <div id="headingPartner" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#headingPartner">
+                          <div class="accordion-body">
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Xác thực tài khoản đối tác</span>
+                                    <span class="notice">Bật/tắt xác thực tài khoản đối tác</span>
+                                </div>
+                                <select name="vertify_account" id="vertify_account" class="form-select select-setting">
+                                    <option value="">Lựa chọn</option>
+                                    <option value="1">Bật</option>
+                                    <option value="2">Tắt</option>
+                                </select>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Tài khoản đối tác</span>
+                                    <span class="notice">Xác thực sẽ áp dụng với những tài khoản setting tại đây, mặc định sẽ áp dụng tất cả</span>
+                                </div>
+                                <select class="ajax-list-partner" name="user_partner_verify" id="listPartners"></select>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-12">
+                                        @if(!empty($settings['setting_partner']))
+                                        <ul>
+                                            @foreach ($setting_partner as $partner)
+                                                <li>
+                                                    <span class="">
+                                                        {{ $partner->name }}
+                                                    </span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -75,5 +124,23 @@
 @endsection
 
 @section('script')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{{ asset('js/admin/voucher.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('#listPartners').select2({
+            ajax: {
+                url: '{{ route(("ajax.list.partners") )}}',
+                data: function (params) {
+                    let query = {
+                        search: params.term,
+                        type: 'public'
+                    }
+                    console.log(params);
+                    return query;
+                }
+            }
+        });
+    });
+</script>
 @endsection

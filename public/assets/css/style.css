@@ -463,6 +463,9 @@ p.inputTags-error:after {
 .iti--flexible-dropdown-width .iti__country-list {
   white-space: nowrap;
 }
+.badge{
+  min-width: 120px;
+}
 
 @media (max-width: 500px) {
   .iti--flexible-dropdown-width .iti__country-list {

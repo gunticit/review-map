@@ -93,9 +93,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($projects as $project)
+                                @foreach($projects as $key => $project)
                                 <tr>
-                                    <td width="35">{{ $project->id }}</td>
+                                    <td width="35">{{ ($projects->currentPage() - 1) * $projects->perPage() + $key + 1 }}</td>
                                     <td class="list-table-title">
                                         <a href="{{ route('project.edit', ['id' => $project->id]) }}">{{ $project->name }}</a>
                                     </td>

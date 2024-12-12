@@ -16,7 +16,7 @@
                 <table class="table list-table">
                     <thead>
                         <tr>
-                            <th class="list-table-stt" scope="col">STT2</th>
+                            <th class="list-table-stt" scope="col">STT</th>
                             <th class="list-table-title" scope="col">Tiêu đề</th>
                             <th class="list-table-creator" scope="col">Người tạo</th>
                             <th class="list-table-progree" scope="col">Trạng thái</th>
@@ -26,7 +26,7 @@
                     <tbody>
                         @foreach ($notifications as $index => $notification)
                         <tr>
-                            <td>{{ $notification->id }}</td>
+                            <td class="text-center">{{ ($notifications->currentPage() - 1) * $notifications->perpage() + $index + 1 }}</td>
                             <td class="list-table-title">
                                 <a href="{{ route('notification.show', ['id' => $notification->id]) }}">{{ $notification->title }}</a>
                             </td>

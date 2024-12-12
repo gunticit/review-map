@@ -32,10 +32,9 @@
                 </thead>
                 <tbody>
                     @if(!empty($histories))
-                        @php $stt = 1; @endphp
-                        @foreach($histories as $history)
+                        @foreach($histories as $key => $history)
                         <tr>
-                            <td width="50">{{ $stt }}</td>
+                            <td width="50">{{ ($histories->currentPage() - 1) * $histories->perPage() + $key + 1 }}</td>
                             <td class="list-table-time">{!! $history['created_at']->format('d/m/Y') !!} <span>{!! $history['created_at']->format('H:i') !!}</span></td>
                             <td class="list-table-title"> 
                                 @php
@@ -47,7 +46,6 @@
                                 {{ $history['createdBy']->name }}
                             </td>
                         </tr>
-                        @php $stt++; @endphp
                         @endforeach
                     @endif
                 </tbody>
