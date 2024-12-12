@@ -12,10 +12,12 @@
             </nav>
         </div>
         <div class="col-xl-2 col-md-8 col-12 text-right">
+            @if(auth()->user()->getRoleNames()->first() != 'admin')
             <a href="{{ route('customer.support.create') }}" class="btn btn-primary d-flex flex-wrap" id="btn-add">
                 <span class="material-symbols-outlined">add</span>
                 <span>Tạo yêu cầu</span>
             </a>
+            @endif
         </div>
     </div>
   </div>
