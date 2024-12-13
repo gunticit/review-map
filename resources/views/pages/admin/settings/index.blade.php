@@ -75,12 +75,56 @@
                         <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#headingPartner" aria-expanded="false" aria-controls="headingPartner">
                             Cấu hình đối tác
                         </button>
-                        <div id="headingPartner" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#headingPartner">
+                        <div id="headingPartner" class="collapse" aria-labelledby="headingPartner" data-bs-parent="#headingPartner">
                           <div class="accordion-body">
                             <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
                                 <div class="content d-flex flex-column">
                                     <span class="title">Xác thực tài khoản đối tác</span>
                                     <span class="notice">Bật/tắt xác thực tài khoản đối tác</span>
+                                </div>
+                                <select name="vertify_account" id="vertify_account" class="form-select select-setting">
+                                    <option value="">Lựa chọn</option>
+                                    <option value="1">Bật</option>
+                                    <option value="2">Tắt</option>
+                                </select>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Tài khoản đối tác</span>
+                                    <span class="notice">Xác thực sẽ áp dụng với những tài khoản setting tại đây, mặc định sẽ áp dụng tất cả</span>
+                                </div>
+                                <select class="ajax-list-partner" name="user_partner_verify" id="listPartners"></select>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-12">
+                                        @if(!empty($settings['setting_partner']))
+                                        <ul>
+                                            @foreach ($setting_partner as $partner)
+                                                <li>
+                                                    <span class="">
+                                                        {{ $partner->name }}
+                                                    </span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion-item">
+                        <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#headingPayment" aria-expanded="false" aria-controls="headingPayment">
+                            Cấu hình thanh toán
+                        </button>
+                        <div id="headingPayment" class="collapse" aria-labelledby="headingPayment" data-bs-parent="#headingPayment">
+                          <div class="accordion-body">
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Phương thức thanh toán</span>
+                                    <span class="notice">Phương thức sẽ trả thưởng cho đối tác</span>
                                 </div>
                                 <select name="vertify_account" id="vertify_account" class="form-select select-setting">
                                     <option value="">Lựa chọn</option>

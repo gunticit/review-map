@@ -62,7 +62,7 @@ class ProfileController extends Controller
                 'dark_mode'  => $profile->dark_mode ?? null,
                 'country_code' => $profile->country_code ?? null
             ),
-            'accountPayment' => $profile->accountPayment
+            'accountPayment' => $profile->accountPayment ?? null
         ]);
     }
 

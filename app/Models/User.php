@@ -82,4 +82,9 @@ class User extends Authenticatable
     public function accountPayment() {
         return $this->hasOne(AccountPayment::class, 'user_id', 'id');
     }
+
+    public function levelDetails()
+    {
+        return $this->belongsTo(Level::class, 'level');
+    }
 }

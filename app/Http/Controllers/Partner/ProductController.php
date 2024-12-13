@@ -50,7 +50,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -81,6 +81,23 @@ class ProductController extends Controller
         $product = $this->productService->findBySlug($slug);
         return view('pages.partner.store.product-detail',[
             'product' => $product
+        ]);
+    }
+
+    public function partnerFindProduct(Request $request){
+        if(!$request->id){
+            return response()->json_encode([
+                'title' => 'Chi tiết sản phẩm bằng ajax',
+                'status' => false,
+                'message' => 'Thiếu params id truyền vào'
+            ]);
+        }
+        $product_info = $this->productService->find($request->id);
+        return response()->json_encode([
+            'title' => 'Chi tiết sản phẩm bằng ajax',
+            'status' => true,
+            'message' => 'Lấy dữ liệu thành công',
+            'data' => $product_info
         ]);
     }
 }

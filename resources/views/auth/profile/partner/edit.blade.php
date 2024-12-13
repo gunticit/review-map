@@ -70,15 +70,14 @@
                     </div>
                     <div class="card-body">
                     <div class="mb-4 payment">
-                                <label for="payment" class="form-label">Phương thức thanh toán</label>
-                                <select class="form-select form-select-js form-control" name="payment_method" id="payment_method" disabled>
-                                    <option value="momo" {{ old('payment_method', $accountPayment->payment_method) == 'momo' ? 'selected' : '' }}>Thanh toán qua ví điện tử Momo</option>
-                                    <option value="onepay" {{ old('payment_method', $accountPayment->payment_method) == 'onepay' ? 'selected' : '' }}>Thanh toán qua Onepay</option>
-                                    {{-- <option value="vnpay" {{ old('payment_method', $accountPayment->payment_method) == 'vnpay' ? 'selected' : '' }}>Quét mã VNPAY-QR</option>
-                                    <option value="atm" {{ old('payment_method', $accountPayment->payment_method) == 'atm' ? 'selected' : '' }}>Thẻ ngân hàng ATM</option>
-                                    <option value="visa" {{ old('payment_method', $accountPayment->payment_method) == 'visa' ? 'selected' : '' }}>Thẻ thanh toán quốc tế</option> --}}
-                                    
-                                </select>
+                            <label for="payment" class="form-label">Phương thức thanh toán</label>
+                            <select class="form-select form-select-js form-control" name="payment_method" id="payment_method" disabled>
+                                <option value="momo" {!! !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'momo' ? 'selected' : '' !!}>Thanh toán qua ví điện tử Momo</option>
+                                <option value="onepay" {!! !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'onepay' ? 'selected' : '' !!}>Thanh toán qua Onepay</option>
+                                {{-- <option value="vnpay" {{ !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'vnpay' ? 'selected' : '' }}>Quét mã VNPAY-QR</option>
+                                <option value="atm" {{ !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'atm' ? 'selected' : '' }}>Thẻ ngân hàng ATM</option>
+                                <option value="visa" {{ !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'visa' ? 'selected' : '' }}>Thẻ thanh toán quốc tế</option> --}}
+                            </select>
                             </div>
                         <div class="mb-4">
                             <label for="tax">Họ và tên</label>

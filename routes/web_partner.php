@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\ManagePartnerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Partner\CartController;
-use App\Http\Controllers\Partner\ProductController;
+use App\Http\Controllers\Partner\ProductController as PartnerProductController;
 use App\Http\Controllers\Partner\MissionController;
 use App\Http\Controllers\Partner\OrderController;
 use App\Http\Controllers\Partner\OverviewController;
@@ -21,8 +21,8 @@ Route::group([
     Route::post('/wallet/transaction-histories',  [WalletController::class, 'storeTransactionHistory'])->name('withdraw.wallet.store');
     Route::get('/wallet/verify/create',  [WalletController::class, 'createVerify'])->name('wallet.verify.create');
     Route::post('/wallet/verify',  [WalletController::class, 'storeVerify'])->name('wallet.verify.store');
-    Route::get('/store-product',  [ProductController::class, 'index'])->name('store.product');
-    Route::get('/detail-product/{slug}',  [ProductController::class, 'findBySlug'])->name('detail.product.partner');
+    Route::get('/store-product',  [PartnerProductController::class, 'index'])->name('store.product');
+    Route::get('/detail-product/{slug}',  [PartnerProductController::class, 'findBySlug'])->name('detail.product.partner');
     
     Route::get('/cart',  [CartController::class, 'index'])->name('cart.index');
     Route::patch('/cart/update-quantity',  [CartController::class, 'updateQuantity'])->name('cart.update.quantity');
@@ -47,4 +47,5 @@ Route::group([
 
     //Ajax
     Route::get('/ajax-list-partners', [ManagePartnerController::class, 'getListPartnerAjax'])->name('ajax.list.partners');
+    Route::get('/partner-find-product', [PartnerProductController::class, 'partnerFindProduct'])->name('partner.find.product');
 });
