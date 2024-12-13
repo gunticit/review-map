@@ -425,8 +425,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" id="confirm-url-map">Xác nhận</button>
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">{{ __('common.text_button.close') }}</button>
+                <button type="button" class="btn btn-primary" id="confirm-url-map">{{ __('common.text_button.confirm') }}</button>
             </div>
         </div>
     </div>

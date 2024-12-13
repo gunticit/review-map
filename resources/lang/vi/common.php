@@ -52,6 +52,12 @@
         'unread' => 'Chưa đọc'
     ];
 
+    $text_button = array(
+        'confirm' => 'Confirm',
+        'cancel' => 'Cancel',
+        'close' => 'Close'
+    );
+
 
     return array(
         'action_success' => $action_success,
@@ -60,6 +66,7 @@
         'token_error'  => $token_error,
         'account_error'  => $account_error,
         'status_notification' => $status_notification,
+        'text_button' => $text_button,
         'overview' => 'Tổng quan',
         'total_customer' => 'Tổng số khách hàng',
         'doing' => 'Đang thực hiện',
