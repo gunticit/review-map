@@ -19,6 +19,9 @@
     .btn.btn-info > span, .btn.btn-danger > span{
         font-size: 20px;
     }
+    .out-of-stock{
+        background: rgba(227, 227, 227, 0.45);
+    }
 </style>
     <!-- danh-sach-du-an -->
     <section class="section danh-sach-du-an mb-5">
@@ -81,6 +84,9 @@
                             <th class="list-table-price">
                                 Giá sản phẩm
                             </th>
+                            <th class="list-table-stock">
+                                Tình trạng
+                            </th>
                             <th class="list-table-handle">
                                 Thao tác
                             </th>
@@ -89,7 +95,7 @@
                     <tbody>
                         @if(!empty($products) && count($products) > 0)
                             @foreach($products as $product)
-                                <tr id="item-product-{{ $product->id }}">
+                                <tr id="item-product-{{ $product->id }}" class="{{ $product == 0 ? 'out-of-stock' : ''}}">
                                     <td class="list-table-product-name" scope="col">{{ $product->id }}</td>
                                     <td class="list-table-product-code text-center" scope="col">
                                     {{ $product->name }}
@@ -105,6 +111,9 @@
                                     </td>
                                     <td class="list-table-price text-center">
                                         {!! formatVND($product->price) !!}
+                                    </td>
+                                    <td class="list-table-price text-center {!!$product->stock == 0 ? 'text-danger' : ''!!}">
+                                        {!! $product->stock == 0 ? config('product.in_stock') : config('product.out_of_stock') !!}
                                     </td>
                                     <td class="list-table-handle text-center">
                                         <button class="btn btn-info" type="button" onclick="handleEdit({{ $product->id }})">
