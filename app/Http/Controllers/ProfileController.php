@@ -49,7 +49,8 @@ class ProfileController extends Controller
     }
 
     public function editPartner(Request $request){
-        $profile = User::where('id',(auth()->user()->id))->with('accountPayment')->first();
+        $user = auth()->user();
+        $profile = User::where('id',($user->id))->with('accountPayment')->first();
         return view('auth.profile.partner.edit', [
             'profile' => array(
                 'id'         => $profile->id ?? null,
@@ -62,6 +63,7 @@ class ProfileController extends Controller
                 'dark_mode'  => $profile->dark_mode ?? null,
                 'country_code' => $profile->country_code ?? null
             ),
+            'levelDetails' => $user->levelDetails,
             'accountPayment' => $profile->accountPayment ?? null
         ]);
     }

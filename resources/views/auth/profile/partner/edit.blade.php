@@ -25,6 +25,13 @@
                                         </a>
                                         <input type="file" name="avatar" class="d-none" id="inputAvatar">
                                     </div>
+                                    @if(!empty($levelDetails))
+                                    <div class="info-level">
+                                        <p>{{ __('Cấp độ') }}: {{ $levelDetails->name }}</p>
+                                        <p>{{ __('Thời gian nhận task') }}: {{ $levelDetails->time_limit . __('giờ') }}</p>
+                                        <p>{{ __('Trả thưởng') }}: {{ number_format($levelDetails->reward, 0) }} VND/task</p>
+                                    </div>
+                                    @endif
                                 </div>
                                 <div class="col-md-8">
                                     <!-- Form Group (username)-->

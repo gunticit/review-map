@@ -11,16 +11,23 @@ use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Services\LevelService;
 
 class MissionService {
-    protected $missionRepository, $walletService, $userService, $transactionHistoryService, $censorshipHistoryService;
+    protected $missionRepository, 
+    $walletService, 
+    $userService, 
+    $transactionHistoryService, 
+    $censorshipHistoryService,
+    $levelService;
 
     public function __construct(
         MissionRepositoryInterface $missionRepository, 
         WalletService $walletService, 
         UserService $userService,
         TransactionHistoryService $transactionHistoryService,
-        CensorshipHistoryService $censorshipHistoryService
+        CensorshipHistoryService $censorshipHistoryService,
+        LevelService $levelService
     )
     {
         $this->missionRepository = $missionRepository;
@@ -28,6 +35,7 @@ class MissionService {
         $this->userService = $userService;
         $this->transactionHistoryService = $transactionHistoryService;
         $this->censorshipHistoryService = $censorshipHistoryService;
+        $this->levelService = $levelService;
     }
 
     /**
@@ -67,6 +75,14 @@ class MissionService {
             ], $id);
 
         }
+
+        $user = auth()->user();
+
+        // Cập nhật số nhiệm vụ đã hoàn thành
+        $user->tasks_completed += 1;
+        $user->save();
+        // Cập nhật lại level
+        $this->levelService->updateUserLevel($user);
 
         return $mission;
     }
