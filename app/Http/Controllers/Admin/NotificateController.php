@@ -109,6 +109,7 @@ class NotificateController extends Controller
                     'user_id' => $customer_id,
                     'title' => $data['title'],
                     'content' => $data['content'],
+                    'file_path' => $data['filepath'],
                     'created_at' => $data['created_at'],
                     'created_by' => auth()->user()->id
                 ];
