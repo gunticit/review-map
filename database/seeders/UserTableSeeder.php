@@ -18,7 +18,11 @@ class UserTableSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'telephone' => '0909123123',
             'password' => bcrypt('123123123123'),
-            'department_id' => 1
+            'department_id' => 1,
+            'otp' => '1234',
+            'otp_expires_at' => now()->addYear(1),
+            'latitude' => '10.8051577',
+            'longitude' => '106.6398229'
         ];
         $userAdmin = User::create($admin);
         $userAdmin->assignRole([Role::ADMIN_ROLE]);
@@ -31,6 +35,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'customer@gmail.com',
                 'telephone' => '0909123124',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_CUSTOMER1',
@@ -38,6 +46,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'customer1@gmail.com',
                 'telephone' => '09091231241',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_CUSTOMER2',
@@ -45,6 +57,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'customer2@gmail.com',
                 'telephone' => '09091231242',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_CUSTOMER3',
@@ -52,6 +68,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'customer3@gmail.com',
                 'telephone' => '09091231243',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_CUSTOMER4',
@@ -59,6 +79,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'customer4@gmail.com',
                 'telephone' => '09091231244',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_CUSTOMER5',
@@ -66,6 +90,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'customer5@gmail.com',
                 'telephone' => '09091231245',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ]
         ];
         User::insert($customer);
@@ -81,6 +109,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'partner@gmail.com',
                 'telephone' => '0909123125',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_PARTNER1',
@@ -88,6 +120,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'partner1@gmail.com',
                 'telephone' => '09091231251',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_PARTNER2',
@@ -95,6 +131,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'partner2@gmail.com',
                 'telephone' => '09091231252',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_PARTNER3',
@@ -102,6 +142,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'partner3@gmail.com',
                 'telephone' => '09091231253',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_PARTNER',
@@ -109,6 +153,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'partner4@gmail.com',
                 'telephone' => '09091231254',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_PARTNER4',
@@ -116,6 +164,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'partner5@gmail.com',
                 'telephone' => '09091231255',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ],
             [
                 'usercode' => 'RV_PARTNER5',
@@ -123,6 +175,10 @@ class UserTableSeeder extends Seeder
                 'email' => 'partner6@gmail.com',
                 'telephone' => '09091231256',
                 'password' => bcrypt('123123123123'),
+                'otp' => '1234',
+                'otp_expires_at' => now()->addYear(1),
+                'latitude' => '10.8051577',
+                'longitude' => '106.6398229'
             ]
         ];
         User::insert($partners);

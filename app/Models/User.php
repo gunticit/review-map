@@ -33,6 +33,10 @@ class User extends Authenticatable
         'email_verified_at',
         'telephone_verified_at',
         'tasks_completed',
+        'otp',
+        'otp_expires_at',
+        'latitude',
+        'longitude'
     ];
 
     /**
