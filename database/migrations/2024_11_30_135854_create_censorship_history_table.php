@@ -16,7 +16,8 @@ return new class extends Migration
             $table->integer('approver_id'); // Người duyệt
             $table->integer('mission_id'); // Nhiệm vụ được duyệt
             $table->integer('partner_id'); // Đối tác
-            $table->double('money', 15, 0); // Số tiền nhận
+            $table->double('money', 15, 0)->nullable(); // Số tiền đối tác nhận
+            $table->integer('status'); // 1: // Thành công, 2: // Thiếu Hình ảnh, 3: // Không thấy comment
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

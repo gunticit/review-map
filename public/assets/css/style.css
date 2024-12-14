@@ -464,7 +464,7 @@ p.inputTags-error:after {
   white-space: nowrap;
 }
 .badge{
-  min-width: 120px;
+  min-width: 200px;
 }
 
 @media (max-width: 500px) {

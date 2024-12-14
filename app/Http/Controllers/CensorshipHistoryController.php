@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\CensorshipHistoryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CensorshipHistoryController extends Controller
 {
@@ -71,6 +72,22 @@ class CensorshipHistoryController extends Controller
     }
 
     public function createJson(Request $request){
+        $validation = Validator::make($request->all(), [
+            'approver_id' => 'required',
+            'mission_id' => 'required',
+            'partner_id' => 'required',
+            'status' => 'required'
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json([
+                'title' => 'Tạo lịch sử kiểm duyệt',
+                'data' => null,
+                'message' => $validation->errors()->first(),
+                'status' => false
+            ]);
+        }
+        
         $data = $this->censorshipHistoryService->create($request);
         return response()->json([
             'title' => 'Tạo lịch sử kiểm duyệt',

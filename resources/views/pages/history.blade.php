@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if(!empty($histories))
+                    @if(!empty($histories) && count($histories) > 0)
                         @foreach($histories as $key => $history)
                         <tr>
                             <td width="50">{{ ($histories->currentPage() - 1) * $histories->perPage() + $key + 1 }}</td>
@@ -47,10 +47,18 @@
                             </td>
                         </tr>
                         @endforeach
+                    @else
+                        <tr class="no-result">
+                            <td colspan="4">
+                                <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có lịch sử hoạt động') }}</span>
+                            </td>
+                        </tr>
                     @endif
                 </tbody>
             </table>
+            @if(!empty($histories))
             {{ $histories->links('vendor.pagination.custom') }}
+            @endif
         </div>
     </div>
 </section>

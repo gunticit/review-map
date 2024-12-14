@@ -36,7 +36,6 @@
                                 <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
                             </div>
                         </form>
-                        @if(!empty($withdraws))
                             <div class="group-table-list">
                                 <table class="table list-table">
                                     <thead>
@@ -51,28 +50,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($withdraws as $key => $withdraw)
-                                            <tr class="recharge">
-                                                <td class="list-table-stt" scope="col">{{ $withdraw->history_id }}</td>
-                                                <td class="list-table-time" scope="col">{{ date('d/m/Y H:i', strtotime($withdraw->created_at)) }}</td>
-                                                <td class="list-table-so-tien" scope="col">{{ $withdraw->transaction_code ?? '' }}</td>
-                                                <td class="list-table-phuong-thuc" scope="col">{{ config('constants.method_payments')[$withdraw->payment_method_id] ?? '' }}</td>
-                                                <td class="list-table-tai-khoan-nhan" scope="col">{{ $withdraw->bank_number ?? '' }}</td>
-                                                <td class="list-table-so-tien-rut" scope="col">{{ formatCurrency($withdraw->amount) }}</td>
-                                                <td class="list-table-trang-thai" scope="col">
-                                                    <span class="text-success">{{ $withdraw->status == 'pending' ? 'Đang xử lý' : ($withdraw->status == 'completed' ? 'Thành công' : 'Thất bại') }}</span>
-                                                </td>
+                                        @if(!empty($withdraws) && count($withdraws) > 0)
+                                            @foreach ($withdraws as $key => $withdraw)
+                                                <tr class="recharge">
+                                                    <td class="list-table-stt" scope="col">{{ $withdraw->history_id }}</td>
+                                                    <td class="list-table-time" scope="col">{{ date('d/m/Y H:i', strtotime($withdraw->created_at)) }}</td>
+                                                    <td class="list-table-so-tien" scope="col">{{ $withdraw->transaction_code ?? '' }}</td>
+                                                    <td class="list-table-phuong-thuc" scope="col">{{ config('constants.method_payments')[$withdraw->payment_method_id] ?? '' }}</td>
+                                                    <td class="list-table-tai-khoan-nhan" scope="col">{{ $withdraw->bank_number ?? '' }}</td>
+                                                    <td class="list-table-so-tien-rut" scope="col">{{ formatCurrency($withdraw->amount) }}</td>
+                                                    <td class="list-table-trang-thai" scope="col">
+                                                        <span class="text-success">{{ $withdraw->status == 'pending' ? 'Đang xử lý' : ($withdraw->status == 'completed' ? 'Thành công' : 'Thất bại') }}</span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="7" class="text-center">Chưa có lịch sử giao dịch</td>
                                             </tr>
-                                        @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
+                        @if(!empty($withdraws) && count($withdraws) > 0)
                             <div class="list-table-footer d-flex justify-content-between align-items-center">
                                 {{ $withdraws->links('vendor.pagination.custom') }}
-                            </div>
-                        @else
-                            <div class="col-sm-12 mt-4">
-                                <p class="text-center">Bạn chưa thực hiện giao dịch nào</p>
                             </div>
                         @endif
                     </div>
@@ -99,13 +101,24 @@
 
                             <div class="mb-4 payment">
                                 <label for="payment" class="form-label">Phương thức thanh toán</label>
-                                <select class="form-select form-select-js" name="payment_method_id" id="payment">
-                                    <option value="{{ \App\Enums\PaymentMethod::MOMO->value }}" selected>Thanh toán qua ví điện tử Momo</option>
-                                    <option value="5">Thanh toán qua Onepay</option>
-                                    {{-- <option value="{{ \App\Enums\PaymentMethod::VNPAY->value }}">Quét mã VNPAY-QR</option>
-                                    <option value="{{ \App\Enums\PaymentMethod::ATM->value }}">Thẻ ngân hàng ATM</option>
-                                    <option value="{{ \App\Enums\PaymentMethod::VISA->value }}">Thẻ thanh toán quốc tế</option> --}}
-                                </select>
+                                @if(!empty($payment_method))
+                                    <select class="form-select" name="payment_method_id" id="payment">
+                                            @if(!empty($payment_method) && old('payment_method', $payment_method) == 'momo')
+                                                <option value="momo" selected>Thanh toán qua ví điện tử Momo</option>
+                                            @elseif(!empty($payment_method) && old('payment_method', $payment_method) == 'bank')
+                                                <option value="bank" selected>Chuyển khoản ngân hàng</option>
+                                            @endif
+                                    </select>
+                                @else
+                                    <p>
+                                        <a class="btn btn-warning" href="{{ route('profile.partner.edit') }}">
+                                            <span class="material-symbols-outlined">
+                                                settings
+                                            </span> 
+                                            <span>Thiết lập</span>
+                                        </a>
+                                    </p>
+                                @endif
                             </div>
 
                             <!-- Form Group (Deposit Amount)-->

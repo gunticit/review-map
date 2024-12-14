@@ -75,7 +75,7 @@
                                         <p style="overflow: hidden; text-overflow: ellipsis; margin-bottom: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.5;">{{ $mission->comments->comment }}</p>
                                     </td>
                                     <td class="list-table-progree text-center">
-                                        <span class="{{ checkStatus($mission->status)['className'] }} {{ checkStatus($mission->status)['className'] }}">{{ statusMission($mission->status) }}</span>
+                                        <span class="{{ checkStatus($mission->status)['className'] }} {{ checkStatus($mission->status)['className'] }}">{!! $mission->status ? statusMission($mission->status):'' !!}</span>
                                     </td>
                                     <td class="list-table-profit text-center">
                                         <span class="{{ checkStatus($mission->status)['className'] }}">{{ formatCurrency($mission->price) }}</span>

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Requests;
 
+use App\Rules\CheckCurrentPassword;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
@@ -14,12 +15,13 @@ class ChangePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'current_password' => ['required', 'incorrect'],
+            'current_password' => ['required', new CheckCurrentPassword()],
             'new_password' => [
                 'required',
                 'string',
-                Password::min(8)->mixedCase()->letters()->numbers()->symbols()->uncompromised(),
-                // 'confirmed'
+                Password::min(6)
+                    ->letters() 
+                    ->symbols()
             ],
         ];
     }

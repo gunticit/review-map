@@ -32,12 +32,23 @@ class CensorshipHistoryService {
         $censorshipHistoryRepository = $this->censorshipHistoryRepository->create($data);
         return $censorshipHistoryRepository;
     }
+    public function getAll($request){
+        $censorshipHistoryRepository = $this->censorshipHistoryRepository->getAll($request);
+        return $censorshipHistoryRepository;
+    }
+    /**
+     * Prepare the data for create or update CensorshipHistory.
+     *
+     * @param Request $request
+     * @return array
+     */
     public function getData($request){
         return [
             'approver_id' => $request->approver_id,
             'mission_id' => $request->mission_id,
             'partner_id' => $request->partner_id,
-            'money' => $request->money
+            'money' => $request->money ?? null,
+            'status' => $request->status
         ];
     }
 }

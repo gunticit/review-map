@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Mission;
 use App\Models\Project;
 use App\Models\ProjectImage;
+use App\Services\CensorshipHistoryService;
 use App\Services\HistoryService;
 use App\Services\MissionService;
 use App\Services\ProjectImageService;
@@ -18,24 +19,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class MissionController extends Controller
 {
-    protected $missionService,$walletService, $historyService, $projectImageService, $userService;
+    protected $missionService,$walletService, $historyService, $projectImageService, $userService, $censorshipHistoryService;
 
     public function __construct(
         MissionService $missionService,
         WalletService $walletService,
         HistoryService $historyService,
         ProjectImageService $projectImageService,
-        UserService $userService
+        UserService $userService,
+        CensorshipHistoryService $censorshipHistoryService
     ){
         $this->missionService = $missionService;
         $this->walletService = $walletService;
         $this->historyService = $historyService;
         $this->projectImageService = $projectImageService;
         $this->userService = $userService;
+        $this->censorshipHistoryService = $censorshipHistoryService;
     }
 
     /**
@@ -46,7 +50,7 @@ class MissionController extends Controller
         try {
             $user_id = auth()->user()->id;
             $lastTimeMakeMission = $this->checkLastTimeMakeMission($user_id);
-            if(empty($lastTimeMakeMission)) {
+            if(!$lastTimeMakeMission) {
                 return redirect()->route('wating.mission');
             }
             $count_project = Project::where('status', 2)->count();
@@ -219,12 +223,34 @@ class MissionController extends Controller
 
     public function showJson(string $id){
         $mission = $this->missionService->find($id);
+        $request = new Request();
+        $request->merge(['mission_id' => $id]);
+        $histories = $this->censorshipHistoryService->list($request);
+        $data_history = array();
+        if(!empty($histories->all())){
+            foreach ($histories->all() as $history) {
+                $label_status = '';
+                if($history['status'] == 1){
+                    $label_status = 'Duyệt thành công';
+                }else if($history['status'] == 2){
+                    $label_status = 'Duyệt thiếu hình ảnh';
+                }else if($history['status'] == 3){
+                    $label_status = 'Duyệt không thấy bình luận';
+                }
+                $data_history[] = array(
+                    'id' => $history->id,
+                    'status' => $label_status,
+                    'created_at' => Carbon::parse($history->created_at)->format('d/m/Y H:i:s')
+                );
+            }
+        }
         return response()->json([
             'data' => array(
                 'mission' => $mission,
                 'images' => $mission->images ?? null,
                 'comments' => $mission->comments ?? null,
-                'project' => $mission->project ?? null
+                'project' => $mission->project ?? null,
+                'histories' => $data_history ?? null
             ),
             'title' => 'Chi tiết nhiệm vụ',
             'status' => 1
@@ -394,10 +420,21 @@ class MissionController extends Controller
             ]);
         }
     }
-
+    // 1: // Thành công, 2: // Thiếu Hình ảnh, 3: // Không thấy comment
     public function updateNoImage(Request $request, $id){
         try{
             $data = $this->missionService->updateNoImage($request, $id);
+            if(!empty($data)){
+                $censorshipHistory = new Request();
+                $censorshipHistory->merge([
+                    'mission_id' => $data->id,
+                    'approver_id' => auth()->user()->id,
+                    'partner_id' => $data->user_id,
+                    'money' => $data->price,
+                    'status' => 2, // Thiếu hình
+                ]);
+                $this->censorshipHistoryService->create($censorshipHistory);
+            }
             return response()->json([
                 'status' => true,
                 'message' => 'Cập nhật trạng thái thành công',
@@ -437,11 +474,16 @@ class MissionController extends Controller
 
 
     public function checkLastTimeMakeMission($user_id, $type = null){
-        $mission = Mission::where('user_id', $user_id)->where('status', 1)->orderBy('completed_at', 'desc')->first();
+        $mission = Mission::where('user_id', $user_id)->where('status', '!=', 2)->orderBy('completed_at', 'desc')->first();
         $hour_plus = $this->checkTimeByLevel($user_id);
         if(!empty($mission)){
-            $time = Carbon::createFromFormat('Y-m-d H:i:s', $mission->created_at)->addHours($hour_plus);
             $now = Carbon::now();
+            // Trường hợp nhiệm vụ đã hết hạn
+            if($mission->status == 6){
+                $time = Carbon::createFromFormat('Y-m-d H:i:s', $mission->created_at)->addHours($hour_plus);
+            }else{
+                $time = Carbon::createFromFormat('Y-m-d H:i:s', $mission->completed_at)->addHours($hour_plus);
+            }
 
             if($time <= $now){
                 return true; // Nếu giờ hiện tại lớn hơn giờ đã làm trước đó + giờ theo cấp

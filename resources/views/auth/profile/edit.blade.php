@@ -11,7 +11,7 @@
                     <div class="card mb-4">
                         <div class="card-header d-xl-flex justify-content-between align-items-center">
                             <h2 class="card-title">Thông tin cá nhân</h2>
-                            <button class="btn btn-primary" type="button">Chỉnh sửa</button>
+                            <button class="btn btn-primary" id="btn-edit-info" type="button">Chỉnh sửa</button>
                             <button class="btn btn-outline-primary" id="btn-save-info" type="button">Lưu thông tin</button>
                         </div>
                         <div class="card-body">
@@ -43,7 +43,7 @@
                                     <div class="mb-4">
                                         <label for="inputPhone">Số điện thoại <span class="required">*</span>
                                         </label>
-                                        <input type="tel" class="form-control form-control-lg" id="telephone" name="telephone" placeholder="Số điện thoại" value="{{ $profile['telephone'] }}" disabled />
+                                        <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="Số điện thoại" value="{{ $profile['telephone'] }}" disabled />
                                     </div>
                                     <!-- Form Group (country)-->
                                     <div class="mb-4">
@@ -65,7 +65,7 @@
                 <div class="card mb-4">
                     <div class="card-header d-xl-flex justify-content-between align-items-center">
                         <h2 class="card-title">Thông tin công ty</h2>
-                        <button class="btn btn-primary" type="button">Chỉnh sửa</button>
+                        <button class="btn btn-primary" id="btn-edit-company" type="button">Chỉnh sửa</button>
                         <button class="btn btn-outline-primary" id="btn-company" type="button">Lưu thông tin</button>
                     </div>
                     <div class="card-body">
@@ -118,19 +118,15 @@
             cache: false,
             data: formData,
             success: function(res) {
-                Toastify({
-                    text: "Thay đổi thông tin thành công!",
-                    duration: 3000,
-                    newWindow: true,
-                    close: true,
-                    gravity: "top", 
-                    position: "center", 
-                    stopOnFocus: true,
-                    style: {
-                        background: "linear-gradient(to right, #00b09b, #96c93d)",
-                    },
-                    onClick: function(){} // Callback after click
-                }).showToast();
+                if(res.status){
+                    $('#btn-edit-info').show();
+                    $('#btn-save-info').hide();
+                    $('input.form-control').attr('disabled', true);
+                    $('select.form-select').attr('disabled', true);
+                    showAlert('success',res.message);
+                }else{
+                    showAlert('error',res.message);
+                }
             },
             error: function() {
             }
@@ -148,6 +144,14 @@
 
         reader.readAsDataURL(file);
     });
+    $('#btn-edit-company').on('click', function(e) {
+        e.preventDefault();
+        $('input.form-control').attr('disabled', false);
+        $('select.form-select').attr('disabled', false);
+        $('#is_receive').attr('disabled', false);
+        $('#btn-edit-company').hide();
+        $('#btn-company').show();
+    });
     $('#btn-company').on('click', function(e) {
         let formData = new FormData();
         formData.append('_token', "{{ csrf_token() }}");
@@ -164,19 +168,16 @@
             cache: false,
             data: formData,
             success: function(res) {
-                Toastify({
-                    text: "Thay đổi thông tin thành công!",
-                    duration: 3000,
-                    newWindow: true,
-                    close: true,
-                    gravity: "top", 
-                    position: "center", 
-                    stopOnFocus: true,
-                    style: {
-                        background: "linear-gradient(to right, #00b09b, #96c93d)",
-                    },
-                    onClick: function(){} // Callback after click
-                }).showToast();
+                if(res.status){
+                    $('#btn-edit-company').show();
+                    $('#btn-company').hide();
+                    $('input.form-control').attr('disabled', true);
+                    $('select.form-select').attr('disabled', true);
+                    $('#is_receive').attr('disabled', true);
+                    showAlert("success","Thay đổi thông tin thành công!");
+                }else{
+                    showAlert("error","Thay đổi thông tin thành công!");
+                }
             },
             error: function() {
             }

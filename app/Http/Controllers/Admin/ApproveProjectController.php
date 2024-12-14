@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project;
-use App\Services\ApiGoogleService;
 use App\Services\ProjectService;
 use Carbon\Carbon;
 
 
 class ApproveProjectController extends Controller
 {
-    public $projectService;
+    public $projectService, $censorshipHistoryService;
     public function __construct(ProjectService $projectService)
     {
         $this->projectService = $projectService;
@@ -59,6 +58,7 @@ class ApproveProjectController extends Controller
             }
         }
         $data['status_complete'] = Project::COMPLETED_PROJECT;
+
 
         return view('pages.admin.approve-project.index', $data);
     }

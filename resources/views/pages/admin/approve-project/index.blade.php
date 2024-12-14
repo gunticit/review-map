@@ -120,6 +120,9 @@
             </div>
         </div>
     </section>
+    @section('js')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    @endsection
     <script>
         function showProject(id) {
             if($('#item-project-'+id).hasClass('active')){
@@ -199,8 +202,8 @@
                 },
                 dataType: 'json',
                 success: function(data) {
+                    console.log('data.data?.histories', data.data?.histories);
                     if(data.data && data.data?.mission){
-                        console.log(data.data);
                         $('#info-project *').remove();
                         $('#info-project').append(`
                             <div class="form-detail">
@@ -221,25 +224,21 @@
                                     <input type="text" class="form-control" readonly value="${data.data.mission?.status == 1 ? 'Đã thực hiện' : 'Đang thực hiện'}">
                                 </div>
                                 ${
-                                    data.data?.mission?.no_image || data.data?.mission?.no_review ? `
+                                    data.data?.histories ? `
                                     <div class="form-group">
                                         <hr />
-                                        <label>Kết quả đã check: </label> 
+                                        <label>Lịch sử duyệt: </label> 
                                     </div>`:``
                                 }
                                 ${
-                                    data.data?.mission?.no_image ? `
-                                        <div class="form-group mb-4">
-                                            <input type="text" class="form-control" readonly value="Không thấy ảnh">
-                                        </div>
-                                    ` : ''
-                                }
-                                ${
-                                    data.data?.mission?.no_review ? `
-                                        <div class="form-group mb-4">
-                                            <input type="text" class="form-control" readonly value="Không thấy đánh giá">
-                                        </div>
-                                    ` : ''
+                                    data.data?.histories ? data.data?.histories.map(history => {
+                                        return `
+                                            <div class="form-group d-flex justify-content-between border-bottom pb-2 mb-4">
+                                                <span>${history?.status ?? ''}</span>
+                                                <span>${history?.created_at ?? ''}</span>
+                                            </div>
+                                        `;
+                                    }).join(''): ''
                                 }
                                 <div class="d-flex gap-3 group-action text-right">
                                     <button onclick="handleViewRate('${data.data.project?.place_id}','${data.data?.mission?.link_confirm}')" class="btn btn-outline-primary">Xem đánh giá</button>
@@ -270,6 +269,46 @@
                         let data_reviews = null;
                         if(res.status){
                             data_reviews = res.data.reviews;
+                            data_reviews = data_reviews.sort((a, b) => new Date(b.publishTime) - new Date(a.publishTime)) // Sắp xếp từ mới đến cũ
+                                .map(review => {
+                                    if (!review.originalText?.text) return '';
+                                    const dateStr = review.publishTime;
+                                    const date = new Date(dateStr);
+
+                                    // Lấy ngày, tháng, năm, giờ và phút
+                                    const day = String(date.getDate()).padStart(2, '0');
+                                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+                                    const year = date.getFullYear();
+                                    const hours = String(date.getHours()).padStart(2, '0');
+                                    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                                    // Định dạng ngày giờ
+                                    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+
+                                    return `
+                                        <li class="list-group-item list-group-item-action">
+                                            <div class="d-block w-100 justify-content-between review-item">
+                                                <div class="row">
+                                                    <div class="col-sm-4 col-xs-12">
+                                                        <label>Người đánh giá</label>
+                                                        <p class="mb-1">${review.authorAttribution?.displayName ?? ''}</p>
+                                                    </div>
+                                                    <div class="col-sm-4 col-xs-12">
+                                                        <label>Điểm đánh giá</label>
+                                                        <p class="mb-1">${review.rating ?? ''}</p>
+                                                    </div>
+                                                    <div class="col-sm-4 col-xs-12">
+                                                        <label>Thời gian đánh giá</label>
+                                                        <p class="mb-1">${formattedDate ?? ''}</p>
+                                                    </div>
+                                                </div>
+                                                <label>Nội dung đánh giá</label>
+                                                <p class="mb-1">${review.originalText?.text ?? ''}</p>
+                                                <a href="${review.googleMapsUri ?? ''}" target="_blank"><span>Xem chi tiết</span></a>
+                                            </div>
+                                        </li>
+                                    `;
+                                }).join('') ?? '';
                             $('body').append(`
                                 <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
                                     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
@@ -293,44 +332,7 @@
                                                     <h3>Bình luận gần đây</h3>
                                                     <ul>
                                                         ${
-                                                            data_reviews.map(review => {
-                                                                if(!review.originalText?.text) return '';
-                                                                const dateStr = review.publishTime;
-                                                                const date = new Date(dateStr);
-
-                                                                // Lấy ngày, tháng, năm, giờ và phút
-                                                                const day = String(date.getDate()).padStart(2, '0');
-                                                                const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-                                                                const year = date.getFullYear();
-                                                                const hours = String(date.getHours()).padStart(2, '0');
-                                                                const minutes = String(date.getMinutes()).padStart(2, '0');
-
-                                                                // Định dạng ngày giờ
-                                                                const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-                                                                return `
-                                                                    <li class="list-group-item list-group-item-action">
-                                                                        <div class="d-block w-100 justify-content-between review-item">
-                                                                            <div class="row">
-                                                                                <div class="col-sm-4 col-xs-12">
-                                                                                    <label>Người đánh giá</label>
-                                                                                    <p class="mb-1">${review.authorAttribution?.displayName ?? '' }</p>
-                                                                                </div>
-                                                                                <div class="col-sm-4 col-xs-12">
-                                                                                    <label>Điểm đánh giá</label>
-                                                                                    <p class="mb-1">${review.rating ?? '' }</p>
-                                                                                </div>
-                                                                                <div class="col-sm-4 col-xs-12">
-                                                                                    <label>Thời gian đánh giá</label>
-                                                                                    <p class="mb-1">${formattedDate ?? ''}</p>
-                                                                                </div>
-                                                                            </div>
-                                                                            <label>Nội dung đánh giá</label>
-                                                                            <p class="mb-1">${review.originalText?.text ?? ''}</p>
-                                                                            <a href="${review.googleMapsUri ?? ''}" target="_blank"><span>Xem chi tiết</span></a>
-                                                                        </div>
-                                                                    </li>
-                                                                `
-                                                            }).join('') ?? ''
+                                                            data_reviews
                                                         }
                                                     </ul>    
                                                 </div>

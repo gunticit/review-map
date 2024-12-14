@@ -5,6 +5,44 @@
         display: flex;
         justify-content: center;
     }
+    #form-change-password .input-group-text.togglePassword{
+        z-index: 1;
+    }
+    div#form-change-password.loading:before {
+        pointer-events: all;
+        content: "";
+        display: flex;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: rgb(0 0 0 / 30%);
+    }
+    div#form-change-password.loading:after{
+        content: '';
+        position: absolute;
+        top: calc(50% - 40px);
+        left: calc(50% - 40px);
+        width: 40px;
+        height: 40px;
+        transform: translate(-50%, -50%);
+        border: 3px solid transparent;
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        z-index: 2;
+    }
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 <div id="layoutSidenav">
         @auth
@@ -66,6 +104,8 @@
         $('#btn-save-change').on('click', function(){
             $('.g-new_password .text-danger').remove();
             $('.g-confirm_password .text-danger').remove();
+            $('#old_password .text-danger').remove();
+            $('#error-message .text-danger').remove();
             $('#new_password').removeClass('border-danger');
             $('#confirm_password').removeClass('border-danger');
             let current_password = $('#old_password').val();
@@ -90,16 +130,44 @@
                     "new_password": new_password
                 },
                 dataType: 'json',
+                beforeSend: function(){
+                    $('#btn-save-change').prop('disabled', true);
+                    $('#form-change-password').addClass('loading');
+                },
                 success: function(response){
+                    if(response.status){
+                        $('#change-password-form').modal('hide');
+                        showAlert('success', response.message);
+                    }
+                },
+                complete: function(){
+                    $('#btn-save-change').prop('disabled', false);
+                    $('#form-change-password').removeClass('loading');
                 },
                 error: function(xhr) {
-                    if (xhr.status === 422) {
-                        let errors = xhr.responseJSON.errors;
-                        for (let key in errors) {
-                            $('#error-message').append('<p class="text-danger">'+errors[key]+'</p>');
+                    let errors = xhr.responseJSON.errors;
+                    if(errors){
+                        if(errors.current_password && errors.current_password.length > 0){
+                            $('#old_password').addClass('border-danger');
+                            errors.current_password.forEach(error => {
+                                $('#old_password').parent().append('<p class="text-danger">' + error + '</p>');
+                            });
                         }
-                    } else {
-                        $('#error-message').append('<p class="text-danger">'+errors[key]+'</p>');
+                        if(errors.new_password && errors.new_password.length > 0){
+                            $('#new_password').addClass('border-danger');
+                            errors.new_password.map(error => {
+                                $('#new_password').parent().append('<p class="text-danger">' + error + '</p>');
+                            })
+                        }
+                        if(errors){
+                            for (let key in errors) {
+                                if(key != 'new_password' && key != 'current_password'){
+                                    $('#error-message').append('<p class="text-danger">' + errors[key] + '</p>');
+                                }
+                            }
+                        }
+                    }else{
+                        $('#error-message').append('<p class="text-danger">Có lỗi xảy ra! Vui lòng thử lại.</p>');
                     }
                 }
             });

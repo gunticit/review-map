@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Onepay;
 use App\Http\Requests\WalletRequest;
+use App\Models\User;
 use App\Services\TransactionHistoryService;
 
 class WalletController extends Controller
@@ -41,6 +42,7 @@ class WalletController extends Controller
     public function withdraw()
     {
         $user_info = Auth::user();
+        $profile = User::where('id',($user_info->id))->with('accountPayment')->first();
         $certificationAccount = $user_info->certificationAccount;
         if(Auth::user()->getRoleNames()->first() == 'partner'){
             $balance = $this->walletService->getBalance();
@@ -50,6 +52,7 @@ class WalletController extends Controller
             'certificationAccount' => $certificationAccount,
             'user_info' => $user_info,
             'balance' => $balance,
+            'payment_method' => $profile->accountPayment['payment_method'] ?? null,
             'withdraws' => $histories
         ]);
     }

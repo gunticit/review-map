@@ -8,10 +8,10 @@
             <!-- cot 1 -->
             <div class="col-xl-6 col-md-12 col-12 mb-4 mb-xl-0">
                 <form>
-                    <div class="card mb-4">
+                    <div class="card">
                         <div class="card-header d-xl-flex justify-content-between align-items-center">
                             <h2 class="card-title">Thông tin cá nhân</h2>
-                            <button class="btn btn-primary" type="button">Chỉnh sửa</button>
+                            <button class="btn btn-primary" id="btn-edit-info" type="button">Chỉnh sửa</button>
                             <button class="btn btn-outline-primary" id="btn-save-info" type="button">Lưu thông tin</button>
                         </div>
                         <div class="card-body">
@@ -69,23 +69,23 @@
             </div>
             <!-- cot 2 -->
             <div class="col-xl-6 col-md-12 col-12 mb-4 mb-xl-0">
-                <div class="card mb-4">
+                <div class="card">
                     <div class="card-header d-xl-flex justify-content-between align-items-center">
                         <h2 class="card-title">Tài khoản nhận thưởng</h2>
-                        <button class="btn btn-primary" type="button">Chỉnh sửa</button>
+                        <button class="btn btn-primary" id="btn-edit" type="button">Chỉnh sửa</button>
                         <button class="btn btn-outline-primary" id="btn-company" type="button">Lưu thông tin</button>
                     </div>
                     <div class="card-body">
-                    <div class="mb-4 payment">
+                        <div class="mb-4 payment">
                             <label for="payment" class="form-label">Phương thức thanh toán</label>
                             <select class="form-select form-select-js form-control" name="payment_method" id="payment_method" disabled>
                                 <option value="momo" {!! !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'momo' ? 'selected' : '' !!}>Thanh toán qua ví điện tử Momo</option>
-                                <option value="onepay" {!! !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'onepay' ? 'selected' : '' !!}>Thanh toán qua Onepay</option>
+                                <option value="bank" {!! !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'bank' ? 'selected' : '' !!}>Chuyển khoản ngân hàng</option>
                                 {{-- <option value="vnpay" {{ !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'vnpay' ? 'selected' : '' }}>Quét mã VNPAY-QR</option>
                                 <option value="atm" {{ !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'atm' ? 'selected' : '' }}>Thẻ ngân hàng ATM</option>
                                 <option value="visa" {{ !empty($accountPayment->payment_method) && old('payment_method', $accountPayment->payment_method) == 'visa' ? 'selected' : '' }}>Thẻ thanh toán quốc tế</option> --}}
                             </select>
-                            </div>
+                        </div>
                         <div class="mb-4">
                             <label for="tax">Họ và tên</label>
                             <input class="form-control " id="account_name" name ="account_name" type="text" placeholder="Nguyen Van A" value="{{ $accountPayment->account_name ?? '' }}" disabled>
@@ -95,13 +95,15 @@
                             </label>
                             <input class="form-control mb-1" id="phone_number" type="text" name="phone_number" placeholder="0123456789" value="{{$accountPayment->phone_number ?? '' }}" disabled>
                         </div>
-                        <div class="mb-4">
-                            <label for="company_address">Số tài khoản </label>
-                            <input class="form-control" id="account_number" name="account_number" type="text" placeholder="Số tài khoản" value="{{$accountPayment->account_number ?? '' }}" disabled>
-                        </div>
-                        <div class="mb-4">
-                            <label for="company_address">Tên ngân hàng </label>
-                            <input class="form-control" id ="bank_name" name="bank_name" type="text" placeholder="VietCombank" value="{{$accountPayment->bank_name ?? '' }}" disabled>
+                        <div class="row">
+                            <div class="col-5">
+                                <label for="company_address">Tên ngân hàng </label>
+                                <input class="form-control form-control-lg" id ="bank_name" name="bank_name" type="text" placeholder="VietCombank" value="{{$accountPayment->bank_name ?? '' }}" disabled>
+                            </div>
+                            <div class="col-7">
+                                <label for="company_address">Số tài khoản </label>
+                                <input class="form-control" id="account_number" name="account_number" type="text" placeholder="Số tài khoản" value="{{$accountPayment->account_number ?? '' }}" disabled>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -112,7 +114,7 @@
 
 <!-- end tai khoan -->
 <script>
-    $('#btn-save-info').on('click', function(e) {
+    $('body').on('click', '#btn-save-info', function(e) {
         e.preventDefault();
         const file = document.getElementById('inputAvatar').files[0];
         let formData = new FormData();
@@ -130,19 +132,14 @@
             cache: false,
             data: formData,
             success: function(res) {
-                Toastify({
-                    text: "Thay đổi thông tin thành công!",
-                    duration: 3000,
-                    newWindow: true,
-                    close: true,
-                    gravity: "top", 
-                    position: "center", 
-                    stopOnFocus: true,
-                    style: {
-                        background: "linear-gradient(to right, #00b09b, #96c93d)",
-                    },
-                    onClick: function(){} // Callback after click
-                }).showToast();
+                if(res.status){
+                    showAlert('success',res.message);
+                    $('#btn-save-info').hide();
+                    $('#btn-edit-info').show();
+                    $('input, select').attr('disabled', 'disabled');
+                }else{
+                    showAlert('error',res.message);
+                }
             },
             error: function() {
             }
@@ -160,15 +157,17 @@
 
         reader.readAsDataURL(file);
     });
-    $('#btn-company').on('click', function(e) {
+    $('body').on('click', '#btn-company', function(e) {
         e.preventDefault();
         let formData = new FormData();
+        let payment_method = $('#payment_method').val();
+        let bank_name = (payment_method == 'bank') ? $('#bank_name').val() : '';
         formData.append('_token', "{{ csrf_token() }}");
-        formData.append('payment_method', $('#payment_method').val());
+        formData.append('payment_method', payment_method);
         formData.append('account_name', $('#account_name').val());
         formData.append('phone_number', $('#phone_number').val());
         formData.append('account_number', $('#account_number').val());
-        formData.append('bank_name', $('#bank_name').val());
+        formData.append('bank_name', bank_name);
         $.ajax({
             url: '{{ route("profile.partner.update.payment", $profile['id']) }}',
             method: 'POST',
@@ -177,23 +176,26 @@
             cache: false,
             data: formData,
             success: function(res) {
-                Toastify({
-                    text: "Thay đổi thông tin thành công!",
-                    duration: 3000,
-                    newWindow: true,
-                    close: true,
-                    gravity: "top", 
-                    position: "center", 
-                    stopOnFocus: true,
-                    style: {
-                        background: "linear-gradient(to right, #00b09b, #96c93d)",
-                    },
-                    onClick: function(){} // Callback after click
-                }).showToast();
+                if(res.status){
+                    showAlert('success',res.message);
+                    $('#btn-company').hide();
+                    $('#btn-edit').show();
+                    $('input, select').attr('disabled', 'disabled');
+                }else{
+                    showAlert('error',res.message);
+                }
             },
             error: function() {
             }
         })
     })
+    $('body #payment_method').on('change', function() {
+        if ($(this).val() != 'bank') {
+            $('#bank_name').attr('disabled', true);
+            $('#bank_name').val('');
+        }else{
+            $('#bank_name').attr('disabled', false);
+        }
+    });
 </script>
 @endsection

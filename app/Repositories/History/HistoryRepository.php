@@ -23,6 +23,9 @@ class  HistoryRepository extends BaseRepository implements HistoryRepositoryInte
                       ->orWhereRaw("LOWER(content->>'$.content') LIKE ?", ['%' . strtolower($keyword) . '%']);
             });
         }
+        if(!empty($request->user_id)){
+            $query = $query->where('created_by', $request->user_id);
+        }
         if(!empty($request->date)){
             $query = $query->whereDate('created_at', urldecode($request->date));
         }

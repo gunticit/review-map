@@ -246,12 +246,12 @@
 <script>
     $('body').on('click', '#btn-edit', function(){
         $('input,select').removeAttr("disabled");
-        $(this).addClass('d-none');
-        $('#btn-company').removeClass('d-none');
+        $(this).hide();
+        $('#btn-company').show();
     });
     $('body').on('click', '#btn-company', function(){
-        $(this).addClass('d-none');
-        $('#btn-edit').removeClass('d-none');
+        $(this).hide();
+        $('#btn-edit').show();
         $('input, select').attr('disabled', 'disabled');
     });
 </script>
