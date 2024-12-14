@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedInteger('level')->default(1);
             $table->unsignedInteger('tasks_completed')->default(0);
             $table->unsignedInteger('experience_points')->default(0);
         });
