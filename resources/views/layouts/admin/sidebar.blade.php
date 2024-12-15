@@ -83,7 +83,7 @@
 <div class="collapse {!! request()->routeIs('category.index') || request()->routeIs('category.create') || request()->routeIs('product.index') || request()->routeIs('product.create') || request()->routeIs('order.index') || request()->routeIs('order.create') ? 'show' : '' !!}" id="collapseProduct" data-bs-parent="#accordionProduct">
     <nav class="sidenav-menu-nested nav accordion" id="accordionProductChild">
         <a class="nav-link {!! request()->routeIs('category.index') || request()->routeIs('category.create') ? 'active' : '' !!}" href="{{ route('category.index') }}">Danh mục sản phẩm</a>
-        <a class="nav-link {!! request()->routeIs('product.index') || request()->routeIs('product.create') ? 'active' : '' !!}" href="{{ route('product.index') }}">Danh sách sản phẩm</a>
+        <a class="nav-link {!! request()->routeIs('product.index') || request()->routeIs('product.create') ? 'active' : '' !!}" href="{{ route('product.index') }}">Sản phẩm</a>
         <a class="nav-link {!! request()->routeIs('order.index') || request()->routeIs('order.create') ? 'active' : '' !!}" href="{{ route('order.index') }}">Quản lý đơn đặt hàng</a>
     </nav>
 </div>

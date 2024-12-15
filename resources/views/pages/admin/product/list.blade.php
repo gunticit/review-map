@@ -95,7 +95,7 @@
                     <tbody>
                         @if(!empty($products) && count($products) > 0)
                             @foreach($products as $product)
-                                <tr id="item-product-{{ $product->id }}" class="{{ $product == 0 ? 'out-of-stock' : ''}}">
+                                <tr id="item-product-{{ $product->id }}" class="{{ $product->stock == 0 ? 'out-of-stock' : ''}}">
                                     <td class="list-table-product-name" scope="col">{{ $product->id }}</td>
                                     <td class="list-table-product-code text-center" scope="col">
                                     {{ $product->name }}

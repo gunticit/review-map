@@ -89,13 +89,15 @@
                 @endif
 
             </form>
-            <div class="login-other">
-                <span>Hoặc đăng nhập với</span>
-            </div>
+            @if(request()->getHost() !== env('ADMIN_DOMAIN'))
+                <div class="login-other">
+                    <span>Hoặc đăng nhập với</span>
+                </div>
                 <a href="javascript:void(0);" class="btn btn-outline-secondary login-with-google" data-bs-toggle="modal" data-bs-target="#confirmModal">
                     <img src="{{ asset('./assets/img/google-logo.svg') }}" alt="google"> Google
                 </a>
-                <div class="login-link-acount">
+            @endif
+            <div class="login-link-acount">
                 <span>Bạn chưa có tài khoản? </span>
                 <a href="{{ route('register') }}" class="btn-link">Tạo tài khoản</a>
             </div>

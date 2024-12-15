@@ -121,25 +121,19 @@
                         </button>
                         <div id="headingPayment" class="collapse" aria-labelledby="headingPayment" data-bs-parent="#headingPayment">
                           <div class="accordion-body">
-                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3">
                                 <div class="content d-flex flex-column">
                                     <span class="title">Phương thức thanh toán</span>
                                     <span class="notice">Phương thức sẽ trả thưởng cho đối tác</span>
                                 </div>
                                 <select name="vertify_account" id="vertify_account" class="form-select select-setting">
                                     <option value="">Lựa chọn</option>
-                                    <option value="1">Bật</option>
-                                    <option value="2">Tắt</option>
+                                    @foreach ( as )
+                                        
+                                    @endforeach
                                 </select>
                             </div>
-                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
-                                <div class="content d-flex flex-column">
-                                    <span class="title">Tài khoản đối tác</span>
-                                    <span class="notice">Xác thực sẽ áp dụng với những tài khoản setting tại đây, mặc định sẽ áp dụng tất cả</span>
-                                </div>
-                                <select class="ajax-list-partner" name="user_partner_verify" id="listPartners"></select>
-                            </div>
-                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                            {{-- <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
                                 <div class="col-sm-12">
                                     <div class="col-sm-12">
                                         @if(!empty($settings['setting_partner']))
@@ -155,7 +149,7 @@
                                         @endif
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                           </div>
                         </div>
                       </div>

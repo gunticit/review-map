@@ -105,12 +105,14 @@
                         <input type="hidden" name="permission_id" value="1">
                         <button type="submit" id="btn-register" class="btn btn-primary">{{ __('auth.register') }}</button>
                     </form>
-                    <div class="login-other">
-                        <span>{{ __('auth.login_with') }}</span>
-                    </div>
-                    <a href="javascript:void(0);" class="btn btn-outline-secondary login-with-google" data-bs-toggle="modal" data-bs-target="#confirmModal">
-                        <img src="{{ asset('./assets/img/google-logo.svg') }}" alt="google"> Google
-                    </a>
+                    @if(request()->getHost() !== env('ADMIN_DOMAIN'))
+                        <div class="login-other">
+                            <span>{{ __('auth.login_with') }}</span>
+                        </div>
+                        <a href="javascript:void(0);" class="btn btn-outline-secondary login-with-google" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                            <img src="{{ asset('./assets/img/google-logo.svg') }}" alt="google"> Google
+                        </a>
+                    @endif
                     <div class="login-link-acount">
                         <span>{{ __('auth.already_have_account') }} </span>
                         <a href="{{ route('login') }}" class="btn-link">{{ __('auth.login') }}</a>
