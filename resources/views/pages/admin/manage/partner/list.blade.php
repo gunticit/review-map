@@ -75,7 +75,7 @@
                     </table>
                         {{ $partners->links('vendor.pagination.custom') }}
                     @else
-                        <div class="col-sm-12">
+                        <div class="no-result col-sm-12">
                             <p class="text-center">Hiện tại chưa có thông tin đối tác</p>
                         </div>
                     @endif

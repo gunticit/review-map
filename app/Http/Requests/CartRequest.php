@@ -22,7 +22,19 @@ class CartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'quantity' => 'required|numeric|min:1',
+            'product_id' => 'required|exists:products,id'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'quantity.required' => 'Số lượng là bắt buộc .',
+            'quantity.numeric' => 'Số lượng phải là số.',
+            'quantity.min' => 'Số lượng đặt tối thiểu là 1.',
+            'product_id.required' => 'Id sản phẩm là bắt buộc.',
+            'product_id.exists' => 'Id sản phẩm không tồn tại.',
         ];
     }
 }

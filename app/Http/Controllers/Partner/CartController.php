@@ -3,16 +3,30 @@
 namespace App\Http\Controllers\Partner;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CartRequest;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Voucher;
 use App\Models\Wallet;
+use App\Services\CartService;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Services\WalletService;
 
 class CartController extends Controller
 {
+    private $cartService, $walletService, $productService;
+    public function __construct(
+        CartService $cartService,
+        WalletService $walletService,
+        ProductService $productService
+    ){
+        $this->cartService = $cartService;
+        $this->walletService = $walletService;
+        $this->productService = $productService;
+    }
     public function index()
     {
         $user = Auth::user();
@@ -41,8 +55,9 @@ class CartController extends Controller
         $cart->total_formatted = $this->formatCurrencyVND($total);
 
         $wallet = Wallet::where('user_id', $user->id)->first();
-        $wallet->balance_formatted = $this->formatCurrencyVND($wallet->balance);
-        return view('pages.partner.cart.index', compact('cart', 'wallet', 'user'));
+        // $wallet->balance_formatted = isset($wallet->balance) && $wallet->balance > 0 ? $this->formatCurrencyVND($wallet->balance) : 0;
+        $balance = isset($wallet->balance) && $wallet->balance > 0 ? $this->formatCurrencyVND($wallet->balance) : 0;
+        return view('pages.partner.cart.index', compact('cart', 'wallet', 'user', 'balance'));
     }
 
     public function updateQuantity(Request $request)
@@ -176,6 +191,28 @@ class CartController extends Controller
             'total_formatted' => $totalFormatted, 
             'discount_formatted' => $discountFormatted,
             'total_after_discount_formatted' => $totalAfterDiscountFormatted
+        ]);
+    }
+
+    public function ajaxStore(CartRequest $request){
+        $wallet_info = $this->walletService->checkWalletUser(auth()->user()->id);
+        $product_info = $this->productService->show($request->product_id);
+        if($product_info->stock < $request->quantity){
+            return response()->json([
+                'success' => false,
+                'message' => 'Số lượng sản phẩm đã hết!'
+            ]);
+        }
+        if($wallet_info->balance < ($product_info->price * $request->quantity) && $wallet_info->balance > 10000){
+            return response()->json([
+                'success' => false,
+                'message' => 'Số tiền trong ví hiện tại không đủ để thanh toán.'
+            ]);
+        }
+        $this->cartService->store($request);
+        return response()->json([
+            'success' => true,
+            'message' => 'Đặt hàng thành công'
         ]);
     }
 

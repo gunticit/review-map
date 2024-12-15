@@ -96,7 +96,7 @@
                 <div class="wallet-card">
                     <img src="{{ asset('./assets/img/rivi-logo.svg') }}" alt="rivi logo">
                     <p>Số dư của tôi</p>
-                    <h3 class="wallet-number text-primary">{{ $wallet->balance_formatted }}</h3>
+                    <h3 class="wallet-number text-primary">{{ $wallet->balance_formatted ?? 0 }}</h3>
                 </div>
                 
                 <div class="shipping">

@@ -31,15 +31,15 @@ $(document).ready(function () {
         });
     }
 
-    function showAlert(type_icon = "info", msg_text = "No messages", redirect = '') {
+    function showAlert(type_icon = "info", msg_text = "No messages", redirect = '', text_button = 'Xác nhận') {
         Swal.fire({
             title: 'Thông báo',
             text: msg_text,
             icon: type_icon, // info, warning, error, success
             showCloseButton: true,
-            showConfirmButton: true,
             allowOutsideClick: false,
-            confirmButtonText: "OK",
+            confirmButtonColor: (type_icon == "success" ? "#0da300" : "#DD6B55"),
+            confirmButtonText: text_button,
         }).then(() => {
             if (redirect) window.location.href=redirect;
         });

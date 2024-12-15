@@ -12,7 +12,7 @@ class Cart extends Model
     use HasFactory, SoftDeletes, UserStamp;
 
     protected $table = 'carts';
-    protected $fillable = ['user_id', 'product_id', 'quantity'];
+    protected $guarded = [];
     public $timestamps = true;
 
     public function user() {

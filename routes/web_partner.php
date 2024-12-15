@@ -36,6 +36,8 @@ Route::group([
     Route::post('/verify-recaptcha', [MissionController::class, 'verifyRecaptcha'])->name('verify.recaptcha');
     Route::get('/waiting-mission', [MissionController::class, 'waitingMission'])->name('wating.mission');
 
+    Route::post('/ajax-cart-add', [CartController::class, 'ajaxStore'])->name('ajax.cart.add');
+
     //Support
     Route::get('/support', [PartnerSupportController::class, 'index'])->name('partner.support');
     Route::post('/support-store', [PartnerSupportController::class, 'store'])->name('partner.support.store');

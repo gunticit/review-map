@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Repositories\AdminFaq\AdminFaqRepository;
 use App\Repositories\AdminFaq\AdminFaqRepositoryInterface;
 use App\Repositories\Bank\BankRepositoryInterface;
-use App\Repositories\Bank\BankRepositoryRepository;
+use App\Repositories\Bank\BankRepository;
+use App\Repositories\Cart\CartRepository;
+use App\Repositories\Cart\CartRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
@@ -81,11 +83,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(WalletRepositoryInterface::class, WalletRepository::class);
         $this->app->bind(TransactionHistoryRepositoryInterface::class, TransactionHistoryRepository::class);
         $this->app->bind(PaymentMethodRepositoryInterface::class, PaymentMethodRepository::class);
-        $this->app->bind(BankRepositoryInterface::class, BankRepositoryRepository::class);
+        $this->app->bind(BankRepositoryInterface::class, BankRepository::class);
         $this->app->bind(ExpenditureStatisticRepositoryInterface::class, ExpenditureStatisticRepository::class);
         $this->app->bind(AdminFaqRepositoryInterface::class, AdminFaqRepository::class);
         $this->app->bind(CensorshipHistoryRepositoryInterface::class, CensorshipHistoryRepository::class);
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
+        $this->app->bind(CartRepositoryInterface::class, CartRepository::class);
     }
 
     /**

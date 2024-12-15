@@ -4,7 +4,7 @@ namespace App\Repositories\Bank;
 use App\Models\Bank;
 use App\Repositories\BaseRepository;
 
-class BankRepositoryRepository extends BaseRepository implements BankRepositoryInterface
+class BankRepository extends BaseRepository implements BankRepositoryInterface
 {
     protected $model;
 
