@@ -67,77 +67,79 @@
                         </button>
                     </div>
                 </form>
-                <table class="table list-table">
-                    <thead>
-                        <tr>
-                            <th class="list-table-stt" scope="col">STT</th>
-                            <th class="list-table-product-name" scope="col">Tên sản phẩm</th>
-                            <th class="list-table-product-code" scope="col">
-                                Mã sản phẩm
-                            </th>
-                            <th class="list-table-image" scope="col">   
-                                Hình đại diện
-                            </th>
-                            <th class="list-table-product">
-                                Danh mục
-                            </th>
-                            <th class="list-table-price">
-                                Giá sản phẩm
-                            </th>
-                            <th class="list-table-stock">
-                                Tình trạng
-                            </th>
-                            <th class="list-table-handle">
-                                Thao tác
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(!empty($products) && count($products) > 0)
-                            @foreach($products as $product)
-                                <tr id="item-product-{{ $product->id }}" class="{{ $product->stock == 0 ? 'out-of-stock' : ''}}">
-                                    <td class="list-table-product-name" scope="col">{{ $product->id }}</td>
-                                    <td class="list-table-product-code text-center" scope="col">
-                                    {{ $product->name }}
-                                    </td>
-                                    <td class="list-table-product-code text-center" scope="col">
-                                    {{ $product->product_code }}
-                                    </td>
-                                    <td class="list-table-image text-center" scope="col">   
-                                        <img src="{!! !empty($product->images[0]?->link_image) ? asset('storage/'.$product->images[0]->link_image) : asset('assets/img/no-image.png') !!}" alt="image" width="100px">
-                                    </td>
-                                    <td class="list-table-product">
-                                        
-                                    </td>
-                                    <td class="list-table-price text-center">
-                                        {!! formatVND($product->price) !!}
-                                    </td>
-                                    <td class="list-table-price text-center {!!$product->stock == 0 ? 'text-danger' : ''!!}">
-                                        {!! $product->stock == 0 ? config('product.in_stock') : config('product.out_of_stock') !!}
-                                    </td>
-                                    <td class="list-table-handle text-center">
-                                        <button class="btn btn-info" type="button" onclick="handleEdit({{ $product->id }})">
-                                            <span class="material-symbols-outlined">
-                                                edit
-                                            </span>
-                                        </button>
-                                        <button class="btn btn-danger" type="button" onclick="handleDelete({{ $product->id }})">
-                                            <span class="material-symbols-outlined">
-                                                delete
-                                            </span>
-                                        </button>
+                <div class="group-table-list">
+                    <table class="table list-table">
+                        <thead>
+                            <tr>
+                                <th class="list-table-stt" scope="col">STT</th>
+                                <th class="list-table-product-name" scope="col">Tên sản phẩm</th>
+                                <th class="list-table-product-code" scope="col">
+                                    Mã sản phẩm
+                                </th>
+                                <th class="list-table-image" scope="col">   
+                                    Hình đại diện
+                                </th>
+                                <th class="list-table-product">
+                                    Danh mục
+                                </th>
+                                <th class="list-table-price">
+                                    Giá sản phẩm
+                                </th>
+                                <th class="list-table-stock">
+                                    Tình trạng
+                                </th>
+                                <th class="list-table-handle">
+                                    Thao tác
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(!empty($products) && count($products) > 0)
+                                @foreach($products as $product)
+                                    <tr id="item-product-{{ $product->id }}" class="{{ $product->stock == 0 ? 'out-of-stock' : ''}}">
+                                        <td class="list-table-product-name" scope="col">{{ $product->id }}</td>
+                                        <td class="list-table-product-code text-center" scope="col">
+                                        {{ $product->name }}
+                                        </td>
+                                        <td class="list-table-product-code text-center" scope="col">
+                                        {{ $product->product_code }}
+                                        </td>
+                                        <td class="list-table-image text-center" scope="col">   
+                                            <img src="{!! !empty($product->images[0]?->link_image) ? asset('storage/'.$product->images[0]->link_image) : asset('assets/img/no-image.png') !!}" alt="image" width="100px">
+                                        </td>
+                                        <td class="list-table-product">
+                                            
+                                        </td>
+                                        <td class="list-table-price text-center">
+                                            {!! formatVND($product->price) !!}
+                                        </td>
+                                        <td class="list-table-price text-center {!!$product->stock == 0 ? 'text-danger' : ''!!}">
+                                            {!! $product->stock == 0 ? config('product.in_stock') : config('product.out_of_stock') !!}
+                                        </td>
+                                        <td class="list-table-handle text-center">
+                                            <button class="btn btn-info" type="button" onclick="handleEdit({{ $product->id }})">
+                                                <span class="material-symbols-outlined">
+                                                    edit
+                                                </span>
+                                            </button>
+                                            <button class="btn btn-danger" type="button" onclick="handleDelete({{ $product->id }})">
+                                                <span class="material-symbols-outlined">
+                                                    delete
+                                                </span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr class="no-result">
+                                    <td colspan="7">
+                                        <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có sản phẩm') }}</span>
                                     </td>
                                 </tr>
-                            @endforeach
-                        @else
-                            <tr class="no-result">
-                                <td colspan="7">
-                                    <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có sản phẩm') }}</span>
-                                </td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
                 @if(!empty($products) && count($products) > 0)
                 {{ $products->links('vendor.pagination.custom') }}
                 @endif

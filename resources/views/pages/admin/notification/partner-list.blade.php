@@ -43,45 +43,47 @@
                         </button>
                     </div>
                 </form>
-                <table class="table list-table">
-                    <thead>
-                        <tr>
-                            <th class="list-table-stt text-center" scope="col">STT</th>
-                            <th class="list-table-code">Thời gian</th>
-                            <th class="list-table-name" scope="col">Tiêu đề</th>
-                            <th class="list-table-description" scope="col">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(!empty($notifications))
-                            @foreach($notifications as $key=> $notificate)
-                                <td class="text-center">{{ ($notifications->currentPage() - 1) * $notifications->perPage() + $key + 1 }}</td>
-                                    <td class="text-center">{{ $notificate->id }}</td>
-                                    <td class="list-table-stt">{!! date('d/m/Y H:i:s', strtotime($notificate->created_at)) !!}</td>
-                                    <td class="list-table-code">
-                                        <a href="{{ route('detail.notificate.partner', $notificate->id) }}" class="text-primary">{{ $notificate->title }}</a>
-                                    </td>
-                                    <td class="list-table-actions">
-                                        <form action="{{ route('delete.notificate.partner', $notificate->id) }}" method="POST" style="display:inline-block;">
-                                            {{ csrf_field() }}
-                                            @method('DELETE')
-                                            <button type="submit" class="btn text-default" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                                <span class="material-symbols-outlined">
-                                                    delete
-                                                </span>
-                                                Thu hồi
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
+                <div class="group-table-list">
+                    <table class="table list-table">
+                        <thead>
                             <tr>
-                                <td colspan="11" class="text-center">Chưa có thông báo nào</td>
+                                <th class="list-table-stt text-center" scope="col">STT</th>
+                                <th class="list-table-code">Thời gian</th>
+                                <th class="list-table-name" scope="col">Tiêu đề</th>
+                                <th class="list-table-description" scope="col">Thao tác</th>
                             </tr>
-                        @endif
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if(!empty($notifications))
+                                @foreach($notifications as $key=> $notificate)
+                                    <td class="text-center">{{ ($notifications->currentPage() - 1) * $notifications->perPage() + $key + 1 }}</td>
+                                        <td class="text-center">{{ $notificate->id }}</td>
+                                        <td class="list-table-stt">{!! date('d/m/Y H:i:s', strtotime($notificate->created_at)) !!}</td>
+                                        <td class="list-table-code">
+                                            <a href="{{ route('detail.notificate.partner', $notificate->id) }}" class="text-primary">{{ $notificate->title }}</a>
+                                        </td>
+                                        <td class="list-table-actions">
+                                            <form action="{{ route('delete.notificate.partner', $notificate->id) }}" method="POST" style="display:inline-block;">
+                                                {{ csrf_field() }}
+                                                @method('DELETE')
+                                                <button type="submit" class="btn text-default" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
+                                                    <span class="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                    Thu hồi
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="11" class="text-center">Chưa có thông báo nào</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
                 {{ $notifications->links('vendor.pagination.custom') }}
             </div>
         </div>

@@ -61,6 +61,7 @@
             </div>
         </div>
     </section>
+    <x-cart-component></x-cart-component>
 @endsection
 @section('js')
     <script>

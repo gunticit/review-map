@@ -19,60 +19,62 @@
                 </form>
                 <div id="list-partners" class="mt-4">
                     @if(!empty($partners))
-                    <table class="table list-table">
-                        <thead>
-                            <tr>
-                                <th style="min-width:55px" scope="col"><a href="javascript:void(0);" class="sort">STT</a></th>
-                                <th style="min-width:135px" cope="col"><a href="javascript:void(0);" class="sort">Mã đối tác</a></th>
-                                <th style="min-width:200px" scope="col"><a href="javascript:void(0);" class="sort">Tên đối tác</a></th>
-                                <th style="min-width:200px"><a href="javascript:void(0);" class="sort">Email</a></th>
-                                <th style="min-width:200px"><a href="javascript:void(0);" class="sort">Số điện thoại</a></th>
-                                <th style="min-width:250px"><a href="javascript:void(0);" class="sort">Nhiệm vụ hoàn thành</a></th>
-                                <th style="min-width:180px"><a href="javascript:void(0);" class="sort">Số tiền đã rút</a></th>
-                                <th style="min-width:180px" scope="col">
-                                    <a href="javascript:void(0);" class="sort">Trạng thái</a>
-                                </th>
-                                <th class="list-table-status" scope="col">
-                                    <a href="javascript:void(0);" class="sort">Thao tác </a>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($partners as $partner)
-                            <tr>
-                                <td width="35">{{ $partner->id }}</td>
-                                <td class="list-table-title">
-                                    <a href="{{ route('admin.manage.partner.info', ['id' => $partner->id]) }}">{{ $partner->name }}</a>
-                                </td>
-                                <td>
-                                    {{ $partner->name }}
-                                </td>
-                                <td>
-                                    <a href="mailto:{{ $partner->email }}">{{ $partner->email }}</a>
-                                </td>
-                                <td>
-                                    <a href="tel:{{ $partner->telephone }}">{{ $partner->telephone }}</a>
-                                </td>
-                                <td>
-                                    {{ $partner->mission->success_count ?? 0 }} / {{ $partner->mission->count ?? 0 }}
-                                </td>
-                                <td>
-                                    {{ $partner->wallet_withdraw ?? 0 }} VND
-                                </td>
-                                <td>
-                                    {{ $partner->active ? 'Hoạt động':'Không hoạt động' }}
-                                </td>
-                                <td>
-                                    <a href="{{ route('admin.manage.partner.info', ['id' => $partner->id]) }}" class="btn-change-status">
-                                        <span class="material-symbols-outlined">
-                                        edit_square
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        <div class="group-table-list">
+                            <table class="table list-table">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width:55px" scope="col"><a href="javascript:void(0);" class="sort">STT</a></th>
+                                        <th style="min-width:135px" cope="col"><a href="javascript:void(0);" class="sort">Mã đối tác</a></th>
+                                        <th style="min-width:200px" scope="col"><a href="javascript:void(0);" class="sort">Tên đối tác</a></th>
+                                        <th style="min-width:200px"><a href="javascript:void(0);" class="sort">Email</a></th>
+                                        <th style="min-width:200px"><a href="javascript:void(0);" class="sort">Số điện thoại</a></th>
+                                        <th style="min-width:250px"><a href="javascript:void(0);" class="sort">Nhiệm vụ hoàn thành</a></th>
+                                        <th style="min-width:180px"><a href="javascript:void(0);" class="sort">Số tiền đã rút</a></th>
+                                        <th style="min-width:180px" scope="col">
+                                            <a href="javascript:void(0);" class="sort">Trạng thái</a>
+                                        </th>
+                                        <th class="list-table-status" scope="col">
+                                            <a href="javascript:void(0);" class="sort">Thao tác </a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($partners as $partner)
+                                    <tr>
+                                        <td width="35">{{ $partner->id }}</td>
+                                        <td class="list-table-title">
+                                            <a href="{{ route('admin.manage.partner.info', ['id' => $partner->id]) }}">{{ $partner->name }}</a>
+                                        </td>
+                                        <td>
+                                            {{ $partner->name }}
+                                        </td>
+                                        <td>
+                                            <a href="mailto:{{ $partner->email }}">{{ $partner->email }}</a>
+                                        </td>
+                                        <td>
+                                            <a href="tel:{{ $partner->telephone }}">{{ $partner->telephone }}</a>
+                                        </td>
+                                        <td>
+                                            {{ $partner->mission->success_count ?? 0 }} / {{ $partner->mission->count ?? 0 }}
+                                        </td>
+                                        <td>
+                                            {{ $partner->wallet_withdraw ?? 0 }} VND
+                                        </td>
+                                        <td>
+                                            {{ $partner->active ? 'Hoạt động':'Không hoạt động' }}
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.manage.partner.info', ['id' => $partner->id]) }}" class="btn-change-status">
+                                                <span class="material-symbols-outlined">
+                                                edit_square
+                                                </span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         {{ $partners->links('vendor.pagination.custom') }}
                     @else
                         <div class="no-result col-sm-12">

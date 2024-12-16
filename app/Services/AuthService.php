@@ -9,6 +9,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -175,6 +176,10 @@ class AuthService {
 
     }
 
+    public function getUserByEmail($email){
+        return User::where('email', $email)->first();
+    }
+
     public function updateCurrentLocation($request)
     {
         $data = $request->validated();
@@ -183,5 +188,24 @@ class AuthService {
             'latitude' => $data['latitude'],
             'longitude' => $data['longitude'],
         ]);
+    }
+    
+    public function incrementOtpAttempts($email){
+        $key = "otp_attempts_" . $email;
+        $attempts = Cache::get($key, 0);
+        $attempts++;
+        Cache::put($key, $attempts, now()->addMinutes(1));
+        return $attempts;
+    }
+    public function getOtpAttempts($email)
+    {
+        $key = "otp_attempts_{$email}";
+        return Cache::get($key, 0);
+    }
+
+    public function clearOtpAttempts($email)
+    {
+        $key = "otp_attempts_{$email}";
+        Cache::forget($key); // Xóa số lần thử OTP khỏi cache
     }
 }

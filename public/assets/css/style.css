@@ -3801,7 +3801,7 @@ h3.col-title {
   top: 4px;
 }
 .table thead, .table tbody, .table tfoot, .table tr, .table td, .table th {
-  border-color: #9f9f9f;
+  border-color: #dfdfdf;
 }
 
 .list-table {

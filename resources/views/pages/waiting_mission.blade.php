@@ -21,48 +21,50 @@
             <div class="text-start">
                 <p>Lưu ý: Thời gian chờ và hoa hồng của nhiệm vụ tùy thuộc vào cấp bậc của tài khoản người dùng!</p>
             </div>
-            <table class="table list-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Cấp độ tài khoản</th>
-                        <th scope="col">Thời gian chờ</th>
-                        <th scope="col">Điều kiện tăng cấp</th>
-                        <th scope="col">Lợi nhuận</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td scope="row">Tài khoản cấp 01</td>
-                        <td class="text-center">12 tiếng</td>
-                        <td class="text-center">Không</td>
-                        <td class="text-center">10.000 VND/nhiệm vụ</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">Tài khoản cấp 02</td>
-                        <td class="text-center">6 tiếng</td>
-                        <td class="text-center">Hoàn thành 5 nhiệm vụ</td>
-                        <td class="text-center">11.000 VND/nhiệm vụ</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">Tài khoản cấp 03</td>
-                        <td class="text-center">3 tiếng</td>
-                        <td class="text-center">Hoàn thành 10 nhiệm vụ</td>
-                        <td class="text-center">12.000 VND/nhiệm vụ</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">Tài khoản cấp 04</td>
-                        <td class="text-center">2 tiếng</td>
-                        <td class="text-center">Hoàn thành 50 nhiệm vụ</td>
-                        <td class="text-center">13.000 VND/nhiệm vụ</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">Tài khoản cấp 05</td>
-                        <td class="text-center">1 tiếng</td>
-                        <td class="text-center">Hoàn thành 100 nhiệm vụ</td>
-                        <td class="text-center">14.000 VND/nhiệm vụ</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="group-table-list">
+                <table class="table list-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Cấp độ tài khoản</th>
+                            <th scope="col">Thời gian chờ</th>
+                            <th scope="col">Điều kiện tăng cấp</th>
+                            <th scope="col">Lợi nhuận</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row">Tài khoản cấp 01</td>
+                            <td class="text-center">12 tiếng</td>
+                            <td class="text-center">Không</td>
+                            <td class="text-center">10.000 VND/nhiệm vụ</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Tài khoản cấp 02</td>
+                            <td class="text-center">6 tiếng</td>
+                            <td class="text-center">Hoàn thành 5 nhiệm vụ</td>
+                            <td class="text-center">11.000 VND/nhiệm vụ</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Tài khoản cấp 03</td>
+                            <td class="text-center">3 tiếng</td>
+                            <td class="text-center">Hoàn thành 10 nhiệm vụ</td>
+                            <td class="text-center">12.000 VND/nhiệm vụ</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Tài khoản cấp 04</td>
+                            <td class="text-center">2 tiếng</td>
+                            <td class="text-center">Hoàn thành 50 nhiệm vụ</td>
+                            <td class="text-center">13.000 VND/nhiệm vụ</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Tài khoản cấp 05</td>
+                            <td class="text-center">1 tiếng</td>
+                            <td class="text-center">Hoàn thành 100 nhiệm vụ</td>
+                            <td class="text-center">14.000 VND/nhiệm vụ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>

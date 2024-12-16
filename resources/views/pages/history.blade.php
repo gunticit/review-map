@@ -21,41 +21,43 @@
                 </div>
                     
             </form>
-            <table class="table list-table">
-                <thead>
-                    <tr>
-                        <th class="list-table-stt" width="50" scope="col">STT</th>
-                        <th class="list-table-time text-start" width="200" scope="col">Thời gian</th>
-                        <th class="list-table-title text-start" width="1000" scope="col">Nhật ký hoạt động</th>
-                        <th class="list-table-title text-start" width="200" scope="col">Người tạo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if(!empty($histories) && count($histories) > 0)
-                        @foreach($histories as $key => $history)
+            <div class="group-table-list">
+                <table class="table list-table">
+                    <thead>
                         <tr>
-                            <td width="50">{{ ($histories->currentPage() - 1) * $histories->perPage() + $key + 1 }}</td>
-                            <td class="list-table-time">{!! $history['created_at']->format('d/m/Y') !!} <span>{!! $history['created_at']->format('H:i') !!}</span></td>
-                            <td class="list-table-title"> 
-                                @php
-                                    $history_content = !empty($history['content'])?json_decode($history['content'], true):[];   
-                                @endphp
-                                {!! $history_content['title'] ?? '' !!} {!! $history_content['content'] ? ' - '.$history_content['content'] : '' !!}
-                            </td>
-                            <td>
-                                {{ $history['createdBy']->name }}
-                            </td>
+                            <th class="list-table-stt" width="50" scope="col">STT</th>
+                            <th class="list-table-time text-start" width="200" scope="col">Thời gian</th>
+                            <th class="list-table-title text-start" width="1000" scope="col">Nhật ký hoạt động</th>
+                            <th class="list-table-title text-start" width="200" scope="col">Người tạo</th>
                         </tr>
-                        @endforeach
-                    @else
-                        <tr class="no-result">
-                            <td colspan="4">
-                                <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có lịch sử hoạt động') }}</span>
-                            </td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @if(!empty($histories) && count($histories) > 0)
+                            @foreach($histories as $key => $history)
+                            <tr>
+                                <td width="50">{{ ($histories->currentPage() - 1) * $histories->perPage() + $key + 1 }}</td>
+                                <td class="list-table-time">{!! $history['created_at']->format('d/m/Y') !!} <span>{!! $history['created_at']->format('H:i') !!}</span></td>
+                                <td class="list-table-title"> 
+                                    @php
+                                        $history_content = !empty($history['content'])?json_decode($history['content'], true):[];   
+                                    @endphp
+                                    {!! $history_content['title'] ?? '' !!} {!! $history_content['content'] ? ' - '.$history_content['content'] : '' !!}
+                                </td>
+                                <td>
+                                    {{ $history['createdBy']->name }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr class="no-result">
+                                <td colspan="4">
+                                    <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có lịch sử hoạt động') }}</span>
+                                </td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
             @if(!empty($histories))
             {{ $histories->links('vendor.pagination.custom') }}
             @endif

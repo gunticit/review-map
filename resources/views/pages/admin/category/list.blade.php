@@ -55,73 +55,75 @@
                         </button>
                     </div>
                 </form>
-                <table class="table list-table">
-                    <thead>
-                        <tr>
-                            <th class="list-table-stt text-center" scope="col">STT</th>
-                            <th class="list-table-name text-center">
-                                Tên danh mục
-                            </th>
-                            <th class="list-table-image text-center">
-                                Hình ảnh
-                            </th>
-                            <th class="text-center">Thuộc nhóm</th>
-                            <th class="list-table-creater text-center" scope="col">Người tạo</th>
-                            <th class="list-table-progree text-center" scope="col">Trạng thái</th>
-                            <th class="list-table-time text-center" scope="col">Ngày tạo</th>
-                            <th class="list-table-handle text-center">
-                                Thao tác
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(!empty($categories) && count($categories) > 0)
-                            @foreach($categories as $category)
-                            <tr class="category-{{ $category->id }}">
-                                <td class="list-table-stt text-center" scope="col">{{ $category->id }}</td>
-                                <td class="list-table-name text-center">
-                                    {{ $category->name }}
-                                </td>
-                                <td class="list-table-image text-center" scope="col">   
-                                    <a
-                                        data-lg-size="1600-1067"
-                                        href="{!! !empty($category->image) ? asset('storage/'.$category->image) : asset('assets/img/no-image.png') !!}"
-                                    >
-                                        <img class="icon-image" src="{!! !empty($category->image) ? asset('storage/'.$category->image) : asset('assets/img/no-image.png') !!}" alt="image" width="100px">
-                                    </a>
-                                </td>
-                                <td class="list-table-name text-center">
-                                    {{ optional($category->parent)->name }}
-                                </td>
-                                <td class="list-table-creater text-center" scope="col">
-                                    {{
-                                        $category->createdBy->name
-                                    }}
-                                </td>
-                                <td class="list-table-progree text-center" scope="col">
-                                    {{ $category->active ? 'Hoạt động' : 'Không hoạt động' }}
-                                </td>
-                                <td class="list-table-time text-center" scope="col">
-                                    {{ date('d/m/Y', strtotime($category->created_at)) }}
-                                </td>
-                                <td class="list-table-handle text-center">
-                                    <button class="btn btn-danger" type="button" onclick="handleDelete({{ $category->id }})">
-                                        <span class="material-symbols-outlined">
-                                            delete
-                                        </span>
-                                    </button>
+                <div class="group-table-list">
+                    <table class="table list-table">
+                        <thead>
+                            <tr>
+                                <th class="list-table-stt text-center" scope="col">STT</th>
+                                <th class="list-table-name text-center">
+                                    Tên danh mục
+                                </th>
+                                <th class="list-table-image text-center">
+                                    Hình ảnh
+                                </th>
+                                <th class="text-center">Thuộc nhóm</th>
+                                <th class="list-table-creater text-center" scope="col">Người tạo</th>
+                                <th class="list-table-progree text-center" scope="col">Trạng thái</th>
+                                <th class="list-table-time text-center" scope="col">Ngày tạo</th>
+                                <th class="list-table-handle text-center">
+                                    Thao tác
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(!empty($categories) && count($categories) > 0)
+                                @foreach($categories as $category)
+                                <tr class="category-{{ $category->id }}">
+                                    <td class="list-table-stt text-center" scope="col">{{ $category->id }}</td>
+                                    <td class="list-table-name text-center">
+                                        {{ $category->name }}
+                                    </td>
+                                    <td class="list-table-image text-center" scope="col">   
+                                        <a
+                                            data-lg-size="1600-1067"
+                                            href="{!! !empty($category->image) ? asset('storage/'.$category->image) : asset('assets/img/no-image.png') !!}"
+                                        >
+                                            <img class="icon-image" src="{!! !empty($category->image) ? asset('storage/'.$category->image) : asset('assets/img/no-image.png') !!}" alt="image" width="100px">
+                                        </a>
+                                    </td>
+                                    <td class="list-table-name text-center">
+                                        {{ optional($category->parent)->name }}
+                                    </td>
+                                    <td class="list-table-creater text-center" scope="col">
+                                        {{
+                                            $category->createdBy->name
+                                        }}
+                                    </td>
+                                    <td class="list-table-progree text-center" scope="col">
+                                        {{ $category->active ? 'Hoạt động' : 'Không hoạt động' }}
+                                    </td>
+                                    <td class="list-table-time text-center" scope="col">
+                                        {{ date('d/m/Y', strtotime($category->created_at)) }}
+                                    </td>
+                                    <td class="list-table-handle text-center">
+                                        <button class="btn btn-danger" type="button" onclick="handleDelete({{ $category->id }})">
+                                            <span class="material-symbols-outlined">
+                                                delete
+                                            </span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @else
+                            <tr class="no-result">
+                                <td colspan="8">
+                                    <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có danh mục') }}</span>
                                 </td>
                             </tr>
-                            @endforeach
-                        @else
-                        <tr class="no-result">
-                            <td colspan="8">
-                                <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có danh mục') }}</span>
-                            </td>
-                        </tr>
-                        @endif
-                    </tbody>
-                </table>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
                 @if(!empty($categories) && count($categories) > 0)
                 {{ $categories->links('vendor.pagination.custom') }}
                 @endif

@@ -355,7 +355,7 @@
                     localStorage.setItem('email_attempts', email);
                 }else{
                     if(localStorage.getItem('otp_attempts')) {
-                        otp_attempts = localStorage.getItem('otp_attempts');
+                        otp_attempts = parseInt(localStorage.getItem('otp_attempts'));
                     }
                 }
                 $.ajax({
@@ -374,15 +374,24 @@
                     },
                     success: function(response) {
                         if (response.success) {
+                            const { email, token } = response.data;
+                            localStorage.setItem('auth_token', token);
                             $('#otpTab').hide();
                             $('#successTab').show();
-                            otp_attempts += 1;
-                            localStorage.setItem('otp_attempts', otp_attempts);
+                            otp_attempts = 0;
+                            $('#otpMessage').text('Đăng nhập thành công!').css('color', 'green');
                         }else{
+                            otp_attempts += 1;
                             $('#otpMessage').text(response.message);
                         }
+                        localStorage.setItem('otp_attempts', otp_attempts);
+                    },
+                    error: function(xhr) {
+                        $('#otpMessage').text('Đã xảy ra lỗi, vui lòng thử lại!').css('color', 'red');
+                    },
+                    complete: function() {
                         $('#confirm-otp-verify').hide();
-                        $('#confirm-otp-verify').prop('disabled',false);
+                        $('#confirm-otp-verify').prop('disabled', false);
                         $('#confirm-otp-verify > span').show();
                         $('#loadingMessageOtpVerify').hide();
                     }

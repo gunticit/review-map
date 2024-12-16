@@ -13,12 +13,16 @@ class CartRepository extends BaseRepository implements CartRepositoryInterface
         $this->model = $cart;
     }
     public function findByUserId($user_id){
-        return $this->model->where('user_id', $user_id)->first();
+        $query = $this->model->query();
+        $query = $query->with(['products','user']);
+        $data = $query->where('user_id', $user_id)->first();
+        return $data; 
     }
     public function findCartByUserIdAjax($request){
-        return $this->model->where('user_id', $user_id)->first();
+        $query = $this->filterQuery($request);
+        return $query->first();
     }
-    public function filterData($request){
+    public function filterQuery($request){
         $query = $this->query();
         $query = $query->with(['products']);
         if(isset($request->user_id)){

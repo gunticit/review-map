@@ -52,63 +52,65 @@
                         </button>
                     </div>
                 </form>
-                <table class="table list-table">
-                    <thead>
-                        <tr>
-                            <th class="list-table-stt" scope="col">STT</th>
-                            <th class="list-table-name">
-                                Tiêu đề
-                            </th>
-                            <th class="list-table-image">
-                                Nội dung
-                            </th>
-                            <th class="list-table-creater" scope="col">Người tạo</th>
-                            <th class="list-table-progree" scope="col">Trạng thái</th>
-                            <th class="list-table-time" scope="col">Ngày tạo</th>
-                            <th class="list-table-handle">
-                                Thao tác
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(!empty($faqs))
-                            @foreach($faqs as $faq)
-                            <tr class="faq-{{ $faq->id }}">
-                                <td class="list-table-stt" scope="col">{{ $faq->id }}</td>
-                                <td class="list-table-name">
-                                    <p style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.5; margin-bottom: 0">{{ $faq->title }}</p>
-                                </td>
-                                <td class="list-table-content">
-                                    <p style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.5; margin-bottom: 0">{{ $faq->content }}</p>
-                                </td>
-                                <td class="list-table-creater" scope="col">
-                                    {{
-                                        $faq->createdBy->title ?? 'Admin'
-                                    }}
-                                </td>
-                                <td class="list-table-progree" scope="col">
-                                    {{ $faq->active ? 'Hoạt động' : 'Không hoạt động' }}
-                                </td>
-                                <td class="list-table-time" scope="col">
-                                    {{ date('d/m/Y', strtotime($faq->created_at)) }}
-                                </td>
-                                <td class="list-table-handle text-center">
-                                    <button class="btn btn-info" type="button" onclick="handleEdit({{ $faq->id }})">
-                                        <span class="material-symbols-outlined">
-                                            edit
-                                        </span>
-                                    </button>
-                                    <button class="btn btn-danger" type="button" onclick="handleDelete({{ $faq->id }})">
-                                        <span class="material-symbols-outlined">
-                                            delete
-                                        </span>
-                                    </button>
-                                </td>
+                <div class="group-table-list">
+                    <table class="table list-table">
+                        <thead>
+                            <tr>
+                                <th class="list-table-stt" scope="col">STT</th>
+                                <th class="list-table-name">
+                                    Tiêu đề
+                                </th>
+                                <th class="list-table-image">
+                                    Nội dung
+                                </th>
+                                <th class="list-table-creater" scope="col">Người tạo</th>
+                                <th class="list-table-progree" scope="col">Trạng thái</th>
+                                <th class="list-table-time" scope="col">Ngày tạo</th>
+                                <th class="list-table-handle">
+                                    Thao tác
+                                </th>
                             </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if(!empty($faqs))
+                                @foreach($faqs as $faq)
+                                <tr class="faq-{{ $faq->id }}">
+                                    <td class="list-table-stt" scope="col">{{ $faq->id }}</td>
+                                    <td class="list-table-name">
+                                        <p style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.5; margin-bottom: 0">{{ $faq->title }}</p>
+                                    </td>
+                                    <td class="list-table-content">
+                                        <p style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.5; margin-bottom: 0">{{ $faq->content }}</p>
+                                    </td>
+                                    <td class="list-table-creater" scope="col">
+                                        {{
+                                            $faq->createdBy->title ?? 'Admin'
+                                        }}
+                                    </td>
+                                    <td class="list-table-progree" scope="col">
+                                        {{ $faq->active ? 'Hoạt động' : 'Không hoạt động' }}
+                                    </td>
+                                    <td class="list-table-time" scope="col">
+                                        {{ date('d/m/Y', strtotime($faq->created_at)) }}
+                                    </td>
+                                    <td class="list-table-handle text-center">
+                                        <button class="btn btn-info" type="button" onclick="handleEdit({{ $faq->id }})">
+                                            <span class="material-symbols-outlined">
+                                                edit
+                                            </span>
+                                        </button>
+                                        <button class="btn btn-danger" type="button" onclick="handleDelete({{ $faq->id }})">
+                                            <span class="material-symbols-outlined">
+                                                delete
+                                            </span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
                 {{ $faqs->links('vendor.pagination.custom') }}
             </div>
         </div>

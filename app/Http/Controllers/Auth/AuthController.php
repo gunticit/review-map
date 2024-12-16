@@ -135,24 +135,56 @@ class AuthController extends BaseController
 
     public function verifyOtp(Request $request)
     {
-        $otp_attempts = $request->input('otp_attempts', 0);
+        $otpAttempts = $request->input('otp_attempts', 0);
         $email = $request->input('email');
-
-        // kiểm tra số lần đã nhập
-        if ($otp_attempts >= 5) {
-            $this->authService->clearOtp($email);
-            return $this->sendError(null, 'Số lần nhập mã OTP đã vượt quá giới hạn.');
+        $otpArray = $request->input('otp');
+        
+        if (empty($email) || empty($otpArray)) {
+            return $this->sendError(null, 'Email và mã OTP là bắt buộc.', 422);
         }
 
-        $otpArray = $request->input('otp');
+        $otp = is_array($otpArray) ? implode('', $otpArray) : $otpArray;
 
-        $otp = is_array($otpArray) ? implode('', $otpArray):$otpArray;
+        if ($otpAttempts >= 5) {
+            $this->authService->clearOtp($email);
+            return $this->sendError(null, 'Số lần nhập mã OTP đã vượt quá giới hạn.', 429);
+        }
 
-        // Verify the OTP
         if ($this->authService->verifyOtp($email, $otp)) {
-            return $this->sendResponse(['email' => $email], 'Xác nhận OTP thành công');
+            $user = $this->authService->getUserByEmail($email);
+
+            if (!$user) {
+                return $this->sendError(null, 'Người dùng không tồn tại.', 404);
+            }
+
+            $this->setRole($user);
+            $token = Auth::login($user);
+
+            return $this->sendResponse([
+                'status' => true,
+                'email' => $email,
+                'token' => $token,
+            ], 'Xác nhận OTP thành công và đã đăng nhập.', 200);
         } else {
-            return $this->sendError(null, 'Mã xác thực không trùng khớp. Số lần thử còn lại: ' . (4 - $otp_attempts), 200);
+            $remainingAttempts = max(0, 4 - $otpAttempts); 
+            $this->authService->incrementOtpAttempts($email);
+            return response()->json([
+                'status' => false,
+                'message' => 'Mã otp không đúng',
+            ]);
+        }
+    }
+
+    private function setRole($user)
+    {
+        if (request()->getHost() === env('ADMIN_DOMAIN')) {
+            $user->assignRole(Role::ADMIN_ROLE);
+        }
+        if (request()->getHost() === env('PARTNER_DOMAIN')) {
+            $user->assignRole(Role::PARTNER_ROLE);
+        }
+        if (request()->getHost() === env('CUSTOMER_DOMAIN')) {
+            $user->assignRole(Role::CUSTOMER_ROLE);
         }
     }
 

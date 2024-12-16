@@ -209,9 +209,35 @@ class CartController extends Controller
                 'message' => 'Số tiền trong ví hiện tại không đủ để thanh toán.'
             ]);
         }
-        $this->cartService->store($request);
+        $request = $request->merge([
+            'user_id' => auth()->user()->id
+        ]);
+        $check_cart = $this->cartService->find($request);
+        if(!$check_cart){
+            $this->cartService->store($request);
+        }else{
+            if(!empty($check_cart->products)){
+                foreach($check_cart->products as $product){
+                    $quantity = $product->pivot->quantity;
+                    $request = $request->merge([
+                        'product_id' => $product->id,
+                        'quantity' => $quantity + $request->quantity
+                    ]);
+                    $this->cartService->update($request);
+                }
+            }
+        }
+        $cart_info = $this->cartService->find($request);
+        
+        $data = array(
+            'cart_id' => $cart_info->id,
+            'user_id' => auth()->user()->id,
+            'total' => $cart_info->total,
+            'total_price' => $this->formatCurrencyVND($cart_info->total)
+        );
         return response()->json([
             'success' => true,
+            'data' => $cart_info,
             'message' => 'Đặt hàng thành công'
         ]);
     }

@@ -24,6 +24,16 @@ class CartService {
         $cart->products()->attach($request->product_id, ['quantity' => $request->quantity]);
     }
 
+    public function update($request){
+        $cart = $this->cartRepository->findByUserId($request->user_id);
+        $cart->products()->updateExistingPivot($request->product_id, ['quantity' => $request->quantity]);
+    }
+
+    public function find($request){
+        $cart = $this->cartRepository->findByUserId($request->user_id);
+        return $cart;
+    }
+
     public function findCartByUserIdAjax($request){
         $cart = $this->cartRepository->findCartByUserIdAjax($request);
         return new CartResource($cart);

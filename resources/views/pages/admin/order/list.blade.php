@@ -37,61 +37,63 @@
                         </button>
                     </div>
                 </form>
-                <table class="table list-table">
-                    <thead>
-                        <tr>
-                            <th class="list-table-stt" scope="col">STT</th>
-                            <th class="list-table-name">
-                                Họ và tên
-                            </th>
-                            <th>Số điện thoại</th>
-                            <th class="list-table-creater" scope="col">Địa chỉ</th>
-                            <th>Tổng cộng</th>
-                            <th>
-                                Số điện thoại đặt
-                            </th>
-                            <th>
-                                Thao tác
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(!empty($orders) && count($orders) > 0)
-                            @foreach($orders as $order)
-                            <tr class="order-{{ $order['id'] }}">
-                                <td class="list-table-stt" scope="col">{{ $order['id'] }}</td>
-                                <td class="list-table-name">
-                                    {{ $order['recipient_name'] }}
-                                </td>
-                                <td class="list-table-name">
-                                    {{ $order['recipient_phone'] }}
-                                </td>
-                                <td class="list-table-creater" scope="col">
-                                    {{ $order['shipping_address'] }}
-                                </td>
-                                <td class="list-table-time" scope="col">
-                                    {{ $order['total'] ?? 0 }}
-                                </td>
-                                <td class="list-table-progree" scope="col">
-                                    {{ $order['status'] }}
-                                </td>
-                                <td class="list-table-time" scope="col">
-                                    {{ $order['telephone'] }}
-                                </td>
-                                <td>
-                                    <a href="{{ route('admin.order.view', $order['id']) }}" class="btn btn-default">Chi tiết</a>
-                                </td>
+                <div class="group-table-list">
+                    <table class="table list-table">
+                        <thead>
+                            <tr>
+                                <th class="list-table-stt" scope="col">STT</th>
+                                <th class="list-table-name">
+                                    Họ và tên
+                                </th>
+                                <th>Số điện thoại</th>
+                                <th class="list-table-creater" scope="col">Địa chỉ</th>
+                                <th>Tổng cộng</th>
+                                <th>
+                                    Số điện thoại đặt
+                                </th>
+                                <th>
+                                    Thao tác
+                                </th>
                             </tr>
-                            @endforeach
-                        @else
-                            <tr class="no-result">
-                                <td colspan="7">
-                                    <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có đơn hàng') }}</span>
-                                </td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if(!empty($orders) && count($orders) > 0)
+                                @foreach($orders as $order)
+                                <tr class="order-{{ $order['id'] }}">
+                                    <td class="list-table-stt" scope="col">{{ $order['id'] }}</td>
+                                    <td class="list-table-name">
+                                        {{ $order['recipient_name'] }}
+                                    </td>
+                                    <td class="list-table-name">
+                                        {{ $order['recipient_phone'] }}
+                                    </td>
+                                    <td class="list-table-creater" scope="col">
+                                        {{ $order['shipping_address'] }}
+                                    </td>
+                                    <td class="list-table-time" scope="col">
+                                        {{ $order['total'] ?? 0 }}
+                                    </td>
+                                    <td class="list-table-progree" scope="col">
+                                        {{ $order['status'] }}
+                                    </td>
+                                    <td class="list-table-time" scope="col">
+                                        {{ $order['telephone'] }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('admin.order.view', $order['id']) }}" class="btn btn-default">Chi tiết</a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @else
+                                <tr class="no-result">
+                                    <td colspan="7">
+                                        <img src="{{ asset('assets/img/no-image.svg') }}" alt="no-data"> <span>{{ __('Chưa có đơn hàng') }}</span>
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
                 @if(!empty($orders) && count($orders) > 0)
                 {{ $orders->links('vendor.pagination.custom') }}
                 @endif
