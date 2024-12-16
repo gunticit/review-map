@@ -217,27 +217,55 @@ class CartController extends Controller
             $this->cartService->store($request);
         }else{
             if(!empty($check_cart->products)){
+                $check_product_id = false;
                 foreach($check_cart->products as $product){
-                    $quantity = $product->pivot->quantity;
+                    if($request->product_id == $product->id){
+                        $check_product_id = true;
+                        $quantity = $product->pivot->quantity;
+                        $request = $request->merge([
+                            'product_id' => $product->id,
+                            'quantity' => $quantity + $request->quantity
+                        ]);   
+                        $this->cartService->update($request);
+                    }
+                }
+                if(!$check_product_id){
                     $request = $request->merge([
-                        'product_id' => $product->id,
-                        'quantity' => $quantity + $request->quantity
-                    ]);
+                        'product_id' => $request->product_id,
+                        'quantity' => $request->quantity
+                    ]);   
                     $this->cartService->update($request);
                 }
             }
         }
         $cart_info = $this->cartService->find($request);
-        
-        $data = array(
-            'cart_id' => $cart_info->id,
-            'user_id' => auth()->user()->id,
-            'total' => $cart_info->total,
-            'total_price' => $this->formatCurrencyVND($cart_info->total)
-        );
+        $list_product = $cart_info->products()->get();
+        $dt_list_product = array();
+        if(!empty($list_product)){
+            $total_price = 0;
+            $total_quantity = 0;
+            foreach($list_product as $product){
+               $dt_list_product[] = array(
+                    'product_id' => $product->id,
+                    'quantity' => $product->pivot->quantity,
+                    'name' => $product->name,
+                    'price' => $product->price
+               ); 
+               $total_quantity += $product->pivot->quantity;
+               $total_price += $product->price * $product->pivot->quantity;
+            }
+            $data = array(
+                'cart_id' => $cart_info->id,
+                'user_id' => $cart_info->id,
+                'total' => $cart_info->total,
+                'list_product' => $list_product,
+                'total_price' => $this->formatCurrencyVND($total_quantity),
+                'total_quantity' => $total_quantity
+            );
+        }
         return response()->json([
             'success' => true,
-            'data' => $cart_info,
+            'data' => $data,
             'message' => 'Đặt hàng thành công'
         ]);
     }

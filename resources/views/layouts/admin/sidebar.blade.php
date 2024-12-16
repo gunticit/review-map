@@ -61,15 +61,8 @@
         </span>
     </div> Quản lý đối tác
 </a>
-<a class="nav-link {!! request()->routeIs('order') ? 'active' : '' !!}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#" aria-expanded="false" aria-controls="collapseOrder">
-    <div class="nav-link-icon">
-        <span class="material-symbols-outlined">list_alt</span>
-    </div> Quản lý đơn hàng <div class="sidenav-collapse-arrow">
-        <span class="material-symbols-outlined">chevron_right</span>
-    </div>
-</a>
-<div class="collapse {!! request()->routeIs('home') || request()->routeIs('overview.customer') || request()->routeIs('overview.partner') ? 'show' : '' !!}" id="collapseOrder" data-bs-parent="#accordionOrder">
-    <nav class="sidenav-menu-nested nav accordion" id="accordionHomeChild">
+<div class="collapse show" id="collapseGuarantee" data-bs-parent="#accordionGuarantee">
+    <nav class="sidenav-menu-nested nav accordion" id="accordionGuaranteeChild">
         <a class="nav-link {!! request()->routeIs('overview.customer') ? 'active' : '' !!}" href="{{ route('overview.customer') }}">Quản lý bảo hành</a>
     </nav>
 </div>

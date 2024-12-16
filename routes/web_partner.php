@@ -47,6 +47,9 @@ Route::group([
     Route::delete('/support-delete-by-ids/{ids}', [PartnerSupportController::class, 'deleteByIds'])->name('partner.support.delete.by.ids');
     Route::get('/support-create', [PartnerSupportController::class, 'create'])->name('partner.support.create');
 
+    //Guarantee - Bảo hành
+    Route::resource('/guarantee', PartnerGuaranteeController::class)->name('partner.guarantee');
+
     //Ajax
     Route::get('/ajax-list-partners', [ManagePartnerController::class, 'getListPartnerAjax'])->name('ajax.list.partners');
     Route::get('/partner-find-product', [PartnerProductController::class, 'partnerFindProduct'])->name('partner.find.product');
