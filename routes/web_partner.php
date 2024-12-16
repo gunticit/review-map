@@ -9,6 +9,7 @@ use App\Http\Controllers\Partner\OrderController;
 use App\Http\Controllers\Partner\OverviewController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\Partner\PartnerSupportController;
+use App\Http\Controllers\PartnerGuaranteeController;
 
 Route::group([
         'prefix' => '/partner',
@@ -48,8 +49,7 @@ Route::group([
     Route::get('/support-create', [PartnerSupportController::class, 'create'])->name('partner.support.create');
 
     //Guarantee - Bảo hành
-    Route::resource('/guarantee', PartnerGuaranteeController::class)->name('partner.guarantee');
-
+    Route::resource('/guarantee', PartnerGuaranteeController::class);
     //Ajax
     Route::get('/ajax-list-partners', [ManagePartnerController::class, 'getListPartnerAjax'])->name('ajax.list.partners');
     Route::get('/partner-find-product', [PartnerProductController::class, 'partnerFindProduct'])->name('partner.find.product');
