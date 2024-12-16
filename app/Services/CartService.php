@@ -24,11 +24,14 @@ class CartService {
         $cart->products()->attach($request->product_id, ['quantity' => $request->quantity]);
     }
 
+    public function findCartByUserIdAjax($request){
+        $cart = $this->cartRepository->findCartByUserIdAjax($request);
+        return new CartResource($cart);
+    }
+
     private function getData($request){
         return [
-            'user_id' => Auth::user()->id,
-            'product_id' => $request->product_id,
-            'quantity' => $request->quantity
+            'user_id' => Auth::user()->id
         ];
     }
 }

@@ -46,7 +46,7 @@
                         <p class="price">{{ number_format($product->price) }} đ</p>
                         <div id="cart-box">
                             <button class="decrease-quantity">-</button>
-                            <input type="number" id="quantity" value="1">
+                            <input type="number" id="quantity" min="1" max="100" value="1">
                             <button class="increase-quantity">+</button>
                             <button class="add-to-cart btn btn-primary">Mua ngay</button>
                         </div>
@@ -106,7 +106,30 @@
     })
     $('.add-to-cart').on('click', function(){
         var quantity = $('#quantity').val();
-        window.location.href = "{{ route('cart.to.add') }}?product_id={{ $product->id }}&quantity=" + quantity;
+        if(quantity < 1) quantity = 1;
+        if(quantity > 100){
+            $('#quantity').val(100);
+            showAlert('error','Số lượng không được vượt quá 100');
+        }
+        $.ajax({
+            url: "{{ route('ajax.cart.add') }}",
+            method: 'POST',
+            data: {
+                product_id: {{ $product->id }},
+                quantity: quantity,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    showAlert('success', response.message);
+                } else {
+                    showAlert('error',response.message);
+                }
+            },
+            error: function(xhr) {
+                showAlert('error','Đã xảy ra lỗi. Vui lòng thử lagi sau.');
+            }
+        })
     })
 </script>
 @endsection

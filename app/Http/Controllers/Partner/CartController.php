@@ -216,6 +216,14 @@ class CartController extends Controller
         ]);
     }
 
+    public function findCartByUserIdAjax(Request $request){
+        $cart_info = $this->cartService->findCartByUserIdAjax($request);
+        return response()->json([
+            'success' => true,
+            'data' => $cart_info
+        ]);
+    }
+
     private function formatCurrencyVND($number)
     {
         return number_format($number, 0, ',', '.') . ' VND';
