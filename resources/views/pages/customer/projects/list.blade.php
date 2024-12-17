@@ -1,5 +1,14 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+        .list-table td:first-child, .list-table th:first-child{
+            width: 15px !important;
+            min-width: auto !important;
+        }
+        .list-table td:first-child .form-check-input[type=checkbox]{
+            margin-right: 0 !important;
+        }
+    </style>
     <!-- thong ke -->
     <section class="thong-ke skeleton">
         <div class="container-fluid">
@@ -61,11 +70,11 @@
                         <h2 class="section-title mb-4">Danh sách dự án</h2>
                     </div>
                     <div class="col-sm-4 text-right">
-                        {{-- <button type="button" class="btn btn-danger" id="btn-delete">
+                        <button type="button" class="btn btn-danger" style="display: none" id="btn-delete">
                             <span class="material-symbols-outlined">
                                 delete
                             </span>
-                        </button> --}}
+                        </button>
                     </div>
                 </div>
                 <form>
@@ -73,7 +82,7 @@
                         <button class="input-group-text" type="submit">
                             <span class="material-symbols-outlined">search</span>
                         </button>
-                        <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
+                        <input type="text" placeholder="Tìm kiếm" class="form-control" name="keyword" id="inputSearch">
                     </div>
                 </form>
                 <div id="list-project">
@@ -81,6 +90,7 @@
                         <table class="table list-table">
                             <thead>
                                 <tr>
+                                    <th width="15"></th>
                                     <th width="35" class="list-table-stt" scope="col">STT</th>
                                     <th class="list-table-title text-start" scope="col">Tên dự án</th>
                                     <th class="list-table-link-map" scope="col">URL Google Map</th>
@@ -94,7 +104,12 @@
                             </thead>
                             <tbody>
                                 @foreach($projects as $key => $project)
-                                <tr>
+                                <tr class="list-row-project">
+                                    <td width="15">
+                                        @if($project->status == 5)
+                                        <input type="checkbox" class="form-check-input" name="id[]" value="{{ $project->id }}" id="check_{{ $project->id }}">
+                                        @endif
+                                    </td>
                                     <td width="35">{{ ($projects->currentPage() - 1) * $projects->perPage() + $key + 1 }}</td>
                                     <td class="list-table-title">
                                         <a href="{{ route('project.edit', ['id' => $project->id]) }}">{{ $project->name }}</a>
@@ -155,7 +170,7 @@
         $(document).ready(function() {
             $('.form-check-input').on('change', function() {
                 if ($('.form-check-input:checked').length > 0) {
-                    $('#btn-delete').hide(); // CHưa làm nếu làm thì đổi thành show()
+                    $('#btn-delete').show(); // CHưa làm nếu làm thì đổi thành show()
                 } else {
                     $('#btn-delete').hide();
                 }
@@ -182,6 +197,27 @@
                     });
                 }
             });
+            $('#btn-delete').on('click', function() {
+                if(confirm('Bạn chắc chắn xóa dự án này?')){
+                    let ids = [];
+                    $('.form-check-input:checked').each(function() {
+                        ids.push($(this).val());
+                    });
+                    $.ajax({
+                        url: "{{ route('project.delete') }}",
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: {
+                            ids: ids
+                        },
+                        success: function(res) {
+                            location.reload();
+                        }
+                    });
+                }
+            })
         });
     </script>
 @endsection

@@ -369,7 +369,7 @@
                             </div>
                             <div id="rating-desire-group">
                                 <input type="hidden" name="rating_google" id="rating-google" value="{{ $project->rating_google }}"/>
-                                <input type="text" onchange="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" value="{{ $project->rating_desire }}" name="rating_desire" id="rating-desire"/>
+                                <input type="number" onchange="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" value="{{ $project->rating_desire ?? 4.9 }}" name="rating_desire" id="rating-desire"/>
                             </div>
                         </div>
                         <div id="video-intro">
@@ -389,7 +389,7 @@
                         </div>
                         <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/MLpWrANjFbI?si=ZGXqWQK6lxYSxRAW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
                         <h3 class="col-title">Rải chậm</h3>
-                        <p>Rải chậm giúp các đánh giá thật hơn. Chi phí rải chậm một ngày là 2.000 VND</p>
+                        <p>Rải chậm giúp các đánh giá thật hơn. Chi phí rải chậm một ngày là ${{ $setting_price_slow ?? 2000 }} VND</p>
                         <h3 class="col-title">Từ khóa</h3>
                         <p>RIVI AI sẽ dùng trí tuệ nhân tạo để tạo ra các nội dung đánh giá bám sát vào sản phẩm/dịch vụ của bạn. <br>
                             <strong>Ví dụ:</strong> Khi bạn có từ khóa “Cà phê ngon” thì RIVI AI sẽ tạo ra các nội dung sau:

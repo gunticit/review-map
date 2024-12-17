@@ -134,6 +134,7 @@
 
             // Xử lý khi nhấn nút gửi
             $('#btn-submit').on('click', function () {
+                let rating_desire = $('body #rating-desire').val();
                 let maxFileCount = settings.maxFileCount();
                 let currentFileCount = selectedFiles.length;
                 let has_image = $('input[name="has_image"]:checked').val();

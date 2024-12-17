@@ -19,7 +19,7 @@
                                 <div class="col-md-4">
                                     <label for="inputUsername">Ảnh đại diện</label>
                                     <div class="position-relative">
-                                        <img style="width: 100%" src="{{ asset('storage/'.$profile['avatar']) ?? asset('./assets/img/acount-img.svg') }}" id="avatar" onclick="document.getElementById('inputAvatar').click()" alt="account img">
+                                        <img style="width: 100%" src="{{ $profile['avatar'] ?? asset('./assets/img/acount-img.svg') }}" id="avatar" onclick="document.getElementById('inputAvatar').click()" alt="account img">
                                         <a class="btn btn-primary position-absolute bottom-0 btn-edit-profile" href="javascript:void(0);" role="button">
                                             <span class="material-symbols-outlined">border_color</span>
                                         </a>

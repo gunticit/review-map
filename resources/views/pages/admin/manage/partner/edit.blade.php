@@ -14,7 +14,7 @@
                         <button class="input-group-text" type="submit">
                             <span class="material-symbols-outlined">search</span>
                         </button>
-                        <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
+                        <input type="text" placeholder="Tìm kiếm" name="keyword" class="form-control" id="inputSearch">
                     </div>
                 </form>
                 <div id="list-partners" class="mt-4">

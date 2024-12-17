@@ -4,6 +4,9 @@
     .setting-page .accordion-header .accordion-button:not(.collapsed){
         color: #005dfb;
     }
+    .select-setting{
+        width: 245px;
+    }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
@@ -68,6 +71,38 @@
                         </button>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#collapseTwo">
                           <div class="accordion-body">
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">% quy định dự án (có rãi chậm)</span>
+                                    <p class="notice mb-0">Số phần trăm % của gói được review tối đa</p>
+                                    <p class="notice mb-0">ví dụ đặt 5% thì khi 200 gói review được tối đa 10 reviews / ngày</p>
+                                </div>
+                                <div class="d-flex flex-row align-items-center" style="position: relative">
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="percentage" value="{{ $setting->percentage ?? 5 }}" />
+                                    <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Số tiền rãi chậm</span>
+                                    <p class="notice mb-0">Số tiền sẽ tính thêm cho từng câu hỏi của dự án</p>
+                                </div>
+                                <div class="d-flex flex-row align-items-center" style="position: relative">
+                                    <input class="form-control select-setting" type="number" name="setting_price_slow" value="{{ $setting->setting_price_slow ?? 2000 }}" />
+                                    <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(đ)</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">% quy định dự án (không rãi chậm - K tính thêm tiền)</span>
+                                    <p class="notice mb-0">Số phần trăm % của gói được review tối đa</p>
+                                    <p class="notice mb-0">ví dụ đặt 5% thì khi 200 gói review được tối đa 10 reviews / ngày</p>
+                                </div>
+                                <div class="d-flex flex-row align-items-center" style="position: relative">
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="percentage" value="{{ $setting->percentage ?? 5 }}" />
+                                    <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
+                                </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -128,9 +163,8 @@
                                 </div>
                                 <select name="vertify_account" id="vertify_account" class="form-select select-setting">
                                     <option value="">Lựa chọn</option>
-                                    @foreach ( as )
-                                        
-                                    @endforeach
+                                    <option value="1">Thanh toán qua[vi điện tử Momo]</option>
+                                    <option value="2">Chuyển khoản ngân hàng</option>
                                 </select>
                             </div>
                             {{-- <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">

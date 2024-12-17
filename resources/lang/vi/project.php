@@ -11,7 +11,7 @@
         'slow_spread' => 'Rãi chậm',
         'keyword' => 'Từ khóa',
         'images' => 'Hình ảnh',
-        'desc_slow_spread' => 'Rải chậm giúp các đánh giá thật hơn. Chi phí rải chậm một ngày là 2.000 VND',
+        'desc_slow_spread' => 'Rải chậm giúp các đánh giá thật hơn. Chi phí rải chậm một ngày là :price VND',
         'desc_keyword_1' => 'RIVI AI sẽ dùng trí tuệ nhân tạo để tạo ra các nội dung đánh giá bám sát vào sản phẩm/dịch vụ của bạn.',
         'desc_keyword_2' => 'Khi bạn có từ khóa “Cà phê ngon” thì RIVI AI sẽ tạo ra các nội dung sau:',
         'example' => 'Ví dụ',

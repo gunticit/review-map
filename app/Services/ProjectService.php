@@ -131,7 +131,7 @@ class ProjectService {
             throw new \Exception("Bạn phải chọn ít nhất một dự án để xóa");
         }
         $ids = $request->ids;
-        $data = $this->projectRepository->destroyByIds($ids);
+        $data = $this->projectRepository->bulkDelete($ids);
         return $data;
     }
 

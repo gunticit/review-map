@@ -36,6 +36,8 @@ Route::group([
     // Voucher apply Customer /{voucher_code}
     Route::post('/check-apply-voucher', [CustomerVoucherController::class, 'checkAjaxApplyVoucher'])->name('check.apply.voucher');
 
+    Route::delete('/project-delete', [ProjectController::class, 'projectDelete'])->name('project.delete');
+
     //Support
     Route::get('/support', [SupportController::class, 'index'])->name('customer.support');
     Route::post('/support-store', [SupportController::class, 'store'])->name('customer.support.store');

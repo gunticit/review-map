@@ -20,6 +20,9 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         if(isset($request->user_id) && Auth::user()->getRoleNames()->first() != 'admin'){
             $query->where('created_by', $request->user_id);
         }
+        if(isset($request->keyword)){
+            $query->whereLike('name', '%'. $request->keyword . '%');
+        }
         if(isset($request->status)){
             $query->where('status', $request->status);
         }

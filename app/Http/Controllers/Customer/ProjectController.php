@@ -378,4 +378,8 @@ class ProjectController extends Controller
             $this->historyService->insert($histories);
         }
     }
+
+    public function projectDelete(Request $request){
+        return $this->projectService->destroyByIds($request);
+    }
 }

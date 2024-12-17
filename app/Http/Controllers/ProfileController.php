@@ -37,7 +37,7 @@ class ProfileController extends Controller
                 'id'         => $profile->id ?? null,
                 'name'   => $profile->name ?? null,
                 'username' => $profile->username ?? null,
-                'avatar' => $profile->avatar ?? null,
+                'avatar' => $profile->avatar ? getAssetStorageLocal("avatars/{$profile->avatar}") : null,
                 'email'     => $profile->email ?? null,
                 'telephone'   => $profile->telephone ?? null,
                 'language'   => $profile->language ?? null,

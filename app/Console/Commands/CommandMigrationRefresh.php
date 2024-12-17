@@ -28,6 +28,7 @@ class CommandMigrationRefresh extends Command
         $this->info('Chạy lại migrations');
         $this->call('migrate:refresh');
         $this->call('route:cache');
+        $this->call('db:seed');
         $this->info('Đã chạy xong!');
     }
 }

@@ -71,7 +71,7 @@ function initMap() {
             </div>
             <div id="rating-desire-group">
                 <input type="hidden" name="rating_google" id="rating-google" value="${place?.rating !== undefined ? place?.rating : 0}"/>
-                <input type="text" onchange="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" name="rating_desire" id="rating-desire"/>
+                <input type="number" value="4.9" onchange="handleRatingDesire()" step="0.1" min="4.1" max="4.9" class="form-control" name="rating_desire" id="rating-desire"/>
             </div>
             `;
             const stars = document.querySelectorAll('.list-star .fa-star');

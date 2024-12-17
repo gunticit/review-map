@@ -22,8 +22,10 @@ class ProjectController extends Controller
     {
         $projects = $this->projectService->list($request);
         $projects = ProjectResource::collection($projects)->resource;
+        $setting_price_slow = 2000;
         return view('pages.admin.project.list', [
             'projects' => $projects,
+            'setting_price_slow' => $setting_price_slow
         ]);
     }
 

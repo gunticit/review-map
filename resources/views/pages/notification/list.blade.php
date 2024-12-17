@@ -9,7 +9,7 @@
                     <button class="input-group-text" type="submit">
                         <span class="material-symbols-outlined">search</span>
                     </button>
-                    <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
+                    <input type="text" placeholder="Tìm kiếm" class="form-control" name="keyword" id="inputSearch">
                 </div>
             </form>
             <div class="group-table-list">

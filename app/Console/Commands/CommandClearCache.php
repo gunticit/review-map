@@ -30,6 +30,8 @@ class CommandClearCache extends Command
         $this->call('view:clear');
         $this->call('cache:clear');
         $this->call('storage:link');
+        $this->call('config:clear');
+        $this->call('cache:clear');
         $this->info('Đã xóa cache thành công');
     }
 }

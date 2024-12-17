@@ -60,7 +60,7 @@
                             <button class="input-group-text" type="submit">
                                 <span class="material-symbols-outlined">search</span>
                             </button>
-                            <input type="text" placeholder="Tìm kiếm" class="form-control" id="inputSearch">
+                            <input type="text" placeholder="Tìm kiếm" class="form-control" name="keyword" id="inputSearch">
                         </div>
                         <button class="btn btn-default btn-filter" type="button" onclick="filter()">
                             <img src="{{ asset('./assets/img/filter.svg') }}" alt="filter"> <span>Tìm kiếm</span>
