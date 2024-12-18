@@ -34,4 +34,8 @@ class  SettingRepository extends BaseRepository implements SettingRepositoryInte
         $perPage = $request->per_page ?? 15;
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
+
+    public function findSettingByKey($keyword){
+        return $this->model->where('key_setting', $keyword)->first();
+    }
 }

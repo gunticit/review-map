@@ -5,8 +5,8 @@
     use Illuminate\Http\UploadedFile;
     use App\Traits\FileManager;
     use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Storage;
-
+    use Illuminate\Support\Facades\Storage;
+    use App\Models\Setting;
     class Helper{
         use FileManager;
         # Lấy danh sách tất cả các module của hệ thống
@@ -99,5 +99,10 @@ use Illuminate\Support\Facades\Storage;
             $avatarFilename = 'avatars/' . $userId . '_avatar.jpg';
             Storage::disk('public')->put($avatarFilename, $avatarContent);
             return $avatarFilename;
+        }
+
+        public static function getSetting($key){
+            $setting = Setting::where('key_setting', $key)->first();
+            return $setting ? $setting->value_setting : null;
         }
     }

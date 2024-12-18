@@ -22,7 +22,7 @@ class WalletRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contract' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'contract' => 'required|mimes:pdf,doc,docx,txt',
             'front_id_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'back_id_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];

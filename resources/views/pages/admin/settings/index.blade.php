@@ -15,14 +15,18 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-12 col-md-12 col-12 mb-4 mb-xl-0">
+                <form action="{{ route('update.setting') }}" method="POST">
+                {{ csrf_field() }}
                 <div class="row">
                     <div class="col-xl-12 text-right mb-3">
-                      <button class="btn btn-info"><span class="material-symbols-outlined">
-                        save
-                        </span> Lưu</button>
+                        <button class="btn btn-info" type="submit">
+                            <span class="material-symbols-outlined">
+                            save
+                            </span> 
+                            Lưu
+                        </button>
                     </div>
                 </div>
-                <form action="{{ route('update.setting') }}" method="POST">
                   <div class="accordion skeleton" id="accordionExample">
                       <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
@@ -39,9 +43,9 @@
                                   </div>
                                   <select name="approve_project" class="form-select select-setting">
                                       <option value="">Lựa chọn</option>
-                                      <option value="1">Chỉ người duyệt</option>
-                                      <option value="2">Chỉ AI duyệt</option>
-                                      <option value="3">AI duyệt đến người duyệt</option>
+                                      <option {{ $setting['approve_project'] == 1 ? 'selected' : '' }} value="1">Chỉ người duyệt</option>
+                                      <option {{ $setting['approve_project'] == 2 ? 'selected' : '' }} value="2">Chỉ AI duyệt</option>
+                                      <option {{ $setting['approve_project'] == 3 ? 'selected' : '' }} value="3">AI duyệt đến người duyệt</option>
                                   </select>
                               </div>
                               <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
@@ -51,8 +55,8 @@
                                   </div>
                                   <select name="rating_image" class="form-select select-setting">
                                       <option value="">Lựa chọn</option>
-                                      <option value="1">Bật</option>
-                                      <option value="2">Tắt</option>
+                                      <option {{ $setting['approve_project'] == 1 ? 'selected' : '' }} value="1">Bật</option>
+                                      <option {{ $setting['approve_project'] == 2 ? 'selected' : '' }} value="2">Tắt</option>
                                   </select>
                               </div>
                               <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
@@ -60,7 +64,7 @@
                                       <span class="title">Thời gian bảo hành</span>
                                       <span class="notice">Thiết lập thời gian mà dự án của khách hàng có thể được bảo hành</span>
                                   </div>
-                                  <input name="time_guarantee" class="form-control select-setting" type="time" /> 
+                                  <input name="time_guarantee" value="{{ $setting['time_guarantee'] ?? '' }}" class="form-control select-setting" type="time" /> 
                               </div>
                           </div>
                         </div>
@@ -78,7 +82,7 @@
                                     <p class="notice mb-0">ví dụ đặt 5% thì khi 200 gói review được tối đa 10 reviews / ngày</p>
                                 </div>
                                 <div class="d-flex flex-row align-items-center" style="position: relative">
-                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="percentage" value="{{ $setting->percentage ?? 5 }}" />
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_percent_slow" value="{{ $setting['setting_percent_slow'] ?? 5 }}" />
                                     <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
                                 </div>
                             </div>
@@ -88,7 +92,7 @@
                                     <p class="notice mb-0">Số tiền sẽ tính thêm cho từng câu hỏi của dự án</p>
                                 </div>
                                 <div class="d-flex flex-row align-items-center" style="position: relative">
-                                    <input class="form-control select-setting" type="number" name="setting_price_slow" value="{{ $setting->setting_price_slow ?? 2000 }}" />
+                                    <input class="form-control select-setting" type="number" name="setting_price_slow" value="{{ $setting['setting_price_slow'] ?? 2000 }}" />
                                     <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(đ)</span>
                                 </div>
                             </div>
@@ -99,7 +103,7 @@
                                     <p class="notice mb-0">ví dụ đặt 5% thì khi 200 gói review được tối đa 10 reviews / ngày</p>
                                 </div>
                                 <div class="d-flex flex-row align-items-center" style="position: relative">
-                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="percentage" value="{{ $setting->percentage ?? 5 }}" />
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_percent_no_slow" value="{{ $setting['setting_percent_no_slow'] ?? 5 }}" />
                                     <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
                                 </div>
                             </div>
@@ -110,12 +114,12 @@
                                 </div>
                                 <div class="d-flex flex-row align-items-center" style="position: relative">
                                     <label style="margin-bottom: 0; margin-right: 10px">Min:</label>
-                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_min_image" value="{{ $setting->setting_min_image ?? 0 }}" />
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_min_image" value="{{ $setting['setting_min_image'] ?? 0 }}" />
                                     <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center" style="position: relative;">
                                     <label style="margin-bottom: 0; margin-right: 10px">Max:</label>
-                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_max_image" value="{{ $setting->setting_max_image ?? 0 }}" />
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_max_image" value="{{ $setting['setting_max_image'] ?? 0 }}" />
                                     <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
                                 </div>
                             </div>
@@ -125,7 +129,7 @@
                                     <p class="notice mb-0">Chi phí bổ sung khi có ảnh: mỗi ảnh 5k ( có option quy định giá tiền mỗi ảnh ) => tính + thêm vào tổng tiền thanh toán dự án</p>
                                 </div>
                                 <div class="d-flex flex-row align-items-center" style="position: relative">
-                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_price_image" value="{{ $setting->setting_price_image ?? 5000 }}" />
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_price_image" value="{{ $setting['setting_price_image'] ?? 5000 }}" />
                                     <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(đ)</span>
                                 </div>
                             </div>
@@ -143,10 +147,10 @@
                                     <span class="title">Xác thực tài khoản đối tác</span>
                                     <span class="notice">Bật/tắt xác thực tài khoản đối tác</span>
                                 </div>
-                                <select name="vertify_account" id="vertify_account" class="form-select select-setting">
+                                <select name="setting_vertify_account" id="setting_vertify_account" class="form-select select-setting">
                                     <option value="">Lựa chọn</option>
-                                    <option value="1">Bật</option>
-                                    <option value="2">Tắt</option>
+                                    <option {{ $setting['setting_vertify_account'] == 1 ? 'selected' : '' }} value="1">Bật</option>
+                                    <option {{ $setting['setting_vertify_account'] == 2 ? 'selected' : '' }} value="2">Tắt</option>
                                 </select>
                             </div>
                             <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
@@ -159,13 +163,14 @@
                             <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
                                 <div class="col-sm-12">
                                     <div class="col-sm-12">
-                                        @if(!empty($settings['setting_partner']))
+                                        @if(!empty($list_partners))
                                         <ul>
-                                            @foreach ($setting_partner as $partner)
+                                            @foreach ($list_partners as $partner)
                                                 <li>
                                                     <span class="">
                                                         {{ $partner->name }}
                                                     </span>
+                                                    <span class="remove-partner" id="remove-partner-{{ $partner->id }}" data-id="{{ $partner->id }}"><i class="fa-solid fa-xmark"></i></span>
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -189,8 +194,8 @@
                                 </div>
                                 <select name="vertify_account" id="vertify_account" class="form-select select-setting">
                                     <option value="">Lựa chọn</option>
-                                    <option value="1">Thanh toán qua[vi điện tử Momo]</option>
-                                    <option value="2">Chuyển khoản ngân hàng</option>
+                                    <option {{ $setting['vertify_account'] == 'momo' ? 'selected' : '' }} value="momo">Thanh toán qua[vi điện tử Momo]</option>
+                                    <option {{ $setting['vertify_account'] == 'bank' ? 'selected' : '' }} value="bank">Chuyển khoản ngân hàng</option>
                                 </select>
                             </div>
                             {{-- <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
@@ -254,6 +259,27 @@
                     $('#list-partners tbody').html(res);
                 }
             })
+        })
+        $('.remove-partner').on('click', function(){
+            let id = $(this).attr('data-id');
+            $.ajax({
+                url: "{{ route('delete.partner.setting') }}",
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    partner_id: id
+                },
+                success: function(res) {
+                    if(res.success){
+                        $('#remove-partner-'+id).remove();
+                        showAlert('success', 'Xóa dữ liệu thành công!');
+                    }else{
+                        showAlert('error', 'Xóa dữ liệu thất bại!');
+                    }
+                }
+            });
         })
     });
 </script>

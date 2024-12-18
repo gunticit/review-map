@@ -64,6 +64,7 @@ Route::group([
         Route::get('/support-create', [SupportController::class, 'create'])->name('admin.support.create');
         Route::get('/setting', [SettingController::class, 'index'])->name('setting');
         Route::post('/update-setting', [SettingController::class, 'update'])->name('update.setting');
+        Route::post('/delete-partner-setting', [SettingController::class, 'deletePartnerSetting'])->name('delete.partner.setting');
 
         //QL Thông báo đối tác
         Route::get('/list-notificate-partner', [NotificateController::class, 'partner_list'])->name('list.notificate.partner');

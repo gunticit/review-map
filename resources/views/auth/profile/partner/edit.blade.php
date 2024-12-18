@@ -1,6 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .img-cccd{
+        text-align: center;
+        box-shadow: 5px 5px 15px #cbcbcb;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .img-cccd img{
+        width: 100%;
+        object-fit: cover;
+    }
+</style>
 <!-- tai khoan -->
 <section class="accout mb-5 mt-5">
     <div class="container-fluid">
@@ -109,6 +121,68 @@
                 </div>
             </div>
         </div>
+
+        @if(!empty($profile['contract']))
+        <div class="card mt-4">
+            <div class="card-header d-xl-flex justify-content-between align-items-center">
+                <h2 class="card-title">Thông tin xác thực</h2>
+                @if(!empty($profile->contract))
+                <p>
+                    <span class="material-symbols-outlined text-success">
+                        bookmark_check
+                    </span>
+                    <span> Tài khoản đã xác thực</span></p>
+                @endif
+            </div>
+            <div class="card-body">
+                <div class="row my-2">
+                    <div class="col-sm-2 d-none d-sm-block"></div>
+                    <div class="col-sm-4 col-xs-12">
+                        @if(!empty($profile['front_id_image']))
+                            <div class="img-cccd mb-3">
+                                <img src="{{ asset('storage/'.$profile['front_id_image']) }}" style="height: 400px" class="img-fluid" />
+                            </div>
+                            <h5 class="text-center mt-2 mb-4">Mặt trước CCCD</h5>
+                        @endif
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        @if(!empty($profile['back_id_image']))
+                            <div class="img-cccd mb-3">
+                                <img src="{{ asset('storage/'.$profile['back_id_image']) }}" style="height: 400px" class="img-fluid" />
+                            </div>
+                            <h5 class="text-center mt-2 mb-4">Mặt sau CCCD</h5>
+                        @endif
+                    </div>
+                    <div class="col-sm-2 d-none d-sm-block"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 d-none d-sm-block"></div>
+                    <div class="col-sm-6 col-xs-12">
+                        @if(!empty($profile['contract']))
+                        <embed
+                            src="{{ asset('storage/'.$profile['contract']) }}#toolbar=0&navpanes=0&scrollbar=0"
+                            type="application/pdf"
+                            frameBorder="0"
+                            scrolling="auto"
+                            height="550px"
+                            width="100%"
+                        ></embed>
+                        <h5 class="text-center mt-2 mb-4">Hợp đồng</h5>
+                        <p class="text-center">
+                            <a class="btn btn-primary px-4" href="{{ asset('storage/'.$profile['contract']) }}">
+                                <span class="material-symbols-outlined">
+                                    cloud_download
+                                </span>
+                                <span class="ml-2">Tải hợp đồng</span>
+                            </a>
+                        </p>
+                        @endif
+                    </div>
+                    <div class="col-sm-3 d-none d-sm-block"></div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </section>
 

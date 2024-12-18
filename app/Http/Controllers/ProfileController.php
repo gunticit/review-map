@@ -50,8 +50,8 @@ class ProfileController extends Controller
 
     public function editPartner(Request $request){
         $user = auth()->user();
-        $profile = User::where('id',($user->id))->with('accountPayment')->first();
-        return view('auth.profile.partner.edit', [
+        $profile = User::where('id',($user->id))->with('accountPayment','certificationAccount')->first();
+        $data = [
             'profile' => array(
                 'id'         => $profile->id ?? null,
                 'name'   => $profile->name ?? null,
@@ -61,11 +61,15 @@ class ProfileController extends Controller
                 'telephone'   => $profile->telephone ?? null,
                 'language'   => $profile->language ?? null,
                 'dark_mode'  => $profile->dark_mode ?? null,
-                'country_code' => $profile->country_code ?? null
+                'country_code' => $profile->country_code ?? null,
+                'contract' => $profile->certificationAccount?->contract ?? null,
+                'front_id_image' => $profile->certificationAccount?->front_id_image ?? null,
+                'back_id_image' => $profile->certificationAccount?->back_id_image ?? null,
             ),
             'levelDetails' => $user->levelDetails,
             'accountPayment' => $profile->accountPayment ?? null
-        ]);
+        ];
+        return view('auth.profile.partner.edit', $data);
     }
 
     public function updateAccountPayment(Request $request, $id){

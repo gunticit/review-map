@@ -154,7 +154,7 @@
                                             <div class="step-1-contract-upload">
                                                 <small class="color-grey" id="text-upload-contract">Hợp đồng phải đúng tên đối tác</small>
                                                 <div class="btn btn-primary" id="btn-upload-contract"><span class="material-symbols-outlined fs-4">upload</span>Tải lên từ thiết bị</div>
-                                                <input id="contract" name="contract" type="file" placeholder="" value="" required="">
+                                                <input id="contract" name="contract" type="file" accept=".pdf,.doc,.docx,.txt" placeholder="" value="" required="">
                                             </div>
                                         </div>
                                         <div class="error-message" id="contract_error">
@@ -233,6 +233,7 @@
         </form>
     </section>
     <script src="{{ asset('./assets/js/fileUpload.js') }}"></script>
+    <script src="{{ asset('./assets/js/validate.js') }}"></script>
     <script>
         const contractError = $('#contract_error');
         const frontIdImageError = $('#front_id_image_error');
@@ -250,6 +251,20 @@
                 const imgUpload = fileInput.closest('.file-container-single').find('.img-upload');
 
                 const selectedFile = event.target.files[0];
+                if(selectedFile){
+                    let checkExtension = checkFileExtension(selectedFile, 'image');
+                    if(!checkExtension){
+                        showAlert('error', 'Vui lòng upload định dạng hình ảnh');
+                        event.target.value = null;
+                        return;
+                    }
+                    let check_size = checkFileSize(selectedFile);
+                    if(!check_size){
+                        showAlert('error', 'Vui lòng không upload hình ảnh quá 2MB, bạn có thể nén hoặc giảm dung lượng hình ảnh trước khi upload');
+                        event.target.value = null;
+                        return;
+                    }
+                }
                 const objectURL = URL.createObjectURL(selectedFile);
                 const img = $('<img>').attr('src', objectURL).attr('alt', 'Ảnh đã chọn');
 
@@ -277,7 +292,17 @@
 
         $('#contract').on('change', function(event){
             if (event.target.files.length > 0) {
-                const fileName = event.target.files[0].name;
+                const allowedExtensions = ['pdf', 'doc', 'docx', 'txt'];
+                const file = event.target.files[0];
+                if (file) {
+                    const fileExtension = file.name.split('.').pop().toLowerCase();
+                    if (!allowedExtensions.includes(fileExtension)) {
+                        alert('Chỉ chấp nhận các tệp: PDF, Word, hoặc TXT!');
+                        $(this).val(''); // Reset input file
+                        return;
+                    }
+                }
+                const fileName = file.name;
                 $('#text-upload-contract').text(fileName);
             } else {
                 $('#text-upload-contract').text('');

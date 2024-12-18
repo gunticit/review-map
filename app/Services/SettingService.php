@@ -61,4 +61,9 @@ class SettingService {
             'value_setting' => $request->value_setting ?? null,
         );
     }
+
+    public function findSettingByKey($keyword){
+        $data = $this->settingRepository->findSettingByKey($keyword);
+        return $data;
+    }
 }

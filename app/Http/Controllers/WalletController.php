@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Onepay;
+use App\Helpers\Helper;
 use App\Http\Requests\WalletRequest;
 use App\Models\User;
 use App\Services\TransactionHistoryService;
@@ -48,10 +49,12 @@ class WalletController extends Controller
             $balance = $this->walletService->getBalance();
         }
         $histories = $this->transactionHistoryService->listHistoriesByUser($user_info->id);
+        $setting_verify = Helper::getSetting('setting_vertify_account');
         return view('pages.wallet.withdraw', [
             'certificationAccount' => $certificationAccount,
             'user_info' => $user_info,
             'balance' => $balance,
+            'setting_verify' => $setting_verify,
             'payment_method' => $profile->accountPayment['payment_method'] ?? null,
             'withdraws' => $histories
         ]);

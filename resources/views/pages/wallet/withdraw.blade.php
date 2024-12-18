@@ -147,31 +147,35 @@
 
         </div>
     </section>
-    <div class="modal fade" tabindex="-1" id="modalVerifyWallet">
-        <div class="modal-dialog modal-dialog-centered">
-            <form action="{{ route('wallet.verify.create') }}" method="GET">
-                <div class="modal-content">
-                    <div class="modal-header mt-4 pb-1">
-                        <h5 class="modal-title text-center">Thông báo</h5>
+    @if(!empty($setting_verify) && $setting_verify == 1)
+        <div class="modal fade" tabindex="-1" id="modalVerifyWallet">
+            <div class="modal-dialog modal-dialog-centered">
+                <form action="{{ route('wallet.verify.create') }}" method="GET">
+                    <div class="modal-content">
+                        <div class="modal-header mt-4 pb-1">
+                            <h5 class="modal-title text-center">Thông báo</h5>
+                        </div>
+                        <div class="modal-body text-center">
+                            <p class="mb-0"><small class="color-grey">Bạn cần xác minh tài khoản để tiếp tục thực hiện</small></p>
+                            <p class="mb-0"><small class="color-grey">thao tác Rút tiền. Bạn chỉ cần xác minh 1 lần duy nhất.</small></p>
+                        </div>
+                        <div class="modal-footer mb-4">
+                            <button type="submit" class="btn btn-primary fw-500">Đến trang xác minh tài khoản</button>
+                        </div>
                     </div>
-                    <div class="modal-body text-center">
-                        <p class="mb-0"><small class="color-grey">Bạn cần xác minh tài khoản để tiếp tục thực hiện</small></p>
-                        <p class="mb-0"><small class="color-grey">thao tác Rút tiền. Bạn chỉ cần xác minh 1 lần duy nhất.</small></p>
-                    </div>
-                    <div class="modal-footer mb-4">
-                        <button type="submit" class="btn btn-primary fw-500">Đến trang xác minh tài khoản</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
+    @endif
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const certificationAccount = @json($certificationAccount);
-            if (!certificationAccount) {
-                const modalVerifyWallet = new bootstrap.Modal('#modalVerifyWallet');
-                modalVerifyWallet.show();
-            }
+            @if(!empty($setting_verify) && $setting_verify == 1)
+                if (!certificationAccount) {
+                    const modalVerifyWallet = new bootstrap.Modal('#modalVerifyWallet');
+                    modalVerifyWallet.show();
+                }
+            @endif
 
             $('#button-submit').on('click', function(e){
                 e.preventDefault();
