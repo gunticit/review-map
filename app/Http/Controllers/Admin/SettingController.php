@@ -22,11 +22,11 @@ class SettingController extends Controller
     public function index(Request $request){
         $data = $setting_partner = array();
         $settings = $this->settingService->list($request);
+        $list_partners = array();
         foreach($settings as $setting){
             $data[$setting->key_setting] = $setting->value_setting;
             if($setting->key_setting == 'setting_partner'){
                 $setting_partners = !empty($setting->value_setting) ? explode(';', $setting->value_setting) : [];
-                $list_partners = array();
                 User::whereIn('id', $setting_partners)->get()->each(function($user) use(&$list_partners){
                     $list_partners[$user->id] = $user->name;
                 });

@@ -110,6 +110,7 @@
                             <div class="mb-4 payment">
                                 <label for="payment" class="form-label">Phương thức thanh toán</label>
                                 <select class="form-select form-select-js" name="method_payment" id="payment">
+                                    <option value="">Lựa chọn</option>
                                     <option value="momo" selected>Thanh toán qua ví điện tử Momo</option>
                                     <option value="onepay">Thanh toán qua Onepay</option>
                                     {{-- <option value="vnpay">Quét mã VNPAY-QR</option>
