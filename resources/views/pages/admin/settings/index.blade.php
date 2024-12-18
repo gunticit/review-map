@@ -43,9 +43,9 @@
                                   </div>
                                   <select name="approve_project" class="form-select select-setting">
                                       <option value="">Lựa chọn</option>
-                                      <option {{ $setting['approve_project'] == 1 ? 'selected' : '' }} value="1">Chỉ người duyệt</option>
-                                      <option {{ $setting['approve_project'] == 2 ? 'selected' : '' }} value="2">Chỉ AI duyệt</option>
-                                      <option {{ $setting['approve_project'] == 3 ? 'selected' : '' }} value="3">AI duyệt đến người duyệt</option>
+                                      <option {{ !empty($setting['approve_project']) && $setting['approve_project'] == 1 ? 'selected' : '' }} value="1">Chỉ người duyệt</option>
+                                      <option {{ !empty($setting['approve_project']) && $setting['approve_project'] == 2 ? 'selected' : '' }} value="2">Chỉ AI duyệt</option>
+                                      <option {{ !empty($setting['approve_project']) && $setting['approve_project'] == 3 ? 'selected' : '' }} value="3">AI duyệt đến người duyệt</option>
                                   </select>
                               </div>
                               <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
@@ -55,8 +55,8 @@
                                   </div>
                                   <select name="rating_image" class="form-select select-setting">
                                       <option value="">Lựa chọn</option>
-                                      <option {{ $setting['approve_project'] == 1 ? 'selected' : '' }} value="1">Bật</option>
-                                      <option {{ $setting['approve_project'] == 2 ? 'selected' : '' }} value="2">Tắt</option>
+                                      <option {{ !empty($setting['rating_image']) && $setting['rating_image'] == 1 ? 'selected' : '' }} value="1">Bật</option>
+                                      <option {{ !empty($setting['rating_image']) && $setting['rating_image'] == 2 ? 'selected' : '' }} value="2">Tắt</option>
                                   </select>
                               </div>
                               <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
@@ -149,8 +149,8 @@
                                 </div>
                                 <select name="setting_vertify_account" id="setting_vertify_account" class="form-select select-setting">
                                     <option value="">Lựa chọn</option>
-                                    <option {{ $setting['setting_vertify_account'] == 1 ? 'selected' : '' }} value="1">Bật</option>
-                                    <option {{ $setting['setting_vertify_account'] == 2 ? 'selected' : '' }} value="2">Tắt</option>
+                                    <option {{ !empty($setting['setting_vertify_account']) && $setting['setting_vertify_account'] == 1 ? 'selected' : '' }} value="1">Bật</option>
+                                    <option {{ !empty($setting['setting_vertify_account']) && $setting['setting_vertify_account'] == 2 ? 'selected' : '' }} value="2">Tắt</option>
                                 </select>
                             </div>
                             <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
@@ -194,8 +194,8 @@
                                 </div>
                                 <select name="vertify_account" id="vertify_account" class="form-select select-setting">
                                     <option value="">Lựa chọn</option>
-                                    <option {{ $setting['vertify_account'] == 'momo' ? 'selected' : '' }} value="momo">Thanh toán qua[vi điện tử Momo]</option>
-                                    <option {{ $setting['vertify_account'] == 'bank' ? 'selected' : '' }} value="bank">Chuyển khoản ngân hàng</option>
+                                    <option {{ !empty($setting['vertify_account']) && $setting['vertify_account'] == 'momo' ? 'selected' : '' }} value="momo">Thanh toán qua[vi điện tử Momo]</option>
+                                    <option {{ !empty($setting['vertify_account']) && $setting['vertify_account'] == 'bank' ? 'selected' : '' }} value="bank">Chuyển khoản ngân hàng</option>
                                 </select>
                             </div>
                             {{-- <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
