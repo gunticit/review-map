@@ -103,6 +103,32 @@
                                     <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
                                 </div>
                             </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">% Upload ảnh dự án</span>
+                                    <p class="notice mb-0">Up ảnh ko được ít hơn % min và ko được quá % max ( làm tròn % ) khi ở trang khách hàng.</p>
+                                </div>
+                                <div class="d-flex flex-row align-items-center" style="position: relative">
+                                    <label style="margin-bottom: 0; margin-right: 10px">Min:</label>
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_min_image" value="{{ $setting->setting_min_image ?? 0 }}" />
+                                    <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
+                                </div>
+                                <div class="d-flex flex-row align-items-center" style="position: relative;">
+                                    <label style="margin-bottom: 0; margin-right: 10px">Max:</label>
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_max_image" value="{{ $setting->setting_max_image ?? 0 }}" />
+                                    <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Giá tiền hình ảnh</span>
+                                    <p class="notice mb-0">Chi phí bổ sung khi có ảnh: mỗi ảnh 5k ( có option quy định giá tiền mỗi ảnh ) => tính + thêm vào tổng tiền thanh toán dự án</p>
+                                </div>
+                                <div class="d-flex flex-row align-items-center" style="position: relative">
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_price_image" value="{{ $setting->setting_price_image ?? 5000 }}" />
+                                    <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(đ)</span>
+                                </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -128,7 +154,7 @@
                                     <span class="title">Tài khoản đối tác</span>
                                     <span class="notice">Xác thực sẽ áp dụng với những tài khoản setting tại đây, mặc định sẽ áp dụng tất cả</span>
                                 </div>
-                                <select class="ajax-list-partner" name="user_partner_verify" id="listPartners"></select>
+                                <input name="setting_partner" id="setting_partner" class="form-control select-setting" type="text" />
                             </div>
                             <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
                                 <div class="col-sm-12">
@@ -213,6 +239,22 @@
                 }
             }
         });
+        $('#setting_partner').on('keyup', function() {
+            let keyword = $(this).val();
+            $.ajax({
+                url: "{{ route('user.partner.search') }}",
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    name: keyword
+                },
+                success: function(res) {
+                    $('#list-partners tbody').html(res);
+                }
+            })
+        })
     });
 </script>
 @endsection

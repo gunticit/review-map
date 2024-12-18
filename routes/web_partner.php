@@ -10,6 +10,7 @@ use App\Http\Controllers\Partner\OverviewController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\Partner\PartnerSupportController;
 use App\Http\Controllers\PartnerGuaranteeController;
+use App\Http\Controllers\UserController;
 
 Route::group([
         'prefix' => '/partner',
@@ -53,4 +54,5 @@ Route::group([
     //Ajax
     Route::get('/ajax-list-partners', [ManagePartnerController::class, 'getListPartnerAjax'])->name('ajax.list.partners');
     Route::get('/partner-find-product', [PartnerProductController::class, 'partnerFindProduct'])->name('partner.find.product');
+    Route::get('/user.partner.search', [UserController::class, 'getPartnerSearch'])->name('user.partner.search');
 });
