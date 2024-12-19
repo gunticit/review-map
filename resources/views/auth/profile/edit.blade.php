@@ -54,6 +54,18 @@
                                             <option {!! $profile['country_code'] == 'vi'? 'selected': '' !!} value="vi">Việt Nam</option>
                                         </select>
                                     </div>
+                                    <div class="mb-4">
+                                        <label for="inputcountry">Phòng ban <span class="required">*</span>
+                                        </label>
+                                        <select class="form-control form-select form-select-lg" name="department_id" id="department_id" disabled>
+                                            <option value="">--- Chọn ---</option>
+                                            @if(!empty($departments))
+                                                @foreach($departments as $department)
+                                                    <option {!! $profile['department_id'] == $department->id? 'selected': '' !!} value="{{ $department->id }}">{{ $department->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -110,6 +122,7 @@
         formData.append('email', $('#inputEmailAddress').val());
         formData.append('telephone', $('#telephone').val());
         formData.append('country_code', $('#countryCode').val());
+        formData.append('department_id', $('#department_id').val());
         $.ajax({
             url: '{{ route("profile.update") }}',
             method: 'POST',

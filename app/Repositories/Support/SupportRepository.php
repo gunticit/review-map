@@ -17,6 +17,10 @@ class  SupportRepository extends BaseRepository implements SupportRepositoryInte
     public function list($request){
         $query = $this->model->query();
 
+        if($request->department_id){
+            $query->where('department_id', $request->department_id);
+        }
+
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){
             foreach ($orderBy as $column => $direction) {

@@ -178,6 +178,14 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Khoảng cách đối tác</span>
+                                    <span class="notice">Là khoảng cách đối với vị trí của địa điểm của nhiệm vụ mà đối tác có thể nhận</span>
+                                </div>
+                                <input name="setting_distance" id="setting_distance" min="0" value="{{ $setting['setting_distance'] ?? 0 }}" class="form-control select-setting" type="number" />
+                            </div>
                           </div>
                         </div>
                       </div>

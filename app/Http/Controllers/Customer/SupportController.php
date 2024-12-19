@@ -33,7 +33,15 @@ class SupportController extends Controller
         $this->categoryService = $categoryService;
     }
     public function index(Request $request){
-        $supports =  $this->supportService->listCreateByUser($request);
+        $user = auth()->user();
+        if($user->hasRole(Role::ADMIN_ROLE)){
+            $request->merge([
+                'department_id' => $user->department_id
+            ]);
+            $supports = $this->supportService->list($request);
+        }else{
+            $supports =  $this->supportService->listCreateByUser($request);
+        }
         $projects = $this->projectService->list($request);
         $data = SupportResource::collection($supports)->resource;
         return view('pages.customer.support.list', [

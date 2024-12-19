@@ -75,6 +75,7 @@ class SettingController extends Controller
             'partner' => array(
                 'setting_price_image' => $request->setting_price_image ?? null,
                 'setting_vertify_account' => $request->setting_vertify_account ?? null,
+                'setting_distance' => $request->setting_distance ?? null,
                 'setting_partner' => $request->setting_partner ?? null,
             ),
             'payment' => array(

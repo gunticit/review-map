@@ -28,6 +28,12 @@ class SupportService {
      * @throws ValidationException
      */
 
+     public function list($request){
+        $supports = $this->supportRepository->list($request);
+        $data = SupportResource::collection($supports)->resource;
+        return $data;
+    }
+
     public function listCreateByUser($request){
         $request = $request->merge(['user_id' => Auth::user()->id]);
         $supports = $this->supportRepository->listCreateByUser($request);

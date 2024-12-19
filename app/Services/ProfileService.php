@@ -78,7 +78,8 @@ class ProfileService {
             'name' => $data['name'] ?? null,
             'email' => $data['email'] ?? null,
             'telephone' => $data['telephone'] ?? null,
-            'country_code' => $data['country_code'] ?? null
+            'country_code' => $data['country_code'] ?? null,
+            'department_id' => $data['department_id'] ?? null
         );
     }
     

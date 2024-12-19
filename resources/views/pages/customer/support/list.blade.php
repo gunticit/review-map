@@ -40,9 +40,9 @@
                 <table class="table list-table">
                     <thead>
                         <tr>
-                            <th class="list-table-stt" scope="col">STT</th>
-                            <th class="list-table-title" scope="col">Tiêu đề</th>
-                            <th class="list-table-sku" scope="col">Mã đơn</th>
+                            <th style="min-width: unset; width: 80px !important" class="list-table-stt" scope="col">STT</th>
+                            <th class="list-table-title text-start" scope="col">Tiêu đề</th>
+                            <th class="list-table-sku" style="min-width: unset; width: 150px !important; text-align: left" scope="col">Nội dung</th>
                             <th class="list-table-time" scope="col">Thời gian</th>
                             <th class="list-table-progree" scope="col">Trạng thái</th>
                         </tr>
@@ -51,14 +51,14 @@
                         @if(!empty($supports))
                         @foreach ($supports as $key => $support)
                         <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td class="list-table-title">
-                                <a href="javascript:void(0);">{{ $support->title }}</a>
+                            <td style="min-width: unset !important; width: 80px !important">{{ $key + 1 }}</td>
+                            <td class="list-table-title text-start" style="min-width: unset !important; width: 220px !important">
+                                <a href="javascript:void(0);" style="min-width: unset !important; width: 180px !important">{{ $support->title }}</a>
                             </td>
-                            <td class="list-table-sku">
-                                <a href="javascript:void(0);">{{ $support->title }}</a>
+                            <td class="list-table-sku text-start" style="min-width: unset; width: 150px !important">
+                                <a href="javascript:void(0);" style="min-width: unset !important; width: 150px !important; text-align: left">{{ $support->content }}</a>
                             </td>
-                            <td class="list-table-time">
+                            <td class="list-table-time text-center">
                                 {!! date('d/m/Y', strtotime($support->created_at)) !!} <span>{!! date('hh:mm', strtotime($support->created_at)) !!}</span>
                             </td>
                             <td class="list-table-progree text-center">

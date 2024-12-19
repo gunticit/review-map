@@ -36,7 +36,8 @@ class User extends Authenticatable
         'otp',
         'otp_expires_at',
         'latitude',
-        'longitude'
+        'longitude',
+        'department_id'
     ];
 
     /**

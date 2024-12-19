@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\Company;
+use App\Models\Department;
 use App\Models\User;
 use App\Services\ProfileService;
 use App\Traits\UploadFile;
@@ -32,6 +33,7 @@ class ProfileController extends Controller
         if(!empty($profile->company_id)){
             $company = Company::find($profile->company_id);
         }
+        $departments = Department::all();
         return view('auth.profile.edit', [
             'profile' => array(
                 'id'         => $profile->id ?? null,
@@ -42,9 +44,11 @@ class ProfileController extends Controller
                 'telephone'   => $profile->telephone ?? null,
                 'language'   => $profile->language ?? null,
                 'dark_mode'  => $profile->dark_mode ?? null,
-                'country_code' => $profile->country_code ?? null
+                'country_code' => $profile->country_code ?? null,
+                'department_id' => $profile->department_id ?? null
             ),
-            'company' => $company
+            'company' => $company,
+            'departments' => $departments,
         ]);
     }
 
