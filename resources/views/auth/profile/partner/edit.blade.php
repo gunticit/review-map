@@ -12,6 +12,21 @@
         width: 100%;
         object-fit: cover;
     }
+    .info-level{
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px dotted;
+        margin: 25px 0 0;
+        background: #fffeed;
+    }
+    .info-level p{
+        margin-bottom: 5px;
+        color: #068036;
+    }
+    .info-level p span{
+        font-weight: bold;
+        color: #000;
+    }
 </style>
 <!-- tai khoan -->
 <section class="accout mb-5 mt-5">
@@ -37,11 +52,11 @@
                                         </a>
                                         <input type="file" name="avatar" class="d-none" id="inputAvatar">
                                     </div>
-                                    @if(!empty($levelDetails))
+                                    @if(!empty($levelDetails) && auth()->user()->hasRole('partner'))
                                     <div class="info-level">
-                                        <p>{{ __('Cấp độ') }}: {{ $levelDetails->name }}</p>
-                                        <p>{{ __('Thời gian nhận task') }}: {{ $levelDetails->time_limit . __('giờ') }}</p>
-                                        <p>{{ __('Trả thưởng') }}: {{ number_format($levelDetails->reward, 0) }} VND/task</p>
+                                        <p><span>{{ __('Cấp độ') }}:</span> {{ $levelDetails->name }}</p>
+                                        <p><span>{{ __('Thời gian nhận task') }}:</span> {{ $levelDetails->time_limit . __('giờ') }}</p>
+                                        <p><span>{{ __('Trả thưởng') }}:</span> {{ number_format($levelDetails->reward, 0) }} VND/task</p>
                                     </div>
                                     @endif
                                 </div>

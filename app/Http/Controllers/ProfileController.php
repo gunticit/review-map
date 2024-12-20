@@ -54,7 +54,7 @@ class ProfileController extends Controller
 
     public function editPartner(Request $request){
         $user = auth()->user();
-        $profile = User::where('id',($user->id))->with('accountPayment','certificationAccount')->first();
+        $profile = User::where('id',($user->id))->with('accountPayment','certificationAccount','levelDetails')->first();
         $data = [
             'profile' => array(
                 'id'         => $profile->id ?? null,
@@ -70,7 +70,7 @@ class ProfileController extends Controller
                 'front_id_image' => $profile->certificationAccount?->front_id_image ?? null,
                 'back_id_image' => $profile->certificationAccount?->back_id_image ?? null,
             ),
-            'levelDetails' => $user->levelDetails,
+            'levelDetails' => $profile->levelDetails ?? null,
             'accountPayment' => $profile->accountPayment ?? null
         ];
         return view('auth.profile.partner.edit', $data);

@@ -91,9 +91,7 @@
 
     /* Hiệu ứng khi đồng hồ đếm ngược gần hết */
     #countdown.warning {
-        background-color: #ff6347; /* Màu đỏ cam */
-        color: white;
-        box-shadow: 0 4px 12px rgba(255, 99, 71, 0.5);
+        color: #f00;
         transform: scale(1.05);
         font-size: 35px;
     }

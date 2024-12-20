@@ -14,11 +14,11 @@ class LevelSeeder extends Seeder
     public function run(): void
     {
         Level::insert([
-            ['name' => 'Cấp 1', 'time_limit' => 12, 'tasks_required' => 0, 'reward' => 10000],
-            ['name' => 'Cấp 2', 'time_limit' => 6, 'tasks_required' => 5, 'reward' => 11000],
-            ['name' => 'Cấp 3', 'time_limit' => 3, 'tasks_required' => 10, 'reward' => 12000],
-            ['name' => 'Cấp 4', 'time_limit' => 2, 'tasks_required' => 50, 'reward' => 13000],
-            ['name' => 'Cấp 5', 'time_limit' => 1, 'tasks_required' => 100, 'reward' => 14000],
+            ['name' => 'Cấp 1', 'time_limit' => 12, 'required_tasks' => 0, 'reward' => 10000],
+            ['name' => 'Cấp 2', 'time_limit' => 6, 'required_tasks' => 5, 'reward' => 11000],
+            ['name' => 'Cấp 3', 'time_limit' => 3, 'required_tasks' => 10, 'reward' => 12000],
+            ['name' => 'Cấp 4', 'time_limit' => 2, 'required_tasks' => 50, 'reward' => 13000],
+            ['name' => 'Cấp 5', 'time_limit' => 1, 'required_tasks' => 100, 'reward' => 14000],
         ]);
     }
 }

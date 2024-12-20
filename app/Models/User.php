@@ -37,7 +37,8 @@ class User extends Authenticatable
         'otp_expires_at',
         'latitude',
         'longitude',
-        'department_id'
+        'department_id',
+        'level'
     ];
 
     /**
@@ -91,6 +92,6 @@ class User extends Authenticatable
 
     public function levelDetails()
     {
-        return $this->belongsTo(Level::class, 'level');
+        return $this->belongsTo(Level::class, 'level', 'id');
     }
 }

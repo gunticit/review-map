@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Partner;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MissionResource;
 use App\Models\Comment;
@@ -123,18 +124,24 @@ class MissionController extends Controller
                 $countMission = Mission::where('project_id', $project->id)
                     ->whereIn('status', [1, 2])
                     ->count();
-    
+                if($project->is_slow){
+                    $percent_get_mession  = Helper::getSetting('setting_percent_slow') ?? 1;
+                }else{
+                    $percent_get_mession  = Helper::getSetting('setting_percent_no_slow') ?? 1;
+                }
                 // Kiểm tra điều kiện
-                $conditionPackage = match ($project->package) {
-                    1 => $countMission < 10,
-                    2 => $countMission < 50,
-                    3 => $countMission < 100,
-                    4 => $countMission < 200,
+                $conditionPackage = match ((int)$project->package) {
+                    1 => $countMission < 10 * ceil($percent_get_mession / 100), // 10 là số câu hỏi của gói 1
+                    2 => $countMission < 50 * ceil($percent_get_mession / 100), // 50 là số câu hỏi của gói 2
+                    3 => $countMission < 100 * ceil($percent_get_mession / 100), // 100 là số câu hỏi của gói 2
+                    4 => $countMission < 200 * ceil($percent_get_mession / 100), // 200 là số câu hỏi của gói 2
                     default => true,
                 };
                 $conditionSlow = !$project->is_slow || $countMissionToDay <= $project->point_slow;
                 $distance = getDistanceBetweenPoints($project->latitude, $project->longitude, auth()->user()->latitude, auth()->user()->longitude);
-                $conditionDistance = $distance['kilometers'] <= 20;
+                $kilometer_setting = Helper::getSetting('setting_distance') ?? 20;
+                $conditionDistance = $distance['kilometers'] <= $kilometer_setting;
+                $user_mission_price = Auth::user()->levelDetails->reward ?? 10000;
                 if ($conditionPackage && $conditionSlow && $conditionDistance) {
                     $comment = $this->randomComment($project->id);
                     if($project->has_image){
@@ -145,7 +152,7 @@ class MissionController extends Controller
                         'project_id' => $project->id,
                         'status' => 2,
                         'comment_id' => $comment->id,
-                        'price' => 10000,
+                        'price' => $user_mission_price,
                         'link_confirm' => null,
                         'latitude' => $project->latitude,
                         'longitude' => $project->longitude,

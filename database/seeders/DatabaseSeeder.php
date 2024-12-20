@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
             NotificationSeeder::class,
             DepartmentSeeder::class,
-            FaqsSeeder::class
+            FaqsSeeder::class,
+            LevelSeeder::class
         ]);
     }
 }

@@ -68,28 +68,7 @@
                 <div class="modal-body">
                     <h4 class="fw-500 text-primary">60 phút</h4>
                     <p>Phần thưởng <span class="fw-500">
-                    @php
-                        switch (Auth::check() && Auth::user()->level) {
-                            case 5:
-                                echo '14.000 VND';
-                                break;
-                            case 4:
-                                echo '13.000 VND';
-                                break;
-                            case 3:
-                                echo '12.000 VND';
-                                break;
-                            case 2:
-                                echo '11.000 VND';
-                                break;
-                            case 1:
-                                echo '10.000 VND';
-                                break;
-                            default:
-                            echo '10.000 VND';
-                                break;
-                        }
-                    @endphp
+                    {{ formatCurrency(Auth::user()->levelDetails->reward) }}
                     </span> khi hoàn thành nhiệm vụ</p>
                     <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
                 </div>
