@@ -63,10 +63,15 @@
 
                 // Nếu số lượng tệp hiện tại cộng với số tệp mới vượt quá giới hạn
                 if (currentFileCount + files.length > maxFileCount) {
-                    // Cập nhật nội dung modal
-                    $('#modalMessage').text(`Số lượng ảnh không được vượt quá ${maxFileCount}. Vui lòng kiểm tra lại.`);
+                    let err_mess = '';
+                    if(maxFileCount == 0){
+                        err_mess = 'Vui lòng chọn gói review trước khi tải hình lên';
+                    }else{
+                        err_mess = `Số lượng ảnh không được vượt quá ${maxFileCount}. Vui lòng kiểm tra lại.`;
+                    }
+                    $('#modalMessage').text(err_mess);
                     $('#modalAlert').modal('show');
-                    return; // Dừng lại nếu vượt quá giới hạn
+                    return;
                 }
 
                 $.each(files, function (index, file) {
@@ -134,18 +139,22 @@
 
             // Xử lý khi nhấn nút gửi
             $('#btn-submit').on('click', function () {
-                let rating_desire = $('body #rating-desire').val();
-                let maxFileCount = settings.maxFileCount();
-                let currentFileCount = selectedFiles.length;
                 let has_image = $('input[name="has_image"]:checked').val();
                 // Khi người dùng chưa chọn tệp
                 if(has_image == 1){
+                    let maxFileCount = settings.maxFileCount();
+                    let minFileCount = settings.minFileCount();
+                    let currentFileCount = selectedFiles.length;
                     if (currentFileCount === 0) {
-                        $('#modalMessage').text('Bạn chưa chọn tệp nào!');  // Cập nhật nội dung modal
+                        $('#modalMessage').text('Bạn chưa chọn tệp nào!');
                         $('#modalAlert').modal('show');
                         return;
-                    } else if (currentFileCount < maxFileCount) {
+                    } else if (currentFileCount > maxFileCount) {
                         $('#modalMessage').text(`Bạn cần tải lên đủ ${maxFileCount} tệp! Hiện tại bạn đã tải lên ${currentFileCount} tệp.`);
+                        $('#modalAlert').modal('show');
+                        return;
+                    } else if(currentFileCount < minFileCount){
+                        $('#modalMessage').text(`Số hình tải lên không đủ ít nhất ${minFileCount} hình. Vui lòng tải lên thêm.`);
                         $('#modalAlert').modal('show');
                         return;
                     }

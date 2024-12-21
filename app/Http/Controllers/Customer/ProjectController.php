@@ -67,11 +67,13 @@ class ProjectController extends Controller
             'latitude' => $user->latitude ?? '10.8299',
             'longitude' => $user->longitude ?? '106.68029'
         );
+        $data['minSetting'] = Helper::getSetting('setting_min_image') ?? 10; // Mặc định 10%
+        $data['maxSetting'] = Helper::getSetting('setting_max_image') ?? 10; // Mặc định 10%
         return view('pages.customer.projects.create',$data);
     }
 
     public function store(ProjectRequest $request){
-        try{
+        // try{
             DB::beginTransaction();
             $data = $this->projectService->create($request);
             $project_id = $data->id;
@@ -140,7 +142,7 @@ class ProjectController extends Controller
                     $quantity_images = count($list_files) ?? 0;
                     $setting_min_image = Helper::getSetting('setting_min_image') ?? 10;
                     $setting_max_image = Helper::getSetting('setting_max_image') ?? 10;
-                    if($quantity_images < ($sl_image * $setting_min_image) || $quantity_images > ($sl_image * $setting_max_image)){
+                    if($quantity_images < ceil($sl_image - ($sl_image * $setting_min_image / 100)) || $quantity_images > ceil($sl_image + ($sl_image * $setting_max_image/100))){
                         Session::flash('error', 'Số lượng hình upload là '.$quantity_images.' không đủ để tạo dự án');
                         return redirect()->back()->withInput();
                     }
@@ -174,10 +176,11 @@ class ProjectController extends Controller
             $this->updateHistory($history);
             Session::flash('error', 'Tạo dự án không thành công');
             return redirect()->back()->withInput();
-        }catch(\Exception $e){
-            DB::rollBack();
-            throw new ProcessException($e);
-        }
+        // }catch(\Exception $e){
+        //     DB::rollBack();
+        //     Session::flash('error', 'Tạo dự án không thành công');
+        //     throw new ProcessException($e);
+        // }
     }
 
     public function edit($id){

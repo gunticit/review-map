@@ -4503,6 +4503,8 @@ table.bt .list-table-title a {
 }
 .Tagslist-wrap {
   margin-bottom: 10px;
+  max-height: 100px;
+  overflow: auto;
 }
 .Tagslist-wrap span {
   border-radius: 8px;

@@ -68,7 +68,7 @@
                 <div class="modal-body">
                     <h4 class="fw-500 text-primary">60 phút</h4>
                     <p>Phần thưởng <span class="fw-500">
-                    {{ !empty(Auth::user()) ? formatCurrency(Auth::user()->levelDetails?->reward) : null }}
+                    {{ !empty(Auth::user()) ? formatCurrency(Auth::user()?->levelDetails?->reward) : null }}
                     </span> khi hoàn thành nhiệm vụ</p>
                     <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
                 </div>

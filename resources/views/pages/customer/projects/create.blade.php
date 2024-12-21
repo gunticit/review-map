@@ -86,6 +86,7 @@
     .Tagslist-wrap{
         display: flex;
         flex-wrap: wrap;
+        position: relative;
     }
     .Tagslist-wrap span {
         border-radius: 8px;
@@ -218,6 +219,37 @@
     .group-tags{
         position: relative;
     }
+    .Tagslist-wrap > div.isloading{
+        position: absolute;
+        z-index: 1;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: rgb(0 0 0 / 12%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+    }
+    .Tagslist-wrap > div > span{
+        background: transparent;
+        padding: 0;
+    }
+    .Tagslist-wrap > div.isloading > span {
+        width: 60px;
+        aspect-ratio: 2;
+        --_g: no-repeat radial-gradient(circle closest-side, rgb(146 147 147 / 85%) 90%, transparent);
+        background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+        background-size: calc(100% / 3) 50%;
+        animation: loader-keywords 1s infinite linear;
+        height: 30px;
+    }
+    @keyframes loader-keywords {
+        20%{background-position:0%   0%, 50%  50%,100%  50%}
+        40%{background-position:0% 100%, 50%   0%,100%  50%}
+        60%{background-position:0%  50%, 50% 100%,100%   0%}
+        80%{background-position:0%  50%, 50%  50%,100% 100%}
+    }
     .loader::after,
     .loader::before {
         content: '';  
@@ -279,6 +311,7 @@
                             {{ session('error') }}
                         </div>
                     @endif
+                    @include('partials.alerts')
                     <div class="col-inner">
                         <h2 class="section-title mb-4">{{ __('project.create_project') }}</h2>
                         <!-- Form Group (list-table)-->
@@ -395,6 +428,7 @@
                                 <span>Vui vẻ</span>
                                 <span>Thân thiện</span>
                                 <span>Thoải mái</span>
+                                <div><span></span></div>
                             </div>
                             <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
                             <input class="form-control hidden" hidden id="keyword_value" type="text" name="keyword_value" readonly>
@@ -403,12 +437,13 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-
-                            <button type="button" id="btn-generate-keyword" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tạo mới bộ từ khóa">
-                                <span class="material-symbols-outlined">
-                                    source_notes
-                                </span>
-                            </button>
+                            <div style="position: relative">
+                                <button type="button" id="btn-generate-keyword" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tạo mới bộ từ khóa">
+                                    <span class="material-symbols-outlined">
+                                        source_notes
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                         <!-- Form Group (Img)-->
                       <div class="inputImg">
@@ -509,25 +544,40 @@
             max : 10
         });
         tagInput1.addData([]);
-
         // file Upload
         $("#fileUpload").fileUpload({
             maxFileCount: function() {
                 // Giới hạn số lượng tệp theo gói đánh giá đã chọn
-                var selectedPackage = $('#inputReview').val();
+                let selectedPackage = $('#inputReview').val();
                 switch (selectedPackage) {
                     case "1":
-                        return 10; // Giới hạn 10 tệp cho gói này
+                        return Math.ceil(10 + (10 * parseInt('{{ $maxSetting }}') / 100));
                     case "2":
-                        return 50; // Giới hạn 50 tệp cho gói này
+                        return Math.ceil(50 + (50 * parseInt('{{ $maxSetting }}') / 100)); // Giới hạn 50 tệp cho gói này
                     case "3":
-                        return 100; // Giới hạn 100 tệp cho gói này
+                        return Math.ceil(100 + (100 * parseInt('{{ $maxSetting }}') / 100)); // Giới hạn 100 tệp cho gói này
                     case "4":
-                        return 200; // Giới hạn 200 tệp cho gói này
+                        return Math.ceil(200 + (200 * parseInt('{{ $maxSetting }}') / 100)); // Giới hạn 200 tệp cho gói này
                     default:
                         return 0; // Không giới hạn
                 }
-            }
+            },
+            minFileCount: function() {
+                // Giới hạn số lượng tệp theo gói đánh giá đã chọn
+                let selectedPackage = $('#inputReview').val();
+                switch (selectedPackage) {
+                    case "1":
+                        return Math.ceil(10 - (10 * parseInt('{{ $maxSetting }}') / 100));
+                    case "2":
+                        return Math.ceil(50 - (50 * parseInt('{{ $maxSetting }}') / 100)); // Giới hạn 50 tệp cho gói này
+                    case "3":
+                        return Math.ceil(100 - (100 * parseInt('{{ $maxSetting }}') / 100)); // Giới hạn 100 tệp cho gói này
+                    case "4":
+                        return Math.ceil(200 - (200 * parseInt('{{ $maxSetting }}') / 100)); // Giới hạn 200 tệp cho gói này
+                    default:
+                        return 0; // Không giới hạn
+                }
+            },
         });
         $('#confirm-url-map').on('click', function(){
             $('#CheckUrl').modal('hide');
@@ -797,6 +847,9 @@
                 e.preventDefault();
                 let checkValidate = validateRequiredFields();
                 if(!checkValidate){
+                    console.error('checkValidate');
+                    console.table(checkValidate);
+                    showAlert('error','Có lỗi xảy ra!');
                     return false;
                 }
                 if ($('.alert').length === 0 && checkValidate) {
@@ -824,12 +877,18 @@
                         _token: "{{ csrf_token() }}",
                         description: description
                     }, 
+                    beforeSend: function(){
+                        $('.Tagslist-wrap > div').addClass('isloading');
+                    },
                     success: function(response) {
                         if(response.status == 'success' && response.data){
                             response.data.forEach(keyword => {
                                 $('.Tagslist-wrap').append(`<span>${keyword}</span>`);
                             })
                         }
+                    },
+                    complete: function(){
+                        $('.Tagslist-wrap > div').removeClass('isloading');
                     }
                 });
             });
