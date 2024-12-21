@@ -392,6 +392,9 @@
                             <label for="Tagslist-table">{{ __('project.keyword') }} <span class="required">*</span>
                             </label>
                             <div class="Tagslist-wrap">
+                                <span>Vui vẻ</span>
+                                <span>Thân thiện</span>
+                                <span>Thoải mái</span>
                             </div>
                             <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
                             <input class="form-control hidden" hidden id="keyword_value" type="text" name="keyword_value" readonly>
@@ -575,7 +578,7 @@
                 $('.tags-input-wrapper').prepend(newTag);
             }
         }
-        $('.Tagslist-wrap > span').click(function(){
+        $('body').on('click', '.Tagslist-wrap > span', function(){
             $(this).toggleClass('active');
             let value = $(this).text();
             addTag(value.trim());
@@ -742,13 +745,13 @@
                     $('.group-check-map .text-danger').remove();
 
                 }
-                if($('.tags-input-wrapper .tag').length == 0){
+                if($('body .tags-input-wrapper .tag').length == 0){
                     $('.tags-input-wrapper').addClass('border-error');
                     $('.group-tags .text-danger').remove();
                     $('.group-tags').append('<p class="text-danger">Vui lòng nhập từ khóa!</p>');
                     check_error = 1;
                 }else{
-                    $('.tags-input-wrapper').removeClass('border-error');
+                    $('body .tags-input-wrapper').removeClass('border-error');
                 }
                 if($('body #rating-desire').val() == 0 || $('body #rating-desire').val() == null || $('body #rating-desire').val() == ''){
                     $('body #rating-desire').addClass('border-error');
@@ -764,7 +767,7 @@
                 }
                 return true;
             }
-            $('.tags-input-wrapper').on('change', function(){
+            $('body').on('change', '.tags-input-wrapper', function(){
                 if($('.tags-input-wrapper .tag').length == 0){
                     $('.tags-input-wrapper').addClass('border-error');
                 }else{
@@ -773,12 +776,12 @@
                 }
                 $(this).parent().find('.alert.text-danger').remove();
             });
-            $('.Tagslist-wrap span').on('click', function(){
-                if($('.tags-input-wrapper .tag').length == 0){
-                    $('.tags-input-wrapper').addClass('border-error');
+            $('body').on('click', '.Tagslist-wrap span', function(){
+                if($('body .tags-input-wrapper .tag').length == 0){
+                    $('body .tags-input-wrapper').addClass('border-error');
                     return false;
                 }else{
-                    $('.tags-input-wrapper').removeClass('border-error');
+                    $('body .tags-input-wrapper').removeClass('border-error');
                     $('.group-tags .text-danger').remove();
                 }
                 $(this).parent().parent().find('.alert.text-danger').remove();

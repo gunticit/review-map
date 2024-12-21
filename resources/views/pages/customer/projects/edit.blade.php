@@ -504,7 +504,7 @@
                 $('.tags-input-wrapper').prepend(newTag);
             }
         }
-        $('.Tagslist-wrap > span').click(function(){
+        $('body').on('click', '.Tagslist-wrap > span', function(){
             $(this).toggleClass('active');
             let value = $(this).text();
             addTag(value.trim());
@@ -513,7 +513,7 @@
             var textCheck = $(this).parent().text().trim(); 
             textCheck = textCheck.replace("×", ""); 
 
-            $('.Tagslist-wrap span').each(function() {
+            $('body .Tagslist-wrap span').each(function() {
                 var tagText = $(this).text().trim(); 
                 if (tagText === textCheck) { 
                     $(this).removeClass('active'); 

@@ -91,16 +91,16 @@ class CommentService {
         }
         if(!empty($keywords)){
             $str_keyword = count($keywords) > 0 ? implode(', ', $keywords) : '';
-            $prompt = "Tạo cho tôi ".$sl_comment." bình luận không đánh số thứ tự mỗi ở mỗi bình luận, cuối mỗi bình luận cách nhau bởi dấu |";
+            $prompt = "Tạo cho tôi ".$sl_comment." bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
             if(!empty($description)){
-                $prompt .= " cho mô tả sau '".$description."' và";
+                $prompt .= " mô tả '".$description."' và";
             }
             if(!empty($str_keyword)){
-                $prompt .= " keyword chủ đề là: '(". $str_keyword .")' và";
+                $prompt .= " keyword chủ đề là: '(". $str_keyword .")'.";
             }
-            $prompt .= " mỗi bình luận không quá 120 ký tự.";
+            $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt.";
             if(!empty(Helper::getSetting('setting_ai_content'))){
-                $prompt .= '. '.Helper::getSetting('setting_ai_content');
+                $prompt .= ' Ngoài ra: '.Helper::getSetting('setting_ai_content');
             }
             $stream = Gemini::geminiPro()
                 ->generateContent($prompt);
