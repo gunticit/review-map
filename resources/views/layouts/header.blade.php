@@ -197,7 +197,7 @@
         }
     }
 </script>
-@if(!Auth::user()?->latitude || !Auth::user()?->longitude)
+@if((!Auth::user()?->latitude || !Auth::user()?->longitude) && env('CUSTOMER_DOMAIN') !== request()->getHost())
     <script>
         getUserLocation();
     </script>
