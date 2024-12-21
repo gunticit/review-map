@@ -207,6 +207,17 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
+    #btn-generate-keyword{
+        right: 0;
+        position: absolute;
+        bottom: 0;
+        padding: 5px;
+        z-index: 1;
+        display: none;
+    }
+    .group-tags{
+        position: relative;
+    }
     .loader::after,
     .loader::before {
         content: '';  
@@ -381,12 +392,6 @@
                             <label for="Tagslist-table">{{ __('project.keyword') }} <span class="required">*</span>
                             </label>
                             <div class="Tagslist-wrap">
-                                <span>Đồ uống ngon</span>
-                                <span>Yên tĩnh</span>
-                                <span>Nhân viên thân thiện</span>
-                                <span>Náo nhiệt</span>
-                                <span>Không gian đẹp</span>
-                                <span>Ưu đãi hấp dẫn</span>
                             </div>
                             <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
                             <input class="form-control hidden" hidden id="keyword_value" type="text" name="keyword_value" readonly>
@@ -395,6 +400,12 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+
+                            <button type="button" id="btn-generate-keyword" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tạo mới bộ từ khóa">
+                                <span class="material-symbols-outlined">
+                                    source_notes
+                                </span>
+                            </button>
                         </div>
                         <!-- Form Group (Img)-->
                       <div class="inputImg">
@@ -791,6 +802,34 @@
                     $('.loading-section').show();
                 }
             }); 
+            $('#inputDescription').on('change', function(){
+                if($(this).val() == ''){
+                    $('#btn-generate-keyword').hide();
+                    return false;
+                }
+                $('#btn-generate-keyword').show();
+            })
+            // Generate keyword
+            $('#btn-generate-keyword').on('click', function(){
+                let description = $('#inputDescription').val();
+                if(description == '') return false;
+                $.ajax({
+                    url: "{{ route('generate.keyword') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        description: description
+                    }, 
+                    success: function(response) {
+                        if(response.status == 'success' && response.data){
+                            response.data.forEach(keyword => {
+                                $('.Tagslist-wrap').append(`<span>${keyword}</span>`);
+                            })
+                        }
+                    }
+                });
+            });
         });
     </script>
     <script>

@@ -141,7 +141,7 @@ class MissionController extends Controller
                 $distance = getDistanceBetweenPoints($project->latitude, $project->longitude, auth()->user()->latitude, auth()->user()->longitude);
                 $kilometer_setting = Helper::getSetting('setting_distance') ?? 20;
                 $conditionDistance = $distance['kilometers'] <= $kilometer_setting;
-                $user_mission_price = Auth::user()->levelDetails->reward ?? 10000;
+                $user_mission_price = Auth::user()->levelDetails?->reward ?? 10000;
                 if ($conditionPackage && $conditionSlow && $conditionDistance) {
                     $comment = $this->randomComment($project->id);
                     if($project->has_image){

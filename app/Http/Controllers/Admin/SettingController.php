@@ -72,6 +72,7 @@ class SettingController extends Controller
                 'setting_ai_content' => $request->setting_ai_content ?? null,
                 'setting_min_image' => $request->setting_min_image ?? null,
                 'setting_max_image' => $request->setting_max_image ?? null,
+                'setting_number_keyword' => $request->setting_number_keyword ?? null
             ),
             'partner' => array(
                 'setting_price_image' => $request->setting_price_image ?? null,

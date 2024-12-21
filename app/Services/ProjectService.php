@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Helpers\Helper;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use App\Traits\PusherTrait;
+use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Validation\ValidationException;
 
 class ProjectService {
@@ -133,6 +135,31 @@ class ProjectService {
         $ids = $request->ids;
         $data = $this->projectRepository->bulkDelete($ids);
         return $data;
+    }
+
+    public function generateKeyword($request){
+        $description = isset($request->description) ? $request->description : '';
+        $setting_number_keyword = Helper::getSetting('setting_number_keyword');
+        if(!empty($description)){
+            $prompt = 'Dựa vào mô tả sau: "'.$description.'" hãy tạo cho tôi '.$setting_number_keyword.' từ khóa tốt đẹp liên quan đến nội dung mô tả này. Kết quả trả về chỉ từ khóa không mô tả gì thêm, cũng không đánh số thứ tự, giữa các từ khóa phân biệt bởi ký tự @';
+            $stream = Gemini::geminiPro()->generateContent($prompt);
+            if(!empty($stream->text())){
+                $keywords = $stream->text();
+            }
+        }
+        if(empty($keywords)){
+            return [];
+        }
+        $keywords = explode('@', $keywords);
+        if(count($keywords) > 0){
+            $keywords = array_map(function($keyword){
+                if(!empty($keyword) && is_string($keyword)){
+                    return trim($keyword);
+                }
+                return $keyword;
+            }, $keywords);
+        }
+        return $keywords;
     }
 
     private function filterData($request): array{

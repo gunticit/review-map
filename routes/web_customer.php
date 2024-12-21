@@ -26,6 +26,7 @@ Route::group([
     Route::delete('/delete-project-by-ids', [ProjectController::class, 'destroyByIds'])->name('project.destroy.ids');
     Route::post('/generate-comment-sample', [ProjectController::class, 'generateCommentBySample'])->name('generate.comment.sample');
     Route::post('/update-new-comment/{id}', [ProjectController::class, 'updateNewComment'])->name('update.new.comment'); // id là comment id
+    Route::post('/generate-keyword', [ProjectController::class, 'generateKeyword'])->name('generate.keyword');
 
     Route::put('/update-order-project/{id}', [ProjectController::class, 'updateOrderProject'])->name('update.order.project');
     Route::get('/page-order-project/{id}', [ProjectController::class, 'pageOrderProject'])->name('page.order.project');

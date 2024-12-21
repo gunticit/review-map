@@ -239,6 +239,13 @@
                                 </div>
                                 <textarea class="form-control content-setting" name="setting_ai_content" id="setting_ai_content" placeholder="Nội dung" rows="3">{{ $setting['setting_ai_content'] ?? '' }}</textarea>
                             </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Từ khóa</span>
+                                    <span class="notice">Số lượng từ khóa mẫu sẽ được tạo từ nội dung khách hàng</span>
+                                </div>
+                                <input name="setting_number_keyword" id="setting_number_keyword" min="5" value="{{ $setting['setting_number_keyword'] ?? 5 }}" class="form-control select-setting" type="number" />
+                            </div>
                           </div>
                         </div>
                       </div>

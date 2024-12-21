@@ -398,4 +398,13 @@ class ProjectController extends Controller
     public function projectDelete(Request $request){
         return $this->projectService->destroyByIds($request);
     }
+
+    public function generateKeyword(Request $request){
+        $keywords = $this->projectService->generateKeyword($request);
+        return response()->json([
+            'status' => 'success',
+            'data' => $keywords,
+            'message' => 'Tạo danh sách từ khóa thành công'
+        ]);
+    }
 }
