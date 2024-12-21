@@ -254,18 +254,23 @@
             <div class="row">
                 <!-- cot 1 -->
                 <div class="col-xl-8 col-md-12 col-12 mb-4 mb-xl-0">
+                    @if ($errors->any())
+                        <div class="alert alert-danger fw-400">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger fw-400">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <div class="col-inner">
                         <h2 class="section-title mb-4">{{ __('project.create_project') }}</h2>
                         <!-- Form Group (list-table)-->
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
                         <div class="mb-4"><!-- class: invalid -->
                             <div class="row">
                                 <div class="col-sm-3 d-none">
@@ -777,7 +782,9 @@
             $('#btn-submit').on('click', function(e){
                 e.preventDefault();
                 let checkValidate = validateRequiredFields();
-                
+                if(!checkValidate){
+                    return false;
+                }
                 if ($('.alert').length === 0 && checkValidate) {
                     $(this).prop('disabled', true);
                     $('#form-create-project').submit();

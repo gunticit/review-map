@@ -226,6 +226,22 @@
                           </div>
                         </div>
                       </div>
+                      <div class="accordion-item">
+                        <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#headingAI" aria-expanded="false" aria-controls="headingAI">
+                            Cấu hình kịch bản AI
+                        </button>
+                        <div id="headingAI" class="collapse" aria-labelledby="headingAI" data-bs-parent="#headingAI">
+                          <div class="accordion-body">
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Nội dung</span>
+                                    <span class="notice">Nội dung này sẽ kết hợp với nội dung của khách hàng để tạo ra comment cho dự án</span>
+                                </div>
+                                <textarea class="form-control content-setting" name="setting_ai_content" id="setting_ai_content" placeholder="Nội dung" rows="3">{{ $setting['setting_ai_content'] ?? '' }}</textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                   </div>
                 </form>
             </div>

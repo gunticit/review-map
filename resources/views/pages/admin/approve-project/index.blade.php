@@ -165,7 +165,7 @@
                                         return `
                                             <li id="item-mission-${mission.id}" class="list-group-item list-group-item-action ${className}" aria-current="true">
                                                 <div class="d-flex w-100 justify-content-between">
-                                                    <p class="mb-1">${mission.comments.comment}</p>
+                                                    <p class="mb-1"><b>RO-${mission.comments.id}:</b> ${mission.comments.comment}</p>
                                                 </div>
                                                 ${
                                                     mission.no_image || mission.no_review ? `

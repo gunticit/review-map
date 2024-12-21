@@ -69,6 +69,7 @@ class SettingController extends Controller
                 'setting_percent_slow' => $request->setting_percent_slow ?? null,
                 'setting_price_slow' => $request->setting_price_slow ?? null,
                 'setting_percent_no_slow' => $request->setting_percent_no_slow ?? null,
+                'setting_ai_content' => $request->setting_ai_content ?? null,
                 'setting_min_image' => $request->setting_min_image ?? null,
                 'setting_max_image' => $request->setting_max_image ?? null,
             ),

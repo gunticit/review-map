@@ -2,8 +2,7 @@
 
 namespace App\Services;
 
-use App\Jobs\GenerateCommentJob;
-use Illuminate\Support\Facades\Auth;
+use App\Helpers\Helper;
 use App\Repositories\Comment\CommentRepositoryInterface;
 use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Validation\ValidationException;
@@ -100,6 +99,9 @@ class CommentService {
                 $prompt .= " keyword chủ đề là: '(". $str_keyword .")' và";
             }
             $prompt .= " mỗi bình luận không quá 120 ký tự.";
+            if(!empty(Helper::getSetting('setting_ai_content'))){
+                $prompt .= '. '.Helper::getSetting('setting_ai_content');
+            }
             $stream = Gemini::geminiPro()
                 ->generateContent($prompt);
             if(!empty($stream->text())){
@@ -115,7 +117,11 @@ class CommentService {
         $description = isset($request->description) ? $request->description : '';
         $comments = '';
         if(!empty($keyword) || !empty($sample)){
-            $stream = Gemini::geminiPro()->generateContent('Tạo cho tôi 1 bình luận tương tự '.$sample.' và nội dung liên quan đến mô tả "'.$description.'" và keyword chủ đề là: ', $keyword . ', và bình luận không quá 120 ký tự.');
+            $prompt = 'Tạo cho tôi 1 bình luận tương tự '.$sample.' và nội dung liên quan đến mô tả "'.$description.'" và keyword chủ đề là: '. $keyword . ', và bình luận không quá 120 ký tự.';
+            if(!empty(Helper::getSetting('setting_ai_content'))){
+                $prompt .= '. '.Helper::getSetting('setting_ai_content');
+            }
+            $stream = Gemini::geminiPro()->generateContent($prompt);
             if(!empty($stream->text())){
                 $comments = $stream->text();
             }

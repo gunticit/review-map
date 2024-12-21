@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Exceptions\ProcessException;
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest;
@@ -18,6 +19,7 @@ use App\Services\WalletService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class ProjectController extends Controller
@@ -91,19 +93,24 @@ class ProjectController extends Controller
                 if(!empty($comments)){
                     $comments = explode('|', $comments);
                     $sl_comment = 10;
+                    $sl_image = 0;
                     if(isset($request->package)){
                         switch($request->package){
                             case '1':
                                 $sl_comment = 10;
+                                $sl_image = 10;
                                 break;
                             case '2':
                                 $sl_comment = 50;
+                                $sl_image = 50;
                                 break;
                             case '3':
                                 $sl_comment = 100;
+                                $sl_image = 100;
                                 break;
                             default: 
                                 $sl_comment = 200;
+                                $sl_image = 200;
                                 break;
                         }
                     }
@@ -128,6 +135,15 @@ class ProjectController extends Controller
                     }
                 }
                 if ($request->has('has_image') && $request->has_image == 1) {
+                    $request_files = $request->files->all() ?? [];
+                    $list_files = count($request_files['files']) > 0 ? $request_files['files'] : [];
+                    $quantity_images = count($list_files) ?? 0;
+                    $setting_min_image = Helper::getSetting('setting_min_image') ?? 10;
+                    $setting_max_image = Helper::getSetting('setting_max_image') ?? 10;
+                    if($quantity_images < ($sl_image * $setting_min_image) || $quantity_images > ($sl_image * $setting_max_image)){
+                        Session::flash('error', 'Số lượng hình upload là '.$quantity_images.' không đủ để tạo dự án');
+                        return redirect()->back()->withInput();
+                    }
                     $this->projectImageService->createDataImages($request, $project_id);
                 }
                 $history = [
