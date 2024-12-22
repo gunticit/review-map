@@ -84,7 +84,11 @@
             </div>
         </div>
     </div>
-    <x-cart-component></x-cart-component>
+    {{$total_item}}
+    <pre>
+        {!! print_r($list_product) !!}
+    </pre>
+    <x-cart-component :listProduct="$list_product" :totalItem="$total_item" :totalPrice="$total_price"></x-cart-component>
 <!-- Slick JS -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <!-- Magnific Popup JS -->
@@ -136,25 +140,7 @@
             $('#quantity').val(100);
             showAlert('error','Số lượng không được vượt quá 100');
         }
-        $.ajax({
-            url: "{{ route('ajax.cart.add') }}",
-            method: 'POST',
-            data: {
-                product_id: {{ $product->id }},
-                quantity: quantity,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                if (response.success) {
-                    showAlert('success', response.message);
-                } else {
-                    showAlert('error',response.message);
-                }
-            },
-            error: function(xhr) {
-                showAlert('error','Đã xảy ra lỗi. Vui lòng thử lagi sau.');
-            }
-        })
+        addToCart({{ $product->id }}, this, quantity);
     });
 </script>
 @endsection

@@ -229,7 +229,7 @@ class CartController extends Controller
                         'product_id' => $request->product_id,
                         'quantity' => $request->quantity
                     ]);   
-                    $this->cartService->update($request);
+                    $this->cartService->store($request);
                 }
             }
         }

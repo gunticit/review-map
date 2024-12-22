@@ -109,7 +109,12 @@ use Illuminate\Support\Facades\File;
         }
         
         public static function getCart($user_id){
-            $cart = Cart::with(['cartProducts'])->where('user_id', $user_id)->first();
+            $cart = Cart::with(['cartProducts' => function($query){
+                $query->with('products');
+            }])->where('user_id', $user_id)->first();
+            if(!$cart){
+                return null;
+            }
             return $cart;
         }
     }

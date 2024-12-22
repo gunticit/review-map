@@ -82,8 +82,29 @@ class ProductController extends Controller
 
     public function findBySlug(string $slug){
         $product = $this->productService->findBySlug($slug);
+        $cart_info = Helper::getCart(auth()->user()->id);
+        $list_product = array();
+        $total_item = 0;
+        $total_price = 0;
+        if($cart_info && !empty($cart_info->cartProducts)){
+            foreach ($cart_info->cartProducts as $item){
+                if(!empty($item->products)){
+                    $total_item += $item->quantity;
+                    $total_price += $item->products['price'] * $item->quantity;
+                    $list_product[] = array(
+                        'name' => $item->products['name'],
+                        'quantity' => $item->quantity,
+                        'desription' => $item->products['description'],
+                        'price' => $item->products['price']
+                    );
+                }
+            }
+        }
         return view('pages.partner.store.product-detail',[
-            'product' => $product
+            'product' => $product,
+            'list_product' => $list_product,
+            'total_item' => $total_item,
+            'total_price' => $total_price
         ]);
     }
 

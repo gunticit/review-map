@@ -5,11 +5,10 @@ namespace App\Models;
 use App\Traits\UserStamp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cart extends Model
 {
-    use HasFactory, SoftDeletes, UserStamp;
+    use HasFactory, UserStamp;
 
     protected $table = 'carts';
     protected $guarded = [];
