@@ -69,6 +69,8 @@ class ProjectController extends Controller
         );
         $data['minSetting'] = Helper::getSetting('setting_min_image') ?? 10; // Mặc định 10%
         $data['maxSetting'] = Helper::getSetting('setting_max_image') ?? 10; // Mặc định 10%
+        $data['setting_percent_slow'] = Helper::getSetting('setting_percent_slow') ?? 0;
+        $data['setting_price_slow'] = Helper::getSetting('setting_price_slow') ?? 0;
         return view('pages.customer.projects.create',$data);
     }
 
@@ -88,51 +90,59 @@ class ProjectController extends Controller
                 'keyword' => implode(',', $keyword_data)
             ]);
             $this->projectService->update($request, $project_id);
+            $sl_image = 0;
+            $sl_comment = 10;
+            if(isset($request->package)){
+                switch($request->package){
+                    case '1':
+                        $sl_comment = 10;
+                        $sl_image = 10;
+                        break;
+                    case '2':
+                        $sl_comment = 50;
+                        $sl_image = 50;
+                        break;
+                    case '3':
+                        $sl_comment = 100;
+                        $sl_image = 100;
+                        break;
+                    case '4':
+                        $sl_comment = 200;
+                        $sl_image = 200;
+                        break;
+                    default: 
+                        $sl_comment = 0;
+                        $sl_image = 0;
+                        break;
+                }
+            }
             if($data && $project_id){
                 $request->request->add(['project_id' => $project_id]);
                 $request->request->add(['noJson' => true]);
                 $comments = $this->commentService->generateComment($request);
-                if(!empty($comments)){
+                if(empty($comments)){
+                    Session::flash('error', 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!');
+                    return redirect()->back()->withInput();
+                }
+                $comments = explode('|', $comments);
+                if(count($comments) < $sl_comment){
+                    $comments = $this->commentService->generateComment($request);
                     $comments = explode('|', $comments);
-                    $sl_comment = 10;
-                    $sl_image = 0;
-                    if(isset($request->package)){
-                        switch($request->package){
-                            case '1':
-                                $sl_comment = 10;
-                                $sl_image = 10;
-                                break;
-                            case '2':
-                                $sl_comment = 50;
-                                $sl_image = 50;
-                                break;
-                            case '3':
-                                $sl_comment = 100;
-                                $sl_image = 100;
-                                break;
-                            default: 
-                                $sl_comment = 200;
-                                $sl_image = 200;
-                                break;
-                        }
-                    }
-                    if(count($comments) < $sl_comment){
-                        $comments = $this->commentService->generateComment($request);
-                        $comments = explode('|', $comments);
-                    }
-                    if(!empty($comments)){
-                        foreach($comments as $comment){
-                            if(!empty($comment)){
-                                $comment = str_replace('-','',trim($comment));
-                                if(strlen(trim($comment)) > 0){
-                                    $data_comment = array(
-                                        'project_id' => $project_id,
-                                        'comment' => $comment,
-                                        'keyword' => implode(',', $keyword_data)
-                                    );
-                                    $this->commentService->create($data_comment);
-                                }
-                            }
+                }
+                if(empty($comments)){
+                    Session::flash('error', 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!');
+                    return redirect()->back()->withInput();
+                }
+                foreach($comments as $comment){
+                    if(!empty($comment)){
+                        $comment = str_replace('-','',trim($comment));
+                        if(strlen(trim($comment)) > 0){
+                            $data_comment = array(
+                                'project_id' => $project_id,
+                                'comment' => $comment,
+                                'keyword' => implode(',', $keyword_data)
+                            );
+                            $this->commentService->create($data_comment);
                         }
                     }
                 }
@@ -280,43 +290,62 @@ class ProjectController extends Controller
             );
         }
         $price_order = 0;
+        $project_price = 0;
 
-        if($project_comments->package){
-            switch ($project_comments->package) {
+        if((int)$project_comments->package){
+            switch ((int)$project_comments->package) {
                 case 1:
+                    $project_price = 45000;
                     $price_order = 45000 * 10;
                     $quantity = 10;
                     break;
                 case 2:
+                    $project_price = 35000;
                     $price_order = 35000 * 50;
                     $quantity = 50;
                     break;
                 case 3:
+                    $project_price = 30000;
                     $price_order = 30000 * 100;
                     $quantity = 100;
                     break;
                 case 4:
+                    $project_price = 25000;
                     $price_order = 25000 * 200;
                     $quantity = 200;
                     break;
                 default:
+                    $project_price = 0;
                     $price_order = 0;
                     $quantity = 0;
                     break;
             }
         }
-        $point_slow = 0;
-        $money_slow = 0;
-        if($project_comments->is_slow){
-            $point_slow = $project_comments->point_slow;
-            $money_slow = 10000;
-        }
         $wallet_info = $this->walletService->checkWalletUser();
         $balance = $wallet_info->balance ?? 0;
         $provisional_deduction = $wallet_info->provisional_deduction ?? 0; // Số nợ trước đó
         $available_balance = $balance - $provisional_deduction; // Số dư khả dụng
-        $surplus = $available_balance - ($price_order + $money_slow + ($price_order + $money_slow) * 0.1); // Số dư tạm tính khi thanh toán
-        $tmp_price = $price_order + ($point_slow > 0 ? 10000 : 0);
+
+        $point_slow = 0;
+        if($project_comments->is_slow){
+            $point_slow = $project_comments->point_slow;
+        }
+        $num_images = $this->projectImageService->countImages($project_id);
+        $price_image_setting = Helper::getSetting('setting_price_image') ?? 0;
+        $setting_price_slow = Helper::getSetting('setting_price_slow') ?? 0;
+        $setting_percent_slow = Helper::getSetting('setting_percent_slow') ?? 0;
+        $date_slow = 0;
+        if($project_comments->is_slow){
+            if($point_slow > 0){
+                $date_slow = ceil($quantity / $point_slow);
+            }else{
+                $date_slow = ceil($quantity / ceil($quantity * $setting_percent_slow / 100));
+            }
+        }
+        $price_slow_total = $setting_price_slow * $date_slow;
+        $price_image_total = $price_image_setting * $num_images;
+
+        $tmp_price = $price_order + $price_slow_total + $price_image_total;
         $total_price = $tmp_price + ($tmp_price * 10 / 100);
 
         $voucher_code = $project_comments->voucher_code ?? '';
@@ -344,17 +373,22 @@ class ProjectController extends Controller
             ]
         ];
         $this->updateHistory($history);
-        
+
         return view('pages.customer.projects.order', [
             'projects' => $paginatedComments,
             'project_info' => $project_comments,
             'price_order' => $price_order,
+            'date_slow' => $date_slow,
+            'project_price' => $project_price,
+            'price_slow' => $price_slow_total,
+            'price_image_setting' => $price_image_setting,
+            'setting_price_slow' => $setting_price_slow,
             'balance' => $balance,
             'voucher_info' => $voucher_info,
             'discount_value' => $discount_value,
             'provisional_deduction' => $provisional_deduction,
             'available_balance' => $available_balance,
-            'surplus' => $surplus,
+            'num_images' => $num_images,
             'quantity' => $quantity,
             'project_id' => $project_id,
             'point_slow' => $point_slow,

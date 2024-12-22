@@ -197,22 +197,11 @@ class CartController extends Controller
     public function ajaxStore(CartRequest $request){
         $wallet_info = $this->walletService->checkWalletUser(auth()->user()->id);
         $product_info = $this->productService->show($request->product_id);
-        if($product_info->stock < $request->quantity){
-            return response()->json([
-                'success' => false,
-                'message' => 'Số lượng sản phẩm đã hết!'
-            ]);
-        }
-        if($wallet_info->balance < ($product_info->price * $request->quantity) && $wallet_info->balance > 10000){
-            return response()->json([
-                'success' => false,
-                'message' => 'Số tiền trong ví hiện tại không đủ để thanh toán.'
-            ]);
-        }
         $request = $request->merge([
             'user_id' => auth()->user()->id
         ]);
         $check_cart = $this->cartService->find($request);
+
         if(!$check_cart){
             $this->cartService->store($request);
         }else{
@@ -220,6 +209,12 @@ class CartController extends Controller
                 $check_product_id = false;
                 foreach($check_cart->products as $product){
                     if($request->product_id == $product->id){
+                        if(($product->pivot->quantity + $request->quantity) > $product_info->stock){
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'Số lượng sản phẩm đã hết!'
+                            ]);
+                        }
                         $check_product_id = true;
                         $quantity = $product->pivot->quantity;
                         $request = $request->merge([
@@ -237,6 +232,12 @@ class CartController extends Controller
                     $this->cartService->update($request);
                 }
             }
+        }
+        if($wallet_info->balance < ($product_info->price * $request->quantity) && $wallet_info->balance > 10000){
+            return response()->json([
+                'success' => false,
+                'message' => 'Số tiền trong ví hiện tại không đủ để thanh toán.'
+            ]);
         }
         $cart_info = $this->cartService->find($request);
         $list_product = $cart_info->products()->get();
@@ -258,9 +259,9 @@ class CartController extends Controller
                 'cart_id' => $cart_info->id,
                 'user_id' => $cart_info->id,
                 'total' => $cart_info->total,
-                'list_product' => $list_product,
-                'total_price' => $this->formatCurrencyVND($total_quantity),
-                'total_quantity' => $total_quantity
+                'list_product' => $list_product ?? [],
+                'total_price' => $this->formatCurrencyVND($total_quantity) ?? 0,
+                'total_quantity' => $total_quantity ?? 0
             );
         }
         return response()->json([

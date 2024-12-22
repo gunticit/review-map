@@ -78,6 +78,10 @@ class ProjectImageService {
         return $data;
     }
 
+    public function countImages($project_id){
+        return $this->projectImageRepository->countImages($project_id);
+    }
+
     public function getData($request){
         return array(
             'project_id' => $data->project_id ?? null,

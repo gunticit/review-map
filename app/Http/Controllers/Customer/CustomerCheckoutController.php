@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Voucher;
@@ -9,6 +10,7 @@ use App\Services\ExpenditureStatisticService;
 use App\Services\ProjectService;
 use App\Services\TransactionHistoryService;
 use App\Services\HistoryService;
+use App\Services\ProjectImageService;
 use App\Services\WalletService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,13 +19,14 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerCheckoutController extends Controller
 {
-    protected $projectService, $transactionHistoryService, $historyService, $walletService, $expenditureStatisticService;
+    protected $projectService, $transactionHistoryService, $historyService, $walletService, $expenditureStatisticService, $projectImageService;
     public function __construct(
         ProjectService $projectService, 
         TransactionHistoryService $transactionHistoryService, 
         HistoryService $historyService,
         WalletService $walletService,
-        ExpenditureStatisticService $expenditureStatisticService
+        ExpenditureStatisticService $expenditureStatisticService,
+        ProjectImageService $projectImageService
     )
     {
         $this->projectService = $projectService;
@@ -31,6 +34,7 @@ class CustomerCheckoutController extends Controller
         $this->walletService = $walletService;
         $this->expenditureStatisticService = $expenditureStatisticService;
         $this->historyService = $historyService;
+        $this->projectImageService = $projectImageService;
     }
     public function confirmCheckout(Request $request){
         try{
@@ -39,21 +43,43 @@ class CustomerCheckoutController extends Controller
             $project = $this->projectService->show($project_id);
             $project_comments = $this->projectService->findWithComments($project_id, $request);
             $price_order = 0;
-            if($project_comments->package){
-                $price_order = match ($project_comments->package) {
-                    1, "1" => 45000 * 10,
-                    2, "2" => 35000 * 50,
-                    3, "3" => 30000 * 100,
-                    4, "4" => 25000 * 200,
+            if((int)$project_comments->package){
+                $price_order = match ((int)$project_comments->package) {
+                    1 => 45000 * 10,
+                    2 => 35000 * 50,
+                    3 => 30000 * 100,
+                    4 => 25000 * 200,
+                    default => 0
+                };
+                $quantity = match ((int)$project_comments->package) {
+                    1 => 10,
+                    2 => 50,
+                    3 => 100,
+                    4 => 200,
                     default => 0
                 };
             }
+            $point_slow = 0;
             if($project_comments->is_slow){
-                $price_order = $price_order + 10000;
+                $point_slow = $project_comments->point_slow;
             }
-            $temp_price_order = $price_order;
+            $num_images = $this->projectImageService->countImages($project_id);
+            $price_image_setting = Helper::getSetting('setting_price_image') ?? 0;
+            $setting_price_slow = Helper::getSetting('setting_price_slow') ?? 0;
+            $setting_percent_slow = Helper::getSetting('setting_percent_slow') ?? 0;
+            $date_slow = 0;
+            if($project_comments->is_slow){
+                if($point_slow > 0){
+                    $date_slow = ceil($quantity / $point_slow);
+                }else{
+                    $date_slow = ceil($quantity / ceil($quantity * $setting_percent_slow / 100));
+                }
+            }
+            $price_slow_total = $setting_price_slow * $date_slow;
+            $price_image_total = $price_image_setting * $num_images;
+            $temp_price_order = $price_order + $price_slow_total + $price_image_total;
             Project::where('id', $project_id)->update(['price' => $price_order]);
-            $price_order = $temp_price_order + $price_order * 0.1; // Cộng VAT
+            $price_order = $temp_price_order + $temp_price_order * 0.1; // Cộng VAT
             $wallet_info = $this->walletService->checkWalletUser();
             $balance = $wallet_info->balance ?? 0; // Số tiền
 
@@ -94,7 +120,7 @@ class CustomerCheckoutController extends Controller
                 [
                     'content' => json_encode([
                         'title' => 'Thanh toán dự án',
-                        'content' => 'Bạn đã thanh toán dự án: ' . $project_comments->name . ' với số tiền ' . $total_price .' thành công!',
+                        'content' => 'Bạn đã thanh toán dự án: ' . $project_comments->name . ' với số tiền ' . formatCurrency($total_price) .' thành công!',
                         'status' => 5, 
                         'user_id' => Auth::user()->id
                     ]),

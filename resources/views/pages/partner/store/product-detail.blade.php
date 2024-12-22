@@ -6,6 +6,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" />
 @endsection
 @section('content')
+    <style>
+        .increase-quantity{
+            right: 5px;
+        }
+        .decrease-quantity{
+            left: 5px;
+        }
+        .increase-quantity,
+        .decrease-quantity{
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 40px;
+            transform: translateY(-50%);
+            z-index: 2;
+            background: #fff;
+        }
+        #description{
+            background: #f1f1f1;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+    </style>
     <div class="container">
         <div id="breadcrumb">
             <div class="row">
@@ -44,11 +68,13 @@
                     <div class="col-sm-7 col-xs-12">
                         <h1>{{ $product->name }}</h1>
                         <p class="price">{{ number_format($product->price) }} đ</p>
-                        <div id="cart-box">
-                            <button class="decrease-quantity">-</button>
-                            <input type="number" id="quantity" min="1" max="100" value="1">
-                            <button class="increase-quantity">+</button>
-                            <button class="add-to-cart btn btn-primary">Mua ngay</button>
+                        <div id="cart-box" style="display: flex; gap: 20px">
+                            <div style="display: inline-block; position: relative">
+                                <button class="btn decrease-quantity btn-outline-dark py-2 px-3">-</button>
+                                <input type="number" class="form-control d-inline-block" style="width: 220px; text-align: center" readonly id="quantity" min="1" max="100" value="1">
+                                <button class="btn increase-quantity btn-outline-dark py-2 px-3">+</button>
+                            </div>
+                            <button class="add-to-cart btn btn-primary flex-1" style="width: 250px">Mua ngay</button>
                         </div>
                         <div id="description">
                             {{ $product->description ?? ''}}
@@ -58,8 +84,7 @@
             </div>
         </div>
     </div>
-@endsection
-@section('js')
+    <x-cart-component></x-cart-component>
 <!-- Slick JS -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <!-- Magnific Popup JS -->
@@ -130,6 +155,6 @@
                 showAlert('error','Đã xảy ra lỗi. Vui lòng thử lagi sau.');
             }
         })
-    })
+    });
 </script>
 @endsection

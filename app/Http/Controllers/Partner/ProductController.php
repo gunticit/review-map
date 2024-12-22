@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Partner;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
@@ -22,10 +23,12 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $products = $this->productService->list($request);
+        $cart_info = Helper::getCart(auth()->user()->id);
         return view('pages.partner.store.product',[
             'categories' => $categories,
             'products' => $products,
-            'filter_data' => $request->all()
+            'filter_data' => $request->all(),
+            'cart_info' => $cart_info
         ]);
     }
 

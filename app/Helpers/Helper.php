@@ -1,6 +1,8 @@
 <?php
     namespace App\Helpers;
-    use Illuminate\Support\Facades\File;
+
+use App\Models\Cart;
+use Illuminate\Support\Facades\File;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Http\UploadedFile;
     use App\Traits\FileManager;
@@ -104,5 +106,10 @@
         public static function getSetting($key){
             $setting = Setting::where('key_setting', $key)->first();
             return $setting ? $setting->value_setting : null;
+        }
+        
+        public static function getCart($user_id){
+            $cart = Cart::with(['orders','cartProducts'])->where('user_id', $user_id)->first();
+            return $cart;
         }
     }

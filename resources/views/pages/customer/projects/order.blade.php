@@ -66,6 +66,9 @@
     .list-table-so-du{
         font-weight: bold;
     }
+    .mid-text{
+        text-align: right;
+    }
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -106,7 +109,7 @@
                                         <th class="list-table-stt" scope="col">STT</th>
                                         <th class="list-table-time" scope="col">Mã đơn</th>
                                         <th class="list-table-so-tien" style="min-width: 250px" scope="col">Nội dung đánh giá</th>
-                                        <th class="list-table-content-3" scope="col">Rãi chậm</th>
+                                        <th class="list-table-content-3" scope="col">Rải chậm</th>
                                         <th class="list-table-so-du" scope="col">Hình ảnh</th>
                                     </tr>
                                 </thead>
@@ -126,7 +129,9 @@
                                                     </div> 
                                                     <input type="text" class="text-comment d-none ip-comment-id-{{ $project->id }}" value="{{ $project->comment ?? '' }}">
                                                 </td>
-                                                <td class="list-table-content-3" scope="col">{{ $project_info->point_slow ?? 0 }}</td>
+                                                <td class="list-table-content-3" scope="col">
+                                                    {{ $project_info->is_slow ? ($project_info->point_slow == 0 ? 'Mặc định' : $project_info->point_slow) : 0 }}
+                                                </td>
                                                 <td class="list-table-content-3" scope="col">
                                                     {!! $project_info->has_image?'Có':'Không' !!}
                                                 </td>
@@ -179,30 +184,37 @@
                                 <div id="checkout-info">
                                     <ul>
                                         <li>
-                                            <span>Số lượng</span>
-                                            <span>{{ $quantity }}</span>
-                                            <span>{!! number_format($price_order, 0, ',', '.') . ' VND'; !!}</span>
+                                            <span style="flex: 1">Số lượng</span>
+                                            <span class="mid-text">x {{ $quantity }}</span>
+                                            <span>{!! number_format($project_price, 0, ',', '.') . ' VND'; !!}</span>
                                         </li>
-                                        @if($point_slow > 0)
-                                        <li>
-                                            <span>Số lượng</span>
-                                            <span>{{ $point_slow }} ngày</span>
-                                            <span>{!! number_format(10000, 0, ',', '.') . ' VND'; !!}</span>
-                                        </li>
+                                        @if(!empty($project_info->is_slow))
+                                            <li class="">
+                                                <span>Rãi chậm</span>
+                                                <span class="mid-text">x {{ $date_slow }} ngày</span>
+                                                <span id="value-voucher">{{ number_format($setting_price_slow, 0, ',', '.') . ' VND'; }}</span>
+                                            </li>
                                         @endif
-                                        <li>
+                                        @if(!empty($num_images) && $num_images > 0)
+                                            <li class="">
+                                                <span>Hình ảnh</span>
+                                                <span class="mid-text">x {{ $num_images }}</span>
+                                                <span id="value-voucher">{{ number_format($price_image_setting, 0, ',', '.') . ' VND'; }}</span>
+                                            </li>
+                                        @endif
+                                        <li style="border-top: 1px solid #ccc; padding-top: 15px;">
                                             <span>Tạm tính</span>
-                                            <span></span>
+                                            <span class="mid-text"></span>
                                             <span>{!! number_format($tmp_price, 0, ',', '.') . ' VND'; !!}</span>
                                         </li>
                                         <li>
                                             <span>VAT</span>
-                                            <span>10%</span>
+                                            <span class="mid-text">10%</span>
                                             <span>{!! number_format(($tmp_price * 10)/100, 0, ',', '.') . ' VND'; !!}</span>
                                         </li>
                                         <li id="discount-voucher" class="text-warning {!! !empty($discount_value) ? 'text-warning d-flex':'' !!}">
                                             <span>Mã giảm giá</span>
-                                            <span></span>
+                                            <span class="mid-text"></span>
                                             <span id="value-voucher">{!! 
                                                 !empty($voucher_info->discount_value) && $voucher_info->discount_type != 'percent' ? '-'.formatCurrency($voucher_info->discount_value) : (!empty($voucher_info->discount_value) && $voucher_info->discount_type == 'percent' ? '-'.$voucher_info->discount_value . '%' : '')
                                             !!}</span>

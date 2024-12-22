@@ -244,6 +244,22 @@
         animation: loader-keywords 1s infinite linear;
         height: 30px;
     }
+    #inputRaiCham{
+        text-align: center;
+    }
+    #btn-minus-rai-cham, #btn-plus-rai-cham{
+        position: absolute;
+        top: 0;
+        z-index: 2;
+        border: 1px solid #ffffff;
+        background: #ededed;
+    }
+    #btn-minus-rai-cham{
+        left: 0;
+    }
+    #btn-plus-rai-cham{
+        right: 0;
+    }
     @keyframes loader-keywords {
         20%{background-position:0%   0%, 50%  50%,100%  50%}
         40%{background-position:0% 100%, 50%   0%,100%  50%}
@@ -415,9 +431,22 @@
                                         <span class="input-group-text" for="inputRaiChamCheck">
                                             <input type="checkbox" name="is_slow" class="form-check-input" id="inputRaiChamCheck">
                                         </span>
-                                        <input type="number" min="2" name="point_slow" readonly class="form-control" id="inputRaiCham">
+                                        <div style="position: relative;flex: 1;">
+                                            <button class="btn btn-outline-secondary" type="button" id="btn-minus-rai-cham" style="display:none">
+                                                <span class="material-symbols-outlined">
+                                                    remove
+                                                </span>
+                                            </button>
+                                            <input type="number" value="" min="2" name="point_slow" readonly class="form-control" id="inputRaiCham">
+                                            <button class="btn btn-outline-secondary" type="button" id="btn-plus-rai-cham" style="display:none">
+                                                <span class="material-symbols-outlined">
+                                                    add
+                                                </span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
+                                <div id="alert-du-kien"></div>
                             </div>
                         </div>
                         <!-- Form Group (Tags)-->
@@ -655,7 +684,48 @@
 
             $(this).parent().remove(); // Xóa tag từ danh sách tags-input-wrapper
         });
-
+        // Check ngay du kien
+        function checkDateDuKien(){
+            let package_id = $('#inputReview').val();
+            let per_day_work = $('#inputRaiCham').val();
+            per_day_work = parseInt(per_day_work);
+            let date_dukien = 10;
+            switch(parseInt(package_id)){
+                case 1:
+                    if(per_day_work < 1){
+                        date_dukien = Math.ceil(10 / Math.ceil(10 * {{ $setting_percent_slow }}/100));
+                    }else{
+                        date_dukien = Math.ceil(10 / per_day_work);
+                    }
+                    break;
+                case 2:
+                    if(per_day_work < 1){
+                        date_dukien = Math.ceil(50 / Math.ceil(50 * {{ $setting_percent_slow }}/100));
+                    }else{
+                        date_dukien = Math.ceil(50 / per_day_work);
+                    }
+                    break;
+                case 3:
+                    if(per_day_work < 1){
+                        date_dukien = Math.ceil(100 / Math.ceil(100 * {{ $setting_percent_slow }}/100));
+                    }else{
+                        date_dukien = Math.ceil(100 / per_day_work);
+                    }
+                    break;
+                case 4:
+                    if(per_day_work < 1){
+                        date_dukien = Math.ceil(200 / Math.ceil(200 * {{ $setting_percent_slow }}/100));
+                    }else{
+                        date_dukien = Math.ceil(200 / per_day_work);
+                    }
+                    break;
+                default:
+                    date_dukien = Math.ceil(10 / (10 * {{ $setting_percent_slow }}/100));
+                    break;
+            }
+            $('#alert-du-kien').html(`<p>Số ngày dự kiến hoàn thành là <span class="text-danger">${date_dukien}</span> ngày. <br />Chi phí: <span class="text-danger">${date_dukien * {{ $setting_price_slow }}}</span> đ</p>`);
+        }
+                
         // Rating
         function handleRateChange(event, rating){
             $('#info-map-reviews .group-reviews-alert').remove();
@@ -692,7 +762,7 @@
                 $('#info-map-reviews .group-reviews-alert').remove();
             }, 3500);
         }
-        // $('#inputReview').on('change', function(){
+        $('#inputReview').on('change', function(){
         //     if($(this).val()){
         //         $('#inputRaiCham').prop('readonly',false);
         //         $('#inputRaiChamCheck').prop('checked', true);
@@ -701,18 +771,37 @@
         //         $('#inputRaiCham').prop('readonly',true);
         //         $('#inputRaiChamCheck').prop('checked', false);
         //     }
-        // })
-        $('#inputRaiChamCheck').on('change', function(){
+            if($('#inputRaiChamCheck').is(':checked')){
+                checkDateDuKien();
+            }
+        })
+        $('#inputRaiChamCheck').on('change', function(e){
+            let inputReview = $('#inputReview').val().trim();
+            if(!inputReview){
+                showAlert('warning', 'Vui lòng chọn gói review trước');
+                e.preventDefault();
+                $(this).prop('checked', false);
+                return false;
+            }
             if($(this).is(':checked')){
-                $('#inputRaiCham').prop('readonly',false);
+                $('#btn-minus-rai-cham').show();
+                $('#btn-plus-rai-cham').show();
+                // $('#inputRaiCham').prop('readonly',false);
+                $('#inputRaiCham').val(0);
                 $('#inputRaiChamCheck').prop('checked', true);
-                $('#inputRaiCham').focus();
+                // $('#inputRaiCham').focus();
+
+                // Tinh ngay du kien
+                checkDateDuKien();
             }else{
-                $('#inputRaiCham').prop('readonly',true);
+                // $('#inputRaiCham').prop('readonly',true);
+                $('#btn-minus-rai-cham').hide();
+                $('#btn-plus-rai-cham').hide();
+                $('#inputRaiCham').val('');
                 $('#inputRaiChamCheck').prop('checked', false);
             }
         });
-        $('#inputRaiCham').on('change', function(){
+        $('#inputRaiCham').on('change', function(e){
             $('#group-raicham small').remove();
             let review = $('#inputReview').val();
             const data = $(this).val();
@@ -733,7 +822,7 @@
                 $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);                
                 $(this).val(10);
             }
-            if(data > 20 && review == 3){
+            if(data > 20 && review == 4){
                 $('#group-raicham').append(`<small class="text-danger">Bạn nên rải chậm để các review trông có vẻ thật nhất. Không nên đánh giá quá nhiều trong 1 ngày sẽ giảm số lượng hiển thị review. Số lượng rải chậm nhiều hơn 2 đánh giá và ít hơn 10% số lượng gói mua</small>`);
                 $(this).val(20);
             }
@@ -891,6 +980,43 @@
                         $('.Tagslist-wrap > div').removeClass('isloading');
                     }
                 });
+            });
+
+            $('#btn-minus-rai-cham').on('click', function(){
+                let value = $('#inputRaiCham').val();
+                value = parseInt(value);
+                let package_id = $('#inputReview').val();
+                if(value >= 2 && package_id > 1){
+                    $('#inputRaiCham').val(value - 1);
+                }
+                checkDateDuKien();
+            });
+            $('#btn-plus-rai-cham').on('click', function(){
+                let value = $('#inputRaiCham').val();
+                value = parseInt(value);
+                let package_id = $('#inputReview').val();
+                let max_value = 1;
+                switch(parseInt(package_id)){
+                    case 1:
+                        max_value = 1;
+                        break;
+                    case 2:
+                        max_value = 2;
+                        break;
+                    case 3:
+                        max_value = 5;
+                        break;
+                    case 4:
+                        max_value = 10;
+                        break;
+                    default:
+                        max_value = 1;
+                        break;
+                }
+                if(value < max_value && package_id >= 1){
+                    $('#inputRaiCham').val(value + 1);
+                }
+                checkDateDuKien();
             });
         });
     </script>

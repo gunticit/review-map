@@ -39,7 +39,7 @@
                                     <div class="product-price">
                                         <span>{{ formatCurrency($product->price) }}</span>
                                     </div>
-                                    <button onclick="addToCart({{ $product->id }})" class="add-to-cart btn btn-primary">Thêm vào giỏ</button>
+                                    <button onclick="addToCart({{ $product->id }}, this)" class="add-to-cart btn btn-primary">Thêm vào giỏ</button>
                                 </div>
                             </div>
                         @endforeach
@@ -68,58 +68,5 @@
         function filterCategory(id) {
             window.location.href = "{{ route('store.product') }}?category_id=" + id
         }
-        function addToCart(id) {
-            $.ajax({
-                url: "{{ route('ajax.cart.add') }}",
-                type: "POST",
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'product_id': id,
-                    'quantity': 1,
-                },
-                dataType: 'json',
-                success: function(data) {
-                    if(data.success){
-                        showAlert('success',data.message);
-                        $('#cart.info-cart').append(`<li class="cart-item">
-                            <img src="https://doitac.rivi.com.vn/./assets/img/Rectangle-22794.jpg" alt="image">
-                            <div class="info">
-                                <p class="name">Sản phẩm</p>
-                                <p class="price">Giá</p>
-                            </div>
-                            <div class="quantity">
-                                x 1
-                            </div>
-                            <div>
-                                <button class="btn-remove-item" onclick="removeItem(this)">
-                                    <span class="material-symbols-outlined">
-                                        backspace
-                                    </span>
-                                </button>
-                            </div>
-                        </li>`);
-                    }else{
-                        showAlert('error',data.message);
-                    }
-                }
-            });
-        }
-        function removeItem(element) {
-            
-        }
-        $(document).ready(function() {
-            $('.btn-cart').on('click', function(e){
-                e.stopPropagation();
-                $(this).fadeOut();
-                $('#cart').addClass('show-cart');
-                $(this).delay(1000).fadeIn();
-            });
-            $('.info-cart').on('click', function(e){
-                e.stopPropagation();
-            });
-            $('body').on('click', function(){
-                $('.info-cart').removeClass('show-cart');
-            });
-        })
     </script>
 @endsection
