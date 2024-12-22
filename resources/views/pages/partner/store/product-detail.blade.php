@@ -84,10 +84,6 @@
             </div>
         </div>
     </div>
-    {{$total_item}}
-    <pre>
-        {!! print_r($list_product) !!}
-    </pre>
     <x-cart-component :listProduct="$list_product" :totalItem="$total_item" :totalPrice="$total_price"></x-cart-component>
 <!-- Slick JS -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
