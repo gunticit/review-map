@@ -50,11 +50,13 @@ class WalletController extends Controller
         }
         $histories = $this->transactionHistoryService->listHistoriesByUser($user_info->id);
         $setting_verify = Helper::getSetting('setting_vertify_account');
+        $certificated = CertificationAccount::where('user_id', Auth::user()->id)->first();
         return view('pages.wallet.withdraw', [
             'certificationAccount' => $certificationAccount,
             'user_info' => $user_info,
             'balance' => $balance,
             'setting_verify' => $setting_verify,
+            'certificated' => $certificated,
             'payment_method' => $profile->accountPayment['payment_method'] ?? null,
             'withdraws' => $histories
         ]);

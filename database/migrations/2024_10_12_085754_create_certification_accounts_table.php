@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('contract')->nullable();
             $table->string('front_id_image')->nullable();
             $table->string('back_id_image')->nullable();
+            $table->integer('user_verified')->nullable();
+            $table->dateTime('verified_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

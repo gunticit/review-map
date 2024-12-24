@@ -46,14 +46,20 @@
         </span>
     </div> Quản lý dự án
 </a>
-<a class="nav-link {!! request()->routeIs('approve.project') ? 'active' : '' !!}" href="{{ route('approve.project') }}">
+<a class="nav-link {!! request()->routeIs('approve.project') ? 'active' : '' !!}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#accordionApprove" aria-expanded="false" aria-controls="accordionApprove">
     <div class="nav-link-icon">
-        <span class="material-symbols-outlined">
-            fact_check
-        </span>
-    </div> <span>Kiểm duyệt</span> 
-    {{-- <span class="badge bg-danger rounded-pill ms-2">2</span> --}}
+        <span class="material-symbols-outlined">fact_check</span>
+    </div> Kiểm duyệt <div class="sidenav-collapse-arrow">
+        <span class="material-symbols-outlined">chevron_right</span>
+    </div>
 </a>
+<div class="collapse {!! request()->routeIs('approve.project') || request()->routeIs('approve.withdraw') ? 'show' : '' !!}" id="accordionApprove" data-bs-parent="#accordionApprove">
+    <nav class="sidenav-menu-nested nav accordion" id="accordionApproveChild">
+        <a class="nav-link {!! request()->routeIs('approve.project') || request()->routeIs('approve.project') ? 'active' : '' !!}" href="{{ route('approve.project') }}">Duyệt nhiệm vụ</a>
+        <a class="nav-link {!! request()->routeIs('approve.withdraw') || request()->routeIs('approve.withdraw') ? 'active' : '' !!}" href="{{ route('approve.withdraw') }}">Duyệt rút tiền</a>
+    </nav>
+</div>
+
 <a class="nav-link {!! request()->routeIs('admin.manage.partner.list') || request()->routeIs('admin.manage.partner.info') || request()->routeIs('admin.manage.partner.wallet') || request()->routeIs('admin.manage.partner.project') || request()->routeIs('admin.manage.partner.edit') ? 'active' : '' !!}" href="{{ route('admin.manage.partner.list') }}">
     <div class="nav-link-icon">
         <span class="material-symbols-outlined">

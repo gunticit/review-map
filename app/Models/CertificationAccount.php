@@ -16,4 +16,8 @@ class CertificationAccount extends Model
     public function user() {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function userVerified(){
+        return $this->belongsTo(User::class, 'user_verified', 'id');
+    }
 }

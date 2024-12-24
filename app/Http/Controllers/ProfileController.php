@@ -69,6 +69,7 @@ class ProfileController extends Controller
                 'contract' => $profile->certificationAccount?->contract ?? null,
                 'front_id_image' => $profile->certificationAccount?->front_id_image ?? null,
                 'back_id_image' => $profile->certificationAccount?->back_id_image ?? null,
+                'google_id' => $profile->google_id ?? null
             ),
             'levelDetails' => $profile->levelDetails ?? null,
             'accountPayment' => $profile->accountPayment ?? null

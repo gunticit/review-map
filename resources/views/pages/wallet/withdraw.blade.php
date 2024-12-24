@@ -124,10 +124,10 @@
                             <!-- Form Group (Deposit Amount)-->
                             <div class="depositAmount mb-4">
                                 <label class="d-block" for="amount">Số tiền rút</span></label>
-                                <input type="text" class="form-control" name="amount" id="amount" placeholder="Số tiền khác" />
+                                <input type="text" style="cursor: pointer" {!! empty($certificated->user_verified) ? 'disabled readonly' : '' !!} class="form-control" name="amount" id="amount" placeholder="Số tiền khác" />
                                 <p id="alert-amount-check" class="text-danger"></p>
-                                <div class="mt-3 form-check-inline">
-                                    <input class="form-check-input" type="radio" name="all_amount" id="all_amount">
+                                <div class="mt-3 form-check-inline" style="cursor: pointer">
+                                    <input {!! empty($certificated->user_verified) ? 'disabled readonly' : '' !!} class="form-check-input" type="radio" name="all_amount" id="all_amount">
                                     <label class="form-check-label" for="all_amount"> Rút toàn bộ </label>
                                 </div>
                             </div>
@@ -139,7 +139,11 @@
                                 <label for="total" class="fw-700">Tổng cộng</label>
                                 <h4 id="totalAmount">0 VND</h4>
                             </div>
+                            @if(!empty($certificated->user_verified))
                             <button type="submit" class="btn btn-primary btn-full" id="button-submit"> Rút tiền </button>
+                            @else
+                                <button type="button" class="btn btn-primary btn-full"> Đang xác thực tài khoản </button>
+                            @endif
                         </form>
                     </div>
                 </div>
@@ -147,7 +151,7 @@
 
         </div>
     </section>
-    @if(!empty($setting_verify) && $setting_verify == 1)
+    @if(!empty($setting_verify) && $setting_verify == 1 && empty($certificated))
         <div class="modal fade" tabindex="-1" id="modalVerifyWallet">
             <div class="modal-dialog modal-dialog-centered">
                 <form action="{{ route('wallet.verify.create') }}" method="GET">

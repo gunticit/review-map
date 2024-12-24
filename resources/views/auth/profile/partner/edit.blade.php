@@ -71,17 +71,17 @@
                                     <div class="mb-4">
                                         <label for="inputEmailAddress">Email <span class="required">*</span>
                                         </label>
-                                        <input class="form-control form-control-lg" id="inputEmailAddress" type="email" value="{{ $profile['email'] }}" disabled>
+                                        <input class="form-control form-control-lg" id="inputEmailAddress" type="email" value="{{ $profile['email'] }}" disabled />
                                     </div>
                                     <!-- Form Group (phone)-->
                                     <div class="mb-4">
                                         <label for="inputPhone">Số điện thoại <span class="required">*</span>
                                         </label>
-                                        <input type="tel" class="form-control form-control-lg" id="telephone" name="telephone" placeholder="Số điện thoại" value="{{ $profile['telephone'] }}" disabled />
+                                        <input type="tel" class="form-control {!! $profile['google_id'] ? '' : 'form-control-lg' !!}" id="telephone" name="telephone" placeholder="Số điện thoại" value="{{ $profile['telephone'] }}" disabled />
                                     </div>
                                     <!-- Form Group (country)-->
                                     <div class="mb-4">
-                                        <label for="inputcountry">Quốc gia <span class="required">*</span>
+                                        <label for="inputcountry">Quốc gia
                                         </label>
                                         <select class="form-control form-select form-select-lg" name="country_id" id="countryCode" disabled>
                                             <option value="">--- Chọn ---</option>
@@ -214,6 +214,11 @@
         formData.append('email', $('#inputEmailAddress').val());
         formData.append('telephone', $('#telephone').val());
         formData.append('country_code', $('#countryCode').val());
+        let telephone = $('#telephone').val();
+        if(!telephone){
+            showAlert('error','Vui lòng nhập số điện thoại');
+            return false;
+        }
         $.ajax({
             url: '{{ route("profile.update") }}',
             method: 'POST',

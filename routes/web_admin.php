@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\Admin\AdminFaqController;
+use App\Http\Controllers\ApproveWithdrawController;
 use App\Http\Controllers\CensorshipHistoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\SupportController;
@@ -27,6 +28,7 @@ Route::group([
         Route::get('/overview-partner',  [DashboardController::class, 'partnerOverview'])->name('overview.partner');
         Route::get('/order',  [DashboardController::class, 'order'])->name('order');
         Route::get('/approve-project',  [ApproveProjectController::class, 'index'])->name('approve.project');
+        Route::get('/approve-withdraw',  [ApproveWithdrawController::class, 'index'])->name('approve.withdraw');
         Route::resource('/statistics', StatisticController::class);
         Route::resource('/category', CategoryController::class);
         Route::resource('/product', ProductController::class);

@@ -799,6 +799,7 @@
                 $('#btn-plus-rai-cham').hide();
                 $('#inputRaiCham').val('');
                 $('#inputRaiChamCheck').prop('checked', false);
+                $('#alert-du-kien').html('');
             }
         });
         $('#inputRaiCham').on('change', function(e){

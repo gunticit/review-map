@@ -227,8 +227,8 @@
                         <h2>Thành công!</h2>
                         <p>Chúc mừng! Bạn đã xác thực thành công. Đăng nhập ngay thôi!!</p>
                         <div class="text-center">
-                            <button class="btn btn-primary">
-                                <a href="{{route('login')}}" class="text-white">Đi tới trang đăng nhập</a>
+                            <button class="btn btn-primary" onclick="window.location.href='{{ route('login') }}'">
+                                <span class="text-white">Đi tới trang đăng nhập</span>
                             </button>
                         </div>
                     </div>
@@ -403,25 +403,6 @@
         import { RegisterForm } from '{{ asset("./assets/js/register.js") }}';
         $(document).ready(function() {
             RegisterForm.init();
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $("input[name='otp[]']").on("input", function () {
-                const currentInput = $(this);
-                const maxLength = 1;
-
-                if (currentInput.val().length === maxLength) {
-                    currentInput.closest(".p-2").next(".p-2").find("input").focus();
-                }
-            });
-
-            $("input[name='otp[]']").on("keydown", function (e) {
-                const currentInput = $(this);
-                if (e.key === "Backspace" && currentInput.val() === "") {
-                    currentInput.closest(".p-2").prev(".p-2").find("input").focus();
-                }
-            });
         });
     </script>
 @endsection
