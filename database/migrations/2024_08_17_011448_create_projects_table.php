@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('project_code')->nullable();
             $table->string('url_map')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('package')->nullable(); // 1: 10, 2: 50, 3: 100, 4: 200
             $table->string('name_google')->nullable(); // Tên thực thể trên google map
             $table->string('address_google')->nullable();
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->double('rating_desire')->nullable(); // Rating mong muốn
             $table->string('is_slow')->nullable(); // Rải chậm
             $table->string('point_slow')->nullable(); // Điểm chậm
-            $table->string('keyword')->nullable();
+            $table->text('keyword')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->string('place_id')->nullable();

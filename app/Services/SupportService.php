@@ -2,14 +2,10 @@
 
 namespace App\Services;
 
-use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Support\SupportRepositoryInterface;
-use App\Http\Resources\ProjectResource;
 use App\Http\Resources\SupportResource;
 use App\Models\Support;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class SupportService {
@@ -48,6 +44,7 @@ class SupportService {
             $data['filepath'] = implode('|', $file_path);
             $data['status'] = Support::INCOMPLETE_SUPPORT; // Đang xử lý
             $data['support_code'] = Support::generateSupportCode();
+            $data['send_id'] = Auth::user()->id;
             $data = $this->supportRepository->create($data);
             return $data;
         } catch (\Exception $e) {
@@ -57,6 +54,11 @@ class SupportService {
 
     public function show($id){
         $data = $this->supportRepository->find($id);
+        return $data;
+    }
+
+    public function reply($id, $request){
+        $data = $this->supportRepository->reply($id);
         return $data;
     }
 

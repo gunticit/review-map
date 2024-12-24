@@ -34,6 +34,12 @@ class  SupportRepository extends BaseRepository implements SupportRepositoryInte
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
+    public function reply($id) {
+        $query = $this->model->query();
+        $query = $query->with(['sender']);
+        return $query->findOrFail($id);
+    }
+
     public function listCreateByUser($request) {
         $query = $this->model->query();
         $query = $query->where('created_by', $request->user_id);

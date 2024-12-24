@@ -49,6 +49,8 @@ use App\Repositories\Profile\ProfileRepository;
 use App\Repositories\Profile\ProfileRepositoryInterface;
 use App\Repositories\Setting\SettingRepository;
 use App\Repositories\Setting\SettingRepositoryInterface;
+use App\Repositories\Support\SupportMessageRepository;
+use App\Repositories\Support\SupportMessageRepositoryInterface;
 use App\Repositories\TransactionHistory\TransactionHistoryRepositoryInterface;
 use App\Repositories\TransactionHistory\TransactionHistoryRepository;
 use App\Repositories\Voucher\VoucherRepository;
@@ -67,6 +69,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProjectRepositoryInterface::class, ProjectRepository::class);
         $this->app->bind(ProjectImageRepositoryInterface::class, ProjectImageRepository::class);
         $this->app->bind(SupportRepositoryInterface::class, SupportRepository::class);
+        $this->app->bind(SupportMessageRepositoryInterface::class, SupportMessageRepository::class);
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
         $this->app->bind(HistoryRepositoryInterface::class, HistoryRepository::class);

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('project_id')->nullable();
             $table->text('content');
             $table->string('filepath');
+            $table->integer('send_id');
             $table->integer('status')->default(2);  // 1: Đã trả lời, 2: Chưa xử lý, 3: Đang thực hiện, 4: Đóng
             $table->timestamps();
             $table->softDeletes();

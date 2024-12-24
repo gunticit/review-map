@@ -45,6 +45,7 @@
                             <th class="list-table-sku" style="min-width: unset; width: 150px !important; text-align: left" scope="col">Nội dung</th>
                             <th class="list-table-time" scope="col">Thời gian</th>
                             <th class="list-table-progree" scope="col">Trạng thái</th>
+                            <th style="min-width: 45px; max-width: 45px; width: 45px"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,7 +54,7 @@
                         <tr>
                             <td style="min-width: unset !important; width: 80px !important">{{ $key + 1 }}</td>
                             <td class="list-table-title text-start" style="min-width: unset !important; width: 220px !important">
-                                <a href="javascript:void(0);" style="min-width: unset !important; width: 180px !important">{{ $support->title }}</a>
+                                <a href="{{ route('admin.reply.support', ['id' => $support->id] )}}" style="min-width: unset !important; width: 180px !important">{{ $support->title }}</a>
                             </td>
                             <td class="list-table-sku text-start" style="min-width: unset; width: 150px !important">
                                 <a href="javascript:void(0);" style="min-width: unset !important; width: 150px !important; text-align: left">{{ $support->content }}</a>
@@ -68,6 +69,9 @@
                                     ($support->status == 3 ? 'btn-info' : 
                                     ($support->status == 4 ? 'btn-danger' : 'btn-danger')))
                                 !!} ">{!! __( config('constants.status_support')[$support->status]) !!}</span>
+                            </td>
+                            <td style="min-width: 45px; max-width: 45px; width: 45px">
+                                <a href="{{ route('admin.reply.support', ['id' => $support->id] )}}" class="btn btn-primary p-2"><span class="material-symbols-outlined">reply</span></a>
                             </td>
                         </tr>
                         @endforeach

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('comment');
             $table->integer('project_id');
-            $table->string('keyword');
+            $table->text('keyword');
             $table->integer('is_used')->default(0); // 1 đã dùng
             $table->timestamps();
             $table->softDeletes();

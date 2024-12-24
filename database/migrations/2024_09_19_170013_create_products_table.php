@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('product_code')->nullable();
             $table->string('sku')->nullable();
             $table->integer('stock')->default(0);
-            $table->string('keyword')->nullable();
+            $table->text('keyword')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

@@ -25,4 +25,12 @@ class Support extends Model
     public function department(){
         return $this->belongsTo(Department::class, 'department_id');
     }
+
+    public function sender(){
+        return $this->belongsTo(User::class, 'send_id');
+    }
+
+    public function messages(){
+        return $this->hasMany(SupportMessage::class, 'support_id');
+    }
 }

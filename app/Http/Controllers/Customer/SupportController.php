@@ -17,20 +17,23 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Notification;
+use App\Services\SupportMessageService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SupportController extends Controller
 {
-    protected $supportService, $projectService, $categoryService;
+    protected $supportService, $projectService, $categoryService, $supportMessageService;
     public function __construct(
         SupportService $supportService,
         ProjectService $projectService,
-        CategoryService $categoryService
+        CategoryService $categoryService,
+        SupportMessageService $supportMessageService
     ){
         $this->supportService = $supportService;
         $this->projectService = $projectService;
         $this->categoryService = $categoryService;
+        $this->supportMessageService = $supportMessageService;
     }
     public function index(Request $request){
         $user = auth()->user();
@@ -98,5 +101,26 @@ class SupportController extends Controller
             Session::flash('error', 'Không thêm được yêu cầu hỗ trợ');
             return redirect()->back()->withInput();
         }
+    }
+    public function reply($id, Request $request){
+        $data = $this->supportService->reply($id, $request);
+        $user = auth()->user();
+        if(!$user->hasRole(Role::ADMIN_ROLE)){
+            return redirect()->back();
+        }
+        $data['support_id'] = $id;
+        $data['departments'] = Department::all();
+        $data['projects'] = Project::all();
+        return view('pages.customer.support.reply', $data);
+    }
+
+    public function updateReply($id, $request){
+        $data = $this->supportMessageService->create($request);
+        if(!$data){
+            return redirect()->back()->with('error', 'Lỗi không thể hỗ trợ! Vui lòng thử lại sau hoặc báo IT');
+        }
+        $request = $request->merge(['status' => 1]);
+        $this->supportService->update($request, $id);
+        return redirect()->route('support.list')->with('success', 'Hỗ trợ thành công');
     }
 }
