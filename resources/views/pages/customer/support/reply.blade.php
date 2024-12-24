@@ -16,6 +16,7 @@
     <section class="section tao-yeu-cau mb-5">
         <form action="{{ route('update.reply.support', ['id' => $support_id]) }}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
+            <input type="hidden" name="support_id" value="{{ $support_id }}">
             <div class="container-fluid">
                 <div class="col-inner">
                     <h2 class="section-title mb-4">Hỗ trợ khách hàng</h2>

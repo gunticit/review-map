@@ -405,4 +405,23 @@
             RegisterForm.init();
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            $("input[name='otp[]']").on("input", function () {
+                const currentInput = $(this);
+                const maxLength = 1;
+
+                if (currentInput.val().length === maxLength) {
+                    currentInput.closest(".p-2").next(".p-2").find("input").focus();
+                }
+            });
+
+            $("input[name='otp[]']").on("keydown", function (e) {
+                const currentInput = $(this);
+                if (e.key === "Backspace" && currentInput.val() === "") {
+                    currentInput.closest(".p-2").prev(".p-2").find("input").focus();
+                }
+            });
+        });
+    </script>
 @endsection
