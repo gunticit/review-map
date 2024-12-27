@@ -16,9 +16,9 @@ jobs:
           password: ${{ secrets.PASS_WORD }}
           port: 22
           script: 
-            cd /www/html/www/rivi.com.vn/
+            cd /var/www/html/rivi.com.vn/
             git checkout main
             git pull
             composer i
             php artisan route:clear
-            touch /tmp/hungdeptrai.txt
+            touch hungdeptrai.txt
