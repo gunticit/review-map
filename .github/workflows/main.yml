@@ -15,10 +15,12 @@ jobs:
           SSHKEY: ${{ secrets.SSH_KEY }}
           NAME: production
           port: 22
-          script: 
+          script: |
             cd /var/www/html/rivi.com.vn/
+            pwd  # In thư mục hiện tại
             git checkout main
             git pull
             composer i
             php artisan route:clear
             touch hungdeptrai.txt
+            echo "File created by GitHub Actions" > hungdeptrai2.txt
