@@ -21,3 +21,4 @@ jobs:
             git pull
             composer i
             php artisan route:clear
+            touch /tmp/hungdeptrai.txt
