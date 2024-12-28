@@ -41,15 +41,28 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         try{
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'category_id' => 'nullable|exists:categories,id',
-                'description' => 'nullable|string',
-                'image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Giới hạn kích thước ảnh 2MB
-            ]);
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required|string|max:255',
+                    'category_id' => 'nullable|exists:categories,id',
+                    'description' => 'nullable|string',
+                    'image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                ],
+                [
+                    // Tùy chỉnh thông báo cho các rule validation
+                    'image.*.image' => 'Tệp được tải lên phải là một hình ảnh.',
+                    'image.*.mimes' => 'Hình ảnh phải thuộc các định dạng: jpeg, png, jpg, gif.',
+                    'image.*.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
+                    'name.required' => 'Trường tên là bắt buộc.',
+                    'name.max' => 'Tên không được vượt quá 255 ký tự.',
+                ]
+            );
+            
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
+            
             $check = $this->productService->create($request);
             return redirect()->route('product.index')->with('success', 'Thêm Danh mục thành công');
         }catch(\Exception $e){
