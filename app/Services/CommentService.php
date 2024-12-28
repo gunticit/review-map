@@ -94,21 +94,42 @@ class CommentService {
         }
         if(!empty($keywords)){
             $str_keyword = count($keywords) > 0 ? implode(', ', $keywords) : '';
-            $prompt = "Tạo cho tôi ".$sl_comment." bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
-            if(!empty($description)){
-                $prompt .= " mô tả '".$description."' và";
-            }
-            if(!empty($str_keyword)){
-                $prompt .= " keyword chủ đề là: '(". $str_keyword .")'.";
-            }
-            $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt, và đủ số lượng bình luận là: ".$sl_comment." bình luận.";
-            if(!empty(Helper::getSetting('setting_ai_content'))){
-                $prompt .= ' Ngoài ra: '.Helper::getSetting('setting_ai_content');
-            }
-            $stream = Gemini::geminiPro()
-                ->generateContent($prompt);
-            if(!empty($stream->text())){
-                $comments = $stream->text();
+            if($sl_comment < 100){
+                $prompt = "Tạo cho tôi ".$sl_comment." bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
+                if(!empty($description)){
+                    $prompt .= " mô tả '".$description."' và";
+                }
+                if(!empty($str_keyword)){
+                    $prompt .= " keyword chủ đề là: '(". $str_keyword .")'.";
+                }
+                $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt, và đủ số lượng bình luận là: ".$sl_comment." bình luận.";
+                if(!empty(Helper::getSetting('setting_ai_content'))){
+                    $prompt .= ' Ngoài ra: '.Helper::getSetting('setting_ai_content');
+                }
+                $stream = Gemini::geminiPro()
+                    ->generateContent($prompt);
+                if(!empty($stream->text())){
+                    $comments = $stream->text();
+                }
+            }else if($sl_comment == 100){
+                for($i = 1; $i <= 2; $i++){
+                    $prompt = "Tạo cho tôi 50 bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
+                    if(!empty($description)){
+                        $prompt .= " mô tả '".$description."' và";
+                    }
+                    if(!empty($str_keyword)){
+                        $prompt .= " keyword chủ đề là: '(". $str_keyword .")'.";
+                    }
+                    $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt, và đủ số lượng bình luận là: ".$sl_comment." bình luận.";
+                    if(!empty(Helper::getSetting('setting_ai_content'))){
+                        $prompt .= ' Ngoài ra: '.Helper::getSetting('setting_ai_content');
+                    }
+                    $stream = Gemini::geminiPro()
+                        ->generateContent($prompt);
+                    if(!empty($stream->text())){
+                        $comments .= $stream->text();
+                    }
+                }
             }
         }
         return $comments;
