@@ -93,20 +93,20 @@ class ProjectController extends Controller
             $sl_image = 0;
             $sl_comment = 10;
             if(isset($request->package)){
-                switch($request->package){
-                    case '1':
+                switch((int)$request->package){
+                    case 1:
                         $sl_comment = 10;
                         $sl_image = 10;
                         break;
-                    case '2':
+                    case 2:
                         $sl_comment = 50;
                         $sl_image = 50;
                         break;
-                    case '3':
+                    case 3:
                         $sl_comment = 100;
                         $sl_image = 100;
                         break;
-                    case '4':
+                    case 4:
                         $sl_comment = 200;
                         $sl_image = 200;
                         break;

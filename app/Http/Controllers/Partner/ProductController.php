@@ -86,7 +86,7 @@ class ProductController extends Controller
         $list_product = array();
         $total_item = 0;
         $total_price = 0;
-        if($cart_info && !empty($cart_info->cartProducts)){
+        if($cart_info && !empty($cart_info?->cartProducts)){
             foreach ($cart_info->cartProducts as $item){
                 if(!empty($item->products)){
                     $total_item += $item->quantity;

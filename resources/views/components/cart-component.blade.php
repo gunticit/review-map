@@ -8,40 +8,42 @@
     <div class="bg-cart">
         @if (!empty($listProduct))
             <ul>
-                @foreach ($listProduct as $product)
-                    <li class="cart-item">
-                        <img src="{{ asset('./assets/img/Rectangle-22794.jpg') }}" alt="image">
-                        <div class="info">
-                            <p class="name"> {{ $product['name'] }}</p>
-                            <p class="price">{{ formatCurrency($product['price']) }}</p>
-                            <div>
-                                <div style="position: relative;">
-                                    <button val-price="{{ $product['price'] }}" style="position: absolute; left: 0" class="btn btn-minus-item"
-                                        onclick="minusProductCart(this)"><span
-                                            class="material-symbols-outlined">remove</span></button>
-                                    <input class="cart-quantity" type="number" name="quantity" min="1" max="100"
-                                        value="{{ $product['quantity'] }}" class="quantity" readonly>
-                                    <button val-price="{{ $product['price'] }}" style="position: absolute; right: 0; top: 0" class="btn btn-plus-item"
-                                        onclick="plusProductCart(this)">
-                                        <span class="material-symbols-outlined">
-                                            add
-                                        </span>
-                                    </button>
+                @if(!empty($listProduct))
+                    @foreach ($listProduct as $product)
+                        <li class="cart-item">
+                            <img src="{{ asset('./assets/img/Rectangle-22794.jpg') }}" alt="image">
+                            <div class="info">
+                                <p class="name"> {{ $product['name'] }}</p>
+                                <p class="price">{{ formatCurrency($product['price']) }}</p>
+                                <div>
+                                    <div style="position: relative;">
+                                        <button val-price="{{ $product['price'] }}" style="position: absolute; left: 0" class="btn btn-minus-item"
+                                            onclick="minusProductCart(this)"><span
+                                                class="material-symbols-outlined">remove</span></button>
+                                        <input class="cart-quantity" type="number" name="quantity" min="1" max="100"
+                                            value="{{ $product['quantity'] }}" class="quantity" readonly>
+                                        <button val-price="{{ $product['price'] }}" style="position: absolute; right: 0; top: 0" class="btn btn-plus-item"
+                                            onclick="plusProductCart(this)">
+                                            <span class="material-symbols-outlined">
+                                                add
+                                            </span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="quantity" style="width:80px">
-                            x {{ $product['quantity'] }}
-                        </div>
-                        <div>
-                            <button class="btn-remove-item" onclick="removeItem(this)">
-                                <span class="material-symbols-outlined">
-                                    backspace
-                                </span>
-                            </button>
-                        </div>
-                    </li>
-                @endforeach
+                            <div class="quantity" style="width:80px">
+                                x {{ $product['quantity'] }}
+                            </div>
+                            <div>
+                                <button class="btn-remove-item" onclick="removeItem(this)">
+                                    <span class="material-symbols-outlined">
+                                        backspace
+                                    </span>
+                                </button>
+                            </div>
+                        </li>
+                    @endforeach
+                @endif
             </ul>
             <div class="total-cart">
                 <div class="total">

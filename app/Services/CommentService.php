@@ -74,31 +74,34 @@ class CommentService {
         $comments = '';
         $sl_comment = 10;
         if(isset($request->package)){
-            switch($request->package){
-                case '1':
+            switch((int)$request->package){
+                case 1:
                     $sl_comment = 10;
                     break;
-                case '2':
+                case 2:
                     $sl_comment = 50;
                     break;
-                case '3':
+                case 3:
                     $sl_comment = 100;
                     break;
-                default: 
+                case 4:
                     $sl_comment = 200;
+                    break;
+                default: 
+                    $sl_comment = 10;
                     break;
             }
         }
         if(!empty($keywords)){
             $str_keyword = count($keywords) > 0 ? implode(', ', $keywords) : '';
-            $prompt = "Tạo cho tôi ".$sl_comment." bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
+            $prompt = "Tạo cho tôi ".$sl_comment." bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
             if(!empty($description)){
                 $prompt .= " mô tả '".$description."' và";
             }
             if(!empty($str_keyword)){
                 $prompt .= " keyword chủ đề là: '(". $str_keyword .")'.";
             }
-            $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt.";
+            $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt, và đủ số lượng bình luận là: ".$sl_comment." bình luận.";
             if(!empty(Helper::getSetting('setting_ai_content'))){
                 $prompt .= ' Ngoài ra: '.Helper::getSetting('setting_ai_content');
             }
