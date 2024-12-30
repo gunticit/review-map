@@ -62,6 +62,7 @@ class ProjectController extends Controller
     }
 
     public function create(Request $request){
+        set_time_limit(0);
         $user = Auth::user();
         $data = array(
             'latitude' => $user->latitude ?? '10.8299',
@@ -75,7 +76,8 @@ class ProjectController extends Controller
     }
 
     public function store(ProjectRequest $request){
-        // try{
+        try{
+            set_time_limit(0);
             DB::beginTransaction();
             $data = $this->projectService->create($request);
             $project_id = $data->id;
@@ -186,11 +188,11 @@ class ProjectController extends Controller
             $this->updateHistory($history);
             Session::flash('error', 'Tạo dự án không thành công');
             return redirect()->back()->withInput();
-        // }catch(\Exception $e){
-        //     DB::rollBack();
-        //     Session::flash('error', 'Tạo dự án không thành công');
-        //     throw new ProcessException($e);
-        // }
+        }catch(\Exception $e){
+            DB::rollBack();
+            Session::flash('error', 'Tạo dự án không thành công');
+            throw new ProcessException($e);
+        }
     }
 
     public function edit($id){
