@@ -25,11 +25,13 @@ Route::group([
     Route::post('/wallet/verify',  [WalletController::class, 'storeVerify'])->name('wallet.verify.store');
     Route::get('/store-product',  [PartnerProductController::class, 'index'])->name('store.product');
     Route::get('/detail-product/{slug}',  [PartnerProductController::class, 'findBySlug'])->name('detail.product.partner');
+    Route::get('checkout-page', [PartnerProductController::class, 'checkoutPage'])->name('checkout.page');
     
     Route::get('/cart',  [CartController::class, 'index'])->name('cart.index');
     Route::patch('/cart/update-quantity',  [CartController::class, 'updateQuantity'])->name('cart.update.quantity');
     Route::delete('/cart/delete-item',  [CartController::class, 'deleteItem'])->name('cart.delete.item');
     Route::post('/cart/apply-voucher',  [CartController::class, 'applyVoucher'])->name('cart.apply.voucher');
+    Route::post('ajax-remove', [CartController::class, 'ajaxRemove'])->name('ajax.cart.remove');
     Route::post('/order', [OrderController::class, 'store']);
 
     Route::post('/create-mission-ajax', [MissionController::class, 'createMissionAjax'])->name('create.mission.ajax');

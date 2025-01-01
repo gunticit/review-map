@@ -83,7 +83,7 @@
                 <!-- cot 2 -->
                 <div class="col-xl-4 col-md-12 col-12 ">
                     <div class="col-inner wallet-col">
-                        <form action="{{ route('withdraw.wallet.store') }}" method="POST" id="form-withdraw">
+                        <form action="{!! !empty($certificated->user_verified) && !empty($certificated->active) ? route('withdraw.wallet.store') : '' !!}" method="POST" id="form-withdraw">
                             {{ csrf_field() }}
                             <h2 class="section-title mb-4">Ví của tôi</h2>
                             <div class="wallet-card">
@@ -139,10 +139,12 @@
                                 <label for="total" class="fw-700">Tổng cộng</label>
                                 <h4 id="totalAmount">0 VND</h4>
                             </div>
-                            @if(!empty($certificated->user_verified))
-                            <button type="submit" class="btn btn-primary btn-full" id="button-submit"> Rút tiền </button>
-                            @else
+                            @if(!empty($certificated->user_verified) && !empty($certificated->active))
+                                <button type="submit" class="btn btn-primary btn-full" id="button-submit"> Rút tiền </button>
+                            @elseif(empty($certificated->user_verified) && !empty($certificated->active))
                                 <button type="button" class="btn btn-primary btn-full"> Đang xác thực tài khoản </button>
+                            @else
+                                <button type="button" class="btn btn-danger btn-full"> Tài khoản không thể rút tiền </button>
                             @endif
                         </form>
                     </div>

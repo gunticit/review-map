@@ -2,62 +2,43 @@
     <span class="material-symbols-outlined">
         shopping_cart
     </span>
-    <span class="count">{{ $totalItem }}</span>
+    <span class="count">{{ $cart_info['total_quantity'] ?? 0 }}</span>
 </span>
 <div id="cart" class="info-cart">`
     <div class="bg-cart">
-        @if (!empty($listProduct))
-            <ul>
-                @if(!empty($listProduct))
-                    @foreach ($listProduct as $product)
-                        <li class="cart-item">
-                            <img src="{{ asset('./assets/img/Rectangle-22794.jpg') }}" alt="image">
-                            <div class="info">
-                                <p class="name"> {{ $product['name'] }}</p>
-                                <p class="price">{{ formatCurrency($product['price']) }}</p>
-                                <div>
-                                    <div style="position: relative;">
-                                        <button val-price="{{ $product['price'] }}" style="position: absolute; left: 0" class="btn btn-minus-item"
-                                            onclick="minusProductCart(this)"><span
-                                                class="material-symbols-outlined">remove</span></button>
-                                        <input class="cart-quantity" type="number" name="quantity" min="1" max="100"
-                                            value="{{ $product['quantity'] }}" class="quantity" readonly>
-                                        <button val-price="{{ $product['price'] }}" style="position: absolute; right: 0; top: 0" class="btn btn-plus-item"
-                                            onclick="plusProductCart(this)">
-                                            <span class="material-symbols-outlined">
-                                                add
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="quantity" style="width:80px">
-                                x {{ $product['quantity'] }}
-                            </div>
-                            <div>
-                                <button class="btn-remove-item" onclick="removeItem(this)">
-                                    <span class="material-symbols-outlined">
-                                        backspace
-                                    </span>
-                                </button>
-                            </div>
-                        </li>
-                    @endforeach
-                @endif
-            </ul>
-            <div class="total-cart">
-                <div class="total">
-                    <span class="fw-700">Tổng cộng</span>
-                    <span id="cart-total-formatted" val-html="{{ $totalPrice }}">{{ formatCurrency($totalPrice) }}</span>
+        @if (!empty($products) && count($products) > 0)
+            @foreach ($products as $product)
+                <div class="col">
+                    <div class="product-box">
+                        <div class="product-image">
+                            <a href="{{ route('detail.product.partner', ['slug' => $product->slug]) }}">
+                                <img src="{!! !empty($product->images[0]) ? asset('storage/'.$product->images[0]->link_image) : asset('assets/img/image-54.jpg') !!}" alt="">
+                            </a>
+                        </div>
+                        <h3 class="product-title">
+                            <a href="{{ route('detail.product.partner', ['slug' => $product->slug]) }}">
+                                {{ $product->name }}
+                            </a>
+                        </h3>
+                        <div class="product-price">
+                            <span>{{ formatCurrency($product->price) }}</span>
+                        </div>
+                        <button onclick="addToCart({{ $product->id }}, this)" class="add-to-cart btn btn-primary">Thêm vào giỏ</button>
+                    </div>
                 </div>
-                <div class="btn-checkout">
-                    <button class="btn btn-primary">Thanh toán</button>
-                </div>
-            </div>
+            @endforeach
         @else
-            <div class="text-center">
-                <img src="{!! asset('assets/img/empty_cart.jpeg') !!}" alt="" style="max-width: 350px">
-                <p>Chưa có sản phẩm trong giỏ hàng</p>
+            <div class="col" style="margin: auto">
+                <div class="product-box">
+                    <div class="product-image">
+                        <a href="#">
+                            <img src="{!! asset('assets/img/empty_cart.jpeg') !!}" alt="">
+                        </a>
+                    </div>
+                    <h3 class="product-title text-center">
+                        Hiện tại chưa có sản phẩm nào!
+                    </h3>
+                </div>
             </div>
         @endif
     </div>
@@ -168,7 +149,7 @@
 
     .info-cart ul>li img {
         width: 100px;
-        height: 100px;
+        max-height: 100px;
         border-radius: 8px;
         overflow: hidden;
         object-fit: cover;
@@ -181,6 +162,10 @@
     .info-cart ul>li .info p {
         font-size: 16px;
         margin-bottom: 5px;
+    }
+    .info-cart ul>li .info p.price{
+        font-weight: bold;
+        color: #0d8ce5;
     }
 
     .cart-item {
@@ -272,28 +257,52 @@
                     showAlert('success', data.message);
                     $('#cart *').remove();
                     const listProduct = data?.data?.list_product;
-                    console.log('zxc', listProduct);
+                    $('.btn-cart .count').text(data.data.total_quantity);
+                    let productHTML = `<div class="bg-cart">
+                                            <ul>`;
                     listProduct.forEach((product) => {
-                        const productHTML = `
-                        <div class="cart-item">
-                            <img src="https://doitac.rivi.com.vn/./assets/img/Rectangle-22794.jpg" alt="image">
+                        productHTML += `<li class="cart-item" id="cart-item-9-1">
+                            <img src="${product.image}" alt="image">
                             <div class="info">
                                 <p class="name">${product.name}</p>
                                 <p class="price">${product.price} VND</p>
+                                <div>
+                                    <div style="position: relative;">
+                                        <button val-price="${product.price}" style="position: absolute; left: 0" class="btn btn-minus-item" onclick="minusProductCart(this)"><span class="material-symbols-outlined">remove</span></button>
+                                        <input class="cart-quantity" type="number" name="quantity" min="1" max="100" value="${product.quantity}" readonly="">
+                                        <button val-price="${product.price}" style="position: absolute; right: 0; top: 0" class="btn btn-plus-item" onclick="plusProductCart(this)">
+                                            <span class="material-symbols-outlined">
+                                                add
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="quantity">
-                                x ${product.pivot.quantity}
+                            <div class="quantity" style="width:80px">
+                                x ${product.quantity}
                             </div>
                             <div>
-                                <button class="btn-remove-item" onclick="removeItem(this)">
+                                <button class="btn-remove-item" onclick="removeItem(${ product.product_id }, ${data.data.cart_id})">
                                     <span class="material-symbols-outlined">
                                         backspace
                                     </span>
                                 </button>
                             </div>
-                        </div>`;
-                        $('#cart.info-cart').append(productHTML);
+                        </li>`;
                     });
+                    productHTML += `
+                        </ul>
+                        <div class="total-cart">
+                            <div class="total">
+                                <span class="fw-700">Tổng cộng</span>
+                                <span id="cart-total-formatted" val-html="${data.data.price_value}">${data.data.total_price}</span>
+                            </div>
+                            <div class="btn-checkout">
+                                <button class="btn btn-primary" onclick="window.location.href = '{{ route('checkout.page') }}'">Thanh toán</button>
+                            </div>
+                        </div>
+                    </div>`;
+                    $('#cart.info-cart').html(productHTML);
                 } else {
                     showAlert('error', data.message);
                 }
@@ -305,8 +314,29 @@
         });
     }
 
-    function removeItem(element) {
-
+    function removeItem(product_id, cart_id) {
+        $.ajax({
+            url: "{{ route('ajax.cart.remove') }}",
+            type: "POST",
+            data: {
+                '_token': '{{ csrf_token() }}',
+                'product_id': product_id,
+                'cart_id': cart_id,
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.success) {
+                    $('#cart-item-'+cart_id+'-'+product_id).remove();
+                    $('.btn-cart .count').text(data.total_cart);
+                    if(parseInt(data.total_cart) == 0){
+                        $('#cart.info-cart > .bg-cart').html(`<div class="text-center">
+                            <img src="{!! asset('assets/img/empty_cart.jpeg') !!}" alt="" style="max-width: 350px">
+                            <p>Chưa có sản phẩm trong giỏ hàng</p>
+                        </div>`);
+                    }
+                }
+            }
+        });
     }
     $(document).ready(function() {
         $('.btn-cart').on('click', function(e) {
@@ -340,4 +370,4 @@
         quantityInput.val(quantity + 1);
         plusBtn.closest('.cart-item').find('.quantity').html('x ' + quantityInput.val());
     }
-</script>
+</script>    

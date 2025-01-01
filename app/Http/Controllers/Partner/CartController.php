@@ -250,7 +250,8 @@ class CartController extends Controller
                     'product_id' => $product->id,
                     'quantity' => $product->pivot->quantity,
                     'name' => $product->name,
-                    'price' => $product->price
+                    'price' => $product->price,
+                    'image' => !empty($product->images[0]?->link_image) ? asset('storage/'.$product->images[0]?->link_image) : '',
                ); 
                $total_quantity += $product->pivot->quantity;
                $total_price += $product->price * $product->pivot->quantity;
@@ -259,8 +260,9 @@ class CartController extends Controller
                 'cart_id' => $cart_info->id,
                 'user_id' => $cart_info->id,
                 'total' => $cart_info->total,
-                'list_product' => $list_product ?? [],
-                'total_price' => $this->formatCurrencyVND($total_quantity) ?? 0,
+                'list_product' => $dt_list_product ?? [],
+                'total_price' => $this->formatCurrencyVND($total_price) ?? 0,
+                'price_value' => $total_price ?? 0,
                 'total_quantity' => $total_quantity ?? 0
             );
         }
@@ -279,8 +281,36 @@ class CartController extends Controller
         ]);
     }
 
+    public function delete($id){
+        $this->cartService->delete($id);
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
     private function formatCurrencyVND($number)
     {
         return number_format($number, 0, ',', '.') . ' VND';
+    }
+
+    public function ajaxRemove(Request $request){
+        $this->cartService->remove($request);
+        $request->merge([
+            'user_id' => auth()->user()->id
+        ]);
+        $cart_info = $this->cartService->find($request);
+        if(!empty($cart_info->products)){
+            $this->cartService->remove($request);
+        }
+        $total_cart = !empty($cart_info->products) ? count($cart_info->products) : 0;
+        if($total_cart == 0){
+            $this->cartService->delete($request->cart_id);
+        }
+        return response()->json([
+            'success' => true,
+            'product_id' => $request->product_id,
+            'cart_id' => $request->cart_id,
+            'total_cart' => $total_cart
+        ]);
     }
 }

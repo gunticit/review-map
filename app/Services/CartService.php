@@ -39,6 +39,14 @@ class CartService {
         return new CartResource($cart);
     }
 
+    public function remove($request){
+        return $this->cartRepository->remove($request);
+    }
+
+    public function delete($id){
+        return $this->cartRepository->delete($id);
+    }
+
     private function getData($request){
         return [
             'user_id' => Auth::user()->id

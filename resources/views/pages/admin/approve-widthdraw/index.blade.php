@@ -1,5 +1,11 @@
 @extends('layouts.app')
 @section('content')
+<style>
+    .bt-content{
+        display: flex;
+        gap: 5px;
+    }
+</style>
 <section class="approve-project">
     <div class="container-fluid pt-4">
         <div class="row">
@@ -17,7 +23,7 @@
                                         <th class="text-start">CCCD Mặt trước</th>
                                         <th class="text-start">CCCD Mặt sau</th>
                                         <th class="text-start list-table-so-tien" scope="col">Ngày xác thực</th>
-                                        <th class="text-start list-table-phuong-thuc" scope="col">Đã duyệt</th>
+                                        <th class="text-start list-table-phuong-thuc" scope="col">Trạng thái</th>
                                         <th class="text-start list-table-tai-khoan-nhan" scope="col">Người duyệt</th>
                                         <th class="text-start list-table-so-tien-rut" scope="col">Thời gian duyệt</th>
                                         <th class="text-start list-table-trang-thai" scope="col" style="width: 100px; min-width: 100px !important; max-width: 100px !important"></th>
@@ -45,27 +51,38 @@
                                                 @endif
                                             </td>
                                             <td>{!! !empty($partner->certificationAccount->created_at) ? date('d/m/Y', strtotime($partner->certificationAccount->created_at)) : '' !!}</td>
-                                            <td class="text-start">
-                                                @if(!empty($partner->certificationAccount->verified_at))
+                                            <td class="text-start status-verified" id="item-withdraw-{{ $partner->certificationAccount->id ?? '' }}">
+                                                @if(!empty($partner->certificationAccount->verified_at) && !empty($partner->certificationAccount->active))
                                                     <span class="text-success material-symbols-outlined">
                                                         check_circle
-                                                    </span>
+                                                    </span> <span class="text-success">Đã duyệt</span>
+                                                @endif
+                                                @if(!empty($partner->certificationAccount->verified_at) && empty($partner->certificationAccount->active))
+                                                    <span class="material-symbols-outlined text-danger">
+                                                        error
+                                                    </span> <span class="text-danger">Không duyệt</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $partner->certificationAccount?->userVerified?->name ?? '' }}</td>
-                                            <td>{!! !empty($partner->certificationAccount->verified_at) ? date('d/m/Y H:i', strtotime($partner->certificationAccount->verified_at)) : '' !!}</td>
-                                            <td style="width: 100px; min-width: 100px !important; max-width: 100px !important; text-align: right">
+                                            <td id="name-verified-{{ $partner->certificationAccount->id ?? '' }}">{{ $partner->certificationAccount?->userVerified?->name ?? '' }}</td>
+                                            <td id="date-verified-{{ $partner->certificationAccount->id ?? '' }}">{!! !empty($partner->certificationAccount->verified_at) ? date('d/m/Y H:i', strtotime($partner->certificationAccount->verified_at)) : '' !!}</td>
+                                            <td style="width: 100px; min-width: 100px !important; max-width: 100px !important; text-align: right" id="btn-group-{{ $partner->certificationAccount->id ?? '' }}">
                                                 @if(empty($partner->certificationAccount->userVerified) && !empty($partner->certificationAccount->contract))
-                                                <button class="btn btn-success p-2" type="button">
-                                                    <span style="font-size: 18px" class="material-symbols-outlined">
-                                                        check
-                                                    </span>
-                                                </button>
-                                                <button class="btn btn-danger p-2" type="button">
-                                                    <span style="font-size: 18px" class="material-symbols-outlined">
-                                                        delete
-                                                    </span>
-                                                </button>
+                                                    <button class="btn btn-success p-2" type="button" onclick="approve({{$partner->certificationAccount->id}})">
+                                                        <span style="font-size: 18px" class="material-symbols-outlined">
+                                                            check
+                                                        </span>
+                                                    </button>
+                                                    <button class="btn btn-danger p-2" type="button" onclick="reject({{$partner->certificationAccount->id}})">
+                                                        <span style="font-size: 18px" class="material-symbols-outlined">
+                                                            delete
+                                                        </span>
+                                                    </button>
+                                                @elseif(!empty($partner->certificationAccount->userVerified))
+                                                    <button class="btn btn-info p-2" type="button" onclick="handleRefresh({{$partner->certificationAccount->id}})">
+                                                        <span class="material-symbols-outlined">
+                                                            refresh
+                                                        </span>
+                                                    </button>
                                                 @endif
                                             </td>
                                         </tr>
@@ -80,4 +97,78 @@
         </div>
     </div>
 </section>
+<script>
+    function approve(id) {
+        $.ajax({
+            url: "{{ route('confirm.approve.withdraw') }}",
+            type: 'POST',
+            data: {
+                certification_id: id,
+                _token: '{{ csrf_token() }}',
+            },  
+            dataType: 'json',
+            success: function(data) {
+                $('#name-verified-'+id).html(data.user_verified);
+                $('#date-verified-'+id).html(data.verified_at);
+                $('#item-withdraw-'+id).html(`
+                    <span class="text-success material-symbols-outlined">
+                        check_circle
+                    </span>
+                `);
+                $('#btn-group-'+id+' *').remove();
+                setTimeout(() => {
+                    showAlert(
+                        data.status == 'success' ? 'success' : 'error',
+                        data.message
+                    )
+                }, 1000);
+            }
+        });
+    }
+    function reject(id) {
+        $.ajax({
+            url: "{{ route('confirm.reject.withdraw') }}",
+            type: 'POST',
+            data: {
+                certification_id: id,
+                _token: '{{ csrf_token() }}',
+            },  
+            dataType: 'json',
+            success: function(data) {
+                $('#name-verified-'+id).html(data.user_verified);
+                $('#date-verified-'+id).html(data.verified_at);
+                $('#item-withdraw-'+id).html(`
+                    <span class="material-symbols-outlined">
+                        error
+                    </span>
+                `);
+                $('#btn-group-'+id+' *').remove();
+                setTimeout(() => {
+                    showAlert(
+                        data.status == 'success' ? 'success' : 'error',
+                        data.message
+                    )
+                }, 1000);
+            }
+        });
+    }
+    function handleRefresh(id) {
+        $.ajax({
+            url: "{{ route('confirm.refresh.withdraw') }}",
+            type: 'POST',
+            data: {
+                certification_id: id,
+                _token: '{{ csrf_token() }}',
+            },  
+            dataType: 'json',
+            success: function(data) {
+                showAlert(
+                    data.status == 'success' ? 'success' : 'error',
+                    data.message
+                )
+                window.location.reload();
+            }
+        });
+    }
+</script>
 @endsection

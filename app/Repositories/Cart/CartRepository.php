@@ -14,7 +14,9 @@ class CartRepository extends BaseRepository implements CartRepositoryInterface
     }
     public function findByUserId($user_id){
         $query = $this->model->query();
-        $query = $query->with(['products','user']);
+        $query = $query->with(['products'=> function($query){
+            return $query->with(['images']);
+        },'user']);
         $data = $query->where('user_id', $user_id)->first();
         return $data; 
     }
@@ -29,5 +31,22 @@ class CartRepository extends BaseRepository implements CartRepositoryInterface
             $query->where('user_id', $request->user_id);
         }
         return $query;
+    }
+    public function remove($request)
+    {
+        $cart = $this->model->whereHas('cartProducts', function ($query) use ($request) {
+            $query->where('product_id', $request->product_id)
+                ->where('cart_id', $request->cart_id);
+        })->first();
+
+        if ($cart) {
+            $cart->cartProducts()->where('product_id', $request->product_id)
+                                ->where('cart_id', $request->cart_id)
+                                ->delete();
+            
+            return true;
+        }
+
+        return false;
     }
 }

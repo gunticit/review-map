@@ -24,11 +24,34 @@ class ProductController extends Controller
         $categories = Category::all();
         $products = $this->productService->list($request);
         $cart_info = Helper::getCart(auth()->user()->id);
+        $cart_info = $cart_info->cartProducts ?? null;
+        $total_item = 0;
+        $prices = 0;
+        $cart_id = 0;
+        if(!empty($cart_info)){
+            foreach ($cart_info as $item){
+                $data_cart['data'][] = array(
+                    'product_id' => $item->products->id,
+                    'quantity' => $item->quantity ?? 0,
+                    'product_image' => $item->products?->images[0]?->link_image ?? '',
+                    'product_name' => $item->products?->name ?? [],
+                    'product_price' => $item->products?->price ?? 0,
+                    'slug' => $item->products?->slug
+                );
+                $total_item += $item->quantity;
+                $prices += $item->products?->price * $item->quantity;
+                $cart_id = $item->cart_id;
+            }
+        }
+        $data_cart['total_quantity'] = $total_item;
+        $data_cart['total_price'] = $prices;
+        $data_cart['cart_id'] = $cart_id;
         return view('pages.partner.store.product',[
             'categories' => $categories,
             'products' => $products,
             'filter_data' => $request->all(),
-            'cart_info' => $cart_info
+            'cart_info' => $data_cart,
+            'total_item' => $total_item
         ]);
     }
 
@@ -81,7 +104,7 @@ class ProductController extends Controller
     }
 
     public function findBySlug(string $slug){
-        $product = $this->productService->findBySlug($slug);
+        $product_info = $this->productService->findBySlug($slug);
         $cart_info = Helper::getCart(auth()->user()->id);
         $list_product = array();
         $total_item = 0;
@@ -100,11 +123,35 @@ class ProductController extends Controller
                 }
             }
         }
+        $cart_info = Helper::getCart(auth()->user()->id);
+        $cart_info = $cart_info->cartProducts ?? null;
+        $total_item = 0;
+        $prices = 0;
+        $cart_id = 0;
+        if(!empty($cart_info)){
+            foreach ($cart_info as $item){
+                $data_cart['data'][] = array(
+                    'product_id' => $item->products->id,
+                    'quantity' => $item->quantity ?? 0,
+                    'product_image' => $item->products?->images[0]?->link_image ?? '',
+                    'product_name' => $item->products?->name ?? [],
+                    'product_price' => $item->products?->price ?? 0,
+                    'slug' => $item->products?->slug
+                );
+                $total_item += $item->quantity;
+                $prices += $item->products?->price * $item->quantity;
+                $cart_id = $item->cart_id;
+            }
+        }
+        $data_cart['total_quantity'] = $total_item;
+        $data_cart['total_price'] = $prices;
+        $data_cart['cart_id'] = $cart_id;
         return view('pages.partner.store.product-detail',[
-            'product' => $product,
+            'product_info' => $product_info,
             'list_product' => $list_product,
             'total_item' => $total_item,
-            'total_price' => $total_price
+            'total_price' => $total_price,
+            'cart_info' => $data_cart,
         ]);
     }
 
@@ -123,5 +170,9 @@ class ProductController extends Controller
             'message' => 'Lấy dữ liệu thành công',
             'data' => $product_info
         ]);
+    }
+
+    public function checkoutPage(){
+        return view('pages.partner.checkout.index');
     }
 }

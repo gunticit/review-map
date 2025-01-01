@@ -11,12 +11,10 @@ class CartComponent extends Component
     /**
      * Create a new component instance.
      */
-    public $listProduct, $totalItem, $totalPrice;
-    public function __construct($listProduct = [], $totalItem = 0, $totalPrice = 0)
+    public $cart_info;
+    public function __construct($cart_info = null)
     {
-        $this->listProduct = $listProduct;
-        $this->totalItem = $totalItem;
-        $this->totalPrice = $totalPrice;
+        $this->cart_info = $cart_info;
     }
 
     /**

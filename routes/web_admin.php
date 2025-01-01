@@ -29,6 +29,9 @@ Route::group([
         Route::get('/order',  [DashboardController::class, 'order'])->name('order');
         Route::get('/approve-project',  [ApproveProjectController::class, 'index'])->name('approve.project');
         Route::get('/approve-withdraw',  [ApproveWithdrawController::class, 'index'])->name('approve.withdraw');
+        Route::post('/confirm-approve-withdraw',  [ApproveWithdrawController::class, 'confirmApprove'])->name('confirm.approve.withdraw');
+        Route::post('/confirm-reject-withdraw',  [ApproveWithdrawController::class, 'reject'])->name('confirm.reject.withdraw');
+        Route::post('/confirm-refresh-withdraw',  [ApproveWithdrawController::class, 'refresh'])->name('confirm.refresh.withdraw');
         Route::resource('/statistics', StatisticController::class);
         Route::resource('/category', CategoryController::class);
         Route::resource('/product', ProductController::class);
