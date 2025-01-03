@@ -8,9 +8,7 @@
         }
         #reviews h3{
             text-transform: uppercase;
-            margin: 10px 0 20px;
             padding: 10px;
-            box-shadow: 3px 3px 3px #ccc;
             border-radius: 8px;
         }
         #reviews ul{
@@ -39,10 +37,14 @@
         }
         #result-partner h3{
             text-transform: uppercase;
-            margin: 10px 0 20px;
             padding: 10px;
-            box-shadow: 3px 3px 3px #ccc;
             border-radius: 8px;
+        }
+        #result-partner h3 span, #reviews h3 span{
+            padding-bottom: 5px;
+            display: inline-block;
+            border-bottom: 2px solid #535353;
+            font-size: 16px;
         }
         #list-project ul.list-missions {
             margin-bottom: 15px;
@@ -325,13 +327,13 @@
                                                     <iframe src="${link_map}" width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                                                 </div>
                                                 <div id="result-partner">
-                                                    <h3>Link kết quả nhiệm vụ:</h3>
+                                                    <h3><span>Link kết quả nhiệm vụ</span></h3>
                                                     <div class="text-center">
                                                         <a href="${link_confirm}" class="btn btn-success" target="_blank">Link kết quả</a>    
                                                     </div>
                                                 </div>
                                                 <div id="reviews">
-                                                    <h3>Bình luận gần đây</h3>
+                                                    <h3><span>Bình luận gần đây</span></h3>
                                                     <ul class="px-3">
                                                         ${
                                                             data_reviews ? data_reviews : '<li>Chưa có đánh giá nào cả!</li>'
