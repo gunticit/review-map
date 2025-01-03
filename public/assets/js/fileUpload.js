@@ -138,32 +138,93 @@
             });
 
             // Xử lý khi nhấn nút gửi
-            $('#btn-submit').on('click', function () {
+            $('#btn-submit').on('click', function (e) {
+                e.preventDefault();
+                let checkValidate = validateRequiredFields();
+                if(!checkValidate){
+                    showAlert('error','Có lỗi xảy ra!');
+                    return false;
+                }
                 let has_image = $('input[name="has_image"]:checked').val();
                 // Khi người dùng chưa chọn tệp
                 if(has_image == 1){
                     let maxFileCount = settings.maxFileCount();
                     let minFileCount = settings.minFileCount();
                     let currentFileCount = selectedFiles.length;
+                    console.log('minFileCount', minFileCount);
+                    console.log('currentFileCount', currentFileCount);
                     if (currentFileCount === 0) {
                         $('#modalMessage').text('Bạn chưa chọn tệp nào!');
                         $('#modalAlert').modal('show');
-                        return;
+                        return false;
                     } else if (currentFileCount > maxFileCount) {
                         $('#modalMessage').text(`Bạn cần tải lên đủ ${maxFileCount} tệp! Hiện tại bạn đã tải lên ${currentFileCount} tệp.`);
                         $('#modalAlert').modal('show');
-                        return;
+                        return false;
                     } else if(currentFileCount < minFileCount){
                         $('#modalMessage').text(`Số hình tải lên không đủ ít nhất ${minFileCount} hình. Vui lòng tải lên thêm.`);
                         $('#modalAlert').modal('show');
-                        return;
+                        return false;
                     }
+                }
+                if ($('.alert').length === 0 && checkValidate) {
+                    $(this).prop('disabled', true);
+                    $('#form-create-project').submit();
+                    $('.loading-section').show();
                 }
             });
         });
     };
 })(jQuery);
 
+function validateRequiredFields() {
+    $('.alert').remove();
+    $('.group-check-map .text-danger').remove();
+    $('body #rating-desire-group .text-danger').remove();
+    let check_error = 0;
+    $('.require').each(function() {
+        if ($(this).val() === '') {
+            $(this).addClass('border-error');
+            var alertMessage = $('<div class="alert text-danger p-0 m-0">Bắt buộc nhập dữ liệu</div>');
+            $(this).after(alertMessage);
+            $(this).addClass('error');
+            check_error = 1;
+        } else {
+            $(this).removeClass('border-error');
+            $(this).removeClass('error');
+        }
+    });
+    if($('#place-id').val() == ''){
+        $('.btn-check-map').addClass('border-error');
+        $('.group-check-map').append('<p class="text-danger">Chọn địa điểm cần đánh giá.</p>');
+        check_error = 1;
+    }else{
+        $('.btn-check-map').removeClass('border-error');
+        $('.group-check-map .text-danger').remove();
+
+    }
+    if($('body .tags-input-wrapper .tag').length == 0){
+        $('.tags-input-wrapper').addClass('border-error');
+        $('.group-tags .text-danger').remove();
+        $('.group-tags').append('<p class="text-danger">Vui lòng nhập từ khóa!</p>');
+        check_error = 1;
+    }else{
+        $('body .tags-input-wrapper').removeClass('border-error');
+    }
+    if($('body #rating-desire').val() == 0 || $('body #rating-desire').val() == null || $('body #rating-desire').val() == ''){
+        $('body #rating-desire').addClass('border-error');
+        $('body #rating-desire-group').append('<p class="alert text-danger p-0 m-0">Vui lòng nhập giá trị mong muốn</p>');
+        var inputOffset = $('body #rating-desire').offset().top;  // Vị trí offset của input
+        $('html, body').animate({
+        scrollTop: inputOffset - 100
+        }, 500);
+        check_error = 1;
+    }
+    if(check_error == 1){
+        return false;
+    }
+    return true;
+}
 
 // Modal HTML
 $('body').append(`

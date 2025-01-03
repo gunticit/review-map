@@ -366,7 +366,7 @@ class MissionController extends Controller
 
     public function resultGoogleMap(string $place_id){
         $url = 'https://places.googleapis.com/v1/places/'. $place_id;
-        $fields = 'id,displayName,rating,reviews,userRatingCount,location,reviews'; 
+        $fields = 'id,displayName,rating,reviews,userRatingCount,location';
         $apiKey = env('GOOGLE_MAP_API_KEY');
 
         // Gửi request GET
@@ -380,7 +380,15 @@ class MissionController extends Controller
             // Trả về dữ liệu JSON
             $data_map = $response->json();
             if(!empty($data_map['reviews'])) {
-                foreach ($data_map['reviews'] as $key => $value) {
+                $reviews = $data_map['reviews'];
+                usort($reviews, function ($a, $b) {
+                    $timeA = parseRelativePublishTime($a['relativePublishTimeDescription']);
+                    $timeB = parseRelativePublishTime($b['relativePublishTimeDescription']);
+                
+                    return $timeB->timestamp - $timeA->timestamp; // Sắp xếp giảm dần
+                });
+                $latestReviews = array_slice($reviews, 0, 5);
+                foreach ($latestReviews as $key => $value) {
                     $data_map['reviews'][] = array(
                         'rating' => $value['rating'],
                         'text' => $value['text'],

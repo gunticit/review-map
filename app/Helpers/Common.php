@@ -292,3 +292,18 @@
             return $price;
         }        
     }
+
+    if(!function_exists('parseRelativePublishTime')) {
+        function parseRelativePublishTime($timeDescription) {
+            $now = now();
+        
+            if (preg_match('/(\d+)\s+(second|minute|hour|day|week|month|year)s?\s+ago/', $timeDescription, $matches)) {
+                $value = (int)$matches[1];
+                $unit = $matches[2];
+        
+                return $now->sub($value, $unit);
+            }
+        
+            return $now;
+        }
+    }
