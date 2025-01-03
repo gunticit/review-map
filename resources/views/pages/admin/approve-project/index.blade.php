@@ -332,7 +332,7 @@
                                                 </div>
                                                 <div id="reviews">
                                                     <h3>Bình luận gần đây</h3>
-                                                    <ul>
+                                                    <ul class="px-3">
                                                         ${
                                                             data_reviews ? data_reviews : '<li>Chưa có đánh giá nào cả!</li>'
                                                         }
