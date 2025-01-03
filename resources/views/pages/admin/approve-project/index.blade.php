@@ -310,43 +310,40 @@
                                             </li>
                                         `;
                                     }).join('') ?? '';
-                                $('body').append(`
-                                    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <button onclick="$('#myModal').modal('hide')" style="background: transparent; z-index: 10; border: none; outline: none; color: #6f6e6e; position: absolute; top: 10px; right: 10px;width: 35px;padding: 0;border-radius: 50%;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span class="material-symbols-outlined">
-                                                        close
-                                                    </span>
-                                                </button>
-                                                <div class="modal-body">
-                                                    <div id="map-project">
-                                                        <iframe src="${link_map}" width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                            }
+                            $('body').append(`
+                                <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <button onclick="$('#myModal').modal('hide')" style="background: transparent; z-index: 10; border: none; outline: none; color: #6f6e6e; position: absolute; top: 10px; right: 10px;width: 35px;padding: 0;border-radius: 50%;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span class="material-symbols-outlined">
+                                                    close
+                                                </span>
+                                            </button>
+                                            <div class="modal-body">
+                                                <div id="map-project">
+                                                    <iframe src="${link_map}" width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                                                </div>
+                                                <div id="result-partner">
+                                                    <h3>Link kết quả nhiệm vụ:</h3>
+                                                    <div class="text-center">
+                                                        <a href="${link_confirm}" class="btn btn-success" target="_blank">Link kết quả</a>    
                                                     </div>
-                                                    <div id="result-partner">
-                                                        <h3>Link kết quả nhiệm vụ:</h3>
-                                                        <div class="text-center">
-                                                            <a href="${link_confirm}" class="btn btn-success" target="_blank">Link kết quả</a>    
-                                                        </div>
-                                                    </div>
-                                                    <div id="reviews">
-                                                        <h3>Bình luận gần đây</h3>
-                                                        <ul>
-                                                            ${
-                                                                data_reviews
-                                                            }
-                                                        </ul>    
-                                                    </div>
+                                                </div>
+                                                <div id="reviews">
+                                                    <h3>Bình luận gần đây</h3>
+                                                    <ul>
+                                                        ${
+                                                            data_reviews ? data_reviews : '<li>Chưa có đánh giá nào cả!</li>'
+                                                        }
+                                                    </ul>    
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                `);
-                                $('#myModal').modal('show');
-                            }else{
-                                showAlert('error', 'Dự án này chưa có đánh giá.')
-                            }
-
+                                </div>
+                            `);
+                            $('#myModal').modal('show');
                         }
                     }
                 });
