@@ -161,14 +161,14 @@
                         <span class="material-symbols-outlined" style="font-size: 45px">
                             notifications_off
                         </span>
-                        <h6>Không có thông báo mới </h6>
+                        <h6>Không có thông báo mới</h6>
                     </div>
             </div>
         </li>
         <!-- User Dropdown-->
         <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img class="img-fluid" src="{!! !empty($profile['avatar']) ? asset('storage/'.$profile['avatar']) : asset('./assets/img/acount-img.svg') !!}" />
+                <img class="img-fluid" src="{!! !empty(auth()->user()->avatar) ? getAssetStorageLocal('avatars/'. auth()->user()->avatar) : asset('./assets/img/acount-img.svg') !!}" />
             </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
                 <a class="dropdown-item text-primary" href="javascript:void(0);">
