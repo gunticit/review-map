@@ -163,7 +163,7 @@
                                 <h4 id="totalAmount">0 VND</h4>
                             </div>
 
-                            <button type="submit" id="btn-deposit" class="btn btn-primary btn-full"> Thanh toán </button>
+                            <button type="submit" id="btn-deposit" class="btn btn-primary btn-full"> Nạp tiền </button>
                         </form>
                     </div>
                 </div>

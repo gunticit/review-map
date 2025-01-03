@@ -268,80 +268,85 @@
                     success: function(res) {
                         let data_reviews = null;
                         if(res.status){
-                            data_reviews = res.data.reviews;
-                            data_reviews = data_reviews.sort((a, b) => new Date(b.publishTime) - new Date(a.publishTime)) // Sắp xếp từ mới đến cũ
-                                .map(review => {
-                                    if (!review.originalText?.text) return '';
-                                    const dateStr = review.publishTime;
-                                    const date = new Date(dateStr);
+                            data_reviews = res?.data?.reviews ?? null;
+                            if(data_reviews){
+                                data_reviews = data_reviews.sort((a, b) => new Date(b.publishTime) - new Date(a.publishTime)) // Sắp xếp từ mới đến cũ
+                                    .map(review => {
+                                        if (!review.originalText?.text) return '';
+                                        const dateStr = review.publishTime;
+                                        const date = new Date(dateStr);
 
-                                    // Lấy ngày, tháng, năm, giờ và phút
-                                    const day = String(date.getDate()).padStart(2, '0');
-                                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-                                    const year = date.getFullYear();
-                                    const hours = String(date.getHours()).padStart(2, '0');
-                                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                                        // Lấy ngày, tháng, năm, giờ và phút
+                                        const day = String(date.getDate()).padStart(2, '0');
+                                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+                                        const year = date.getFullYear();
+                                        const hours = String(date.getHours()).padStart(2, '0');
+                                        const minutes = String(date.getMinutes()).padStart(2, '0');
 
-                                    // Định dạng ngày giờ
-                                    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+                                        // Định dạng ngày giờ
+                                        const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
 
-                                    return `
-                                        <li class="list-group-item list-group-item-action">
-                                            <div class="d-block w-100 justify-content-between review-item">
-                                                <div class="row">
-                                                    <div class="col-sm-4 col-xs-12">
-                                                        <label>Người đánh giá</label>
-                                                        <p class="mb-1">${review.authorAttribution?.displayName ?? ''}</p>
+                                        return `
+                                            <li class="list-group-item list-group-item-action">
+                                                <div class="d-block w-100 justify-content-between review-item">
+                                                    <div class="row">
+                                                        <div class="col-sm-4 col-xs-12">
+                                                            <label>Người đánh giá</label>
+                                                            <p class="mb-1">${review.authorAttribution?.displayName ?? ''}</p>
+                                                        </div>
+                                                        <div class="col-sm-4 col-xs-12">
+                                                            <label>Điểm đánh giá</label>
+                                                            <p class="mb-1">${review.rating ?? ''}</p>
+                                                        </div>
+                                                        <div class="col-sm-4 col-xs-12">
+                                                            <label>Thời gian đánh giá</label>
+                                                            <p class="mb-1">${formattedDate ?? ''}</p>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-sm-4 col-xs-12">
-                                                        <label>Điểm đánh giá</label>
-                                                        <p class="mb-1">${review.rating ?? ''}</p>
-                                                    </div>
-                                                    <div class="col-sm-4 col-xs-12">
-                                                        <label>Thời gian đánh giá</label>
-                                                        <p class="mb-1">${formattedDate ?? ''}</p>
-                                                    </div>
+                                                    <label>Nội dung đánh giá</label>
+                                                    <p class="mb-1">${review.originalText?.text ?? ''}</p>
+                                                    <a href="${review.googleMapsUri ?? ''}" target="_blank"><span>Xem chi tiết</span></a>
                                                 </div>
-                                                <label>Nội dung đánh giá</label>
-                                                <p class="mb-1">${review.originalText?.text ?? ''}</p>
-                                                <a href="${review.googleMapsUri ?? ''}" target="_blank"><span>Xem chi tiết</span></a>
-                                            </div>
-                                        </li>
-                                    `;
-                                }).join('') ?? '';
-                            $('body').append(`
-                                <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <button onclick="$('#myModal').modal('hide')" style="background: transparent; z-index: 10; border: none; outline: none; color: #6f6e6e; position: absolute; top: 10px; right: 10px;width: 35px;padding: 0;border-radius: 50%;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span class="material-symbols-outlined">
-                                                    close
-                                                </span>
-                                            </button>
-                                            <div class="modal-body">
-                                                <div id="map-project">
-                                                    <iframe src="${link_map}" width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-                                                </div>
-                                                <div id="result-partner">
-                                                    <h3>Link kết quả nhiệm vụ:</h3>
-                                                    <div class="text-center">
-                                                        <a href="${link_confirm}" class="btn btn-success" target="_blank">Link kết quả</a>    
+                                            </li>
+                                        `;
+                                    }).join('') ?? '';
+                                $('body').append(`
+                                    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <button onclick="$('#myModal').modal('hide')" style="background: transparent; z-index: 10; border: none; outline: none; color: #6f6e6e; position: absolute; top: 10px; right: 10px;width: 35px;padding: 0;border-radius: 50%;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span class="material-symbols-outlined">
+                                                        close
+                                                    </span>
+                                                </button>
+                                                <div class="modal-body">
+                                                    <div id="map-project">
+                                                        <iframe src="${link_map}" width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                                                     </div>
-                                                </div>
-                                                <div id="reviews">
-                                                    <h3>Bình luận gần đây</h3>
-                                                    <ul>
-                                                        ${
-                                                            data_reviews
-                                                        }
-                                                    </ul>    
+                                                    <div id="result-partner">
+                                                        <h3>Link kết quả nhiệm vụ:</h3>
+                                                        <div class="text-center">
+                                                            <a href="${link_confirm}" class="btn btn-success" target="_blank">Link kết quả</a>    
+                                                        </div>
+                                                    </div>
+                                                    <div id="reviews">
+                                                        <h3>Bình luận gần đây</h3>
+                                                        <ul>
+                                                            ${
+                                                                data_reviews
+                                                            }
+                                                        </ul>    
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            `);
-                            $('#myModal').modal('show');
+                                `);
+                                $('#myModal').modal('show');
+                            }else{
+                                showAlert('error', 'Dự án này chưa có đánh giá.')
+                            }
+
                         }
                     }
                 });
