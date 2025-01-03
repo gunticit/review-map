@@ -366,7 +366,7 @@ class MissionController extends Controller
 
     public function resultGoogleMap(string $place_id){
         $url = 'https://places.googleapis.com/v1/places/'. $place_id;
-        $fields = 'id,displayName,rating,reviews,userRatingCount,location,reviews';
+        $fields = 'id,displayName,rating,reviews,userRatingCount,location,reviews'; 
         $apiKey = env('GOOGLE_MAP_API_KEY');
 
         // Gửi request GET
