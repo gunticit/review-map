@@ -79,6 +79,8 @@ class SettingController extends Controller
                 'setting_vertify_account' => $request->setting_vertify_account ?? null,
                 'setting_distance' => $request->setting_distance ?? null,
                 'setting_partner' => $request->setting_partner ?? null,
+                'setting_day_min_distance' => $request->setting_day_min_distance ?? 1,
+                'setting_extend_distance' => $request->setting_extend_distance ?? null
             ),
             'payment' => array(
                 'vertify_account' => $request->vertify_account ?? null

@@ -12,9 +12,5 @@ class Setting extends Model
 
     protected $table = 'settings';
 
-    protected $fillable = [
-        'code_setting',
-        'key_setting',
-        'value_setting',
-    ];
+    protected $guarded = [];
 }

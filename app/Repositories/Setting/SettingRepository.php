@@ -31,7 +31,7 @@ class  SettingRepository extends BaseRepository implements SettingRepositoryInte
         }
         
         $page = $request->page ?? 1;
-        $perPage = $request->per_page ?? 15;
+        $perPage = $request->per_page ?? 50;
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
 

@@ -139,7 +139,8 @@ class MissionController extends Controller
                 };
                 $conditionSlow = !$project->is_slow || $countMissionToDay <= $project->point_slow;
                 $distance = getDistanceBetweenPoints($project->latitude, $project->longitude, auth()->user()->latitude, auth()->user()->longitude);
-                $kilometer_setting = Helper::getSetting('setting_distance') ?? 20;
+                // Kiểm tra nếu không có mission nào của dự án được tạo
+                $kilometer_setting =  $this->checkMissionToAddDistance($project->id);
                 $conditionDistance = $distance['kilometers'] <= $kilometer_setting;
                 $user_mission_price = Auth::user()->levelDetails?->reward ?? 10000;
                 if ($conditionPackage && $conditionSlow && $conditionDistance) {
@@ -570,4 +571,38 @@ class MissionController extends Controller
         }
         return $hour;
     }   
+    private function checkMissionToAddDistance($id_project){
+        // Lấy thời gian hiện tại
+        $now = Carbon::now();
+
+        $kilometer_setting = Helper::getSetting('setting_distance') ?? 20; // Khoảng cách cài đặt
+        $date_check_setting = Helper::getSetting('setting_day_min_distance') ?? 0; // Ngày tối thiểu phải tạo nhiệm vụ mới
+        $setting_extend_distance = Helper::getSetting('setting_extend_distance') ?? 0; // Khoảng cách + thêm vào khoảng cách cài đặt nếu nhiệm vụ của dự án được tạo ra gần nhất > ngày tối thiểu
+
+        $project = Project::find($id_project);
+        if (!$project) {
+            return $kilometer_setting;
+        }
+
+        $latestMission = Mission::where('project_id', $id_project)->latest('created_at')->first();
+        // Kiểm tra nhiệm vụ gần nhất của dự án nếu có
+        if ($latestMission) {
+            $lastMissionCreatedAt = $latestMission->created_at;
+            $daysSinceLastMission = $now->diffInDays($lastMissionCreatedAt);
+
+            if ($daysSinceLastMission > $date_check_setting) {
+                return $kilometer_setting + $daysSinceLastMission * $setting_extend_distance; // Trả về số ngày từ nhiệm vụ gần nhất
+            }
+        }
+
+        // Trường hợp chưa có nv nào được tạo ra
+        $createdAt = $project->created_at;
+        $daysSinceCreated = $now->diffInDays($createdAt);
+
+        if ($daysSinceCreated > $date_check_setting) {
+            return $kilometer_setting + $daysSinceCreated * $setting_extend_distance; // Trả về số ngày từ ngày tạo dự án
+        }
+
+        return $kilometer_setting;
+    }
 }
