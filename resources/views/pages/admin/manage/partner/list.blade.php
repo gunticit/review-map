@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+        .list-table th{
+            text-align: left;
+        }
+    </style>
     <!-- danh-sach-du-an -->
     <section class="section danh-sach-du-an mb-5">
         <div class="container-fluid pt-4">
@@ -23,12 +28,11 @@
                             <table class="table list-table">
                                 <thead>
                                     <tr>
-                                        <th style="min-width:55px" scope="col"><a href="javascript:void(0);" class="sort">STT</a></th>
-                                        <th style="min-width:135px" cope="col"><a href="javascript:void(0);" class="sort">Mã đối tác</a></th>
+                                        <th style="min-width:55px; text-align: center;" scope="col"><a href="javascript:void(0);" class="sort">STT</a></th>
                                         <th style="min-width:200px" scope="col"><a href="javascript:void(0);" class="sort">Tên đối tác</a></th>
                                         <th style="min-width:200px"><a href="javascript:void(0);" class="sort">Email</a></th>
                                         <th style="min-width:200px"><a href="javascript:void(0);" class="sort">Số điện thoại</a></th>
-                                        <th style="min-width:250px"><a href="javascript:void(0);" class="sort">Nhiệm vụ hoàn thành</a></th>
+                                        <th style="min-width:250px; text-align: center;"><a href="javascript:void(0);" class="sort">Nhiệm vụ hoàn thành</a></th>
                                         <th style="min-width:180px"><a href="javascript:void(0);" class="sort">Số tiền đã rút</a></th>
                                         <th style="min-width:180px" scope="col">
                                             <a href="javascript:void(0);" class="sort">Trạng thái</a>
@@ -42,11 +46,9 @@
                                     @foreach($partners as $partner)
                                     <tr>
                                         <td width="35">{{ $partner->id }}</td>
-                                        <td class="list-table-title">
-                                            <a href="{{ route('admin.manage.partner.info', ['id' => $partner->id]) }}">{{ $partner->name }}</a>
-                                        </td>
                                         <td>
-                                            {{ $partner->name }}
+                                            <a href="{{ route('admin.manage.partner.info', ['id' => $partner->id]) }}">{{ $partner->name }}</a>
+                                            {!! !empty($partner->username) ? '<span class="text-bold"> (' . $partner->username . ')</span>' : '' !!}
                                         </td>
                                         <td>
                                             <a href="mailto:{{ $partner->email }}">{{ $partner->email }}</a>
@@ -54,7 +56,7 @@
                                         <td>
                                             <a href="tel:{{ $partner->telephone }}">{{ $partner->telephone }}</a>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             {{ $partner->mission->success_count ?? 0 }} / {{ $partner->mission->count ?? 0 }}
                                         </td>
                                         <td>

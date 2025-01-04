@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProjectResource;
 use App\Services\ProjectService;
@@ -22,7 +23,7 @@ class ProjectController extends Controller
     {
         $projects = $this->projectService->list($request);
         $projects = ProjectResource::collection($projects)->resource;
-        $setting_price_slow = 2000;
+        $setting_price_slow = Helper::getSetting('setting_price_slow') ?? 0;
         return view('pages.admin.project.list', [
             'projects' => $projects,
             'setting_price_slow' => $setting_price_slow

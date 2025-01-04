@@ -82,13 +82,13 @@ class SupportService {
     }
 
     private function filterData($request): array{
-        $data = $request->all();
-        return array(
-            'title' => $data['title'] ?? null,
-            'department_id' => $data['department_id'] ?? null,
-            'project_id' => $data['project_id'] ?? null,
-            'content' => $data['content'] ?? null,
-            'status' => $data['status'] ?? null
-        );
+        $key_able = array('title', 'department_id', 'project_id', 'content', 'status');
+        $data = array();
+        foreach ($key_able as $key) {
+            if(!empty($request[$key])){
+                $data[$key] = $request[$key];
+            }
+        }
+        return $data;
     }
 }

@@ -106,7 +106,7 @@
                     <div class="content-conversation mt-4">
                         @foreach($support_info->messages as $message)
                         <div class="content-conversation-item mb-4">
-                            <h5 class="section-title">
+                            <h5 class="{{ $message->type == 'answer' ? 'section-title reply' : 'section-title' }}">
                                 @if($message->type == 'answer')
                                     <img width="15" src="{{ asset('./assets/img/rivi-favicon.png') }}" /> 
                                 @else
@@ -133,42 +133,8 @@
                         @endforeach
                     </div>
                     @endif
-                    <form action="{{ route('update.reply.support', ['id' => $support_id]) }}" method="POST" enctype="multipart/form-data">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="support_id" value="{{ $support_id }}">
-                        <div>
-                            <h2 class="section-title mb-4">Hỗ trợ khách hàng</h2>
-                            <div class="mb-4">
-                                <label>Phản hồi</label>
-                                <textarea class="form-control" name="message" id="inputDescription" placeholder="Nhập mô tả"></textarea>
-                            </div>
-                            <!-- Form Group (inputFile)-->
-                            <label>
-                                <span class="material-symbols-outlined">
-                                    database_upload
-                                </span> Tệp đính kèm <small>(Nếu có)</small>
-                            </label>
-                            <div class="mb-4">
-                                <input type="file" name="filepath" class="form-control" name="filepath">
-                            </div>
-                            <!-- Form Group (inputFile)-->
-                            <div class="text-right">
-                                @if(auth()->user()->hasRole('admin'))
-                                <button type="button" class="btn btn-danger" onclick="handleCloseSupport({{ $support_id }})">Đóng yêu cầu</button>
-                                @endif
-                                <button type="submit" class="btn btn-success">Gửi yêu cầu</button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
     </section>
-    <script>
-        function handleCloseSupport(support_id) {
-            var url = "{{ route('close.support', ['id' => ':id']) }}";
-            url = url.replace(':id', support_id);
-            window.location.href = url;
-        }
-    </script>
 @endsection

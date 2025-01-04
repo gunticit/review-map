@@ -17,7 +17,11 @@ class SupportMessage extends Model
         return $this->belongsTo(Support::class, 'support_id');
     }
 
-    public function children(){
-        return $this->hasMany(SupportMessage::class, 'parent_id', 'id');
+    public function sender(){
+        return $this->belongsTo(User::class, 'send_id');
+    }
+
+    public function receiver(){
+        return $this->belongsTo(User::class, 'receive_id');
     }
 }

@@ -63,15 +63,14 @@ Route::group([
         Route::get('/support', [SupportController::class, 'index'])->name('admin.support');
         Route::post('/support-store', [SupportController::class, 'store'])->name('admin.support.store');
         Route::get('/support-edit/{id}', [SupportController::class, 'edit'])->name('admin.support.edit');
-        Route::get('/reply-support/{id}', [SupportController::class, 'reply'])->name('admin.reply.support');
         Route::put('/support-update/{id}', [SupportController::class, 'update'])->name('admin.support.update');
         Route::delete('/support-delete/{id}', [SupportController::class, 'delete'])->name('admin.support.delete');
         Route::delete('/support-delete-by-ids/{ids}', [SupportController::class, 'deleteByIds'])->name('admin.support.delete.by.ids');
         Route::get('/support-create', [SupportController::class, 'create'])->name('admin.support.create');
+        Route::get('/close-support/{id}', [SupportController::class, 'closeSupport'])->name('close.support');
         Route::get('/setting', [SettingController::class, 'index'])->name('setting');
         Route::post('/update-setting', [SettingController::class, 'update'])->name('update.setting');
         Route::post('/delete-partner-setting', [SettingController::class, 'deletePartnerSetting'])->name('delete.partner.setting');
-        Route::post('/update-reply-support/{id}', [SupportController::class, 'updateReply'])->name('update.reply.support');
 
         //QL Thông báo đối tác
         Route::get('/list-notificate-partner', [NotificateController::class, 'partner_list'])->name('list.notificate.partner');

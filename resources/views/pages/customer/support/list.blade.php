@@ -28,6 +28,16 @@
     <div class="container-fluid">
         <div class="col-inner">
             <h2 class="section-title mb-4">Yêu cầu hỗ trợ</h2>
+            @if (Session::has('success'))
+                <div class="alert alert-success">
+                    {{ Session::get('success') }}
+                </div>
+            @endif
+            @if (Session::has('error'))
+                <div class="alert alert-danger">
+                    {{ Session::get('error') }}
+                </div>
+            @endif
             <form>
                 <div class="input-group">
                     <button class="input-group-text" type="submit">
@@ -43,6 +53,7 @@
                             <th style="min-width: unset; width: 80px !important" class="list-table-stt" scope="col">STT</th>
                             <th class="list-table-title text-start" scope="col">Tiêu đề</th>
                             <th class="list-table-sku" style="min-width: unset; width: 150px !important; text-align: left" scope="col">Nội dung</th>
+                            <th class="list-table-time" scope="col">Người gửi</th>
                             <th class="list-table-time" scope="col">Thời gian</th>
                             <th class="list-table-progree" scope="col">Trạng thái</th>
                             <th style="min-width: 45px; max-width: 45px; width: 45px"></th>
@@ -51,16 +62,20 @@
                     <tbody>
                         @if(!empty($supports))
                         @foreach ($supports as $key => $support)
+                        @php
+                            $link_support = (!empty($support->status) && $support->status != 4) ? route('admin.reply.support', ['id' => $support->id]) : route('customer.support.detail', ['id' => $support->id]);
+                        @endphp
                         <tr>
                             <td style="min-width: unset !important; width: 80px !important">{{ $key + 1 }}</td>
                             <td class="list-table-title text-start" style="min-width: unset !important; width: 220px !important">
-                                <a href="{{ route('admin.reply.support', ['id' => $support->id] )}}" style="min-width: unset !important; width: 180px !important">{{ $support->title }}</a>
+                                <a href="{{ $link_support }}" style="min-width: unset !important; width: 180px !important">{{ $support->title }}</a>
                             </td>
                             <td class="list-table-sku text-start" style="min-width: unset; width: 150px !important">
                                 <a href="javascript:void(0);" style="min-width: unset !important; width: 150px !important; text-align: left">{{ $support->content }}</a>
                             </td>
+                            <td class="text-center">{{ $support->sender?->name ?? '' }}</td>
                             <td class="list-table-time text-center">
-                                {!! date('d/m/Y', strtotime($support->created_at)) !!} <span>{!! date('hh:mm', strtotime($support->created_at)) !!}</span>
+                                {!! date('d/m/Y h:i', strtotime($support->created_at)) !!}
                             </td>
                             <td class="list-table-progree text-center">
                                 <span class="btn {!! 
@@ -71,7 +86,9 @@
                                 !!} ">{!! __( config('constants.status_support')[$support->status]) !!}</span>
                             </td>
                             <td style="min-width: 45px; max-width: 45px; width: 45px">
-                                <a href="{{ route('admin.reply.support', ['id' => $support->id] )}}" class="btn btn-primary p-2"><span class="material-symbols-outlined">reply</span></a>
+                                @if(!empty($support->status) && $support->status != 4)
+                                <a href="{{ $link_support }}" class="btn btn-primary p-2"><span class="material-symbols-outlined">reply</span></a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

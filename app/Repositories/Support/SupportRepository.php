@@ -16,6 +16,9 @@ class  SupportRepository extends BaseRepository implements SupportRepositoryInte
 
     public function list($request){
         $query = $this->model->query();
+        $query->with(['sender', 'project','messages' => function($query) {
+            $query->with(['sender', 'receiver'])->orderBy('created_at', 'desc');
+        }]);
 
         if($request->department_id){
             $query->where('department_id', $request->department_id);
@@ -36,12 +39,17 @@ class  SupportRepository extends BaseRepository implements SupportRepositoryInte
 
     public function reply($id) {
         $query = $this->model->query();
-        $query = $query->with(['sender']);
+        $query = $query->with(['sender', 'project', 'messages' => function($query) {
+            $query->with(['sender', 'receiver']);
+        }]);
         return $query->findOrFail($id);
     }
 
     public function listCreateByUser($request) {
         $query = $this->model->query();
+        $query->with(['sender', 'project','messages' => function($query) {
+            $query->with(['sender', 'receiver']);
+        }]);
         $query = $query->where('created_by', $request->user_id);
         $orderBy = $request->order_by ?? [];
         if(!empty($orderBy)){

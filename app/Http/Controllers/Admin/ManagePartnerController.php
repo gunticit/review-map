@@ -136,6 +136,10 @@ class ManagePartnerController extends Controller
             $query->orderBy($orderBy, $sort);
         }
 
+        $query->whereHas('missions', function ($query) use ($user_id) {
+            $query->where('user_id', $user_id);
+        });
+
         $projects = $query->paginate($perPage, ['*'], 'page', $page)
             ->appends(request()->query());
 

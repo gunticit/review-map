@@ -17,19 +17,26 @@ class SupportMessageService {
     }
 
     public function create($request){
-        $request = $request->merge(['send_id' => Auth::user()->id]);
         $data = $this->filterData($request);
         return $this->supportMessageRepository->create($data);
     }
 
     private function filterData($request): array{
-        $data = $request->all();
-        return array(
-            'support_id' => $data['support_id'] ?? null,
-            'send_id' => $data['send_id'] ?? null,
-            'receive_id' => $data['receive_id'] ?? null,
-            'parent_id' => $data['parent_id'] ?? null,
-            'message' => $data['message'] ?? null
+        $key_ables = array(
+            'support_id' => 'support_id', 
+            'send_id' => 'send_id', 
+            'receive_id' => 'receive_id', 
+            'parent_id' => 'parent_id', 
+            'message' => 'message', 
+            'filepath' => 'file_path',
+            'type' => 'type'
         );
+        $data = array();
+        foreach ($key_ables as $key => $key_able) {
+            if(!empty($request[$key_able])){
+                $data[$key] = $request[$key_able];
+            }
+        }
+        return $data;
     }
 }

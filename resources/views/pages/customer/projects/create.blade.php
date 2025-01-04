@@ -518,7 +518,7 @@
                         </div>
                         <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/MLpWrANjFbI?si=ZGXqWQK6lxYSxRAW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
                         <h3 class="col-title">{{ __('project.slow_spread') }}</h3>
-                        <p>{{ __('project.desc_slow_spread') }}</p>
+                        <p>{{ __('project.desc_slow_spread', ['price' => formatVND($setting_price_slow)]) }}</p>
                         <h3 class="col-title">{{ __('project.keyword') }}</h3>
                         <p>{{ __('project.desc_keyword_1') }}<br>
                             <strong>{{ __('project.example') }}:</strong> {{ __('project.desc_keyword_1') }}

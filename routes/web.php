@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\SocicalController;
+use App\Http\Controllers\Customer\SupportController;
 use App\Http\Controllers\Partner\PartnerSupportController;
 
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index']);
@@ -57,6 +58,9 @@ Route::group(['middleware' => ['locale','auth']], function(){
     Route::post('/update-location', [App\Http\Controllers\Auth\AuthController::class, 'updateCurrentLocation'])->name('profile.update.location');
     Route::get('/notification-user', [App\Http\Controllers\NotificationController::class, 'ajaxNotification'])->name('notification.user');
     Route::put('/notification-user-read', [App\Http\Controllers\NotificationController::class, 'ajaxMakeRead'])->name('notification.user.read');
+    Route::get('/reply-support/{id}', [SupportController::class, 'reply'])->name('admin.reply.support');
+    Route::post('/update-reply-support/{id}', [SupportController::class, 'updateReply'])->name('update.reply.support');
+    Route::get('/detail-support/{id}', [SupportController::class, 'detail'])->name('customer.support.detail');
     
     include 'web_customer.php';
     include 'web_admin.php';

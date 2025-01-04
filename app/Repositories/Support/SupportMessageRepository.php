@@ -3,15 +3,16 @@ namespace App\Repositories\Support;
 
 use App\Repositories\BaseRepository;
 use App\Models\Support;
+use App\Models\SupportMessage;
 use App\Repositories\Support\SupportMessageRepositoryInterface;
 
 class  SupportMessageRepository extends BaseRepository implements SupportMessageRepositoryInterface
 {
     protected $model;
 
-    public function __construct(Support $support)
+    public function __construct(SupportMessage $supportMessage)
     {
-        $this->model = $support;
+        $this->model = $supportMessage;
     }
 
     public function list($request){

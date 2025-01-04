@@ -28,6 +28,9 @@ class SupportResource extends JsonResource
             'longitude' => $this->longitude,
             'place_id' => $this->place_id,
             'status'  => $this->status ? $status_config[$this->status] : null,
+            'sender' => $this->sender,
+            'messages' => SupportMessageResource::collection($this->messages),
+            'created_at' => $this->created_at
         ];
     }
 }

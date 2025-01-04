@@ -31,6 +31,12 @@
             'deposit' => 'Nạp tiền',
             'withdraw' => 'Rút tiền',
             'mined' => 'Tiền nhiệm vụ'
+        ],
+        "support_status" => [
+            1 => 'support.status_support.done', // Đã trả lời
+            2 => 'support.status_support.unprocessed', // Chưa xử lý
+            3 => 'support.status_support.in_progress', // Đang thực hiện
+            4 => 'support.status_support.close', // Đóng
         ]
     );
 ?>

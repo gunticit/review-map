@@ -17,7 +17,9 @@ return new class extends Migration
             $table->integer('send_id');
             $table->integer('receive_id');
             $table->integer('parent_id')->default(0);
+            $table->enum('type', ['question', 'answer'])->default('question');
             $table->text('message');
+            $table->text('filepath')->nullable();
             $table->timestamps();
         });
     }

@@ -17,8 +17,8 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\Support;
 use App\Services\SupportMessageService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SupportController extends Controller
@@ -102,25 +102,92 @@ class SupportController extends Controller
             return redirect()->back()->withInput();
         }
     }
+    public function detail($id, Request $request){
+        $support_info = $this->supportService->reply($id, $request);
+        $data['support_info'] = $support_info;
+        $data['support_id'] = $id;
+        $data['departments'] = Department::all();
+        $data['projects'] = Project::all();
+        return view('pages.customer.support.detail', $data);
+    }
+
     public function reply($id, Request $request){
-        $data = $this->supportService->reply($id, $request);
-        $user = auth()->user();
-        if(!$user->hasRole(Role::ADMIN_ROLE)){
-            return redirect()->back();
-        }
+        $support_info = $this->supportService->reply($id, $request);
+        $data['support_info'] = $support_info;
         $data['support_id'] = $id;
         $data['departments'] = Department::all();
         $data['projects'] = Project::all();
         return view('pages.customer.support.reply', $data);
     }
 
-    public function updateReply($id, $request){
+    public function updateReply($id,Request $request){
+        $support = Support::find($id);
+        $receive_id = $support->send_id; // Mặc định người đặt câu hỏi sẽ là người nhận câu trả lời
+        $type = 'question';
+        // Nếu người đang đăng nhập khác người đặt câu hỏi => người trả lời => người đặt câu hỏi là người nhận receive_id = người đặt câu hỏi
+        if($support->send_id != auth()->id()){
+            $type = 'answer';
+        }else{
+            if(!empty($support->messages)){
+                foreach($support->messages as $message){
+                    if($message->send_id == auth()->id()){
+                        $receive_id = $message->receive_id;
+                        break;
+                    }else{
+                        $receive_id = $message->send_id;
+                        break;
+                    }
+                }
+            }
+        }
+        $filepath = $request->file('filepath');
+        if($filepath){
+            $request->merge([
+                'project_id' => $support->project_id
+            ]);
+            $file_path = $this->uploadImage($request);
+            $request->merge([
+                'file_path' => $file_path
+            ]);
+        }
+        $request->merge([
+            'receive_id' => $receive_id,
+            'type' => $type,
+            'support_id' => $id,
+            'send_id' => auth()->id()
+        ]);
         $data = $this->supportMessageService->create($request);
         if(!$data){
             return redirect()->back()->with('error', 'Lỗi không thể hỗ trợ! Vui lòng thử lại sau hoặc báo IT');
         }
         $request = $request->merge(['status' => 1]);
         $this->supportService->update($request, $id);
-        return redirect()->route('support.list')->with('success', 'Hỗ trợ thành công');
+        return redirect()->back()->with('success', 'Gửi đi thành công!');
+    }
+
+    public function uploadImage($request){
+        $path = '';
+        $project_id = $request->project_id ?? 'undefined'; 
+        if ($request->hasFile('filepath')) {
+            $folder = 'uploads' . '/supports/' . date('Y-m') . '/' . date('d') . '/' . $project_id;
+            $image = $request->file('filepath');
+            $extension = $image->getClientOriginalExtension();
+            $fileName = 'support-'.$project_id.'-'.date('Y-m-d') . time() . '.' . $extension;
+            $path = $image->storeAs($folder, $fileName, 'public');
+        }
+        return $path;
+    }
+
+    public function closeSupport($id){
+        $support = Support::find($id);
+        $support->status = 4;
+        $support->save();
+        if(auth()->user()->hasRole(Role::ADMIN_ROLE)){
+            return redirect()->route('admin.support')->with('success', 'Đã đóng hỗ trợ '.$support->title.' thành công!');
+        }else if(auth()->user()->hasRole(Role::CUSTOMER_ROLE)){
+            return redirect()->route('support.customer');
+        } else if(auth()->user()->hasRole(Role::PARTNER_ROLE)){
+            return redirect()->route('partner.support');
+        }
     }
 }

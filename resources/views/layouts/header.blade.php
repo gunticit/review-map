@@ -11,7 +11,7 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>RIVI</title>
-        <link rel="icon" type="image/x-icon" href="img/rivi-favicon.png" />
+        <link rel="icon" type="image/x-icon" href="{{ asset('./assets/img/rivi-favicon.png') }}" />
 
         <script src="{{ asset('./assets/js/jquery-3.7.1.min.js') }}"></script>
         <script src="{{ asset('./assets/js/jquery.basictable.js') }}"></script>

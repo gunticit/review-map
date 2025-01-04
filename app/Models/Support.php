@@ -33,4 +33,8 @@ class Support extends Model
     public function messages(){
         return $this->hasMany(SupportMessage::class, 'support_id');
     }
+
+    public function project(){
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 }

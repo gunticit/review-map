@@ -197,8 +197,10 @@ class ProjectController extends Controller
 
     public function edit($id){
         $data = $this->projectService->show($id);
+        $setting_price_slow = Helper::getSetting('setting_price_slow') ?? 0;
         return view('pages.customer.projects.edit',[
-            'project' => $data
+            'project' => $data,
+            'setting_price_slow' => $setting_price_slow
         ]);
     }
 
