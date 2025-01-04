@@ -200,7 +200,7 @@
                             </div>
                             <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
                                 <div class="content d-flex flex-column">
-                                    <span class="title">Khoảng cách mở rộng {{$setting['setting_extend_distance']}}</span>
+                                    <span class="title">Khoảng cách mở rộng</span>
                                     <span class="notice">Là số khoảng cách được cộng thêm vào 'khoảng khách đối tác' đối với dự án quá </span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center" style="position: relative">
