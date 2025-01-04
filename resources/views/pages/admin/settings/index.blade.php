@@ -178,13 +178,35 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
                                 <div class="content d-flex flex-column">
                                     <span class="title">Khoảng cách đối tác</span>
                                     <span class="notice">Là khoảng cách đối với vị trí của địa điểm của nhiệm vụ mà đối tác có thể nhận</span>
                                 </div>
-                                <input name="setting_distance" id="setting_distance" min="0" value="{{ $setting['setting_distance'] ?? 0 }}" class="form-control select-setting" type="number" />
+                                <div class="d-flex flex-row align-items-center" style="position: relative">
+                                    <input name="setting_distance" id="setting_distance" min="0" value="{{ $setting['setting_distance'] ?? 0 }}" class="form-control select-setting" type="number" />
+                                    <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(Km)</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Ngày tối thiểu</span>
+                                    <span class="notice">Là ngày tối thiểu dự án bắt buộc có đối tác nhận nhiệm vụ. Nếu dự án vượt quá số ngày này sẽ cộng thêm 'Khoảng cách mở rộng'.</span>
+                                </div>
+                                <div class="d-flex flex-row align-items-center" style="position: relative">
+                                    <input name="setting_day_min_distance" id="setting_day_min_distance" min="1" value="{{ $setting['setting_day_min_distance'] ?? 1 }}" class="form-control select-setting" type="number" />
+                                    <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(Ngày)</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                <div class="content d-flex flex-column">
+                                    <span class="title">Khoảng cách mở rộng</span>
+                                    <span class="notice">Là số khoảng cách được cộng thêm vào 'khoảng khách đối tác' đối với dự án quá </span>
+                                </div>
+                                <div class="d-flex flex-row align-items-center" style="position: relative">
+                                    <input name="setting_extend_distance" id="setting_extend_distance" min="0" value="{{ $setting['setting_extend_distance'] ?? 0 }}" class="form-control select-setting" type="number" />
+                                    <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(Km)</span>
+                                </div>
                             </div>
                           </div>
                         </div>
