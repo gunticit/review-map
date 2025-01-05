@@ -3221,7 +3221,7 @@ https://flickity.metafizzy.co
 .form-control, .datatable-input {
   background-color: #FAFAFA;
   border-radius: 8px;
-  min-height: 54px;
+  min-height: 48px;
   border: none;
   box-shadow: unset;
   line-height: 1.3;

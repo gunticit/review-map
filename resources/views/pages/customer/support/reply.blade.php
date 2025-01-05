@@ -77,9 +77,11 @@
                         <tbody>
                             <tr>
                                 <td>MSP-000{{ $support_info->id }}</td>
-                                <td>Dự án</td>
-                                <td>Phòng hỗ trợ</td>
-                                <td>Nhân viên</td>
+                                <td>{{ $support_info->project?->name ?? '' }}</td>
+                                <td>{{ $support_info->department?->name ?? '' }}</td>
+                                <td>
+                                    {{ $support_info->messages[0]?->sender?->name ?? '' }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -93,7 +95,7 @@
 
                         @if($support_info->filepath)
                             <p class="text-right">
-                                <a class="link-file btn btn-outline-primary fw-300" href="{{ $support_info->filepath }}" class="btn btn-outline-primary fw-300 mt-3 py-2 px-4" target="_blank">
+                                <a class="link-file btn btn-outline-primary fw-300" href="{{ '/storage/'. $support_info->filepath }}" class="btn btn-outline-primary fw-300 mt-3 py-2 px-4" target="_blank">
                                     <span class="material-symbols-outlined">
                                         download
                                     </span>
