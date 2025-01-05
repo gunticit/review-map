@@ -76,7 +76,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>MSP-000{{ $support_info->id }}</td>
+                                <td width="18%">{{ $support_info->support_code }}</td>
                                 <td>{{ $support_info->project?->name ?? '' }}</td>
                                 <td>{{ $support_info->department?->name ?? '' }}</td>
                                 <td>
