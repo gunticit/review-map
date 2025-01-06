@@ -126,27 +126,16 @@ class ProjectController extends Controller
                     Session::flash('error', 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!');
                     return redirect()->back()->withInput();
                 }
-                $comments = explode('|', $comments);
-                if(count($comments) < $sl_comment){
-                    $comments = $this->commentService->generateComment($request);
-                    $comments = explode('|', $comments);
-                }
-                if(empty($comments)){
-                    Session::flash('error', 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!');
-                    return redirect()->back()->withInput();
-                }
                 $data_comment = array();
-                if(!empty($comments)){
-                    for($i = 1; $i <= $sl_comment; $i++){
-                        $comment = !empty($comments[$i - 1]) ? str_replace('-','',trim($comments[$i - 1])) : '';
-                        $data_comment[] = array(
-                            'project_id' => $project_id,
-                            'comment' => $comment,
-                            'keyword' => implode(',', $keyword_data)
-                        );
-                    }
-                    $this->commentService->create($data_comment);
+                for($i = 1; $i <= $sl_comment; $i++){
+                    $comment = !empty($comments[$i - 1]) ? str_replace('-','',trim($comments[$i - 1])) : '';
+                    $data_comment[] = array(
+                        'project_id' => $project_id,
+                        'comment' => $comment,
+                        'keyword' => implode(',', $keyword_data)
+                    );
                 }
+                $this->commentService->create($data_comment);
                 if ($request->has('has_image') && $request->has_image == 1) {
                     $request_files = $request->files->all() ?? [];
                     $list_files = count($request_files['files']) > 0 ? $request_files['files'] : [];

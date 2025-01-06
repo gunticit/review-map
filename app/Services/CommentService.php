@@ -93,15 +93,16 @@ class CommentService {
         }
         if(!empty($keywords)){
             $str_keyword = count($keywords) > 0 ? implode(', ', $keywords) : '';
-            for($i = 1; $i <= ceil((int) $sl_comment / 25); $i++){
-                $prompt = "Tạo cho tôi 25 bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
+            $settimg_comment = 50;
+            for($i = 1; $i <= ceil((int) $sl_comment / $settimg_comment); $i++){
+                $prompt = "Tạo cho tôi ".$settimg_comment." bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
                 if(!empty($description)){
                     $prompt .= " mô tả '".$description."' và";
                 }
                 if(!empty($str_keyword)){
                     $prompt .= " keyword chủ đề là: '(". $str_keyword .")'.";
                 }
-                $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt, và đủ số lượng bình luận là: 25 bình luận.";
+                $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt, và đủ số lượng bình luận là: ".$settimg_comment." bình luận.";
                 if(!empty(Helper::getSetting('setting_ai_content'))){
                     $prompt .= ' Ngoài ra: '.Helper::getSetting('setting_ai_content');
                 }
