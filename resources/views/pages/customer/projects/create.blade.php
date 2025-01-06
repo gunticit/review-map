@@ -580,13 +580,13 @@
                 let selectedPackage = $('#inputReview').val();
                 switch (selectedPackage) {
                     case "1": case 1:
-                        return Math.ceil(10 + (10 * parseInt('{{ $maxSetting }}') / 100));
+                        return Math.ceil(10 * parseInt('{{ $maxSetting }}') / 100);
                     case "2": case 2:
-                        return Math.ceil(50 + (50 * parseInt('{{ $maxSetting }}') / 100)); // Giới hạn 50 tệp cho gói này
+                        return Math.ceil(50 * parseInt('{{ $maxSetting }}') / 100); // Giới hạn 50 tệp cho gói này
                     case "3": case 3:
-                        return Math.ceil(100 + (100 * parseInt('{{ $maxSetting }}') / 100)); // Giới hạn 100 tệp cho gói này
+                        return Math.ceil(100 * parseInt('{{ $maxSetting }}') / 100); // Giới hạn 100 tệp cho gói này
                     case "4": case 4:
-                        return Math.ceil(200 + (200 * parseInt('{{ $maxSetting }}') / 100)); // Giới hạn 200 tệp cho gói này
+                        return Math.ceil(200 * parseInt('{{ $maxSetting }}') / 100); // Giới hạn 200 tệp cho gói này
                     default:
                         return 0; // Không giới hạn
                 }
@@ -598,13 +598,13 @@
                 console.log('minSetting',parseInt('{{ $minSetting }}'));
                 switch (selectedPackage) {
                     case "1": case 1:
-                        return Math.ceil(10 - (10 * parseInt('{{ $minSetting }}') / 100));
+                        return Math.ceil(10 * parseInt('{{ $minSetting }}') / 100);
                     case "2": case 2:
-                        return Math.ceil(50 - (50 * parseInt('{{ $minSetting }}') / 100)); // Giới hạn 50 tệp cho gói này
+                        return Math.ceil(50 * parseInt('{{ $minSetting }}') / 100); // Giới hạn 50 tệp cho gói này
                     case "3": case 3:
-                        return Math.ceil(100 - (100 * parseInt('{{ $minSetting }}') / 100)); // Giới hạn 100 tệp cho gói này
+                        return Math.ceil(100 * parseInt('{{ $minSetting }}') / 100); // Giới hạn 100 tệp cho gói này
                     case "4": case 4: 
-                        return Math.ceil(200 - (200 * parseInt('{{ $minSetting }}') / 100)); // Giới hạn 200 tệp cho gói này
+                        return Math.ceil(200 * parseInt('{{ $minSetting }}') / 100); // Giới hạn 200 tệp cho gói này
                     default:
                         return 0; // Không giới hạn
                 }

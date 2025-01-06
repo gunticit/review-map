@@ -34,8 +34,7 @@ class CommentService {
         return $projects;
     }
 
-    public function create($request){
-        $data_create = $this->filterData($request);
+    public function create($data_create){
         $data = $this->commentRepository->insert($data_create);
         return $data;
     }

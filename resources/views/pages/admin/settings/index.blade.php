@@ -114,12 +114,12 @@
                                 </div>
                                 <div class="d-flex flex-row align-items-center" style="position: relative">
                                     <label style="margin-bottom: 0; margin-right: 10px">Min:</label>
-                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_min_image" value="{{ $setting['setting_min_image'] ?? 0 }}" />
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" id="setting-min-image" name="setting_min_image" value="{{ $setting['setting_min_image'] ?? 0 }}" />
                                     <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center" style="position: relative;">
                                     <label style="margin-bottom: 0; margin-right: 10px">Max:</label>
-                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_max_image" value="{{ $setting['setting_max_image'] ?? 0 }}" />
+                                    <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" id="setting-max-image" name="setting_max_image" value="{{ $setting['setting_max_image'] ?? 0 }}" />
                                     <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(%)</span>
                                 </div>
                             </div>
@@ -277,8 +277,24 @@
         </div>
     </div>
 </section>
-@endsection
+<script>
 
+$('#setting-max-image').on('change', function(){
+    let max = $(this).val();
+    let min = $('#setting-min-image').val();
+    if(parseInt(min) > parseInt(max)){
+        $('#setting-min-image').val(max);
+    }
+});
+$('#setting-min-image').on('change', function(){
+    let min = $(this).val();
+    let max = $('#setting-max-image').val();
+    if(parseInt(min) > parseInt(max)){
+        $('#setting-max-image').val('');
+    }
+});
+</script>
+@endsection
 @section('script')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{{ asset('js/admin/voucher.js') }}"></script>
@@ -333,7 +349,7 @@
                     }
                 }
             });
-        })
+        });
     });
 </script>
 @endsection

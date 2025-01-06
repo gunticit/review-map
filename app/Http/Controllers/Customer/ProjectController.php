@@ -135,18 +135,17 @@ class ProjectController extends Controller
                     Session::flash('error', 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!');
                     return redirect()->back()->withInput();
                 }
-                foreach($comments as $comment){
-                    if(!empty($comment)){
-                        $comment = str_replace('-','',trim($comment));
-                        if(strlen(trim($comment)) > 0){
-                            $data_comment = array(
-                                'project_id' => $project_id,
-                                'comment' => $comment,
-                                'keyword' => implode(',', $keyword_data)
-                            );
-                            $this->commentService->create($data_comment);
-                        }
+                $data_comment = array();
+                if(!empty($comments)){
+                    for($i = 1; $i <= $sl_comment; $i++){
+                        $comment = !empty($comments[$i - 1]) ? str_replace('-','',trim($comments[$i - 1])) : '';
+                        $data_comment[] = array(
+                            'project_id' => $project_id,
+                            'comment' => $comment,
+                            'keyword' => implode(',', $keyword_data)
+                        );
                     }
+                    $this->commentService->create($data_comment);
                 }
                 if ($request->has('has_image') && $request->has_image == 1) {
                     $request_files = $request->files->all() ?? [];
