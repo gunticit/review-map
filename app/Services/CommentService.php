@@ -60,7 +60,6 @@ class CommentService {
     }
 
     public function generateComment($request){
-        // GenerateCommentJob::dispatch($request);
         $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
         $description = isset($request->description) ? $request->description : '';
         if(!empty($request->keyword_value) && !empty($keyword)){
@@ -93,7 +92,7 @@ class CommentService {
         }
         if(!empty($keywords)){
             $str_keyword = count($keywords) > 0 ? implode(', ', $keywords) : '';
-            $settimg_comment = $sl_comment;
+            $settimg_comment = 50;
             for($i = 1; $i <= ceil((int) $sl_comment / $settimg_comment); $i++){
                 $prompt = "Tạo cho tôi ".$settimg_comment." bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
                 if(!empty($description)){

@@ -122,6 +122,7 @@ class ProjectController extends Controller
                 $request->request->add(['project_id' => $project_id]);
                 $request->request->add(['noJson' => true]);
                 $comments = $this->commentService->generateComment($request);
+                $comments = explode('|', $comments);
                 if(empty($comments)){
                     Session::flash('error', 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!');
                     return redirect()->back()->withInput();
@@ -142,7 +143,7 @@ class ProjectController extends Controller
                     $quantity_images = count($list_files) ?? 0;
                     $setting_min_image = Helper::getSetting('setting_min_image') ?? 10;
                     $setting_max_image = Helper::getSetting('setting_max_image') ?? 10;
-                    if($quantity_images < ceil($sl_image - ($sl_image * $setting_min_image / 100)) || $quantity_images > ceil($sl_image + ($sl_image * $setting_max_image/100))){
+                    if($quantity_images < ceil(($sl_image * $setting_min_image / 100)) || $quantity_images > ceil($sl_image * $setting_max_image / 100)){
                         Session::flash('error', 'Số lượng hình upload là '.$quantity_images.' không đủ để tạo dự án');
                         return redirect()->back()->withInput();
                     }
