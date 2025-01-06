@@ -33,7 +33,7 @@
         }
         #reviews .list-group-item a{
             display: block;
-            text-align: right;
+            text-align: left;
         }
         #result-partner h3{
             text-transform: uppercase;
@@ -204,7 +204,6 @@
                 },
                 dataType: 'json',
                 success: function(data) {
-                    console.log('data.data?.histories', data.data?.histories);
                     if(data.data && data.data?.mission){
                         $('#info-project *').remove();
                         $('#info-project').append(`
@@ -272,9 +271,9 @@
                         if(res.status){
                             data_reviews = res?.data?.reviews ?? null;
                             if(data_reviews){
-                                data_reviews = data_reviews.sort((a, b) => new Date(b.publishTime) - new Date(a.publishTime)) // Sắp xếp từ mới đến cũ
-                                    .map(review => {
-                                        if (!review.originalText?.text) return '';
+                                data_reviews = data_reviews.sort((a, b) => b.publishTime - a.publishTime); // Sắp xếp từ mới đến cũ
+                                data_reviews = data_reviews.map(review => {
+                                        if (!review?.text) return '';
                                         const dateStr = review.publishTime;
                                         const date = new Date(dateStr);
 
@@ -294,7 +293,14 @@
                                                     <div class="row">
                                                         <div class="col-sm-4 col-xs-12">
                                                             <label>Người đánh giá</label>
-                                                            <p class="mb-1">${review.authorAttribution?.displayName ?? ''}</p>
+                                                            <a href="${review?.author_url ?? ''}" target="_blank" class="mb-1">
+                                                            <img width="50" height="50" class="rounded-circle" src="${review?.profile_photo_url ?? ''}" alt="">
+                                                            </a>
+                                                            <p class="mb-1">
+                                                                <a href="${review?.author_url ?? ''}" target="_blank" class="mb-1">
+                                                                <span>${review.author_name ?? ''}</span>
+                                                                </a>
+                                                            </p>
                                                         </div>
                                                         <div class="col-sm-4 col-xs-12">
                                                             <label>Điểm đánh giá</label>
@@ -302,12 +308,11 @@
                                                         </div>
                                                         <div class="col-sm-4 col-xs-12">
                                                             <label>Thời gian đánh giá</label>
-                                                            <p class="mb-1">${formattedDate ?? ''}</p>
+                                                            <p class="mb-1">${review.relative_time_description ?? ''}</p>
                                                         </div>
                                                     </div>
                                                     <label>Nội dung đánh giá</label>
-                                                    <p class="mb-1">${review.originalText?.text ?? ''}</p>
-                                                    <a href="${review.googleMapsUri ?? ''}" target="_blank"><span>Xem chi tiết</span></a>
+                                                    <p class="mb-1">${review?.text ?? ''}</p>
                                                 </div>
                                             </li>
                                         `;

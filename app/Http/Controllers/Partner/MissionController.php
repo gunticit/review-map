@@ -366,40 +366,44 @@ class MissionController extends Controller
     }
 
     public function resultGoogleMap(string $place_id){
-        $url = 'https://places.googleapis.com/v1/places/'. $place_id;
-        $fields = 'id,displayName,rating,reviews,userRatingCount,location';
+        $url = 'https://maps.googleapis.com/maps/api/place/details/json?';
         $apiKey = env('GOOGLE_MAP_API_KEY');
 
         // Gửi request GET
         $response = Http::get($url, [
-            'fields' => $fields,
-            'key'    => $apiKey
+            'key'    => $apiKey,
+            'place_id' => $place_id,
+            'language' => 'vi'
         ]);
-
+        
         // Kiểm tra phản hồi
         if ($response->successful()) {
             // Trả về dữ liệu JSON
             $data_map = $response->json();
-            if(!empty($data_map['reviews'])) {
-                $reviews = $data_map['reviews'];
+            $data_map_review = array();
+            if(!empty($data_map['result']['reviews'])) {
+                $reviews = $data_map['result']['reviews'];
                 usort($reviews, function ($a, $b) {
-                    $timeA = parseRelativePublishTime($a['relativePublishTimeDescription']);
-                    $timeB = parseRelativePublishTime($b['relativePublishTimeDescription']);
-                
-                    return $timeB->timestamp - $timeA->timestamp; // Sắp xếp giảm dần
+                    $timeA = $a['time'];
+                    $timeB = $b['time'];
+                    return $timeB - $timeA; // Sắp xếp giảm dần
                 });
                 $latestReviews = array_slice($reviews, 0, 5);
                 foreach ($latestReviews as $key => $value) {
-                    $data_map['reviews'][] = array(
+                    $data_map_review['reviews'][] = array(
                         'rating' => $value['rating'],
                         'text' => $value['text'],
-                        'googleMapsUri' => $value['googleMapsUri']
+                        'author_url' => $value['author_url'],
+                        'author_name' => $value['author_name'],
+                        'publishTime' => $value['time'],
+                        'profile_photo_url' => $value['profile_photo_url'],
+                        'relative_time_description' => $value['relative_time_description']
                     );
                 }
             }
             return response()->json([
                 'title' => 'Review api google map',
-                'data' => $data_map,
+                'data' => $data_map_review,
                 'status' => 1
             ]);
         } else {
