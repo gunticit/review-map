@@ -159,6 +159,19 @@ class MissionController extends Controller
                         'longitude' => $project->longitude,
                         'image_id' => $image->id ?? null
                     ]);
+
+                    $history = [
+                        [
+                            'content' => json_encode([
+                                'title' => 'Khởi tạo nhiệm vụ thành công!',
+                                'content' => 'Khởi tạo nhiệm vụ dự án '.$project->name.' thành công!',
+                                'status' => 1, 
+                                'user_id' => Auth::user()->id
+                            ]),
+                            'user_id' => Auth::user()->id
+                        ]
+                    ];
+                    $this->updateHistory($history);
                     
                     Comment::where('id', $comment->id)->update(['is_used' => 1]);
                     if(!empty($image->id)){
@@ -296,6 +309,19 @@ class MissionController extends Controller
                     'temporary_addition' => (int)$wallet->temporary_addition + (int)$price_plus
                 ]);
                 $data = $this->walletService->update($wallet_request, $user_id);
+
+                $history = [
+                    [
+                        'content' => json_encode([
+                            'title' => 'Hoàn thành nhiệm vụ!',
+                            'content' => 'Đã thực hiện nhiệm vụ dự án thành công!',
+                            'status' => 1, 
+                            'user_id' => Auth::user()->id
+                        ]),
+                        'user_id' => Auth::user()->id
+                    ]
+                ];
+                $this->updateHistory($history);
             DB::commit();
             return json_encode([
                 'status' => 'success',
@@ -319,6 +345,7 @@ class MissionController extends Controller
     public function createMissionAjax(Request $request){
             // Check xem user có đang làm mission nào không status = 2 và thuộc dự án
             $mission = Mission::where('user_id', $request->user_id)->where('status', 2)->where('project_id', $request->project_id)->first();
+            Log::debug('mission: ' . $mission);
             if(empty($mission)){
                 $comment = $this->getCommentsNotInMissions($request);
                 // Tạo nhiệm vụ
@@ -328,6 +355,19 @@ class MissionController extends Controller
                     'comment_id' => $comment->id,
                     'status' => 2 // Đang thực hiện
                 ]);
+
+                $history = [
+                    [
+                        'content' => json_encode([
+                            'title' => 'Khởi tạo nhiệm vụ thành công!',
+                            'content' => 'Khởi tạo nhiệm vụ thành công!',
+                            'status' => 1, 
+                            'user_id' => Auth::user()->id
+                        ]),
+                        'user_id' => Auth::user()->id
+                    ]
+                ];
+                $this->updateHistory($history);
                 // Cập nhật lại cái trạng thái is_used
                 Comment::where('id', $comment->id)->update(['is_used' => 1]);
             }
@@ -608,5 +648,18 @@ class MissionController extends Controller
         }
 
         return $kilometer_setting;
+    }
+
+
+    public function updateHistory($histories = array()){
+        if(!empty($histories)){
+            $histories = array_map(function($history){
+                $history['created_by'] = Auth::user()->id;
+                $history['created_at'] = date('Y-m-d H:i:s');
+                $history['updated_at'] = date('Y-m-d H:i:s');
+                return $history;
+            }, $histories);
+            $this->historyService->insert($histories);
+        }
     }
 }
