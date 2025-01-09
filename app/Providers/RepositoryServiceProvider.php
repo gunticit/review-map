@@ -35,6 +35,8 @@ use App\Repositories\Company\CompanyRepository;
 use App\Repositories\Company\CompanyRepositoryInterface;
 use App\Repositories\ExpenditureStatistic\ExpenditureStatisticRepository;
 use App\Repositories\ExpenditureStatistic\ExpenditureStatisticRepositoryInterface;
+use App\Repositories\Guarantee\GuaranteeSupportRepository;
+use App\Repositories\Guarantee\GuaranteeSupportRepositoryInterface;
 use App\Repositories\Mission\MissionRepository;
 use App\Repositories\Mission\MissionRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
@@ -92,6 +94,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CensorshipHistoryRepositoryInterface::class, CensorshipHistoryRepository::class);
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
         $this->app->bind(CartRepositoryInterface::class, CartRepository::class);
+        $this->app->bind(GuaranteeSupportRepositoryInterface::class, GuaranteeSupportRepository::class);
     }
 
     /**

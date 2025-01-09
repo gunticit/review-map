@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Services;
+
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\Support\guaranteeSupportRepositoryInterface;
+use App\Http\Resources\SupportResource;
+use App\Models\Support;
+use App\Repositories\Guarantee\GuaranteeSupportRepositoryInterface as GuaranteeGuaranteeSupportRepositoryInterface;
+use Illuminate\Validation\ValidationException;
+
+class GuaranteeSupportService {
+    protected $guaranteeSupportRepository;
+
+    public function __construct(GuaranteeGuaranteeSupportRepositoryInterface $guaranteeSupportRepository)
+    {
+        $this->guaranteeSupportRepository = $guaranteeSupportRepository;
+    }
+
+    /**
+     * Authenticates the project with the given credentials.
+     *
+     * @param array $credentials The project's login credentials.
+     * @return mixed|null The authenticated project if successful, null otherwise.
+     * @throws ValidationException
+     */
+
+     public function list($request){
+        $supports = $this->guaranteeSupportRepository->list($request);
+        $data = SupportResource::collection($supports)->resource;
+        return $data;
+    }
+
+    public function listCreateByUser($request){
+        $request = $request->merge(['user_id' => Auth::user()->id]);
+        $supports = $this->guaranteeSupportRepository->listCreateByUser($request);
+        $data = SupportResource::collection($supports)->resource;
+        return $data;
+    }
+
+    public function create($request){
+        try{
+            $data = $this->filterData($request);
+            $file_path = $this->uploadImage($request);
+            $data['filepath'] = implode('|', $file_path);
+            $data['status'] = Support::INCOMPLETE_SUPPORT; // Đang xử lý
+            $data['support_code'] = Support::generateSupportCode();
+            $data['send_id'] = Auth::user()->id;
+            $data = $this->guaranteeSupportRepository->create($data);
+            return $data;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function show($id){
+        $data = $this->guaranteeSupportRepository->find($id);
+        return $data;
+    }
+
+    public function reply($id, $request){
+        $data = $this->guaranteeSupportRepository->reply($id);
+        return $data;
+    }
+
+    public function update($request, $id){
+        $data = $this->filterData($request);
+        $data = $this->guaranteeSupportRepository->update($data, $id);
+        return $data; 
+    }
+
+    public function uploadImage($request){
+        $data = array();
+        $project_id = $request->project_id ?? 'undefined'; 
+        if ($request->hasFile('files')) {
+            $folder = 'uploads' . '/supports/' . date('Y-m') . '/' . date('d') . '/' . $project_id;
+            foreach ($request->file('files') as $image) {
+                $path = $image->store($folder, 'public');
+                $data[] = $path;
+            }
+        }
+        return $data;
+    }
+
+    private function filterData($request): array{
+        $key_able = array('title', 'department_id', 'project_id', 'content', 'status');
+        $data = array();
+        foreach ($key_able as $key) {
+            if(!empty($request[$key])){
+                $data[$key] = $request[$key];
+            }
+        }
+        return $data;
+    }
+}

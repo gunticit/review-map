@@ -184,12 +184,33 @@ class ProjectController extends Controller
         }
     }
 
-    public function edit($id){
+    public function edit($id, Request $request){
         $data = $this->projectService->show($id);
+        $project_comments = $this->projectService->findWithComments($id, $request);
+        if($project_comments->status !== 5){
+            return redirect()->route('project.list');
+        }
+        if($project_comments && $project_comments->comments && !empty($project_comments->comments)){
+            $comments = $project_comments->comments;
+            $perPage = 15;
+            $currentPage = isset($request->page) ? $request->page  : LengthAwarePaginator::resolveCurrentPage();
+            $currentComments = $comments->slice(($currentPage - 1) * $perPage, $perPage)->values();
+            $paginatedComments = new LengthAwarePaginator(
+                $currentComments,
+                $comments->count(),
+                $perPage,
+                $currentPage,
+                ['path' => LengthAwarePaginator::resolveCurrentPath()]
+            );
+        }
+        $project_images = $this->projectImageService->findImageByProject($id);
         $setting_price_slow = Helper::getSetting('setting_price_slow') ?? 0;
         return view('pages.customer.projects.edit',[
             'project' => $data,
-            'setting_price_slow' => $setting_price_slow
+            'setting_price_slow' => $setting_price_slow,
+            'paginatedComments' => $paginatedComments,
+            'project_info' => $project_comments,
+            'project_images' => $project_images
         ]);
     }
 

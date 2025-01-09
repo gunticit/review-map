@@ -202,6 +202,9 @@
         border: 1px solid #f00;
         background: #f1f1f1;
     }
+    .list-table-so-du{
+        font-weight: bold;
+    }
     @keyframes showBtnVideo{
         from{
             opacity: 0;
@@ -336,7 +339,7 @@
                             @enderror
                         </div>
                         <!-- Form Group (Img)-->
-                        <div class="inputImg"><!-- class: active -->
+                        <div class="inputImg mb-4"><!-- class: active -->
                             <label class="d-block" for="inputImg">Hình ảnh
                             </label>
                             <div class="form-check form-check-inline">
@@ -385,13 +388,62 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="mb-4">
+                            <h3>Bộ câu hỏi</h3>
+                            <div class="group-table-list" id="scroll-div">
+                                <table class="table list-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="list-table-stt" scope="col">STT</th>
+                                            <th class="list-table-time" scope="col">Mã đơn</th>
+                                            <th class="list-table-so-tien" style="min-width: 250px" scope="col">Nội dung đánh giá</th>
+                                            <th class="list-table-content-3" scope="col">Rải chậm</th>
+                                            <th class="list-table-so-du" scope="col">Hình ảnh</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(!empty($paginatedComments))
+                                            @foreach($paginatedComments as $key => $project)
+                                                <tr>
+                                                    <td class="list-table-stt" scope="col">{{ ($paginatedComments->currentPage() - 1) * $paginatedComments->perPage() + $key + 1 }}<input type="hidden" class="comment-id" value="{{ $project->id }}"></td>
+                                                    <td class="list-table-time" scope="col">RO-{{ $project->id }}</td>
+                                                    <td class="list-table-content" scope="col">
+                                                        <div class="content-comment-{{ $project->id }}">{{ $project->comment ?? '' }}
+                                                            {{-- <button type="button" class="btn btn-default render-comment-again p-0 bg-white ms-2">
+                                                                <span class="material-symbols-outlined">
+                                                                    border_color
+                                                                </span>
+                                                            </button> --}}
+                                                        </div> 
+                                                        <input type="text" class="text-comment d-none ip-comment-id-{{ $project->id }}" value="{{ $project->comment ?? '' }}">
+                                                    </td>
+                                                    <td class="list-table-content-3 text-center" scope="col">
+                                                        {{ $project_info->is_slow ? ($project_info->point_slow == 0 ? 'Mặc định' : $project_info->point_slow) : 0 }}
+                                                    </td>
+                                                    <td class="list-table-content-3 text-center" scope="col">
+                                                        @if($project_info->has_image)
+                                                            <img width="60" src="{!! !empty($project_images[$key]['image_url'])?asset('storage/'.$project_images[$key]['image_url']) : asset('assets/img/no-image.png') !!}" alt="no-data">
+                                                        @else
+                                                            Không
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="list-table-footer d-flex justify-content-between align-items-center">
+                                {{ $paginatedComments->links('vendor.pagination.custom') }}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- cot 2 -->
                 <div class="col-xl-4 col-md-12 col-12 ">
                     <div class="col-inner col-guide">
                         <div id="info-map-reviews">
-                            <h3>{{ $project->name }}</h3>
+                            {{-- <h3>{{ $project->name }}</h3>
                             <div class="list-star">
                                 <span>{{ $project->rating_google }}</span>
                                 <p>
@@ -404,7 +456,7 @@
                                 {{ $project->total_rating_google }}
                             </div>
                             <p>{{ $project->address_google }}</p>
-                            <p>{{ $project->telephone_google }}</p>
+                            <p>{{ $project->telephone_google }}</p> --}}
                             <div class="rating-row">
                                 <h4>Đánh giá: <span id="avg-rating">{{ $project->rating_google }}</span></h4>
                                 <span>{{ $project->total_rating_google }}</span>
@@ -701,6 +753,32 @@
                     $('#form-create-project').submit();
                 }
             }); 
+        });
+        $(document).ready(function(){
+            const $scrollContainer = $('#scroll-div');
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            $scrollContainer.on('mousedown', function(e){
+                this.style.cursor = 'grabbing';
+                isDown = true;
+                $scrollContainer.addClass('active');
+                startX = e.pageX - $scrollContainer.offset().left;
+                scrollLeft = $scrollContainer.scrollLeft();
+            });
+            $scrollContainer.on('mouseleave mouseup', function() {
+                this.style.cursor = 'grab';
+                isDown = false;
+                $scrollContainer.removeClass('active');
+            });
+
+            $scrollContainer.on('mousemove', function(e) {
+            if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - $scrollContainer.offset().left;
+                const walk = (x - startX) * 2;
+                $scrollContainer.scrollLeft(scrollLeft - walk);
+            });
         });
     </script>
     <script>

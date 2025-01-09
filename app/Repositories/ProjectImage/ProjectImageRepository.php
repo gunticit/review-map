@@ -30,7 +30,7 @@ class  ProjectImageRepository extends BaseRepository implements ProjectImageRepo
     public function findImageByProject($project_id){
         $query = $this->model->query();
         $query = $query->where('project_id', $project_id);
-        $query = $query->first();
+        $query = $query->get();
         return $query;
     }
     public function countImages($project_id){

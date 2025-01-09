@@ -4,17 +4,23 @@ namespace App\Http\Controllers\Partner;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\CartService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    protected $productService;
-    public function __construct(ProductService $productService)
+    protected $productService, $cartService;
+    public function __construct(
+        ProductService $productService,
+        CartService $cartService
+    )
     {
         $this->productService = $productService;
+        $this->cartService = $cartService;
     }
     /**
      * Display a listing of the resource.
@@ -172,7 +178,10 @@ class ProductController extends Controller
         ]);
     }
 
-    public function checkoutPage(){
-        return view('pages.partner.checkout.index');
+    public function checkoutPage(Request $request){
+        $data = array();
+        $data['user_info'] = auth()->user();
+        $data['cart_info'] = $this->cartService->find($request);
+        return view('pages.partner.checkout.index', $data);
     }
 }

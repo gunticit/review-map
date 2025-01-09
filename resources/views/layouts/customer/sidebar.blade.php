@@ -20,6 +20,11 @@
     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavNhiemvuMenu">
         <a class="nav-link {!! request()->routeIs('project.create') ? 'active' : '' !!}" href="{{ route('project.create') }}"><?= __('menu.create_project') ?></a>
         <a class="nav-link {!! request()->routeIs('project.list') ? 'active' : '' !!}" href="{{ route('project.list') }}"><?= __('menu.list_project') ?></a>
+        <a class="nav-link" href="{{ route('partner.support') }}/">
+            <div class="nav-link-icon">
+                Yêu cầu bảo hành
+            </div>
+        </a>
     </nav>
 </div>
 <a class="nav-link {!! request()->routeIs('wallet') ? 'active' : '' !!}" href="{{ route('wallet') }}">

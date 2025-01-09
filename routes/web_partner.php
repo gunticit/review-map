@@ -32,7 +32,6 @@ Route::group([
     Route::delete('/cart/delete-item',  [CartController::class, 'deleteItem'])->name('cart.delete.item');
     Route::post('/cart/apply-voucher',  [CartController::class, 'applyVoucher'])->name('cart.apply.voucher');
     Route::post('ajax-remove', [CartController::class, 'ajaxRemove'])->name('ajax.cart.remove');
-    Route::post('/order', [OrderController::class, 'store']);
 
     Route::post('/create-mission-ajax', [MissionController::class, 'createMissionAjax'])->name('create.mission.ajax');
     Route::get('/mission/confirm/{id}', [MissionController::class, 'missionConfirm'])->name('mission.confirm');
@@ -41,6 +40,7 @@ Route::group([
     Route::get('/waiting-mission', [MissionController::class, 'waitingMission'])->name('wating.mission');
 
     Route::post('/ajax-cart-add', [CartController::class, 'ajaxStore'])->name('ajax.cart.add');
+    Route::post('/partner-checkout-store', [OrderController::class, 'store'])->name('partner.checkout.store');
 
     //Support
     Route::get('/support', [PartnerSupportController::class, 'index'])->name('partner.support');

@@ -112,7 +112,7 @@
                         <span id="cart-total-formatted" val-html="{{ $cart_info['total_price'] }}">{{ formatCurrency($cart_info['total_price']) }}</span>
                     </div>
                     <div class="btn-checkout">
-                        <button class="btn btn-primary" onclick="window.location.href = '{{ route('checkout.page') }}'">Thanh toán</button>
+                        <button class="btn btn-primary" onclick="window.location.href = '{{ route('checkout.page', ['cart_id' => $cart_info['cart_id']]) }}'">Thanh toán</button>
                     </div>
                 </div>
             @else

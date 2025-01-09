@@ -48,6 +48,7 @@
                                 <th>Số điện thoại</th>
                                 <th class="list-table-creater" scope="col">Địa chỉ</th>
                                 <th>Tổng cộng</th>
+                                <th>Đối tác</th>
                                 <th>
                                     Số điện thoại đặt
                                 </th>
@@ -75,6 +76,9 @@
                                     </td>
                                     <td class="list-table-progree" scope="col">
                                         {{ $order['status'] }}
+                                    </td>
+                                    <td class="list-table-time" scope="col">
+                                        {{ $order['telephone'] }}
                                     </td>
                                     <td class="list-table-time" scope="col">
                                         {{ $order['telephone'] }}

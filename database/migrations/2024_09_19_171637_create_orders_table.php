@@ -20,6 +20,8 @@ return new class extends Migration
             $table->enum('payment_method', ['credit_card', 'bank_transfer', 'cash_on_delivery']);
             $table->string('recipient_name')->nullable();
             $table->string('recipient_phone')->nullable();
+            $table->string('recipient_email')->nullable();
+            $table->string('recipient_address')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

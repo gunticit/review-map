@@ -25,13 +25,35 @@ class CartService {
     }
 
     public function update($request){
-        $cart = $this->cartRepository->findByUserId($request->user_id);
+        if($request->user_id){
+            $cart = $this->cartRepository->findByUserId($request->user_id);
+        }elseif($request->cart_id){
+            $cart = $this->cartRepository->find($request->cart_id);
+        }
         $cart->products()->updateExistingPivot($request->product_id, ['quantity' => $request->quantity]);
     }
 
     public function find($request){
-        $cart = $this->cartRepository->findByUserId($request->user_id);
-        return $cart;
+        $data_cart = array();
+        if($request->user_id){
+            $cart = $this->cartRepository->findByUserId($request->user_id);
+        }elseif($request->cart_id){
+            $cart = $this->cartRepository->find($request->cart_id);
+        }
+        if(empty($cart)) return null;
+        $total = 0;
+        if(empty($cart->products)) $total = 0;
+        foreach($cart->products as $product){
+            $total += $product->price * $product->pivot->quantity;
+        }
+        $data_cart = array(
+            'id' => $cart->id,
+            'user_id' => $cart->user_id,
+            'products' => $cart->products,
+            'user' => $cart->user,
+            'total' => $total
+        );
+        return $data_cart;
     }
 
     public function findCartByUserIdAjax($request){

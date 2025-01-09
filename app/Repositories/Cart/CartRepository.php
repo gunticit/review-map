@@ -12,6 +12,14 @@ class CartRepository extends BaseRepository implements CartRepositoryInterface
     {
         $this->model = $cart;
     }
+    public function find($id){
+        $query = $this->model->query();
+        $query = $query->with(['products'=> function($query){
+            return $query->with(['images']);
+        },'user']);
+        $data = $query->where('id', $id)->first();
+        return $data;
+    }
     public function findByUserId($user_id){
         $query = $this->model->query();
         $query = $query->with(['products'=> function($query){

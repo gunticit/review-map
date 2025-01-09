@@ -5,6 +5,7 @@ use App\Http\Controllers\Customer\CustomerCheckoutController;
 use App\Http\Controllers\Customer\ProjectController;
 use App\Http\Controllers\Customer\SupportController;
 use App\Http\Controllers\Customer\VoucherController as CustomerVoucherController;
+use App\Http\Controllers\GuaranteeSupportController;
 
 // Customer
 Route::group([
@@ -38,6 +39,8 @@ Route::group([
     Route::post('/check-apply-voucher', [CustomerVoucherController::class, 'checkAjaxApplyVoucher'])->name('check.apply.voucher');
 
     Route::delete('/project-delete', [ProjectController::class, 'projectDelete'])->name('project.delete');
+
+    Route::resource('/support-guarantee', GuaranteeSupportController::class);
 
     //Support
     Route::get('/support', [SupportController::class, 'index'])->name('customer.support');
