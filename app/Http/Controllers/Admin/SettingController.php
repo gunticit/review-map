@@ -63,7 +63,13 @@ class SettingController extends Controller
             'system' => array(
                 'approve_project' => $request->approve_project ?? null, // Duyệt dự án
                 'rating_image' => $request->rating_image ?? null, // Đánh giá hình ảnh
-                'time_guarantee' => $request->time_guarantee ? date('H:i', strtotime($request->time_guarantee)) : null, // Thời gian bảo hành
+                'time_guarantee' => $request->time_guarantee ?? null, // Thời gian bảo hành
+                'time_guarantee_type' => $request->time_guarantee_type ?? null,
+                'time_limit_otp' => $request->time_limit_otp ?? null, // Thời gian otp
+                'time_limit_otp_type' => $request->time_limit_otp_type ?? null,
+                'setting_term_content' => $request->setting_term_content ? html_entity_decode($request->setting_term_content) : null,
+                'setting_contact_content' => $request->setting_contact_content ? html_entity_decode($request->setting_contact_content) : null,
+                'setting_intro_content' => $request->setting_intro_content ? html_entity_decode($request->setting_intro_content) : null
             ),
             'service' => array(
                 'setting_percent_slow' => $request->setting_percent_slow ?? null,

@@ -59,7 +59,7 @@
                     <form method="POST" action="{{ route('auth.registerUser') }}" id="registerForm">
                         {{ csrf_field() }}
                         <div class="input-group mb-3 d-block">
-                            <input id="ip-fullname" placeholder="{{ __('auth.full_name') }}" required type="text" class="form-control w-100 @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                            <input id="ip-fullname" placeholder="{{ __('auth.full_name') }}*" required type="text" class="form-control w-100 @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                             @error('name')
                                 <span class="invalid-feedback text-start" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -67,7 +67,7 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <input type="tel" class="form-control w-100" id="ip-telephone" name="telephone" placeholder="{{ __('auth.telephone') }}" required />
+                            <input type="tel" class="form-control w-100 @error('telephone') is-invalid @enderror" id="ip-telephone" name="telephone" value="{{ old('telephone') }}" placeholder="{{ __('auth.telephone') }}*" required />
                             @error('telephone')
                                 <span class="invalid-feedback text-start" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -75,7 +75,7 @@
                             @enderror
                         </div>
                         <div class="input-group mb-3 d-block">
-                            <input id="ip-email" placeholder="{{ __('auth.email') }}" type="email" class="form-control w-100 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                            <input id="ip-email" placeholder="{{ __('auth.email') }}*" type="email" class="form-control w-100 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
                             @error('email')
                                 <span class="invalid-feedback text-start" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -83,7 +83,7 @@
                             @enderror
                         </div>
                         <div class="input-group mb-3 d-block">
-                            <input id="ip-password" type="password" placeholder="{{ __('auth.password') }}" class="form-control w-100 @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                            <input id="ip-password" type="password" placeholder="{{ __('auth.password') }}*" class="form-control w-100 @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
                             @error('password')
                                 <span class="invalid-feedback text-start" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -91,7 +91,7 @@
                             @enderror
                         </div>
                         <div class="input-group mb-3 d-block">
-                            <input id="ip-password-confirm" type="password" placeholder="{{ __('auth.re-password') }}" class="form-control w-100" name="password_confirmation" required autocomplete="new-password">
+                            <input id="ip-password-confirm" type="password" placeholder="{{ __('auth.re-password') }}*" class="form-control w-100" name="password_confirm" required autocomplete="new-password">
                         </div>
                         <div class="group-policy text-start">
                             <div class="d-flex align-items-center justify-content-between">
@@ -172,27 +172,27 @@
                     <div class="tab">
                         <form id="emailForm" action="{{ route('send.otp') }}" method="POST">
                                 {{ csrf_field() }}
-                                <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
-                        <h2>Xác thực danh tính</h2>
-                        <p>Vui lòng chọn phương thức nhận liên kết thay đổi mật khẩu.</p>
-                        @if(session()->has('telephone'))
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="regFormRadio" id="regFormSms" disabled>
-                            <label class="form-check-label" for="regFormSms"> 
-                                Nhận mã bằng (SMS) tại: 
-                                <span id="smsNumber"></span>
-                            </label>
-                        </div>
-                        @endif
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="regFormRadio" id="regFormEmail" checked>
-                            <label class="form-check-label" for="regFormEmail"> 
-                                Nhận mã qua email tại: 
-                                <span id="emailAddress"></span>
-                                <input type="hidden" class="form-control" id="emailOtp" name="email" placeholder="Email" value="" required />
-                            </label>
-                        </div>
-                    </form>
+                            <div class="error-message text-danger small d-none" style="font-style: italic;"></div>
+                            <h2>Xác thực danh tính</h2>
+                            <p>Vui lòng chọn phương thức nhận liên kết thay đổi mật khẩu.</p>
+                            @if(session()->has('telephone'))
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="regFormRadio" id="regFormSms" disabled>
+                                <label class="form-check-label" for="regFormSms"> 
+                                    Nhận mã bằng (SMS) tại: 
+                                    <span id="smsNumber"></span>
+                                </label>
+                            </div>
+                            @endif
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="regFormRadio" id="regFormEmail" checked>
+                                <label class="form-check-label" for="regFormEmail"> 
+                                    Nhận mã qua email tại: 
+                                    <span id="emailAddress"></span>
+                                    <input type="hidden" class="form-control" id="emailOtp" name="email" placeholder="Email" value="" required />
+                                </label>
+                            </div>
+                        </form>
                     </div>
                     <!-- Bước 2: Nhập mã OTP -->
                     <div class="tab" id="otpTab">

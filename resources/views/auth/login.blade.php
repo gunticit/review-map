@@ -50,7 +50,19 @@
             <form method="POST" action="{{ route('auth.authenticate') }}">
                 {{ csrf_field() }}
                 <div class="input-group mb-3">
-                    <input id="username" type="text" placeholder="{{ __('auth.username') }}" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                    <input 
+                        id="username" 
+                        type="text" 
+                        placeholder="{{ __('auth.username') }}" 
+                        class="form-control @error('username') is-invalid @enderror" 
+                        name="username" 
+                        value="{{ old('username') }}" 
+                        required 
+                        autocomplete="username" 
+                        autofocus
+                        oninvalid="this.setCustomValidity('Vui lòng nhập email hoặc số tài khoản của bạn')"
+                        oninput="this.setCustomValidity('')"
+                    >
 
                     @error('username')
                         <span class="invalid-feedback" role="alert">
@@ -59,7 +71,17 @@
                     @enderror
                 </div>
                 <div class="input-group mb-3">
-                    <input id="new_password" placeholder="{{ __('auth.password') }}" type="password" class="form-control @error('password') password is-invalid @enderror" name="password" required autocomplete="current-password">
+                    <input 
+                        id="new_password" 
+                        placeholder="{{ __('auth.password') }}" 
+                        type="password" 
+                        class="form-control @error('password') password is-invalid @enderror" 
+                        name="password" 
+                        required 
+                        autocomplete="current-password"
+                        oninvalid="this.setCustomValidity('Vui lòng nhập mật khẩu của bạn')"
+                        oninput="this.setCustomValidity('')"
+                    >
                     @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

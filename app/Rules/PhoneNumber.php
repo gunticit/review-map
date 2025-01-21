@@ -16,7 +16,7 @@ class PhoneNumber implements ValidationRule
     {
         $phoneNumberPattern = '%^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$%i';
         if (!preg_match($phoneNumberPattern, $value) || strlen($value) < 10) {
-            $fail('The :attribute must be a valid phone number.');
+            $fail(trans('validation.phone', ['attribute' => $attribute]));
         }
     }
 }

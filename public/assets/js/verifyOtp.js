@@ -14,10 +14,11 @@ $(document).ready(function () {
             method: 'POST', // Phương thức gửi dữ liệu
             data: form.serialize(), // Chuỗi hóa dữ liệu từ form
             success: function (response) {
+                console.log('response', response);
                 if (response.success) {
                     successCallback(response); // Gọi lại hàm callback nếu thành công
                 } else {
-                    showAlert(response.message || 'Có lỗi xảy ra!'); // Hiển thị thông báo lỗi
+                    showAlert('error',response.message || 'Có lỗi xảy ra!'); // Hiển thị thông báo lỗi
                 }
             },
             error: function (xhr) {
@@ -74,13 +75,11 @@ $(document).ready(function () {
     // Xử lý sự kiện khi nút "Tiếp tục" được click
     $('#nextBtn').click(function () {
         let currentTabElement = $(".tab").eq(currentTab); // Lấy tab hiện tại
-
         // Kiểm tra xem form hiện tại có hợp lệ không
         if (currentTabElement.find('input').get(0).checkValidity()) {
             $('#loadingMessage').show(); // Hiển thị thông báo/loading
             $('#buttonText').hide(); // Ẩn văn bản "Tiếp tục"
             $('#nextBtn').prop('disabled', true); // Vô hiệu hóa nút để ngăn nhiều lần click
-
             // Kiểm tra tab hiện tại và gửi dữ liệu tương ứng
             if (currentTab === 0) {
                 sendAjaxRequest($('#emailForm'), function (response) {

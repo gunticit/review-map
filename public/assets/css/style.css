@@ -6034,6 +6034,10 @@ body .btn.btn-info > span{
     animation: spin 1s linear infinite; /* Animation effect */
     margin: 0 auto; /* Centering */
 }
+.note-toolbar{
+  position: relative;
+  z-index: 3;
+}
 
 @keyframes spin {
     0% { transform: rotate(0deg); }

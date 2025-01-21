@@ -48,7 +48,7 @@
                                         </span>
                                     </div>
                                     <div class="input-group mb-3">
-                                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                        <input id="password-confirm" type="password" class="form-control" name="password_confirm" required autocomplete="new-password">
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="form-check">

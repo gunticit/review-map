@@ -138,7 +138,7 @@ class AuthService {
             throw new Exception("Email không tồn tại trong hệ thống");
         }
         if (!empty($user->otp_expires_at) && now()->lessThanOrEqualTo($user->otp_expires_at)) {
-            throw new Exception("Hãy thử lại sau vài phút");
+            throw new Exception("Mã Otp đã được gửi qua mail, bạn có thể sử dụng lại hoặc chờ 5 phút để gửi yêu cầu lại mã.");
         }
         return $this->userRepository->generateOtp($user);
     }

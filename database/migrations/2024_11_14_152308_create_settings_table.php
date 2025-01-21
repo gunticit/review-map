@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code_setting')->nullable();
             $table->string('key_setting')->nullable();
-            $table->string('value_setting')->nullable();
+            $table->longText('value_setting')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->integer('created_by')->nullable();

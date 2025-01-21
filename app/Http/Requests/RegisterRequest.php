@@ -44,14 +44,9 @@ class RegisterRequest extends FormRequest
             'password' => [
                 'required',
                 'string',
-                'confirmed',
                 Password::min(6)
-                    // ->mixedCase()
-                    ->letters() 
-                    // ->numbers() 
-                    ->symbols() 
-                    // ->uncompromised() 
-            ]
+            ],
+            'password_confirm' => 'required|same:password',
         ];
     }
 
@@ -67,11 +62,8 @@ class RegisterRequest extends FormRequest
             'telephone.phone' => __('Vui lòng nhập đúng điện thoại'),
             'password.required' => __('Mật khẩu là bắt buộc.'),
             'password.min' => __('Mật khẩu phải ít nhất :min ký tự.'),
-            // 'password.mixedCase' => 'Mật khẩu phải bao gồm cả chữ hoa và chữ thường.',
-            'password.letters' => __('Mật khẩu phải chứa ít nhất một chữ cái.'),
-            // 'password.numbers' => 'Mật khẩu phải chứa ít nhất một số.',
-            'password.symbols' => __('Mật khẩu phải chứa ít nhất một ký tự đặc biệt.'),
-            // 'password.uncompromised' => 'Mật khẩu này đã bị rò rỉ. Vui lòng chọn mật khẩu khác.'
+            'password_confirm.required' => __('Mật khẩu xác nhận là bắt buộc.'),
+            'password_confirm.same' => __('Mật khẩu xác nhận không khớp'),
         ];
     }
 }

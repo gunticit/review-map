@@ -307,3 +307,24 @@
             return $now;
         }
     }
+
+    if(!function_exists('convertSecondsToTime')) {
+        function convertSecondsToTime($seconds) {
+            $hours = floor($seconds / 3600);
+            $minutes = floor(($seconds % 3600) / 60);
+            $seconds = $seconds % 60;
+        
+            return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        }
+    }
+
+    if(!function_exists('convertTimeToSeconds')) {
+        function convertTimeToSeconds($time) {
+            $parts = explode(':', $time);
+            $hours = isset($parts[0]) ? (int)$parts[0] : 0;
+            $minutes = isset($parts[1]) ? (int)$parts[1] : 0;
+            $seconds = isset($parts[2]) ? (int)$parts[2] : 0;
+        
+            return $hours * 3600 + $minutes * 60 + $seconds;
+        }
+    }
