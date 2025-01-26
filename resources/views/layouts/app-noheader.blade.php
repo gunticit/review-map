@@ -5,9 +5,9 @@
         display: flex;
         justify-content: center;
     }
-    #form-change-password .input-group-text.togglePassword{
-        z-index: 1;
-    }
+    /* #form-change-password .input-group-text.togglePassword{
+        z-index: 1; // Lỗi mắt xem pw tại đổi mật khẩu
+    } */
     div#form-change-password.loading:before {
         pointer-events: all;
         content: "";

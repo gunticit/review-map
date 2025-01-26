@@ -30,10 +30,10 @@ export const RegisterForm = {
         e.stopPropagation();
         e.preventDefault();
         this.$groupPolicy.find('.text-danger').remove();
-
         try {
             let checkValidate = this.validateRegister();
             if (checkValidate) {
+                document.querySelector('#reset-otp').setAttribute('val-html', this.$email);
                 if (this.$checkPolicy.prop('checked')) {
                     // Nộp form nếu đã có dữ liệu hợp lệ
                     this.$registerForm.submit();

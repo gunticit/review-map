@@ -8,7 +8,7 @@
             <!-- cot 1 -->
             <div class="col-xl-6 col-md-12 col-12 mb-4 mb-xl-0">
                 <form>
-                    <div class="card mb-4">
+                    <div class="card mb-4" id="edit-info-user">
                         <div class="card-header d-xl-flex justify-content-between align-items-center">
                             <h2 class="card-title">Thông tin cá nhân</h2>
                             <button class="btn btn-primary" id="btn-edit-info" type="button">Chỉnh sửa</button>
@@ -19,8 +19,8 @@
                                 <div class="col-md-4">
                                     <label for="inputUsername">Ảnh đại diện</label>
                                     <div class="position-relative">
-                                        <img style="width: 100%" src="{{ $profile['avatar'] ?? asset('./assets/img/acount-img.svg') }}" id="avatar" onclick="document.getElementById('inputAvatar').click()" alt="account img">
-                                        <a class="btn btn-primary position-absolute bottom-0 btn-edit-profile" href="javascript:void(0);" role="button">
+                                        <img style="width: 100%" src="{{ $profile['avatar'] ?? asset('./assets/img/acount-img.svg') }}" id="avatar" alt="account img">
+                                        <a class="btn btn-primary position-absolute bottom-0 btn-edit-profile" href="javascript:void(0);" onclick="document.getElementById('inputAvatar').click()" role="button">
                                             <span class="material-symbols-outlined">border_color</span>
                                         </a>
                                         <input type="file" name="avatar" class="d-none" id="inputAvatar">
@@ -54,6 +54,7 @@
                                             <option {!! $profile['country_code'] == 'vi'? 'selected': '' !!} value="vi">Việt Nam</option>
                                         </select>
                                     </div>
+                                    @if(Auth::user()->getRoleNames()->first() == 'admin')
                                     <div class="mb-4">
                                         <label for="inputcountry">Phòng ban <span class="required">*</span>
                                         </label>
@@ -66,6 +67,7 @@
                                             @endif
                                         </select>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -116,13 +118,22 @@
         e.preventDefault();
         const file = document.getElementById('inputAvatar').files[0];
         let formData = new FormData();
-        formData.append('_token', "{{ csrf_token() }}");
+        formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
         formData.append('avatar', file);
         formData.append('name', $('#inputUsername').val());
         formData.append('email', $('#inputEmailAddress').val());
         formData.append('telephone', $('#telephone').val());
         formData.append('country_code', $('#countryCode').val());
         formData.append('department_id', $('#department_id').val());
+        
+        if (file) {
+            const render = new FileReader();
+            render.readAsDataURL(file);
+            render.onload = function(event) {
+                $('#navbarDropdownUserImage img').attr('src', event.target.result);
+            };
+        }
+        
         $.ajax({
             url: '{{ route("profile.update") }}',
             method: 'POST',
@@ -131,20 +142,24 @@
             cache: false,
             data: formData,
             success: function(res) {
-                if(res.status){
+                if (res.status) {
                     $('#btn-edit-info').show();
                     $('#btn-save-info').hide();
+                    showAlert('success', res.message);
                     $('input.form-control').attr('disabled', true);
                     $('select.form-select').attr('disabled', true);
-                    showAlert('success',res.message);
-                }else{
-                    showAlert('error',res.message);
+                    $('#edit-info-user').removeClass('active');
+                } else {
+                    showAlert('error', res.message);
                 }
             },
-            error: function() {
+            error: function(err) {
+                console.error('An error occurred:', err);
+                showAlert('error', 'An unexpected error occurred. Please try again.');
             }
-        })
+        });
     });
+
     document.getElementById('inputAvatar').addEventListener('change', function() {
         const file = this.files[0];
         const reader = new FileReader();

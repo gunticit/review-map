@@ -291,6 +291,13 @@
                                     </div>
                                     <input name="setting_number_keyword" id="setting_number_keyword" min="5" value="{{ $setting['setting_number_keyword'] ?? 5 }}" class="form-control select-setting" type="number" />
                                 </div>
+                                <div class="d-flex flex-row justify-content-between gap-3 py-3">
+                                    <div class="content d-flex flex-column">
+                                        <span class="title">Giới hạn mô tả dự án</span>
+                                        <span class="notice">Số lượng ký tự của mô tả trong dự án sẽ bị giới hạn. Nếu không điền thị mặc định là 300.</span>
+                                    </div>
+                                    <input name="setting_number_keyword" id="setting_number_keyword" min="5" value="{{ $setting['setting_number_keyword'] ?? 5 }}" class="form-control select-setting" type="number" />
+                                </div>
                             </div>
                             </div>
                         </div>

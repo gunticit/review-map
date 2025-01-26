@@ -212,9 +212,12 @@
         right: 0;
         position: absolute;
         bottom: 0;
-        padding: 5px;
+        padding: 3px;
         z-index: 1;
         display: none;
+    }
+    #btn-generate-keyword > span{
+        font-size: 20px;
     }
     .group-tags{
         position: relative;
@@ -259,6 +262,19 @@
     }
     #btn-plus-rai-cham{
         right: 0;
+    }
+    #charCount {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #555;
+        text-align: right;
+    }
+
+    #charCount.error {
+        color: red;
+    }
+    #inputDescription.error{
+        border: 1px solid red;
     }
     @keyframes loader-keywords {
         20%{background-position:0%   0%, 50%  50%,100%  50%}
@@ -395,7 +411,10 @@
                         <div class="mb-4">
                             <label for="inputDescription">{{ __('project.description') }} <span style="margin-left: 5px" class="required">*</span>
                             </label>
-                            <textarea class="form-control" name="description" id="inputDescription" placeholder="{{ __('project.placeholder_description') }}"></textarea>
+                            <div class="textarea-container">
+                                <textarea class="form-control" name="description" id="inputDescription" placeholder="{{ __('project.placeholder_description') }}"></textarea>
+                                <div id="charCount">0/300 ký tự</div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-12">
@@ -451,8 +470,22 @@
                         </div>
                         <!-- Form Group (Tags)-->
                         <div class="mb-4 group-tags">
-                            <label for="Tagslist-table">{{ __('project.keyword') }} <span class="required">*</span>
+                            <label for="Tagslist-table" class="d-flex gap-2">
+                                <span class="material-symbols-outlined">
+                                    info
+                                </span> 
+                                 {{ __('project.keyword') }} 
+                                 <span class="required">*</span>
                             </label>
+                            
+                            <div class="mb-2 d-flex">
+                                <button type="button" id="btn-generate-keyword" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tạo mới bộ từ khóa">
+                                    <span class="material-symbols-outlined">
+                                        source_notes
+                                    </span>
+                                </button>
+                                <span>Tạo mới bộ từ khóa</span>
+                            </div>
                             <div class="Tagslist-wrap">
                                 <span>Vui vẻ</span>
                                 <span>Thân thiện</span>
@@ -466,13 +499,6 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                            <div style="position: relative">
-                                <button type="button" id="btn-generate-keyword" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tạo mới bộ từ khóa">
-                                    <span class="material-symbols-outlined">
-                                        source_notes
-                                    </span>
-                                </button>
-                            </div>
                         </div>
                         <!-- Form Group (Img)-->
                       <div class="inputImg">
@@ -970,5 +996,28 @@
                 width="100%" height="350px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>`);
             }
         });
+    </script>
+    <script>
+        // Đếm số ký tự
+        $(document).ready(function () {
+            const $textarea = $('#inputDescription');
+            const $charCount = $('#charCount');
+
+            $textarea.on('input', function () {
+                const textLength = $textarea.val().length;
+                $charCount.text(`${textLength}/300 ký tự`);
+
+                if (textLength > 300) {
+                    $textarea.addClass('error');
+                    $charCount.addClass('error');
+                    $('#btn-submit').attr('disabled', true);
+                } else {
+                    $textarea.removeClass('error');
+                    $charCount.removeClass('error');
+                    $('#btn-submit').attr('disabled', false);
+                }
+            });
+        });
+
     </script>
 @endsection

@@ -171,11 +171,7 @@
                 <img class="img-fluid" src="{!! !empty(auth()->user()->avatar) ? getAssetStorageLocal('avatars/'. auth()->user()->avatar) : asset('./assets/img/acount-img.svg') !!}" />
             </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
-                <a class="dropdown-item text-primary" href="javascript:void(0);">
-                    <div class="dropdown-item-icon">
-                        <span class="material-symbols-outlined">id_card</span>
-                    </div> {{ Auth::user()->name }}
-                </a>
+                <p class="mb-2 px-3">Xin chào <span class="fw-bolder">{{ Auth::user()->name }}</span>,</p>
                 <a class="dropdown-item" href="{{Auth::user()->getRoleNames()->first() === 'partner' ? route('profile.partner.edit') : route('profile.edit') }}">
                     <div class="dropdown-item-icon">
                         <span class="material-symbols-outlined">manage_accounts</span>

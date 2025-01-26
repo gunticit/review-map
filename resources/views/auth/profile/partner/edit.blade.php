@@ -35,7 +35,7 @@
             <!-- cot 1 -->
             <div class="col-xl-6 col-md-12 col-12 mb-4 mb-xl-0">
                 <form>
-                    <div class="card">
+                    <div class="card" id="edit-info-user">
                         <div class="card-header d-xl-flex justify-content-between align-items-center">
                             <h2 class="card-title">Thông tin cá nhân</h2>
                             <button class="btn btn-primary" id="btn-edit-info" type="button">Chỉnh sửa</button>
@@ -46,8 +46,8 @@
                                 <div class="col-md-4">
                                     <label for="inputUsername">Ảnh đại diện</label>
                                     <div class="position-relative">
-                                        <img src="{{ $profile['avatar'] ?? asset('./assets/img/acount-img.svg') }}" id="avatar" onclick="document.getElementById('inputAvatar').click()" alt="account img">
-                                        <a class="btn btn-primary position-absolute bottom-0 btn-edit-profile" href="#" role="button">
+                                        <img src="{{ $profile['avatar'] ?? asset('./assets/img/acount-img.svg') }}" id="avatar" alt="account img">
+                                        <a class="btn btn-primary position-absolute bottom-0 btn-edit-profile" onclick="document.getElementById('inputAvatar').click()" href="javascript:void(0);" role="button">
                                             <span class="material-symbols-outlined">border_color</span>
                                         </a>
                                         <input type="file" name="avatar" class="d-none" id="inputAvatar">
@@ -215,6 +215,13 @@
         formData.append('telephone', $('#telephone').val());
         formData.append('country_code', $('#countryCode').val());
         let telephone = $('#telephone').val();
+        if (file) {
+            const render = new FileReader();
+            render.readAsDataURL(file);
+            render.onload = function(event) {
+                $('#navbarDropdownUserImage img').attr('src', event.target.result);
+            };
+        }
         if(!telephone){
             showAlert('error','Vui lòng nhập số điện thoại');
             return false;
@@ -232,6 +239,7 @@
                     $('#btn-save-info').hide();
                     $('#btn-edit-info').show();
                     $('input, select').attr('disabled', 'disabled');
+                    $('#edit-info-user').removeClass('active')
                 }else{
                     showAlert('error',res.message);
                 }

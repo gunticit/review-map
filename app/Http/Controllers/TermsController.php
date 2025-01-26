@@ -32,8 +32,9 @@ class TermsController extends Controller
                 break;
         }
         $content = $this->settingService->findSettingByKey($key_setting);
+        $content_setting = isset($content->value_setting) ? html_entity_decode($content->value_setting) : '';
         return view('pages.terms',[
-            'content' => html_entity_decode($content->value_setting),
+            'content' => $content_setting,
             'heading_title' => $heading_title
         ]);
     }

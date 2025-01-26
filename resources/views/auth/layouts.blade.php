@@ -15,7 +15,7 @@
                             </div>
                             <div class="login-form text-center">
                                 <h1>{{ __('auth.register') }}</h1>
-                                <form method="POST" action="{{ route('register') }}">
+                                <form id="emailForm" method="POST" action="{{ route('register') }}">
                                     {{ csrf_field() }}
                                     <div class="input-group mb-3">
                                         <input id="FullName" placeholder="{{ __('auth.full_name') }}" required type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
@@ -53,7 +53,7 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                            <label class="form-check-label" for="exampleCheck1">{!! __('auth.terms_and_policy', ['url' => route('terms')]) !!} </label>
+                                            <label class="form-check-label" for="exampleCheck1">{!! __('auth.terms_and_policy', ['url' => route('terms', ['slug'=>'terms'])]) !!} </label>
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary">{{ __('auth.register') }}</button>

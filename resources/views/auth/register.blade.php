@@ -97,7 +97,7 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="check-policy">
-                                    <label class="form-check-label" for="check-policy">{!! __('auth.terms_and_policy', ['url' => route('terms')]) !!} </label>
+                                    <label class="form-check-label" for="check-policy">{!! __('auth.terms_and_policy', ['url' => route('terms', ['slug'=>'terms'])]) !!} </label>
                                 </div>
                             </div>
                         </div>
@@ -176,13 +176,13 @@
                             <h2>Xác thực danh tính</h2>
                             <p>Vui lòng chọn phương thức nhận liên kết thay đổi mật khẩu.</p>
                             @if(session()->has('telephone'))
-                            <div class="form-check mb-3">
+                            {{-- <div class="form-check mb-3">
                                 <input class="form-check-input" type="radio" name="regFormRadio" id="regFormSms" disabled>
                                 <label class="form-check-label" for="regFormSms"> 
                                     Nhận mã bằng (SMS) tại: 
                                     <span id="smsNumber"></span>
                                 </label>
-                            </div>
+                            </div> --}}
                             @endif
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="radio" name="regFormRadio" id="regFormEmail" checked>
@@ -219,6 +219,7 @@
                                 </div>
                             </div>
                             <div class="d-flex w-100 text-end justify-content-end re-send-otp">
+                                <div id="countdown">60</div>
                                 <a href="javascript:void(0)" id="reset-otp" onclick="handleOtp()">Lấy mã</a>
                             </div>
                         </form>
@@ -265,6 +266,32 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+      let countdownTime = 5;
+      const $countdownElement = $('#countdown');
+      const $otpLink = $('#reset-otp');
+      let interval;
+
+      function startCountdown() {
+        $otpLink.hide(); // Hide the OTP link initially
+        $countdownElement.text(countdownTime);
+
+        interval = setInterval(() => {
+          countdownTime--;
+          $countdownElement.text(countdownTime);
+
+          if (countdownTime <= 0) {
+            clearInterval(interval);
+            $countdownElement.hide();
+            $otpLink.show(); // Show OTP link when countdown ends
+          }
+        }, 1000);
+      }
+
+      startCountdown();
+    });
+</script>
 <x-login-by-google message="Bạn có chắc chắn muốn đăng nhập bằng Google với vai trò đối tác không?" />
 @endsection
 @section('js')
@@ -273,16 +300,16 @@
         document.addEventListener("DOMContentLoaded", function() {
             // Check if there are any session messages
             var email = "{{ session('email', '') }}";
-            var telephone = "{{ session('telephone', '') }}";
+            // var telephone = "{{ session('telephone', '') }}";
             // If either session exists, show the modal
             if (email || telephone) {
                 if (email) {
                     document.getElementById('emailAddress').textContent = email;
                     $('#emailOtp').val(email);
                 }
-                if (telephone) {
-                    document.getElementById('smsNumber').textContent = telephone;
-                }
+                // if (telephone) {
+                //     document.getElementById('smsNumber').textContent = telephone;
+                // }
                 var verifyModal = new bootstrap.Modal(document.getElementById('verifyModel'));
                 verifyModal.show();
             }
@@ -291,12 +318,12 @@
             let email_verify = '{!! !empty($email_verify) ? urldecode($email_verify) : '' !!}';
             if(email_verify != ''){
                 var verifyModal = new bootstrap.Modal(document.getElementById('verifyModel'));
+                verifyModal.show();
                 $('input[name=email]').val(email_verify);
                 $('#email-verify').text(email_verify);
                 $('#reset-otp').attr('val-html',email_verify);
                 $('#regForm .tab').hide();
                 $('#otpTab').show();
-                verifyModal.show();
             }
         });
         function handleOtp(){
@@ -315,6 +342,7 @@
                     var expiryDate = new Date();
                         expiryDate.setTime(expiryDate.getTime() + (5 * 60 * 1000));
                     document.cookie = "resendOtp=1; expires=" + expiryDate.toUTCString() + "; path=/; domain=" + domain + ";";
+                    startCountdown();
                 },
             });
         }

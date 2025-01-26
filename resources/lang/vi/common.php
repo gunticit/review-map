@@ -53,9 +53,9 @@
     ];
 
     $text_button = array(
-        'confirm' => 'Confirm',
-        'cancel' => 'Cancel',
-        'close' => 'Close'
+        'confirm' => 'Xác nhận',
+        'cancel' => 'Hủy bỏ',
+        'close' => 'Đóng'
     );
 
 
