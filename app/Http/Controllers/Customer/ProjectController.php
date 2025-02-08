@@ -70,7 +70,7 @@ class ProjectController extends Controller
         );
         $data['minSetting'] = Helper::getSetting('setting_min_image') ?? 10; // Mặc định 10%
         $data['maxSetting'] = Helper::getSetting('setting_max_image') ?? 10; // Mặc định 10%
-        $data['setting_percent_slow'] = Helper::getSetting('setting_percent_slow') ?? 0;
+        $data['setting_percent_slow'] = Helper::getSetting('setting_percent_slow') ?? 0;    
         $data['setting_price_slow'] = Helper::getSetting('setting_price_slow') ?? 0;
         return view('pages.customer.projects.create',$data);
     }
