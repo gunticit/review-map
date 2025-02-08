@@ -209,15 +209,20 @@
         transform: translate(-50%, -50%);
     }
     #btn-generate-keyword{
-        right: 0;
-        position: absolute;
-        bottom: 0;
+        margin-right: 5px;
         padding: 3px;
         z-index: 1;
         display: none;
     }
     #btn-generate-keyword > span{
         font-size: 20px;
+    }
+    #btn-generate-keyword + span{
+        line-height: 1.4;
+        transition: all ease .4s;
+    }
+    #btn-generate-keyword:hover + span{
+        color: #194BFB;
     }
     .group-tags{
         position: relative;
@@ -478,7 +483,7 @@
                                  <span class="required">*</span>
                             </label>
                             
-                            <div class="mb-2 d-flex">
+                            <div class="mb-2 d-flex align-items-sm-center">
                                 <button type="button" id="btn-generate-keyword" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tạo mới bộ từ khóa">
                                     <span class="material-symbols-outlined">
                                         source_notes
