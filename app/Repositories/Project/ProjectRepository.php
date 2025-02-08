@@ -57,6 +57,9 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         if(isset($filter['status'])){
             $query->where('status', $filter['status']);
         }
+        if(isset($filter['user_id'])){
+            $query->where('created_by', $filter['user_id']);
+        }
         if(isset($filter['year'])){
             $query->whereYear('created_at', $filter['year']);
         }

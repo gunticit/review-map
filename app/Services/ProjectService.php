@@ -31,8 +31,11 @@ class ProjectService {
      */
 
     public function list($request){
+        if(isset($request->user_id)  || Auth::user()->getRoleNames()->first() == 'customer'){
+            $user_id = isset($request->user_id) ? $request->user_id : Auth::user()->id;
+            $request = $request->merge(['user_id' => $user_id]);
+        }
         $request = $request->merge([
-            'user_id' => isset($request->user_id) ? $request->user_id : Auth::user()->id,
             'order_by' => array('created_at' => 'desc')
         ]);
         $total_projects = $this->projectRepository->countData($request);
