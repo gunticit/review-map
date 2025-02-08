@@ -209,15 +209,20 @@
         transform: translate(-50%, -50%);
     }
     #btn-generate-keyword{
-        right: 0;
-        position: absolute;
-        bottom: 0;
+        margin-right: 5px;
         padding: 3px;
         z-index: 1;
         display: none;
     }
     #btn-generate-keyword > span{
         font-size: 20px;
+    }
+    #btn-generate-keyword + span{
+        line-height: 1.4;
+        transition: all ease .4s;
+    }
+    #btn-generate-keyword:hover + span{
+        color: #194BFB;
     }
     .group-tags{
         position: relative;
@@ -256,6 +261,7 @@
         z-index: 2;
         border: 1px solid #ffffff;
         background: #ededed;
+        padding: 11px;
     }
     #btn-minus-rai-cham{
         left: 0;
@@ -456,7 +462,7 @@
                                                     remove
                                                 </span>
                                             </button>
-                                            <input type="number" value="" min="2" name="point_slow" readonly class="form-control" id="inputRaiCham">
+                                            <input type="number" value="" min="1" name="point_slow" readonly class="form-control" id="inputRaiCham">
                                             <button class="btn btn-outline-secondary" type="button" id="btn-plus-rai-cham" style="display:none">
                                                 <span class="material-symbols-outlined">
                                                     add
@@ -478,7 +484,7 @@
                                  <span class="required">*</span>
                             </label>
                             
-                            <div class="mb-2 d-flex">
+                            <div class="mb-2 d-flex align-items-sm-center">
                                 <button type="button" id="btn-generate-keyword" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tạo mới bộ từ khóa">
                                     <span class="material-symbols-outlined">
                                         source_notes
@@ -716,6 +722,10 @@
         function checkDateDuKien(){
             let package_id = $('#inputReview').val();
             let per_day_work = $('#inputRaiCham').val();
+            if(parseInt(per_day_work) < 1){
+                $('#inputRaiCham').val(1);
+                per_day_work = 1;
+            }
             per_day_work = parseInt(per_day_work);
             let date_dukien = 10;
             switch(parseInt(package_id)){
@@ -751,7 +761,7 @@
                     date_dukien = Math.ceil(10 / (10 * {{ $setting_percent_slow }}/100));
                     break;
             }
-            $('#alert-du-kien').html(`<p>Số ngày dự kiến hoàn thành là <span class="text-danger">${date_dukien}</span> ngày. <br />Chi phí: <span class="text-danger">${date_dukien * {{ $setting_price_slow }}}</span> đ</p>`);
+            $('#alert-du-kien').html(`<p>Số ngày dự kiến hoàn thành là <span class="text-danger">${date_dukien}</span> ngày. <br />Chi phí: <span class="text-danger">${(parseInt(date_dukien) * parseInt({{$setting_price_slow}})).toLocaleString('vi-VN')}</span> vnđ</p>`);
         }
                 
         // Rating
