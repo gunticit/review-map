@@ -93,7 +93,7 @@ class CartController extends Controller
             DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => 'Có lỗi xảy ra'
+                'message' => 'Có lỗi khi đặt hàng!'
             ]);
         }
     }
@@ -109,7 +109,7 @@ class CartController extends Controller
             return redirect()->back();
         } catch (\Throwable $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra']);
+            return redirect()->back()->withErrors(['error' => 'Có lỗi khi xóa item giỏ hàng!']);
         }
     }
 

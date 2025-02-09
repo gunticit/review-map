@@ -18,7 +18,7 @@ $(document).ready(function () {
                 if (response.success) {
                     successCallback(response); // Gọi lại hàm callback nếu thành công
                 } else {
-                    showAlert('error',response.message || 'Có lỗi xảy ra!'); // Hiển thị thông báo lỗi
+                    showAlert('error',response.message || 'Xác thực OTP đang bị lỗi!'); // Hiển thị thông báo lỗi
                 }
             },
             error: function (xhr) {

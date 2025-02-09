@@ -287,7 +287,7 @@ class ProjectController extends Controller
 
     public function pageOrderProject($project_id, Request $request){
         $project_comments = $this->projectService->findWithComments($project_id, $request);
-        if($project_comments->status !== 5){
+        if($project_comments && $project_comments->status !== 5){
             return redirect()->route('project.list');
         }
         if($project_comments && $project_comments->comments && !empty($project_comments->comments)){
@@ -306,7 +306,7 @@ class ProjectController extends Controller
         $price_order = 0;
         $project_price = 0;
 
-        if((int)$project_comments->package){
+        if($project_comments && (int)$project_comments->package){
             switch ((int)$project_comments->package) {
                 case 1:
                     $project_price = 45000;
@@ -341,7 +341,7 @@ class ProjectController extends Controller
         $available_balance = $balance - $provisional_deduction; // Số dư khả dụng
 
         $point_slow = 0;
-        if($project_comments->is_slow){
+        if($project_comments && $project_comments->is_slow){
             $point_slow = $project_comments->point_slow;
         }
         $num_images = $this->projectImageService->countImages($project_id);
@@ -349,7 +349,7 @@ class ProjectController extends Controller
         $setting_price_slow = Helper::getSetting('setting_price_slow') ?? 0;
         $setting_percent_slow = Helper::getSetting('setting_percent_slow') ?? 0;
         $date_slow = 0;
-        if($project_comments->is_slow){
+        if($project_comments && $project_comments->is_slow){
             if($point_slow > 0){
                 $date_slow = ceil($quantity / $point_slow);
             }else{
@@ -379,7 +379,7 @@ class ProjectController extends Controller
             [
                 'content' => json_encode([
                     'title' => 'Tạo dự án mới',
-                    'content' => 'Bạn đã tạo dự án: ' . $project_comments->name . ' thành công!',
+                    'content' => $project_comments ? 'Bạn đã tạo dự án: ' . $project_comments->name . ' thành công!'  : '',
                     'status' => 5, 
                     'user_id' => Auth::user()->id
                 ]),
@@ -389,7 +389,7 @@ class ProjectController extends Controller
         $this->updateHistory($history);
 
         return view('pages.customer.projects.order', [
-            'projects' => $paginatedComments,
+            'projects' => $paginatedComments ?? null,
             'project_info' => $project_comments,
             'price_order' => $price_order,
             'date_slow' => $date_slow,
@@ -403,11 +403,12 @@ class ProjectController extends Controller
             'provisional_deduction' => $provisional_deduction,
             'available_balance' => $available_balance,
             'num_images' => $num_images,
-            'quantity' => $quantity,
+            'quantity' => $quantity ?? null,
             'project_id' => $project_id,
             'point_slow' => $point_slow,
             'tmp_price' => $tmp_price,
-            'total_price' => $total_price
+            'total_price' => $total_price,
+            'filter' => $request->all()
         ]);
     }
 

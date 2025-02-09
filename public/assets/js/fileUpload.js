@@ -142,7 +142,7 @@
                 e.preventDefault();
                 let checkValidate = validateRequiredFields();
                 if(!checkValidate){
-                    showAlert('error','Có lỗi xảy ra!');
+                    showAlert('error','Vui lòng kiểm tra và nhập đầy đủ thông tin băắt buộc *!');
                     return false;
                 }
                 let has_image = $('input[name="has_image"]:checked').val();
