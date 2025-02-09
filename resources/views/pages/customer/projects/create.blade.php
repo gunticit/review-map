@@ -137,6 +137,9 @@
         width: 250px;
         margin-left: 0;
     }
+    .bs-popover-auto{
+        z-index: 1;
+    }
     .tags-input-wrapper .tag{
         display: inline-block;
         background-color: #FAFAFA;
