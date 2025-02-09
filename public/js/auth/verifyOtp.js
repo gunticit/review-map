@@ -36,7 +36,7 @@ $(document).ready(function () {
     function handleAjaxError(xhr, form) {
         if (xhr.status === 422) {
             const response = xhr.responseJSON; // Lấy phản hồi JSON từ server
-            form.find('.error-message').text("*" + response.message || 'Có lỗi xảy ra!').removeClass('d-none'); // Hiển thị thông báo lỗi từ server
+            form.find('.error-message').text("*" + response.message || 'Có lỗi từ server!').removeClass('d-none'); // Hiển thị thông báo lỗi từ server
         } else {
             showAlert('Đã xảy ra lỗi khi gửi dữ liệu. Vui lòng thử lại.'); // Thông báo lỗi chung
         }
