@@ -156,6 +156,16 @@
                                         <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(đ)</span>
                                     </div>
                                 </div>
+                                <div class="d-flex flex-row justify-content-between gap-3 py-3 border-bottom">
+                                    <div class="content d-flex flex-column">
+                                        <span class="title">Giá tiền hình ảnh</span>
+                                        <p class="notice mb-0">Chi phí bổ sung khi có ảnh: mỗi ảnh 5k ( có option quy định giá tiền mỗi ảnh ) => tính + thêm vào tổng tiền thanh toán dự án</p>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center" style="position: relative">
+                                        <input height="45" style="max-height: 45px" class="form-control select-setting" type="number" name="setting_price_image" value="{{ $setting['setting_price_image'] ?? 5000 }}" />
+                                        <span style="position: absolute; top: 50%; right: 20%; transform: translateY(-50%);">(đ)</span>
+                                    </div>
+                                </div>
                             </div>
                             </div>
                         </div>
