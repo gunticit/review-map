@@ -123,8 +123,8 @@
         border: none;
         background: transparent;
         outline: none;
-        width: 140px;
-        margin-left: 8px;
+        width: 250px;
+        margin-left: 0;
     }
     .tags-input-wrapper .tag{
         display: inline-block;
