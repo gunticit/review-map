@@ -62,6 +62,7 @@
       tag.appendChild(closeIcon);
       this.wrapper.insertBefore(tag , this.input);
       this.orignal_input.value = this.arr.join(',');
+      this.input.removeAttribute('placeholder');
 
       return this;
   }
@@ -71,6 +72,9 @@
       tag.remove();
       this.arr.splice( i , 1);
       this.orignal_input.value =  this.arr.join(',');
+      if (this.arr.length === 0) {
+        this.input.setAttribute('placeholder', this.options.placeholder);
+    }
       return this;
   }
 
@@ -126,6 +130,7 @@
   // Private function to initialize the tag input plugin
   function init(tags){
       tags.wrapper.append(tags.input);
+      tags.input.setAttribute('placeholder', tags.options.placeholder);
       tags.wrapper.classList.add(tags.options.wrapperClass);
       tags.orignal_input.setAttribute('hidden' , 'true');
       tags.orignal_input.parentNode.insertBefore(tags.wrapper , tags.orignal_input);
@@ -159,7 +164,8 @@
       wrapperClass : 'tags-input-wrapper',
       tagClass : 'tag',
       max : null,
-      duplicate: false
+      duplicate: false,
+      placeholder: 'Enter hoặc Tab để ngắt từ khóa'
   }
 
   window.TagsInput = TagsInput;
