@@ -134,8 +134,8 @@
         border: none;
         background: transparent;
         outline: none;
-        width: 140px;
-        margin-left: 8px;
+        width: 250px;
+        margin-left: 0;
     }
     .tags-input-wrapper .tag{
         display: inline-block;
@@ -498,7 +498,7 @@
                                 <span>Thoải mái</span>
                                 <div><span></span></div>
                             </div>
-                            <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
+                            <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter hoặc Tab để ngắt từ khóa">
                             <input class="form-control hidden" hidden id="keyword_value" type="text" name="keyword_value" readonly>
                             @error('keyword')
                                 <span class="invalid-feedback" role="alert">
@@ -602,9 +602,12 @@
         var tagInput1 = new TagsInput({
             selector: 'Tagslist-table',
             duplicate : false,
-            max : 10
+            max : 10,
+            placeholder: 'Enter hoặc Tab để ngắt từ khóa'
         });
         tagInput1.addData([]);
+        // Check placeholder
+
         // file Upload
         $("#fileUpload").fileUpload({
             maxFileCount: function() {

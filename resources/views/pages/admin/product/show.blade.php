@@ -135,8 +135,8 @@
         border: none;
         background: transparent;
         outline: none;
-        width: 140px;
-        margin-left: 8px;
+        width: 250px;
+        margin-left: 0;
     }
     .tags-input-wrapper .tag{
         display: inline-block;
@@ -314,7 +314,7 @@
                                 <span>Không gian đẹp</span>
                                 <span>Ưu đãi hấp dẫn</span>
                             </div>
-                            <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter để ngắt từ khóa">
+                            <input class="form-control" id="Tagslist-table" type="text" name="keyword" placeholder="Enter hoặc Tab để ngắt từ khóa">
                             @error('keyword')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -441,7 +441,8 @@
         var tagInput1 = new TagsInput({
             selector: 'Tagslist-table',
             duplicate : false,
-            max : 10
+            max : 10,
+            placeholder: 'Enter hoặc Tab để ngắt từ khóa'
         });
         tagInput1.addData([]);
 
