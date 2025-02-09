@@ -75,10 +75,39 @@ class  ProjectRepository extends BaseRepository implements ProjectRepositoryInte
         return $this->model->with('images')->find($id);
     }
 
-    public function findWithComments($project_id, $request){
+    public function findWithComments($project_id, $request)
+    {
         $query = $this->model->query();
-        $query->with('comments');
         $query->where('id', $project_id);
+
+        if (isset($request->keyword) && !empty($request->keyword)) {
+            $keyword = $request->keyword;
+
+            if (!empty(str_replace('RO-', '', $keyword))) {
+                $comment_id = str_replace('RO-', '', $keyword);
+                $query->with(['comments' => function ($q) use ($comment_id) {
+                    $q->where('id', $comment_id);
+                }]);
+            }else{
+                // Lọc comments liên quan đến keyword
+                $query->with(['comments' => function ($q) use ($keyword) {
+                    $q->whereLike('comment', '%' . $keyword . '%');
+                }]);
+                // Lọc project theo keyword
+                $query->where(function ($q) use ($keyword) {
+                    $q->whereLike('name', '%' . $keyword . '%')
+                    ->orWhereLike('project_code', '%' . $keyword . '%')
+                    ->orWhereHas('comments', function ($q) use ($keyword) {
+                        $q->whereLike('comment', '%' . $keyword . '%');
+                    });
+                });
+            }
+
+        } else {
+            // Nếu không có keyword, lấy tất cả comments
+            $query->with('comments');
+        }
+
         return $query->first();
     }
 

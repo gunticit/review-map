@@ -98,7 +98,7 @@
                                 <button class="input-group-text" type="submit">
                                     <span class="material-symbols-outlined">search</span>
                                 </button>
-                                <input type="text" placeholder="Tìm kiếm" class="form-control" name="keyword" id="inputSearch">
+                                <input type="text" placeholder="Tìm kiếm" value="{!! $filter['keyword'] ?? '' !!}" class="form-control" name="keyword" id="inputSearch">
                             </div>
                         </form>
 
@@ -141,9 +141,11 @@
                                 </tbody>
                             </table>
                         </div>
+                        @if(!empty($projects))
                         <div class="list-table-footer d-flex justify-content-between align-items-center">
                             {{ $projects->links('vendor.pagination.custom') }}
                         </div>
+                        @endif
                     </div>
                 </div>
 
@@ -318,11 +320,6 @@
                     success: function(response) {
                         $('.ip-comment-id-'+response.id).val(response.comment);
                         $('.content-comment-'+response.id).html(response.comment);
-                        Swal.fire({
-                            title: "Thông báo",
-                            text: "Cập nhật comment thành công",
-                            icon: "success"
-                        });
                     },
                     complete: function() {
                         stopLoading();
@@ -359,7 +356,7 @@
                     url: "{{ route('confirm.checkout') }}",
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        project_id: "{{ $project_info->id }}"
+                        project_id: "{{ $project_info->id ?? null }}"
                     },
                     success: function(response) {
                         if(response.status == 'error') {
@@ -403,7 +400,7 @@
                     url: "{{ route('check.apply.voucher') }}",
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        project_id: "{{ $project_info->id }}",
+                        project_id: "{{ $project_info->id ?? null }}",
                         voucher_code: voucher_code
                     },
                     success: function(response) {
