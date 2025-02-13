@@ -114,7 +114,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(!empty($projects))
+                                    @if(!empty($projects) && count($projects) > 0)
                                         @foreach($projects as $key => $project)
                                             <tr>
                                                 <td class="list-table-stt" scope="col">{{ ($projects->currentPage() - 1) * $projects->perPage() + $key + 1 }}<input type="hidden" class="comment-id" value="{{ $project->id }}"></td>
@@ -137,6 +137,13 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="text-center"><button class="btn btn-info" onclick="window.location.reload();">
+                                                <span class="material-symbols-outlined">
+                                                published_with_changes
+                                                </span> Lấy danh sách</button></td>
+                                        </tr>
                                     @endif
                                 </tbody>
                             </table>
