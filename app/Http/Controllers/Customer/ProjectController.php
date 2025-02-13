@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\GenerateCommentSuccess;
+use App\Events\ProjectImagesUploaded;
 use App\Exceptions\ProcessException;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
@@ -21,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -75,114 +78,117 @@ class ProjectController extends Controller
         return view('pages.customer.projects.create',$data);
     }
 
-    public function store(ProjectRequest $request){
-        try{
+    public function store(ProjectRequest $request)
+    {
+        try {
             set_time_limit(0);
             DB::beginTransaction();
+    
             $data = $this->projectService->create($request);
             $project_id = $data->id;
-            $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
-            $keyword_value = isset($request->keyword_value) ? explode(',', $request->keyword_value): array();
-            $keyword_array = array_merge($keyword, $keyword_value);
-            $unique_keyword_array = array_unique($keyword_array);
-            $keyword_data = array_filter($unique_keyword_array, function($value) {
-                return $value !== null && $value !== "";
-            });
-            $request = $request->merge([
-                'keyword' => implode(',', $keyword_data)
-            ]);
+            
+            $keyword_data = $this->processKeywords($request);
+            $request->merge(['keyword' => implode(',', $keyword_data)]);
+            
             $this->projectService->update($request, $project_id);
-            $sl_image = 0;
-            $sl_comment = 10;
-            if(isset($request->package)){
-                switch((int)$request->package){
-                    case 1:
-                        $sl_comment = 10;
-                        $sl_image = 10;
-                        break;
-                    case 2:
-                        $sl_comment = 50;
-                        $sl_image = 50;
-                        break;
-                    case 3:
-                        $sl_comment = 100;
-                        $sl_image = 100;
-                        break;
-                    case 4:
-                        $sl_comment = 200;
-                        $sl_image = 200;
-                        break;
-                    default: 
-                        $sl_comment = 0;
-                        $sl_image = 0;
-                        break;
-                }
+            
+            [$sl_comment, $sl_image] = $this->getPackageLimits($request->package ?? null);
+            
+            if (!$this->handleComments($request, $project_id, $keyword_data, $sl_comment)) {
+                return redirect()->back()->withInput();
             }
-            if($data && $project_id){
-                $request->request->add(['project_id' => $project_id]);
-                $request->request->add(['noJson' => true]);
-                $comments = $this->commentService->generateComment($request);
-                $comments = explode('|', $comments);
-                if(empty($comments)){
-                    Session::flash('error', 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!');
+    
+            if ($request->has('has_image') && $request->has_image == 1) {
+                if (!$this->handleImages($request, $project_id, $sl_image)) {
                     return redirect()->back()->withInput();
                 }
-                $data_comment = array();
-                for($i = 1; $i <= $sl_comment; $i++){
-                    $comment = !empty($comments[$i - 1]) ? str_replace('-','',trim($comments[$i - 1])) : '';
-                    $data_comment[] = array(
-                        'project_id' => $project_id,
-                        'comment' => $comment,
-                        'keyword' => implode(',', $keyword_data)
-                    );
-                }
-                $this->commentService->create($data_comment);
-                if ($request->has('has_image') && $request->has_image == 1) {
-                    $request_files = $request->files->all() ?? [];
-                    $list_files = count($request_files['files']) > 0 ? $request_files['files'] : [];
-                    $quantity_images = count($list_files) ?? 0;
-                    $setting_min_image = Helper::getSetting('setting_min_image') ?? 10;
-                    $setting_max_image = Helper::getSetting('setting_max_image') ?? 10;
-                    if($quantity_images < ceil(($sl_image * $setting_min_image / 100)) || $quantity_images > ceil($sl_image * $setting_max_image / 100)){
-                        Session::flash('error', 'Số lượng hình upload là '.$quantity_images.' không đủ để tạo dự án');
-                        return redirect()->back()->withInput();
-                    }
-                    $this->projectImageService->createDataImages($request, $project_id);
-                }
-                $history = [
-                    [
-                        'content' => json_encode([
-                            'title' => 'Dự án khởi tạo thành công',
-                            'content' => 'Bạn đã tạo dự án ' . $data['name'] . ' thành công!',
-                            'status' => 5, // Chờ thanh toán
-                            'user_id' => Auth::user()->id
-                        ]),
-                        'user_id' => Auth::user()->id
-                    ]
-                ];
-                $this->updateHistory($history);
-                Session::flash('success', 'Khởi tạo dự án thành công');
-                DB::commit();
-                return redirect()->route('page.order.project', ['id' => $project_id])
-                ->with('success', 'Khởi tạo dự án thành công');
             }
-            $history = [
-                'content' => json_encode([
-                    'title' => 'Dự án tạo không thành công',
-                    'content' => 'Dự án tạo không thành công',
-                    'status' => 0
-                ]),
-                'user_id' => Auth::user()->id
-            ];
-            $this->updateHistory($history);
-            Session::flash('error', 'Tạo dự án không thành công');
-            return redirect()->back()->withInput();
-        }catch(\Exception $e){
+    
+            $this->logProjectHistory($data['name'], true);
+            DB::commit();
+    
+            return redirect()->route('page.order.project', ['id' => $project_id])
+                ->with('success', 'Khởi tạo dự án thành công');
+        } catch (\Exception $e) {
             DB::rollBack();
             Session::flash('error', 'Tạo dự án không thành công');
             throw new ProcessException($e);
         }
     }
+    
+    private function processKeywords($request)
+    {
+        $keyword = isset($request->keyword) ? explode(',', $request->keyword) : [];
+        $keyword_value = isset($request->keyword_value) ? explode(',', $request->keyword_value) : [];
+        $keyword_array = array_merge($keyword, $keyword_value);
+        
+        return array_values(array_filter(array_unique($keyword_array), function ($value) {
+            return $value !== null && $value !== "";
+        }));
+    }
+    
+    private function getPackageLimits($package)
+    {
+        $limits = [
+            1 => [10, 10],
+            2 => [50, 50],
+            3 => [100, 100],
+            4 => [200, 200],
+        ];
+        return $limits[$package] ?? [0, 0];
+    }
+    
+    private function handleComments($request, $project_id, $keyword_data, $sl_comment)
+    {
+        $requestData = request()->all();
+        $files = request()->file();
+        $request_filter = array_diff_key($requestData, $files);
+        event(new GenerateCommentSuccess($request_filter, $project_id, $keyword_data, $sl_comment));
+        return true;
+    }
+    
+    private function handleImages($request, $project_id, $sl_image)
+    {
+        $files = $request->file('files', []);
+        $quantity_images = count($files);
+        
+        $min_images = ceil($sl_image * (Helper::getSetting('setting_min_image') ?? 10) / 100);
+        $max_images = ceil($sl_image * (Helper::getSetting('setting_max_image') ?? 10) / 100);
+        
+        if ($quantity_images < $min_images || $quantity_images > $max_images) {
+            Session::flash('error', "Số lượng hình upload là $quantity_images không đủ để tạo dự án");
+            return false;
+        }
+
+        $folder = 'uploads/' . date('Y-m') . '/' . date('d') . '/' . $project_id;
+        $filePaths = [];
+
+        foreach ($files as $file) {
+            $path = $file->store($folder, 'public');
+            $filePaths[] = $path;
+        }
+
+        event(new ProjectImagesUploaded($filePaths, $project_id));
+        return true;
+    }
+    
+    private function logProjectHistory($project_name, $success)
+    {
+        $history = [
+            [
+                'content' => json_encode([
+                    'title' => $success ? 'Dự án khởi tạo thành công' : 'Dự án tạo không thành công',
+                    'content' => $success ? "Bạn đã tạo dự án $project_name thành công!" : 'Dự án tạo không thành công',
+                    'status' => $success ? 5 : 0,
+                    'user_id' => Auth::user()->id
+                ]),
+                'user_id' => Auth::user()->id
+            ]
+        ];
+        $this->updateHistory($history);
+        Session::flash($success ? 'success' : 'error', $success ? 'Khởi tạo dự án thành công' : 'Tạo dự án không thành công');
+    }
+    
 
     public function edit($id, Request $request){
         $data = $this->projectService->show($id);

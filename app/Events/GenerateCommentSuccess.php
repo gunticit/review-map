@@ -14,12 +14,20 @@ class GenerateCommentSuccess
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $request;
+    public $project_id;
+    public $keyword_data;
+    public $sl_comment;
+
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($request, $project_id, $keyword_data, $sl_comment)
     {
-        //
+        $this->request = $request;
+        $this->project_id = $project_id;
+        $this->keyword_data = $keyword_data;
+        $this->sl_comment = $sl_comment;
     }
 
     /**

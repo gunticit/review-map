@@ -8,7 +8,10 @@ class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
         'App\Events\GenerateCommentSuccess' => [
-            'App\Listeners\GenerateCommentNotify.php',
+            'App\Listeners\GenerateCommentNotify',
+        ],
+        'App\Events\ProjectImagesUploaded' => [
+            'App\Listeners\HandleProjectImages',
         ],
     ];
 }
