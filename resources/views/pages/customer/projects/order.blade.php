@@ -69,10 +69,65 @@
     .mid-text{
         text-align: right;
     }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+    .wrapper-loading{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        background: #263238d4;
     }
+    #list-comments{
+        position: relative;
+    }
+    .loader {
+        width: 60px;
+        height: 40px;
+        position: relative;
+        display: inline-block;
+        --base-color: #263238; /*use your base color*/
+    }
+    .loader::before {
+        content: '';  
+        left: 0;
+        top: 0;
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #FFF;
+        background-image: radial-gradient(circle 8px at 18px 18px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 18px 0px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 0px 18px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 36px 18px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 18px 36px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 30px 5px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 30px 5px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 30px 30px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 5px 30px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 5px 5px, var(--base-color) 100%, transparent 0);
+        background-repeat: no-repeat;
+        box-sizing: border-box;
+        animation: rotationBack 3s linear infinite;
+    }
+    .loader::after {
+        content: '';  
+        left: 35px;
+        top: 15px;
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #FFF;
+        background-image: radial-gradient(circle 5px at 12px 12px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 12px 0px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 0px 12px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 24px 12px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 12px 24px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 20px 3px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 20px 3px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 20px 20px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 3px 20px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 3px 3px, var(--base-color) 100%, transparent 0);
+        background-repeat: no-repeat;
+        box-sizing: border-box;
+        animation: rotationBack 4s linear infinite reverse;
+    }
+    @keyframes rotationBack {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(-360deg);
+        }
+    }  
+    
 </style>
     <!-- danh-sach-du-an -->
     <section class="section tao-du-an mb-5 mt-5">
@@ -91,7 +146,10 @@
                 <!-- cot 1 -->
                     <div class="col-xl-8 col-md-12 col-12 mb-4 mb-xl-0">
                         <div class="col-inner">
-                        <h2 class="section-title mb-4">Dữ liệu chi tiết</h2>
+                            <div class="d-flex mb-4 flex-wrap justify-content-between">
+                                <h2 class="section-title">Dữ liệu chi tiết</h2>
+                                <button class="btn btn-danger" id="btn-generate-comment">Tạo nội dung tự động</button>
+                            </div>
 
                         <form>
                             <div class="input-group">
@@ -102,7 +160,7 @@
                             </div>
                         </form>
 
-                        <div class="group-table-list">
+                        <div class="group-table-list" id="list-comments">
                             <table class="table list-table">
                                 <thead>
                                     <tr>
@@ -341,6 +399,25 @@
                 e.stopPropagation();
                 let total_value = $('#total_value').val();
                 let balance_value = $('#balance').val();
+                let has_comment = @json(isset($project_info) ? $project_info->has_comment : 0);
+                if( has_comment != 1){
+                    Swal.fire({
+                        title: "Thông báo",
+                        text: "Bạn vui lòng nhấn vào nút tạo mới để tạo nội dung đánh giá cho dự án.",
+                        icon: "warning",
+                        showCancelButton: false,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Tạo mới",
+                        // cancelButtonText: "Hủy bỏ"
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#btn-generate-comment').trigger('click');
+                            $('body #btn-confirm-deposit').attr('disabled','disabled');
+                        }
+                    });
+                    return;
+                }
                 if(parseFloat(balance_value) < parseFloat(total_value)) {
                     Swal.fire({
                         title: "Thông báo số dư",
@@ -440,6 +517,29 @@
                         $('#btn-apply-discount').removeAttr('disabled');
                     }
                 })
+            });
+        });
+    </script>
+    <script>
+        $('#btn-generate-comment').click(function(){
+            $(this).prop('disabled',true);
+            $('#list-comments .wrapper-loading').remove();
+            $('#list-comments').append(`<div class="wrapper-loading"><div class="loader"></div></div>`);
+            $.ajax({
+                type: "GET",
+                url: "{{ route('api.generate.comment') }}",
+                data: {
+                    'project_id': '{{$project_id}}'
+                },
+                success: function(response) {
+                    if(response.status == 1) {
+                        window.location.reload();
+                    }   
+                },
+                complete: function() {
+                    $(this).prop('disabled',false);
+                    $('#list-comments .wrapper-loading').remove();
+                }
             });
         });
     </script>

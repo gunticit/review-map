@@ -9,7 +9,6 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest;
-use App\Http\Resources\ProjectResource;
 use App\Models\Voucher;
 use App\Services\CommentService;
 use App\Services\ExpenditureStatisticService;
@@ -23,7 +22,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -83,13 +81,11 @@ class ProjectController extends Controller
         try {
             set_time_limit(0);
             DB::beginTransaction();
-    
             $data = $this->projectService->create($request);
             $project_id = $data->id;
             
             $keyword_data = $this->processKeywords($request);
-            $request->merge(['keyword' => implode(',', $keyword_data)]);
-            
+            $request->merge(['keyword' => implode(',', $keyword_data),'status' => 5]);
             $this->projectService->update($request, $project_id);
             
             [$sl_comment, $sl_image] = $this->getPackageLimits($request->package ?? null);
@@ -142,9 +138,72 @@ class ProjectController extends Controller
     {
         $requestData = request()->all();
         $files = request()->file();
-        $request_filter = array_diff_key($requestData, $files);
-        event(new GenerateCommentSuccess($request_filter, $project_id, $keyword_data, $sl_comment));
+        if($files){
+            $request_filter = array_diff_key($requestData, $files);
+        }
+        $request_filter = $request_filter ?? $requestData;
+
+        $data_comment = array_fill(0, $sl_comment, [
+            'project_id' => $project_id,
+            'comment' => '',
+            'keyword' => implode(',', $keyword_data)
+        ]);
+        $this->commentService->create($data_comment);
+        // event(new GenerateCommentSuccess($request_filter, $project_id, $keyword_data, $sl_comment));
         return true;
+    }
+
+    public function ajaxHandleComments(Request $request){
+        $project_id = $request->project_id;
+        $project_info = $this->projectService->show($project_id);
+        if(!empty($project_info->has_comment)){
+            return response()->json([
+                'status' => 2,
+                'message' => 'Đã render comment cho dự án này'
+            ]);
+        }
+        [$sl_comment, $sl_image] = $this->getPackageLimits($project_info->package ?? null);
+        $keyword_value = !empty($project_info->keyword) ? explode(',', $project_info->keyword) : [];
+        $event_request = array(
+            'project_id' => $project_id,
+            'keyword' => $project_info->keyword,
+            'description' => $project_info->description,
+            'package' => $project_info->package,
+            'keyword_value' => $keyword_value
+        );
+        $comments = explode('|', $this->commentService->generateComment($event_request));
+
+        if (empty($comments)) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!'
+            ]);
+        }
+
+        $data_comment = array_map(function ($i) use ($comments, $project_id, $keyword_value) {
+            return [
+                'project_id' => $project_id,
+                'comment' => isset($comments[$i - 1]) ? str_replace('-', '', trim($comments[$i - 1])) : '',
+                'keyword' => implode(',', $keyword_value)
+            ];
+        }, range(1, $sl_comment));
+        $this->commentService->deleteByKey('project_id',$project_id);
+        $check = $this->commentService->create($data_comment);
+        if($check){
+            $this->projectService->update([
+                'has_comment' => true,
+                'status' => 5,
+            ], $project_id);
+            return response()->json([
+                'status' => 1,
+                'message' => 'Tạo comment thành công!'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 0,
+            'message' => 'Tạo comment không thành công!'
+        ]);
     }
     
     private function handleImages($request, $project_id, $sl_image)

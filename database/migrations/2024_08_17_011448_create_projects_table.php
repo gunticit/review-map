@@ -39,6 +39,7 @@ return new class extends Migration
             $table->enum('is_payment', [1,2])->nullable(); // 1: Đã thanh toán, 2: Chưa thanh toán
             $table->string('voucher_code')->nullable(); // Mã voucher áp dụng cho dự án
             $table->decimal('price', 15, 0)->nullable(); // Lưu lại khi đã thanh toán
+            $table->boolean(('has_comment'))->default(false)->nullable(); // Có comment hay không
             // Dành cho admin
             $table->integer('id_confirm')->nullable();
             $table->timestamp('id_confirm_at')->nullable();

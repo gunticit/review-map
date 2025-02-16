@@ -87,6 +87,15 @@ class ProjectService {
         return $data;
     }
 
+    public function findByKey($key, $value){
+        $query = $this->projectRepository->query();
+        $query = $query->with(['images','missions' => function($query){
+            $query->with('comments');
+        }]);
+        $data = $query->findByKey($key, $value);
+        return $data;
+    }
+
     public function update($request, $id){
         $project = $this->filterData($request);
         $data = $this->projectRepository->update($project, $id);
@@ -166,25 +175,33 @@ class ProjectService {
     }
 
     private function filterData($request): array{
-        $data = is_array($request) ? $request : $request->all();
-        return array(
-            'name' => $data['name'] ?? null,
-            'project_code' => $data['project_code'] ?? null,
-            'description' => $data['description'] ?? null,
-            'package' => $data['package'] ?? null,
-            'is_slow' => $data['is_slow'] ?? null,
-            'point_slow' => $data['point_slow'] ?? null,
-            'keyword' => $data['keyword'] ?? null,
-            'latitude' => $data['latitude'] ?? null,
-            'longitude' => $data['longitude'] ?? null,
-            'place_id' => $data['place_id'] ?? null,
-            'has_image' => $data['has_image'] ?? null,
-            'address_google' => $data['address_google'] ?? null,
-            'telephone_google' => $data['telephone_google'] ?? null,
-            'rating_google' => $data['rating_google'] ?? null,
-            'total_rating_google' => $data['total_rating_google'] ?? null,
-            'rating_desire' => $data['rating_desire'] ?? null,
-            'status' => $data['status'] ?? 5,
+        $data_request = is_array($request) ? $request : $request->all();
+        $keys = array(
+            'name',
+            'project_code',
+            'description',
+            'package',
+            'is_slow',
+            'point_slow',
+            'keyword',
+            'latitude',
+            'longitude',
+            'place_id',
+            'has_image',
+            'has_comment',
+            'address_google',
+            'telephone_google',
+            'rating_google',
+            'total_rating_google',
+            'rating_desire'
         );
+        $data = array();
+        foreach($keys as $key){
+            if(!empty($data_request[$key])){
+                $data[$key] = $data_request[$key];
+            }
+        }
+        $data['status'] = $data_request[$key] ?? 5;
+        return $data;
     }
 }

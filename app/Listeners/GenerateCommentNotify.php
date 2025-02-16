@@ -25,18 +25,14 @@ class GenerateCommentNotify implements ShouldQueue
         $project_id = $event->project_id;
         $keyword_data = $event->keyword_data;
         $sl_comment = $event->sl_comment;
-
-        // Gửi request để lấy bình luận
-        $request = new \Illuminate\Http\Request($event_request);
-        $request->request->add(['project_id' => $project_id, 'noJson' => true]);
-        $comments = explode('|', $this->commentService->generateComment($request));
+        $event_request['project_id'] = $project_id;
+        $comments = explode('|', $this->commentService->generateComment($event_request));
 
         if (empty($comments)) {
             Session::flash('error', 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!');
             return;
         }
 
-        // Tạo danh sách bình luận
         $data_comment = array_map(function ($i) use ($comments, $project_id, $keyword_data) {
             return [
                 'project_id' => $project_id,
@@ -45,10 +41,8 @@ class GenerateCommentNotify implements ShouldQueue
             ];
         }, range(1, $sl_comment));
 
-        // Lưu bình luận vào DB
         $this->commentService->create($data_comment);
 
-        // Log lại để debug
         Log::info("Project {$project_id} generated {$sl_comment} comments successfully.");
     }
 }

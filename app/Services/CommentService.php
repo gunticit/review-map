@@ -6,6 +6,8 @@ use App\Helpers\Helper;
 use App\Repositories\Comment\CommentRepositoryInterface;
 use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
+use Log;
 
 class CommentService {
     protected $commentRepository;
@@ -60,14 +62,18 @@ class CommentService {
     }
 
     public function generateComment($request){
+        $request = new Request($request);
         $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
         $description = isset($request->description) ? $request->description : '';
         if(!empty($request->keyword_value) && !empty($keyword)){
-            $keyword_value = isset($request->keyword_value) ? explode(',', $request->keyword_value): array();
-            $common = array_intersect($keyword, $keyword_value);
-            $diff1 = array_diff($keyword, $keyword_value);
-            $diff2 = array_diff($keyword_value, $keyword);
-            $keywords = array_merge($diff1, $diff2, $common);
+            $keyword_value = array();
+            $keyword_value = is_array($request->keyword_value) ? $request->keyword_value : explode(',', $request->keyword_value);
+            if($keyword_value){
+                $common = array_intersect($keyword, $keyword_value);
+                $diff1 = array_diff($keyword, $keyword_value);
+                $diff2 = array_diff($keyword_value, $keyword);
+                $keywords = array_merge($diff1, $diff2, $common);
+            }
         }
         $comments = '';
         $sl_comment = 10;
@@ -141,5 +147,9 @@ class CommentService {
             'keyword' => $keyword,
             'is_used' => $data['is_used'] ?? 0,
         );
+    }
+
+    public function deleteByKey($key, $request){
+        return $this->commentRepository->deleteByKey($key, $request);
     }
 }
