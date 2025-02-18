@@ -173,7 +173,7 @@ class ProjectController extends Controller
             'keyword_value' => $keyword_value
         );
         $summary_comment = $this->commentService->countDataByKey('project_id', $project_id);
-        if($summary_comment >= $sl_comment){
+        if($summary_comment >= $sl_comment && !!$project_info->has_comment){
             return response()->json([
                 'status' => 0,
                 'message' => 'Số lượng đã đủ vui lòng thanh toán hoặc nâng cấp gói để tạo thêm comments!'
