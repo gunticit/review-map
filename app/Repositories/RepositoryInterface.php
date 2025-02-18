@@ -26,5 +26,7 @@ interface RepositoryInterface
     public function insertGetId(array $data);
  
     public function updateOrCreate(array $params, array $data);
+
+    public function countDataByKey($column, $value);
  
 }

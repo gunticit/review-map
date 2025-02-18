@@ -7,8 +7,8 @@ use App\Repositories\Comment\CommentRepositoryInterface;
 use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Log;
-use DB;
 
 class CommentService {
     protected $commentRepository;
@@ -62,26 +62,33 @@ class CommentService {
         return [];
     }
 
-    public function generateComment($request){
-        try{
+    public function generateComment($request)
+    {
+        try {
             DB::beginTransaction();
-                $request = new Request($request);
-                $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
-                $description = isset($request->description) ? $request->description : '';
-                if(!empty($request->keyword_value) && !empty($keyword)){
-                    $keyword_value = array();
-                    $keyword_value = is_array($request->keyword_value) ? $request->keyword_value : explode(',', $request->keyword_value);
-                    if($keyword_value){
-                        $common = array_intersect($keyword, $keyword_value);
-                        $diff1 = array_diff($keyword, $keyword_value);
-                        $diff2 = array_diff($keyword_value, $keyword);
-                        $keywords = array_merge($diff1, $diff2, $common);
-                    }
-                }
-                $comments = '';
-                $sl_comment = 10;
-                if(isset($request->package)){
-                    switch((int)$request->package){
+
+            $request = new Request($request);
+            $keywords = array_filter(array_map('trim', explode(',', $request->keyword ?? '')));
+            $description = $request->description ?? '';
+            $keyword_value = is_array($request->keyword_value) 
+                ? array_map('trim', $request->keyword_value) 
+                : array_filter(array_map('trim', explode(',', $request->keyword_value ?? '')));
+
+            // Xử lý danh sách từ khóa
+            $keywords = !empty($keyword_value) 
+                ? array_values(array_unique(array_merge($keywords, $keyword_value))) 
+                : $keywords;
+
+            // Xác định số lượng bình luận
+
+            if (!empty($keywords)) {
+                $str_keyword = implode(',', $keywords);
+                
+
+                $summary_comment = $this->commentRepository->countDataByKey('project_id', $request->project_id); 
+                $project_info = resolve(ProjectService::class)->show($request->project_id);
+                if(!empty($project_info->package)){
+                    switch($project_info->package){
                         case 1:
                             $sl_comment = 10;
                             break;
@@ -98,57 +105,58 @@ class CommentService {
                             $sl_comment = 10;
                             break;
                     }
-                }
-                if(!empty($keywords)){
-                    $str_keyword = count($keywords) > 0 ? implode(', ', $keywords) : '';
-                    $loop = 1;
-                    if($sl_comment > 25){
-                        $loop = $sl_comment / 25;
+                    if(($sl_comment - $summary_comment) < 25){
+                        $sl_comment = $sl_comment - $summary_comment;
+                    }else{
                         $sl_comment = 25;
                     }
-                    $prompt = "Tạo cho tôi ".$sl_comment." bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
-                    if(!empty($description)){
-                        $prompt .= " mô tả '".$description."' và";
-                    }
-                    if(!empty($str_keyword)){
-                        $prompt .= " keyword chủ đề là: '(". $str_keyword .")'.";
-                    }
-                    $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt, và đủ số lượng bình luận là: ".$sl_comment." bình luận.";
-                    if(!empty(Helper::getSetting('setting_ai_content'))){
-                        $prompt .= ' Ngoài ra: '.Helper::getSetting('setting_ai_content');
-                    }
-                    $data_check = array();
-                    for($i = 0; $i < $loop; $i++){
-                        $stream = Gemini::geminiPro()
-                            ->generateContent($prompt);
-                        if(!empty($stream->text())){
-                            $comments .= $stream->text();
-                        }
-    
-                        $data_comment = array_map(function ($i) use ($comments, $request, $keyword_value) {
-                            return [
-                                'project_id' => $request->project_id,
-                                'comment' => isset($comments[$i - 1]) ? str_replace('-', '', trim($comments[$i - 1])) : '',
-                                'keyword' => implode(',', $keyword_value)
-                            ];
-                        }, range(1, $sl_comment));
-                        if($i == 0){
-                            $this->deleteByKey('project_id',$request->project_id);
-                        }
-                        $check = $this->create($data_comment);
-                        $comments = '';
-                        $data_check[] = $check;
-                    }
-                    
                 }
-            if(!in_array(false,$data_check) && !in_array(0,$data_check)){
-                DB::submit();
-            }else{
-                DB::rollback();
+                $this->processComments($request->project_id, $sl_comment, $description, $str_keyword, $keyword_value);
             }
-        }catch(\Exception $e){
-            DB::rollback();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
         }
+    }
+
+    private function processComments($projectId, $sl_comment, $description, $str_keyword, $keyword_value)
+    {
+        $prompt = $this->generatePrompt($sl_comment, $description, $str_keyword);
+        $stream = Gemini::geminiPro()->generateContent($prompt);
+        if (empty($stream->text())) {
+            return false;
+        }
+        
+        $comments = mb_convert_encoding($stream->text(), 'UTF-8', 'UTF-8');
+        $commentList = array_filter(array_map(fn($c) => str_replace('-', '', trim($c)), explode('|', $comments)));
+        
+        $data_comment = array_map(fn($comment) => [
+            'project_id' => $projectId,
+            'comment' => $comment,
+            'keyword' => implode(',', $keyword_value),
+        ], $commentList);
+        if(count($data_comment) > $sl_comment){
+            $data_comment = array_slice($data_comment, 0, $sl_comment);
+        }
+        return $this->create($data_comment);
+        
+    }
+
+    public function generatePrompt($sl_comment, $description, $str_keyword)
+    {
+        $prompt = "Tạo $sl_comment bình luận, mỗi bình luận không quá 120 ký tự, liên quan đến";
+        if (!empty($description)) {
+            $prompt .= " mô tả '{$description}' và";
+        }
+        if (!empty($str_keyword)) {
+            $prompt .= " chủ đề từ khóa: '($str_keyword)', hãy dùng ít nhất 1 từ khóa và nhiều nhất 2 từ khóa trong mỗi comment và các comment không được tạo trùng nhau.";
+        }
+        $prompt .= " Bình luận không đánh số, ngăn cách bởi ký tự '|', đảm bảo đủ $sl_comment bình luận.";
+        
+        if ($extraContent = Helper::getSetting('setting_ai_content')) {
+            $prompt .= " Ngoài ra: " . $extraContent;
+        }
+        return $prompt;
     }
     
     public function generateCommentBySample($request){
@@ -184,5 +192,9 @@ class CommentService {
 
     public function deleteByKey($key, $request){
         return $this->commentRepository->deleteByKey($key, $request);
+    }
+    
+    public function countDataByKey($column, $value){
+        return $this->commentRepository->countDataByKey($column, $value);
     }
 }

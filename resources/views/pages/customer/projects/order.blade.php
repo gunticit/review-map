@@ -148,7 +148,11 @@
                         <div class="col-inner">
                             <div class="d-flex mb-4 flex-wrap justify-content-between">
                                 <h2 class="section-title">Dữ liệu chi tiết</h2>
-                                <div class="d-flex">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <p class="d-flex align-items-center justify-content-between mb-0 mr-3 gap-1">
+                                        <span>{{ $total_comment ?? 0 }}</span>/
+                                        <span>{{ $quantity ?? 0 }}</span>
+                                    </p>
                                     <button class="btn btn-danger" id="btn-generate-comment" style="padding: 10px 15px">
                                         <span class="material-symbols-outlined">
                                         rule_settings
@@ -204,10 +208,9 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center"><button class="btn btn-info" onclick="window.location.reload();">
-                                                <span class="material-symbols-outlined">
-                                                published_with_changes
-                                                </span> Lấy danh sách</button></td>
+                                            <td colspan="5" class="text-center">
+                                                Không thể load dữ liệu
+                                            </td>
                                         </tr>
                                     @endif
                                 </tbody>
@@ -304,7 +307,7 @@
                             <input type="hidden" id="total_value" value="{{ $total_price }}">
                         </div>
 
-                        <button type="button" id="btn-confirm-deposit" class="btn btn-primary btn-full" > Thanh toán </button>
+                        <button type="button" @if($total_comment != $quantity) disabled @endif id="btn-confirm-deposit" @if($total_comment != $quantity || !$project_info->has_comment) class="btn btn-default btn-full" @else class="btn btn-primary btn-full" @endif > Thanh toán </button>
                 
                     </div>
                 </div>
@@ -401,75 +404,6 @@
                     }
                 });
             });
-            $('body #btn-confirm-deposit').on('click', function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                let total_value = $('#total_value').val();
-                let balance_value = $('#balance').val();
-                let has_comment = @json(isset($project_info) ? $project_info->has_comment : 0);
-                if( has_comment != 1){
-                    Swal.fire({
-                        title: "Thông báo",
-                        text: "Bạn vui lòng nhấn vào nút tạo mới để tạo nội dung đánh giá cho dự án.",
-                        icon: "warning",
-                        showCancelButton: false,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Tạo mới",
-                        // cancelButtonText: "Hủy bỏ"
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#btn-generate-comment').trigger('click');
-                            $('body #btn-confirm-deposit').attr('disabled','disabled');
-                        }
-                    });
-                    return;
-                }
-                if(parseFloat(balance_value) < parseFloat(total_value)) {
-                    Swal.fire({
-                        title: "Thông báo số dư",
-                        text: "Tài khoản của bạn không đủ để thanh toán. Vui lòng nạp thêm để tiếp tục",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Nạp tiền",
-                        cancelButtonText: "Hủy bỏ"
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href="{{ route('wallet') }}";
-                        }
-                    });
-                    return false;
-                }
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('confirm.checkout') }}",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        project_id: "{{ $project_info->id ?? null }}"
-                    },
-                    success: function(response) {
-                        if(response.status == 'error') {
-                            Swal.fire({
-                                title: "Thông báo",
-                                text: response.message,
-                                icon: "error"
-                            })
-                        }else{
-                            Swal.fire({
-                                title: "Thông báo",
-                                text: "Thanh toán thành công",
-                                icon: "success"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = "{{ route('project.list') }}";
-                                }
-                            });
-                        }
-                    }
-                })
-            });
             $('body #btn-deposit-wallet').on('click', function(){
                 window.location.href="{{ route('wallet',['order_id' => $project_id]) }}"
             });
@@ -541,7 +475,13 @@
                 success: function(response) {
                     if(response.status == 1) {
                         window.location.reload();
-                    }   
+                    }else{
+                        Swal.fire({
+                            title: "Thông báo",
+                            text: response.message,
+                            icon: "info"
+                        })
+                    }
                 },
                 complete: function() {
                     $(this).prop('disabled',false);
@@ -550,4 +490,77 @@
             });
         });
     </script>
+    @if($total_comment == $quantity && !!$project_info->has_comment)    
+    <script>
+        $('body #btn-confirm-deposit').on('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            let total_value = $('#total_value').val();
+            let balance_value = $('#balance').val();
+            let has_comment = @json(isset($project_info) ? $project_info->has_comment : 0);
+            if( has_comment != 1){
+                Swal.fire({
+                    title: "Thông báo",
+                    text: "Bạn vui lòng nhấn vào nút tạo mới để tạo nội dung đánh giá cho dự án.",
+                    icon: "warning",
+                    showCancelButton: false,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Tạo mới",
+                    // cancelButtonText: "Hủy bỏ"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#btn-generate-comment').trigger('click');
+                        $('body #btn-confirm-deposit').attr('disabled','disabled');
+                    }
+                });
+                return;
+            }
+            if(parseFloat(balance_value) < parseFloat(total_value)) {
+                Swal.fire({
+                    title: "Thông báo số dư",
+                    text: "Tài khoản của bạn không đủ để thanh toán. Vui lòng nạp thêm để tiếp tục",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Nạp tiền",
+                    cancelButtonText: "Hủy bỏ"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href="{{ route('wallet') }}";
+                    }
+                });
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "{{ route('confirm.checkout') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    project_id: "{{ $project_info->id ?? null }}"
+                },
+                success: function(response) {
+                    if(response.status == 'error') {
+                        Swal.fire({
+                            title: "Thông báo",
+                            text: response.message,
+                            icon: "error"
+                        })
+                    }else{
+                        Swal.fire({
+                            title: "Thông báo",
+                            text: "Thanh toán thành công",
+                            icon: "success"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{{ route('project.list') }}";
+                            }
+                        });
+                    }
+                }
+            })
+        });
+    </script>
+    @endif
 @endsection

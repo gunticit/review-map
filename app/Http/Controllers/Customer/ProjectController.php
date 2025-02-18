@@ -89,7 +89,7 @@ class ProjectController extends Controller
             $this->projectService->update($request, $project_id);
             
             [$sl_comment, $sl_image] = $this->getPackageLimits($request->package ?? null);
-            
+            $sl_comment = $sl_comment > 25 ? 25 : $sl_comment;
             if (!$this->handleComments($request, $project_id, $keyword_data, $sl_comment)) {
                 return redirect()->back()->withInput();
             }
@@ -156,11 +156,12 @@ class ProjectController extends Controller
     public function ajaxHandleComments(Request $request){
         $project_id = $request->project_id;
         $project_info = $this->projectService->show($project_id);
-        if(!empty($project_info->has_comment)){
-            return response()->json([
-                'status' => 2,
-                'message' => 'Đã render comment cho dự án này'
-            ]);
+        if(empty($project_info->has_comment)){
+            $this->commentService->deleteByKey('project_id', $project_id);
+            $this->projectService->update([
+                'has_comment' => true,
+                'status' => 5,
+            ], $project_id);
         }
         [$sl_comment, $sl_image] = $this->getPackageLimits($project_info->package ?? null);
         $keyword_value = !empty($project_info->keyword) ? explode(',', $project_info->keyword) : [];
@@ -171,20 +172,14 @@ class ProjectController extends Controller
             'package' => $project_info->package,
             'keyword_value' => $keyword_value
         );
-        $comments = explode('|', $this->commentService->generateComment($event_request));
-
-        if (empty($comments)) {
+        $summary_comment = $this->commentService->countDataByKey('project_id', $project_id);
+        if($summary_comment >= $sl_comment){
             return response()->json([
                 'status' => 0,
-                'message' => 'Không thể tạo câu hỏi cho dự án, vui lòng chỉnh sửa lại nội dung và tạo lại!'
+                'message' => 'Số lượng đã đủ vui lòng thanh toán hoặc nâng cấp gói để tạo thêm comments!'
             ]);
         }
-
-        $this->projectService->update([
-            'has_comment' => true,
-            'status' => 5,
-        ], $project_id);
-        
+        $this->commentService->generateComment($event_request);
         return response()->json([
             'status' => 1,
             'message' => 'Tạo comment thành công!'
@@ -342,7 +337,7 @@ class ProjectController extends Controller
         }
         if($project_comments && $project_comments->comments && !empty($project_comments->comments)){
             $comments = $project_comments->comments;
-            $perPage = 15;
+            $perPage = 25;
             $currentPage = isset($request->page) ? $request->page  : LengthAwarePaginator::resolveCurrentPage();
             $currentComments = $comments->slice(($currentPage - 1) * $perPage, $perPage)->values();
             $paginatedComments = new LengthAwarePaginator(
@@ -458,6 +453,7 @@ class ProjectController extends Controller
             'point_slow' => $point_slow,
             'tmp_price' => $tmp_price,
             'total_price' => $total_price,
+            'total_comment' => $comments->count(),
             'filter' => $request->all()
         ]);
     }

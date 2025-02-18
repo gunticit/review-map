@@ -14,10 +14,9 @@
         <div class="list-table-per-page">
             <span class="form-label">Hiển thị kết quả</span>
             <select class="form-select d-inline-block" name="" id="">
-                <option selected>15</option>
-                <option value="">20</option>
-                <option value="">30</option>
-                <option value="">50</option>
+                <option selected value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
             </select>
         </div>
         <nav aria-label="Page navigation">

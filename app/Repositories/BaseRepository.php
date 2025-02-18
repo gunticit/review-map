@@ -252,4 +252,8 @@ class BaseRepository implements RepositoryInterface
     {
         return $this->model->where($column, $value)->orderBy('id', $orderBy); 
     }
+
+    public function countDataByKey($column, $value){
+        return $this->model->where($column, $value)->count();
+    }
 }
