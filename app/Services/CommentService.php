@@ -8,6 +8,7 @@ use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Log;
+use DB;
 
 class CommentService {
     protected $commentRepository;
@@ -62,60 +63,92 @@ class CommentService {
     }
 
     public function generateComment($request){
-        $request = new Request($request);
-        $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
-        $description = isset($request->description) ? $request->description : '';
-        if(!empty($request->keyword_value) && !empty($keyword)){
-            $keyword_value = array();
-            $keyword_value = is_array($request->keyword_value) ? $request->keyword_value : explode(',', $request->keyword_value);
-            if($keyword_value){
-                $common = array_intersect($keyword, $keyword_value);
-                $diff1 = array_diff($keyword, $keyword_value);
-                $diff2 = array_diff($keyword_value, $keyword);
-                $keywords = array_merge($diff1, $diff2, $common);
+        try{
+            DB::beginTransaction();
+                $request = new Request($request);
+                $keyword = isset($request->keyword) ? explode(',', $request->keyword): array();
+                $description = isset($request->description) ? $request->description : '';
+                if(!empty($request->keyword_value) && !empty($keyword)){
+                    $keyword_value = array();
+                    $keyword_value = is_array($request->keyword_value) ? $request->keyword_value : explode(',', $request->keyword_value);
+                    if($keyword_value){
+                        $common = array_intersect($keyword, $keyword_value);
+                        $diff1 = array_diff($keyword, $keyword_value);
+                        $diff2 = array_diff($keyword_value, $keyword);
+                        $keywords = array_merge($diff1, $diff2, $common);
+                    }
+                }
+                $comments = '';
+                $sl_comment = 10;
+                if(isset($request->package)){
+                    switch((int)$request->package){
+                        case 1:
+                            $sl_comment = 10;
+                            break;
+                        case 2:
+                            $sl_comment = 50;
+                            break;
+                        case 3:
+                            $sl_comment = 100;
+                            break;
+                        case 4:
+                            $sl_comment = 200;
+                            break;
+                        default: 
+                            $sl_comment = 10;
+                            break;
+                    }
+                }
+                if(!empty($keywords)){
+                    $str_keyword = count($keywords) > 0 ? implode(', ', $keywords) : '';
+                    $loop = 1;
+                    if($sl_comment > 25){
+                        $loop = $sl_comment / 25;
+                        $sl_comment = 25;
+                    }
+                    $prompt = "Tạo cho tôi ".$sl_comment." bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
+                    if(!empty($description)){
+                        $prompt .= " mô tả '".$description."' và";
+                    }
+                    if(!empty($str_keyword)){
+                        $prompt .= " keyword chủ đề là: '(". $str_keyword .")'.";
+                    }
+                    $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt, và đủ số lượng bình luận là: ".$sl_comment." bình luận.";
+                    if(!empty(Helper::getSetting('setting_ai_content'))){
+                        $prompt .= ' Ngoài ra: '.Helper::getSetting('setting_ai_content');
+                    }
+                    $data_check = array();
+                    for($i = 0; $i < $loop; $i++){
+                        $stream = Gemini::geminiPro()
+                            ->generateContent($prompt);
+                        if(!empty($stream->text())){
+                            $comments .= $stream->text();
+                        }
+    
+                        $data_comment = array_map(function ($i) use ($comments, $request, $keyword_value) {
+                            return [
+                                'project_id' => $request->project_id,
+                                'comment' => isset($comments[$i - 1]) ? str_replace('-', '', trim($comments[$i - 1])) : '',
+                                'keyword' => implode(',', $keyword_value)
+                            ];
+                        }, range(1, $sl_comment));
+                        if($i == 0){
+                            $this->deleteByKey('project_id',$request->project_id);
+                        }
+                        $check = $this->create($data_comment);
+                        $comments = '';
+                        $data_check[] = $check;
+                    }
+                    
+                }
+            if(!in_array(false,$data_check) && !in_array(0,$data_check)){
+                DB::submit();
+            }else{
+                DB::rollback();
             }
+        }catch(\Exception $e){
+            DB::rollback();
         }
-        $comments = '';
-        $sl_comment = 10;
-        if(isset($request->package)){
-            switch((int)$request->package){
-                case 1:
-                    $sl_comment = 10;
-                    break;
-                case 2:
-                    $sl_comment = 50;
-                    break;
-                case 3:
-                    $sl_comment = 100;
-                    break;
-                case 4:
-                    $sl_comment = 200;
-                    break;
-                default: 
-                    $sl_comment = 10;
-                    break;
-            }
-        }
-        if(!empty($keywords)){
-            $str_keyword = count($keywords) > 0 ? implode(', ', $keywords) : '';
-                $prompt = "Tạo cho tôi ".$sl_comment." bình luận, với mỗi bình luận cảm nhận ngắn không quá 120 ký tự với nội dung liên quan đến";
-                if(!empty($description)){
-                    $prompt .= " mô tả '".$description."' và";
-                }
-                if(!empty($str_keyword)){
-                    $prompt .= " keyword chủ đề là: '(". $str_keyword .")'.";
-                }
-                $prompt .= " Yêu cầu bình luận tạo ra không đánh dấu số thứ tự và các bình luận được ngăn cách bởi ký tự | để phân biệt, và đủ số lượng bình luận là: ".$sl_comment." bình luận.";
-                if(!empty(Helper::getSetting('setting_ai_content'))){
-                    $prompt .= ' Ngoài ra: '.Helper::getSetting('setting_ai_content');
-                }
-                $stream = Gemini::geminiPro()
-                    ->generateContent($prompt);
-                if(!empty($stream->text())){
-                    $comments .= $stream->text();
-                }
-        }
-        return $comments;
     }
     
     public function generateCommentBySample($request){

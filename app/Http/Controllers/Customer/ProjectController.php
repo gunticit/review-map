@@ -180,29 +180,14 @@ class ProjectController extends Controller
             ]);
         }
 
-        $data_comment = array_map(function ($i) use ($comments, $project_id, $keyword_value) {
-            return [
-                'project_id' => $project_id,
-                'comment' => isset($comments[$i - 1]) ? str_replace('-', '', trim($comments[$i - 1])) : '',
-                'keyword' => implode(',', $keyword_value)
-            ];
-        }, range(1, $sl_comment));
-        $this->commentService->deleteByKey('project_id',$project_id);
-        $check = $this->commentService->create($data_comment);
-        if($check){
-            $this->projectService->update([
-                'has_comment' => true,
-                'status' => 5,
-            ], $project_id);
-            return response()->json([
-                'status' => 1,
-                'message' => 'Tạo comment thành công!'
-            ]);
-        }
-
+        $this->projectService->update([
+            'has_comment' => true,
+            'status' => 5,
+        ], $project_id);
+        
         return response()->json([
-            'status' => 0,
-            'message' => 'Tạo comment không thành công!'
+            'status' => 1,
+            'message' => 'Tạo comment thành công!'
         ]);
     }
     

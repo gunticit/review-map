@@ -148,7 +148,14 @@
                         <div class="col-inner">
                             <div class="d-flex mb-4 flex-wrap justify-content-between">
                                 <h2 class="section-title">Dữ liệu chi tiết</h2>
-                                <button class="btn btn-danger" id="btn-generate-comment">Tạo nội dung tự động</button>
+                                <div class="d-flex">
+                                    <button class="btn btn-danger" id="btn-generate-comment" style="padding: 10px 15px">
+                                        <span class="material-symbols-outlined">
+                                        rule_settings
+                                        </span>
+                                        Tạo nội dung tự động
+                                    </button>
+                                </div>
                             </div>
 
                         <form>
