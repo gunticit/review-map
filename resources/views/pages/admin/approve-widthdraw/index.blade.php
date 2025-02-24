@@ -37,17 +37,17 @@
                                             <td style="width: 250px; min-width: 250px !important; max-width: 250px !important">{{ $partner->name }}</td>
                                             <td>
                                                 @if(!empty($partner->certificationAccount->contract))
-                                                    <a href="{{$partner->certificationAccount->contract}}" target="_blank">Xem hợp đồng</a>
+                                                    <a id="contract-{{ $partner->certificationAccount->id ?? '' }}" html-href="{{ asset('storage/'.$partner->certificationAccount->contract) }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="javascript:void(0);" onclick="viewContract({{$partner->certificationAccount->id}})">Xem hợp đồng</a>
                                                 @endif
                                             </td>
                                             <td>
                                                 @if(!empty($partner->certificationAccount->front_id_image))
-                                                    <a href="{{$partner->certificationAccount->front_id_image}}" target="_blank">Xem mặt trước</a>
+                                                    <a id="id-image-front-{{ $partner->certificationAccount->id ?? '' }}" html-href="{{ asset('storage/'.$partner->certificationAccount->front_id_image) }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop2" href="javascript:void(0);" onclick="viewIdImage({{$partner->certificationAccount->id}},'front')">Xem mặt trước</a>
                                                 @endif
                                             </td>
                                             <td>
                                                 @if(!empty($partner->certificationAccount->back_id_image))
-                                                    <a href="{{$partner->certificationAccount->back_id_image}}" target="_blank">Xem mặt sau</a>
+                                                    <a id="id-image-back-{{ $partner->certificationAccount->id ?? '' }}" html-href="{{ asset('storage/'.$partner->certificationAccount->back_id_image) }}" data-bs-toggle="modal" data-bs-target="#staticBackdrop2" href="javascript:void(0);" onclick="viewIdImage({{$partner->certificationAccount->id}},'back')">Xem mặt sau</a>
                                                 @endif
                                             </td>
                                             <td>{!! !empty($partner->certificationAccount->created_at) ? date('d/m/Y', strtotime($partner->certificationAccount->created_at)) : '' !!}</td>
@@ -97,6 +97,36 @@
         </div>
     </div>
 </section>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Hợp đồng</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <iframe src="" width="100%" height="600px" id="contract-iframe"></iframe>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Đóng</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="label-image">Hình căn cước</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <img src="" alt="" id="id-image">
+        </div>
+      </div>
+    </div>
+</div>
 <script>
     function approve(id) {
         $.ajax({
@@ -111,17 +141,20 @@
                 $('#name-verified-'+id).html(data.user_verified);
                 $('#date-verified-'+id).html(data.verified_at);
                 $('#item-withdraw-'+id).html(`
-                    <span class="text-success material-symbols-outlined">
-                        check_circle
+                    <span class="bt-content">
+                        <span class="text-success material-symbols-outlined">
+                            check_circle
+                        </span>
+                        <span class="text-success">Đã duyệt</span>
                     </span>
                 `);
                 $('#btn-group-'+id+' *').remove();
-                setTimeout(() => {
-                    showAlert(
-                        data.status == 'success' ? 'success' : 'error',
-                        data.message
-                    )
-                }, 1000);
+                // setTimeout(() => {
+                //     showAlert(
+                //         data.status == 'success' ? 'success' : 'error',
+                //         data.message
+                //     )
+                // }, 1000);
             }
         });
     }
@@ -138,17 +171,20 @@
                 $('#name-verified-'+id).html(data.user_verified);
                 $('#date-verified-'+id).html(data.verified_at);
                 $('#item-withdraw-'+id).html(`
-                    <span class="material-symbols-outlined">
-                        error
+                    <span class="bt-content">
+                        <span class="material-symbols-outlined text-danger">
+                            error
+                        </span>
+                        <span class="text-danger">Không duyệt</span>
                     </span>
                 `);
                 $('#btn-group-'+id+' *').remove();
-                setTimeout(() => {
-                    showAlert(
-                        data.status == 'success' ? 'success' : 'error',
-                        data.message
-                    )
-                }, 1000);
+                // setTimeout(() => {
+                //     showAlert(
+                //         data.status == 'success' ? 'success' : 'error',
+                //         'Xác nhận đã kiểm duyệt thành công!'
+                //     )
+                // }, 1000);
             }
         });
     }
@@ -162,13 +198,32 @@
             },  
             dataType: 'json',
             success: function(data) {
-                showAlert(
-                    data.status == 'success' ? 'success' : 'error',
-                    data.message
-                )
+                // showAlert(
+                //     data.status == 'success' ? 'success' : 'error',
+                //     data.message
+                // )
                 window.location.reload();
             }
         });
+    }
+</script>
+<script>
+    function viewContract(id) {
+        $('#staticBackdrop').modal('show');
+        let link_docx = $('#contract-'+id).attr('html-href');
+        $('#contract-iframe').attr('src', link_docx);
+    }
+    function viewIdImage(id, type=''){
+        $('#staticBackdrop2').modal('show');
+        if(type=='front'){
+            let id_image_front = $('#id-image-front-'+id).attr('html-href');
+            $('#id-image').attr('src', id_image_front);
+            $('#label-image').text('Hình CCCD Mặt trước');
+        }else{
+            let id_image_back = $('#id-image-back-'+id).attr('html-href');
+            $('#id-image').attr('src', id_image_back);
+            $('#label-image').text('Hình CCCD Mặt sau');
+        }
     }
 </script>
 @endsection

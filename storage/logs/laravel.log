@@ -1,0 +1,17 @@
+[2025-02-24 23:46:19] local.ERROR: Command "storage:linkk" is not defined.
+
+Did you mean one of these?
+    storage:link
+    storage:unlink {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"storage:linkk\" is not defined.
+
+Did you mean one of these?
+    storage:link
+    storage:unlink at /Applications/MAMP/htdocs/review-map/vendor/symfony/console/Application.php:702)
+[stacktrace]
+#0 /Applications/MAMP/htdocs/review-map/vendor/symfony/console/Application.php(258): Symfony\\Component\\Console\\Application->find('storage:linkk')
+#1 /Applications/MAMP/htdocs/review-map/vendor/symfony/console/Application.php(167): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#2 /Applications/MAMP/htdocs/review-map/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 /Applications/MAMP/htdocs/review-map/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1203): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 /Applications/MAMP/htdocs/review-map/artisan(13): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#5 {main}
+"} 

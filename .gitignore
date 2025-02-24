@@ -21,3 +21,5 @@ yarn-error.log
 /docker/nginx/logs/*
 /docker/apache/logs/*
 /docker/*
+*.log
+storage/logs/*

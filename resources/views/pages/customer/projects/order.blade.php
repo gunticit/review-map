@@ -178,7 +178,6 @@
                                         <th class="list-table-stt" scope="col">STT</th>
                                         <th class="list-table-time" scope="col">Mã đơn</th>
                                         <th class="list-table-so-tien" style="min-width: 250px" scope="col">Nội dung đánh giá</th>
-                                        <th class="list-table-content-3" scope="col">Rải chậm</th>
                                         <th class="list-table-so-du" scope="col">Hình ảnh</th>
                                     </tr>
                                 </thead>
@@ -197,9 +196,6 @@
                                                         </button>
                                                     </div> 
                                                     <input type="text" class="text-comment d-none ip-comment-id-{{ $project->id }}" value="{{ $project->comment ?? '' }}">
-                                                </td>
-                                                <td class="list-table-content-3" scope="col">
-                                                    {{ $project_info->is_slow ? ($project_info->point_slow == 0 ? 'Mặc định' : $project_info->point_slow) : 0 }}
                                                 </td>
                                                 <td class="list-table-content-3" scope="col">
                                                     {!! $project_info->has_image?'Có':'Không' !!}
@@ -474,7 +470,13 @@
                 },
                 success: function(response) {
                     if(response.status == 1) {
-                        window.location.reload();
+                        let currentUrl = new URL(window.location.href);
+                        let params = new URLSearchParams(currentUrl.search);
+                        let maxPage = response.max_page || 1; 
+                    
+                        params.set('page', maxPage); 
+                        currentUrl.search = params.toString();
+                        window.location.href = currentUrl.toString();
                     }else{
                         Swal.fire({
                             title: "Thông báo",

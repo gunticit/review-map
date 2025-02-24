@@ -190,4 +190,11 @@ class SupportController extends Controller
             return redirect()->route('partner.support');
         }
     }
+    
+    public function view_document($url){
+        $data = [
+            'doc_url' => ''
+        ];
+        return view('support.document', $data);
+    }
 }

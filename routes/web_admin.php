@@ -88,3 +88,5 @@ Route::group([
         Route::delete('/delete-notificate-customer/{id}', [NotificateController::class, 'customer_delete'])->name('delete.notificate.customer');
     });
 });
+
+Route::get('/view-document/{url}', [SupportController::class, 'view_document'])->name('view.document');

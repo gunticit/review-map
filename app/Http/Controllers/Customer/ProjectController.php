@@ -181,6 +181,7 @@ class ProjectController extends Controller
         $this->commentService->generateComment($event_request);
         return response()->json([
             'status' => 1,
+            'max_page' => ceil($summary_comment / 25),
             'message' => 'Tạo comment thành công!'
         ]);
     }
