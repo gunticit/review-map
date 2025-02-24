@@ -89,7 +89,6 @@ class ProjectController extends Controller
             $this->projectService->update($request, $project_id);
             
             [$sl_comment, $sl_image] = $this->getPackageLimits($request->package ?? null);
-            $sl_comment = $sl_comment > 25 ? 25 : $sl_comment;
             if (!$this->handleComments($request, $project_id, $keyword_data, $sl_comment)) {
                 return redirect()->back()->withInput();
             }

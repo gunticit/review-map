@@ -253,7 +253,10 @@ class BaseRepository implements RepositoryInterface
         return $this->model->where($column, $value)->orderBy('id', $orderBy); 
     }
 
-    public function countDataByKey($column, $value){
-        return $this->model->where($column, $value)->count();
+    public function countDataByKey($column, $value, $exception_key = ''){
+        if(!$exception_key) return $this->model->where($column, $value)->count();
+        if($exception_key == 'comment'){
+            return $this->model->where($column, $value)->whereNotNull('comment')->where('comment','!=','')->count();
+        }
     }
 }
